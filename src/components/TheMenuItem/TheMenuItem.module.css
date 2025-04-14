@@ -1,0 +1,18 @@
+li {
+  list-style-type: none;
+  padding: 1rem;
+  background-color: #FAFBFD;
+  border-radius: 0.5rem;
+}
+
+.text_animation {
+  transition: opacity 0.5s ease; /* Adjust duration and easing as needed */
+}
+
+.text_visible {
+  opacity: 1; /* Fully visible */
+}
+
+.text_hidden {
+  opacity: 0; /* Fully transparent */
+}

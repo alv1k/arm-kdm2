@@ -1,0 +1,79 @@
+/* styles.css */
+.navbar {
+  transition: opacity 0.3s ease-in-out;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.navbar.visible_sm {
+  animation: slideIn 0.3s forwards;
+}
+
+.navbar.hidden_sm {
+  animation: slideOut 0.3s forwards;
+}
+
+
+.navbar.larger_md {
+  animation: slideRight 0.3s forwards;
+}
+
+.navbar.smaller_md {
+  animation: slideLeft 0.3s forwards;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+    visibility: hidden;
+    display: none;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+    display: block;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    display: block;
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+  to {
+    transform: translateY(100%);
+    display: none;
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes slideRight {
+  from {
+    width: 117px;
+    opacity: 1;
+    visibility: visible;
+  }
+  to {
+    width: 400px;
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+@keyframes slideLeft {
+  from {
+    width: 400px;
+    opacity: 1;
+    visibility: visible;
+  }
+  to {
+    width: 117px;
+    opacity: 1;
+    visibility: visible;
+  }
+}

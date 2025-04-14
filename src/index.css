@@ -1,6 +1,40 @@
 @import "tailwindcss";
 
+@theme {
+  --breakpoint-sm: 24.375rem;
+  --breakpoint-md: 51.25rem;
+  --breakpoint-lg: 90rem;
+  --breakpoint-xl: 120rem;
+  --breakpoint-2xl: initial;
+}
+* {
+  font-family: Inter, sans-serif;
+}
+body {
+  background-color: #FAFBFD;
+}
+.minHeight {
+  min-height: 1080px;
+}
 
+.itemInactive {
+  background-color: #FAFBFD;
+  color: #000;
+}
+.itemInactive:hover {
+  background-color: #F6F8FF;
+}
+.itemSelected {
+  background-color: #6374AD;
+  color: #fff;
+}
+.icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  stroke: #232323;
+}
 
 
 @media (prefers-color-scheme: light) {
