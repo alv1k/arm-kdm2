@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { hideNavbar } from '../../store/navbarSlice';
@@ -20,6 +21,17 @@ const AgreementsPage = () => {
   
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const dispatch = useDispatch();
+  useEffect(() => {
+    if (xl_breakpoint) {
+      dispatch(setValue('all'));
+    } else if (lg_breakpoint) {
+      dispatch(setValue('all'));
+    } else if (md_breakpoint) {
+      dispatch(setValue('all'));
+    } else if (sm_breakpoint) {
+      dispatch(setValue('active'));
+    }
+  }, [xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint, dispatch]);
   const agreements = [
     {
       name: 'agree1',
@@ -45,7 +57,7 @@ const AgreementsPage = () => {
   } 
 
   return (
-    <main className={[styles.mainLogin, sm_breakpoint || md_breakpoint ? 'h-[500px]' : 'minHeight'].join(' ')}>
+    <main className={[styles.mainLogin, sm_breakpoint || md_breakpoint ? 'h-[500px]' : 'min-height'].join(' ')}>
       <Header />
       <div className="xl:p-10 lg:p-5 md:py-5 flex">        
         {
@@ -84,7 +96,7 @@ const AgreementsPage = () => {
                 <div className={`
                     lg:px-10
                     md:px-4
-                    px-10 py-4 
+                    px-10 py-4 cursor-pointer bg-item-default rounded-t-xl
                     ${agreementType == 'all' ? 'text-[#203887] border-b border-b-[#6374AD]' : ''}
                   `}
                   onClick={() => getAgreements('all')}
@@ -100,20 +112,20 @@ const AgreementsPage = () => {
                 className={`
                   lg:px-10 lg:w-auto
                   md:px-5 md:w-auto
-                  px-9 w-1/2 py-4 
-                  ${agreementType == 'actual' ? 'text-[#203887] border-b border-b-[#6374AD]' : ''}
+                  px-9 w-1/2 py-4 cursor-pointer bg-item-default rounded-t-xl
+                  ${agreementType == 'active' ? 'text-[#203887] border-b border-b-[#6374AD]' : ''}
                 `}
-                onClick={() => getAgreements('actual')}
+                onClick={() => getAgreements('active')}
               >
                 Действующие
               </div>
               <div className={`
                   lg:px-10 px-9 lg:w-auto 
                   md:px-5 md:w-auto
-                  w-1/2 py-4
-                  ${agreementType == 'expired' ? 'text-[#203887] border-b border-b-[#6374AD]' : ''}
+                  w-1/2 py-4 cursor-pointer bg-item-default rounded-t-xl
+                  ${agreementType == 'inactive' ? 'text-[#203887] border-b border-b-[#6374AD]' : ''}
                 `}
-                onClick={() => getAgreements('expired')}
+                onClick={() => getAgreements('inactive')}
               >
                 Неакуальные
               </div>

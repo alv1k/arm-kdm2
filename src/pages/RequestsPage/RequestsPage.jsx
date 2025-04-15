@@ -41,7 +41,7 @@ const RequestsPage = () => {
 
 
   return (
-    <main className={[styles.mainLogin, sm_breakpoint || md_breakpoint ? 'h-[500px]' : 'minHeight'].join(' ')}>
+    <main className={[styles.mainLogin, sm_breakpoint || md_breakpoint ? 'h-[500px]' : 'min-height'].join(' ')}>
       <Header />
       <div className="xl:p-10 lg:p-5 md:py-5 flex">        
         {
@@ -95,7 +95,7 @@ const RequestsPage = () => {
                   md:px-5 md:w-auto
                   px-9 w-1/2 py-4 text-[#203887] border-b border-b-[#6374AD]
                 "
-                onClick={() => getAgreements('actual')}
+                onClick={() => getAgreements('active')}
               >
                 В работе
               </div>

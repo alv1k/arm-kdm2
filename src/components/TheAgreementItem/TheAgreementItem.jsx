@@ -11,12 +11,13 @@ const TheAgreementItem = ({ number, date, address, summ }) => {
 
   return (
     <div className={`
-        bgItemDefault      
+        bg-item-default      
         lg:p-10 lg:rounded-2xl lg:mb-10 lg:flex
         md:mb-4
-        rounded-xl mb-6 p-5 
+        rounded-xl mb-6 p-5 cursor-pointer
       `}
       onClick={showDetails}
+      
     >
       <div className="lg:text-xl md:text-base text-sm">
         <h3 className="lg:font-bold font-medium">Договор: {number} <span>от {date}</span></h3>

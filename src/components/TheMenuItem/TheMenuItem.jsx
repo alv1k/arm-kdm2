@@ -25,7 +25,7 @@ const TheMenuItem = ({ icon, text, to }) => {
         to={to}
         className={({ isActive }) => 
           `
-            ${isActive ? `itemSelected` : `itemInactive`} 
+            ${isActive ? `item-selected` : `bg-item-default`} 
             lg:mt-5 lg:mb-0 lg:p-5 lg:rounded-xl lg:w-full 
             md:mt-[-8px] md:mb-7 md:p-5 md:w-full
             mt-0 mb-6 py-2 px-5 rounded-md flex 
@@ -41,7 +41,7 @@ const TheMenuItem = ({ icon, text, to }) => {
             <svg
               className={`
                 icon lg:mx-0
-                ${isActive ? 'itemSelected' : 'bgItemDefault'}
+                ${isActive ? 'item-selected' : 'bg-item-default'}
                 ${navbarRemoteIcon}
               `}
               fill={`${isActive ? '#FFFFFF' : '#0B1930'}`}
