@@ -88,7 +88,7 @@ Please change the parent <Route path="${w}"> to <Route path="${w==="/"?"*":`${w}
         ${r||c?Vn.navbar:""}
         ${s}
         ${f?"shadow-xl":""}
-      `,children:[!r&&!c||u?V.jsx("p",{className:"text-xl font-bold",children:"Основное меню"}):null,V.jsxs("div",{className:"lg:mt-9 md:mt-9 mt-0",children:[V.jsxs("div",{children:[V.jsx(Zn,{icon:"docs-icon",text:"Мои договоры",to:"/agreements"}),V.jsx(Zn,{icon:"requests-icon",text:"Заявки",to:"/requests"}),V.jsx(Zn,{icon:"contacts-icon",text:"Контакты",to:"/contacts"})]}),V.jsxs("div",{className:"lg:mt-96 md:mt-132",children:[V.jsx(Zn,{icon:"user-icon",text:"Профиль",to:"/user"}),V.jsx(Zn,{icon:"logout-icon",text:"Выйти",to:"/logout"})]})]})]})},G1="_agreementDiv_tovlu_1",X1={agreementDiv:G1},Q1=({number:u,date:c,address:r,summ:f})=>{const s="/src/assets/images/i.svg";return In(),V.jsxs("div",{className:`
+      `,children:[!r&&!c||u?V.jsx("p",{className:"text-xl font-bold",children:"Основное меню"}):null,V.jsxs("div",{className:"lg:mt-9 md:mt-9 mt-0",children:[V.jsxs("div",{children:[V.jsx(Zn,{icon:"docs-icon",text:"Мои договоры",to:"/arm-kdm2/agreements"}),V.jsx(Zn,{icon:"requests-icon",text:"Заявки",to:"/arm-kdm2/requests"}),V.jsx(Zn,{icon:"contacts-icon",text:"Контакты",to:"/arm-kdm2/contacts"})]}),V.jsxs("div",{className:"lg:mt-96 md:mt-132",children:[V.jsx(Zn,{icon:"user-icon",text:"Профиль",to:"/arm-kdm2/user"}),V.jsx(Zn,{icon:"logout-icon",text:"Выйти",to:"/arm-kdm2/logout"})]})]})]})},G1="_agreementDiv_tovlu_1",X1={agreementDiv:G1},Q1=({number:u,date:c,address:r,summ:f})=>{const s="/src/assets/images/i.svg";return In(),V.jsxs("div",{className:`
       ${X1.agreementDiv} 
       lg:p-10 p-5 lg:rounded-2xl lg:mb-10 lg:flex
       md:mb-4
@@ -121,4 +121,4 @@ Please change the parent <Route path="${w}"> to <Route path="${w==="/"?"*":`${w}
                 md:px-5 md:w-auto\r
                 w-1/2 py-4\r
               `,children:"Неакуальные"})]}),V.jsx("div",{className:"md:pt-4 pt-5",children:h.map(y=>V.jsx(Q1,{number:y.num,date:y.date,address:y.address,summ:y.summ},y.num))})]})})]})]})},om=()=>V.jsx("div",{children:"settings page"});function Z1(){return V.jsx(Vp,{children:V.jsxs(_p,{children:[V.jsx(ja,{path:"/arm-kdm2/",element:V.jsx(gr,{})}),V.jsx(ja,{path:"/arm-kdm2/agreements",element:V.jsx(gr,{})}),V.jsx(ja,{path:"/arm-kdm2/settings",element:V.jsx(om,{})}),V.jsx(ja,{path:"/arm-kdm2/user",element:V.jsx(gr,{})}),V.jsx(ja,{path:"/arm-kdm2/logout",element:V.jsx(om,{})})]})})}R0.createRoot(document.getElementById("root")).render(V.jsx(D.StrictMode,{children:V.jsx(L0,{store:Ng,children:V.jsx(Z1,{})})}));
-//# sourceMappingURL=index-BEicdSmW.js.map
+//# sourceMappingURL=index-DhboD1jc.js.map
