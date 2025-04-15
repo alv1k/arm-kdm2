@@ -37,14 +37,14 @@ const TheNavbar = () => {
       }
       <div className="lg:mt-9 md:mt-9 mt-0">
         <div>
-          <TheMenuItem icon="docs-icon" text="Мои договоры" to="/agreements" />
-          <TheMenuItem icon="requests-icon" text="Заявки" to="/requests" />
-          <TheMenuItem icon="contacts-icon" text="Контакты" to="/contacts" />
+          <TheMenuItem icon="docs-icon" text="Мои договоры" to="/arm-kdm2/agreements" />
+          <TheMenuItem icon="requests-icon" text="Заявки" to="/arm-kdm2/requests" />
+          <TheMenuItem icon="contacts-icon" text="Контакты" to="/arm-kdm2/contacts" />
         </div>
         
         <div className="lg:mt-96 md:mt-132">
-          <TheMenuItem  icon="user-icon" text="Профиль" to="/user" />
-          <TheMenuItem icon="logout-icon" text="Выйти" to="/logout" />
+          <TheMenuItem  icon="user-icon" text="Профиль" to="/arm-kdm2/user" />
+          <TheMenuItem icon="logout-icon" text="Выйти" to="/arm-kdm2/logout" />
         </div>
       </div>
     </aside>
