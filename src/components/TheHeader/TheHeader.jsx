@@ -4,7 +4,7 @@ import { toggleNavbar } from '../../store/navbarSlice';
 import useMediaQueries from '../../hooks/useMediaQueries'; 
 import styles from './TheHeader.module.css'
 
-const sprite_path = '/src/assets/images/i.svg';
+const sprite_path = './src/assets/images/i.svg';
 const TheHeader = () => {
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const dispatch = useDispatch();
@@ -32,7 +32,7 @@ const TheHeader = () => {
         <span className="lg:mr-10 md:mr-4 font-semibold text-xl mt-[0.35rem] ">
           ООО «Название»
         </span>
-        <img src="../src/assets/images/Ellipse.png" alt=""  />
+        <img src="./src/assets/images/Ellipse.png" alt=""  />
       </div>
     </header>
   )

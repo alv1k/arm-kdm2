@@ -2,7 +2,7 @@ import styles from './TheAgreementItem.module.css';
 import useMediaQueries from '../../hooks/useMediaQueries'; 
 
 const TheAgreementItem = ({ number, date, address, summ }) => {
-  const sprite_path = '/src/assets/images/i.svg';
+  const sprite_path = './src/assets/images/i.svg';
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   
   return (

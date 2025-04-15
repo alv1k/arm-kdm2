@@ -7,7 +7,7 @@ import styles from './TheMenuItem.module.css';
 const TheMenuItem = ({ icon, text, to }) => {
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const showNavbar = useSelector(state => state.navbar.showNavbar);
-  const sprite_path = '/src/assets/images/i.svg';
+  const sprite_path = './src/assets/images/i.svg';
   
   const navbarRemoteIcon = [
     md_breakpoint && showNavbar && !sm_breakpoint ? 'md:mx-auto' : '',
@@ -59,7 +59,7 @@ const TheMenuItem = ({ icon, text, to }) => {
               font-normal ms-5 whitespace-nowrap
               ${styles.text_animation} 
               ${navbarRemoteText}
-              ${showNavbar ? 'visible' : 'invisible'}
+              ${showNavbar && (sm_breakpoint || md_breakpoint) ? 'visible' : lg_breakpoint || xl_breakpoint ? 'visible' : 'invisible'}
             `}
             >
               {text}
