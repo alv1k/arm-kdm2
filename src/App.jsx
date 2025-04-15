@@ -8,12 +8,11 @@ function App() {
   return (
       <Router>
         <Routes>
-          <Route path='/' element={<AgreementsPage/>} />
           <Route path='/arm-kdm2/' element={<AgreementsPage/>} />
-          <Route path='/agreements' element={<AgreementsPage/>} />
-          <Route path='/settings' element={<SettingsPage/>} />
-          <Route path='/user' element={<AgreementsPage/>} />
-          <Route path='/logout' element={<SettingsPage/>} />
+          <Route path='/arm-kdm2/agreements' element={<AgreementsPage/>} />
+          <Route path='/arm-kdm2/settings' element={<SettingsPage/>} />
+          <Route path='/arm-kdm2/user' element={<AgreementsPage/>} />
+          <Route path='/arm-kdm2/logout' element={<SettingsPage/>} />
         </Routes>
       </Router>
   )
