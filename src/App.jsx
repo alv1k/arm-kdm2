@@ -9,6 +9,7 @@ function App() {
       <Router>
         <Routes>
           <Route path='/' element={<AgreementsPage/>} />
+          <Route path='/arm-kdm2/' element={<AgreementsPage/>} />
           <Route path='/agreements' element={<AgreementsPage/>} />
           <Route path='/settings' element={<SettingsPage/>} />
           <Route path='/user' element={<AgreementsPage/>} />
