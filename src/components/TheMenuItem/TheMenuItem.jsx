@@ -28,7 +28,7 @@ const TheMenuItem = ({ icon, text, to }) => {
             ${isActive ? `itemSelected` : `itemInactive`} 
             lg:mt-5 lg:mb-0 lg:p-5 lg:rounded-xl lg:w-full 
             md:mt-[-8px] md:mb-7 md:p-5 md:w-full
-            mt-0 mb-5 py-3 px-5 rounded-md flex 
+            mt-0 mb-6 py-2 px-5 rounded-md flex 
           `
         }
       >
@@ -41,7 +41,7 @@ const TheMenuItem = ({ icon, text, to }) => {
             <svg
               className={`
                 icon lg:mx-0
-                ${isActive ? 'itemSelected' : 'itemInactive'}
+                ${isActive ? 'itemSelected' : 'bgItemDefault'}
                 ${navbarRemoteIcon}
               `}
               fill={`${isActive ? '#FFFFFF' : '#0B1930'}`}
@@ -55,8 +55,8 @@ const TheMenuItem = ({ icon, text, to }) => {
           }>
             <span className={`
               lg:block lg:font-medium 
-              md:block md:text-left
-              font-normal ms-5 whitespace-nowrap
+              md:block md:text-left md:text-base
+              font-normal ms-5 whitespace-nowrap text-sm
               ${styles.text_animation} 
               ${navbarRemoteText}
               ${showNavbar && (sm_breakpoint || md_breakpoint) ? 'visible' : lg_breakpoint || xl_breakpoint ? 'visible' : 'invisible'}

@@ -1,26 +1,21 @@
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { hideNavbar } from '../../store/navbarSlice';
-import { setValue,selectValue } from '../../store/agreementsSlice';
 import useMediaQueries from '../../hooks/useMediaQueries'; 
-import styles from './AgreementsPage.module.css';
-
+import styles from './RequestsPage.module.css';
 import Header from '../../components/TheHeader/TheHeader';
 import TheNavbar from '../../components/TheNavbar/TheNavbar';
-import AgreementItem from '../../components/TheAgreementItem/TheAgreementItem';
 
 
-const AgreementsPage = () => {
+const RequestsPage = () => {
   // const navigate = useNavigate();
   // const handleButtonClick = () => {
   //   navigate('/settings')
   // }
   const showNavbar = useSelector(state => state.navbar.showNavbar);
-  const agreementType = useSelector(selectValue);
-  
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const dispatch = useDispatch();
-  const agreements = [
+  const requests = [
     {
       name: 'agree1',
       summ: 400000,
@@ -41,8 +36,9 @@ const AgreementsPage = () => {
     dispatch(hideNavbar());
   };
   const getAgreements = (type) => {
-    dispatch(setValue(type));
-  } 
+    console.log(type, 'getAgreements');
+  }
+
 
   return (
     <main className={[styles.mainLogin, sm_breakpoint || md_breakpoint ? 'h-[500px]' : 'minHeight'].join(' ')}>
@@ -71,7 +67,7 @@ const AgreementsPage = () => {
               md:px-2 md:text-left md:mt-9
               text-center text-xl font-bold mt-4
             ">
-              Мои договоры
+              Заявки
             </p>
             <div className="
               xl:mt-9
@@ -81,14 +77,11 @@ const AgreementsPage = () => {
             ">
               {
                 (xl_breakpoint || lg_breakpoint || md_breakpoint) && 
-                <div className={`
-                    lg:px-10
-                    md:px-4
-                    px-10 py-4 
-                    ${agreementType == 'all' ? 'text-[#203887] border-b border-b-[#6374AD]' : ''}
-                  `}
-                  onClick={() => getAgreements('all')}
-                >
+                <div className="
+                  lg:px-10
+                  md:px-4
+                  px-10 py-4 text-[#203887] border-b border-b-[#6374AD]
+                ">
                   Все
                   {/* 
                       выбранный элемент #011E7D #6374AD 
@@ -97,44 +90,28 @@ const AgreementsPage = () => {
                 </div>
               }
               <div 
-                className={`
+                className="
                   lg:px-10 lg:w-auto
                   md:px-5 md:w-auto
-                  px-9 w-1/2 py-4 
-                  ${agreementType == 'actual' ? 'text-[#203887] border-b border-b-[#6374AD]' : ''}
-                `}
+                  px-9 w-1/2 py-4 text-[#203887] border-b border-b-[#6374AD]
+                "
                 onClick={() => getAgreements('actual')}
               >
-                Действующие
+                В работе
               </div>
-              <div className={`
-                  lg:px-10 px-9 lg:w-auto 
-                  md:px-5 md:w-auto
-                  w-1/2 py-4
-                  ${agreementType == 'expired' ? 'text-[#203887] border-b border-b-[#6374AD]' : ''}
-                `}
-                onClick={() => getAgreements('expired')}
-              >
-                Неакуальные
+              <div className="
+                lg:px-10 px-9 lg:w-auto 
+                md:px-5 md:w-auto
+                w-1/2 py-4
+              ">
+                Завершенные
               </div>
             </div>
-            <div className="md:pt-4 pt-5">
-              {
-                agreements.map((agreement) => (
-                  <AgreementItem 
-                    key={agreement.num}
-                    number={agreement.num}
-                    date={agreement.date}
-                    address={agreement.address}
-                    summ={agreement.summ}
-                  />
-                ))
-              }
-            </div>
+           
           </div>
         </section>
       </div>
     </main>
   )
 }
-export default AgreementsPage;
+export default RequestsPage;

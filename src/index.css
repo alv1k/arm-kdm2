@@ -16,14 +16,13 @@ body {
 .minHeight {
   min-height: 1080px;
 }
-
-.itemInactive {
+.bgItemDefault {  
   background-color: #FAFBFD;
-  color: #000;
 }
-.itemInactive:hover {
+.bgItemDefault:hover {
   background-color: #F6F8FF;
 }
+
 .itemSelected {
   background-color: #6374AD;
   color: #fff;
