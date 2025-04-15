@@ -22,6 +22,9 @@ body {
 .bg-item-default:hover {
   background-color: #F6F8FF;
 }
+.bg-item-active {
+  background-color: #F6F8FF;
+}
 
 .item-selected {
   background-color: #6374AD;

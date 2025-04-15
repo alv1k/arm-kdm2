@@ -1,12 +1,15 @@
+import { useDispatch } from 'react-redux';
 import useMediaQueries from '../../hooks/useMediaQueries'; 
+import { showDetails } from '../../store/agreementsSlice';
 
 const TheAgreementItem = ({ number, date, address, summ }) => {
   const sprite_path = './src/assets/images/i.svg';
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
+  const dispatch = useDispatch();
   
-  const showDetails = () => {
+  const showDetailsTrue = () => {
     console.log('details here');
-    
+    dispatch(showDetails());
   }
 
   return (
@@ -16,7 +19,7 @@ const TheAgreementItem = ({ number, date, address, summ }) => {
         md:mb-4
         rounded-xl mb-6 p-5 cursor-pointer
       `}
-      onClick={showDetails}
+      onClick={showDetailsTrue}
       
     >
       <div className="lg:text-xl md:text-base text-sm">

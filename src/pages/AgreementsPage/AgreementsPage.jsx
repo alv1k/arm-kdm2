@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { hideNavbar } from '../../store/navbarSlice';
-import { setValue,selectValue } from '../../store/agreementsSlice';
+import { setType, selectedType, isShowDetails, showDetails, setTab, selectedTab, selectedAgreement } from '../../store/agreementsSlice';
 import useMediaQueries from '../../hooks/useMediaQueries'; 
 import styles from './AgreementsPage.module.css';
 
@@ -17,19 +17,22 @@ const AgreementsPage = () => {
   //   navigate('/settings')
   // }
   const showNavbar = useSelector(state => state.navbar.showNavbar);
-  const agreementType = useSelector(selectValue);
+  const agreementType = useSelector(selectedType);
+  const showAgreementDetails = useSelector(isShowDetails);
+  const agreementTab = useSelector(selectedTab);
+  const singleAgreement = useSelector(selectedAgreement);
   
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const dispatch = useDispatch();
   useEffect(() => {
     if (xl_breakpoint) {
-      dispatch(setValue('all'));
+      dispatch(setType('all'));
     } else if (lg_breakpoint) {
-      dispatch(setValue('all'));
+      dispatch(setType('all'));
     } else if (md_breakpoint) {
-      dispatch(setValue('all'));
+      dispatch(setType('all'));
     } else if (sm_breakpoint) {
-      dispatch(setValue('active'));
+      dispatch(setType('active'));
     }
   }, [xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint, dispatch]);
   const agreements = [
@@ -52,9 +55,16 @@ const AgreementsPage = () => {
     event.stopPropagation();
     dispatch(hideNavbar());
   };
-  const getAgreements = (type) => {
-    dispatch(setValue(type));
+  const setAgreementsType = (type) => {
+    dispatch(setType(type));
   } 
+  const setAgreementDetailsTab = (tab) => {
+    dispatch(setTab(tab));
+  }
+  const handleAgreementClick = (num) => {
+    dispatch(showDetails(num));
+  }
+
 
   return (
     <main className={[styles.mainLogin, sm_breakpoint || md_breakpoint ? 'h-[500px]' : 'min-height'].join(' ')}>
@@ -69,7 +79,7 @@ const AgreementsPage = () => {
         
         <section 
           className="
-            xl:ml-10 xl:px-12 xl:py-9 xl:rounded-x
+            xl:ml-10 xl:px-10 xl:py-11 xl:rounded-x
             lg:ml-8 lg:px-4 lg:py-5 
             md:w-full md:px-6 md:ms-9 md:rounded-xl md:min-h-[1080px]
             w-full px-5 ms-0 bg-white min-h-[844px]
@@ -97,11 +107,20 @@ const AgreementsPage = () => {
                     lg:px-10
                     md:px-4
                     px-10 py-4 cursor-pointer bg-item-default rounded-t-xl
-                    ${agreementType == 'all' ? 'text-[#203887] border-b border-b-[#6374AD]' : ''}
+                    ${(showAgreementDetails && agreementTab == 'bills') || (!showAgreementDetails && agreementType == 'all') ? 'text-[#203887] border-b border-b-[#6374AD]' : ''}
                   `}
-                  onClick={() => getAgreements('all')}
+                  onClick={() => {
+                      if (showAgreementDetails) {
+                        setAgreementDetailsTab('bills')
+                      } else {
+                        setAgreementsType('all')
+                      }
+                    } 
+                  }
                 >
-                  Все
+                  {
+                    showAgreementDetails ? 'Счета' : 'Все'
+                  }
                   {/* 
                       выбранный элемент #011E7D #6374AD 
                       hover для элементов (каждого договора)
@@ -113,36 +132,63 @@ const AgreementsPage = () => {
                   lg:px-10 lg:w-auto
                   md:px-5 md:w-auto
                   px-9 w-1/2 py-4 cursor-pointer bg-item-default rounded-t-xl
-                  ${agreementType == 'active' ? 'text-[#203887] border-b border-b-[#6374AD]' : ''}
+                  ${(showAgreementDetails && agreementTab == 'acts') || (!showAgreementDetails && agreementType == 'active') ? 'text-[#203887] border-b border-b-[#6374AD]' : ''}
                 `}
-                onClick={() => getAgreements('active')}
+                
+                onClick={() => {
+                  if (showAgreementDetails) {
+                    setAgreementDetailsTab('acts')
+                  } else {
+                    setAgreementsType('active')
+                  }
+                } 
+              }
               >
-                Действующие
+              {
+                showAgreementDetails ? 'Акты' : 'Действующие'
+              }                
               </div>
               <div className={`
                   lg:px-10 px-9 lg:w-auto 
                   md:px-5 md:w-auto
                   w-1/2 py-4 cursor-pointer bg-item-default rounded-t-xl
-                  ${agreementType == 'inactive' ? 'text-[#203887] border-b border-b-[#6374AD]' : ''}
+                  ${(showAgreementDetails && agreementTab == 'counters') || (!showAgreementDetails && agreementType == 'inactive') ? 'text-[#203887] border-b border-b-[#6374AD]' : ''}
                 `}
-                onClick={() => getAgreements('inactive')}
+                
+                onClick={() => {
+                  if (showAgreementDetails) {
+                    setAgreementDetailsTab('counters')
+                  } else {
+                    setAgreementsType('inactive')
+                  }
+                } 
+              }
               >
-                Неакуальные
+              {
+                showAgreementDetails ? 'Показания' : 'Неакуальные'
+              }
               </div>
             </div>
-            <div className="md:pt-4 pt-5">
-              {
-                agreements.map((agreement) => (
-                  <AgreementItem 
-                    key={agreement.num}
-                    number={agreement.num}
-                    date={agreement.date}
-                    address={agreement.address}
-                    summ={agreement.summ}
-                  />
-                ))
-              }
-            </div>
+            {
+              showAgreementDetails ? 
+              <div></div> : 
+              <div className="md:pt-4 pt-5">
+                {agreements.map((agreement) => (
+                  <div key={agreement.num} onClick={() => handleAgreementClick(agreement)}>
+                    { (
+                      <AgreementItem 
+                        number={agreement.num}
+                        date={agreement.date}
+                        address={agreement.address}
+                        summ={agreement.summ}
+                        // Здесь можно добавить дополнительные пропсы для отображения подробностей
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            }
+            
           </div>
         </section>
       </div>

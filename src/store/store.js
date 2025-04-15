@@ -6,7 +6,7 @@ import agreementsTypesReducer from './agreementsSlice';
 const store = configureStore({
   reducer: {
     navbar: navbarReducer, // Добавляем редюсер в хранилище
-    agreements_types: agreementsTypesReducer,
+    agreements_slice: agreementsTypesReducer,
   },
 });
 

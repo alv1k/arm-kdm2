@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { toggleNavbar } from '../../store/navbarSlice';
 import useMediaQueries from '../../hooks/useMediaQueries'; 
 import styles from './TheHeader.module.css'
