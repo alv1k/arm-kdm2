@@ -9,7 +9,7 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
-  base: "/arm-kdm",
+  base: "/",
   server: {
     port: 3000,
     open: true
