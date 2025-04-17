@@ -13,18 +13,36 @@ const TheAgreementItem = ({ number, date, address, summ }) => {
     <div className={`
         lg:p-10 lg:rounded-2xl lg:mb-10 lg:flex
         md:mb-4
-        rounded-xl mb-6 md:p-5 p-5
-        ${isDetailsShown ? 'lg:mt-6 md:bg-blue-100 bg-transparent' : 'md:bg-item-default bg-item-active cursor-pointer'}
+        rounded-xl mb-6 md:p-5
+        ${isDetailsShown ? 'lg:mt-6 md:bg-blue-100 bg-transparent p-0' : 'md:bg-item-default bg-item-active cursor-pointer p-5'}
         
       `}
     >
       <div className="lg:text-xl md:text-base text-sm">
-        <h3 className="lg:font-bold lg:text-baase font-medium text-xl">Договор: {number} <span>от {date}</span></h3>
+        <h3 className={`
+          lg:font-bold lg:text-base md:text-left text-xl text-center
+          ${isDetailsShown ? 'font-semibold' : 'font-medium'}
+        `}>
+          Договор: {number} <span>от {date}</span></h3>
         <p className={`
           ${isDetailsShown ? 'md:text-base md:mt-8' : 'lg:text-xl'}
           md:my-4 md:block
           my-2 contents
         `}>
+        {
+          isDetailsShown ? 
+          <button className="bg-white px-4 py-2 rounded-lg border border-[#6374AD] flex gap-3 text-[#203887] w-full text-base ms-auto mt-4">
+            <svg
+              className="icon lg:ms-0 ms-auto"
+            >
+              <use href={`${sprite_path}#doc-icon`} />
+            </svg>
+            <span className="lg:me-0 me-auto">
+              Скачать договор
+            </span>
+          </button>
+          : ''
+        }
           <span className="text-[#787C82] lg:inline md:inline block lg:mt-0 mt-2">Адрес:&nbsp;</span>
           <span className="lg:inline md:inline block mt-1">{address}</span>
         </p>

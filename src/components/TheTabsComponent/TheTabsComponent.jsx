@@ -7,7 +7,8 @@ const TheTabsComponent = (props) => {
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const showAgreementDetails = useSelector(isShowDetails);  
   const agreementType = useSelector(selectedType);
-  const agreementTab = useSelector(selectedTab);  
+  const agreementTab = useSelector(selectedTab);
+  const tabs = useSelector((state) => state.tabs_slice.tabs);
   
   const setAgreementsType = (type) => {
     dispatch(setType(type));
@@ -15,7 +16,6 @@ const TheTabsComponent = (props) => {
   const setAgreementDetailsTab = (tab) => {
     dispatch(setTab(tab));
   }
-  let titles = props.titles
   const dispatch = useDispatch();
   useEffect(() => {
     if (xl_breakpoint) {
@@ -37,7 +37,7 @@ const TheTabsComponent = (props) => {
         md:mt-7 md:rounded-t-xl md:gap-10
         flex mt-6 bg-[#FAFBFD] border-b-1 border-slate-300 rounded-t-md font-medium
       ">
-          {titles.map((tab, index) => (
+          {tabs.map((tab, index) => (
             <div 
               key={index} 
               className={`

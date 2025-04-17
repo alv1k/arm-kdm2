@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { hideNavbar } from '../../store/navbarSlice';
-import { selectedType, isShowDetails, showDetails, hideDetails, selectedTab, agreementsStoreList, setAgreementsList, selectedAgreement } from '../../store/agreementsSlice';
+import { toggleTabs } from '../../store/tabsSlice';
+import { isShowDetails, selectedAgreement, agreementsStoreList, showDetails, hideDetails, setAgreementsList } from '../../store/agreementsSlice';
 import useMediaQueries from '../../hooks/useMediaQueries'; 
 import styles from './AgreementsPage.module.css';
 
@@ -18,6 +19,7 @@ const AgreementsPage = () => {
   const isDetailsShown = useSelector(isShowDetails);
   const agreementsList = useSelector(agreementsStoreList);
   const currentAgreement = useSelector(selectedAgreement);
+  const tabs = useSelector((state) => state.tabs_slice.tabs);
   // useEffect(() => {
   //   dispatch(fetchAgreementsList()); // Загружаем список договоров при монтировании компонента
   // }, [dispatch]);
@@ -28,6 +30,9 @@ const AgreementsPage = () => {
     event.stopPropagation();
     dispatch(hideNavbar());
   };
+  const setTabs = (target, breakpoint) => {
+    dispatch(toggleTabs({ target, breakpoint }));
+  }
   const backToAgreements = () => {
     dispatch(hideDetails());
   }
@@ -39,9 +44,6 @@ const AgreementsPage = () => {
   useEffect(() => {
     dispatch(hideDetails());
   }, [location]);
-  const tabsCalc = (tabsList) => {
-    
-  }
 
   return (
     <main className={[styles.mainLogin, sm_breakpoint || md_breakpoint ? 'h-[500px]' : 'min-height'].join(' ')}>
@@ -96,11 +98,7 @@ const AgreementsPage = () => {
             {
               isDetailsShown ? '' :
               <TheTabsComponent titles={
-                [
-                  sm_breakpoint ? {} : { title_ru: 'Все', title_en: 'all' },
-                  { title_ru: 'Действующие', title_en: 'active' },
-                  { title_ru: 'Неактуальные', title_en: 'inactive' }
-                ]
+                setTabs('agreements', sm_breakpoint ? 'sm-breakpoint' : '')
               } />
             }
             {
