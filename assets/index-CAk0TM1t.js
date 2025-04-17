@@ -70,11 +70,11 @@ Please change the parent <Route path="${H}"> to <Route path="${H==="/"?"*":`${H}
             lg:mt-5 lg:mb-0 lg:p-5 lg:rounded-xl lg:w-full 
             md:mt-[-8px] md:mb-7 md:p-5 md:w-full
             mt-0 mb-6 py-2 px-5 rounded-md flex 
-          `,onClick:E,children:({isActive:w})=>z.jsxs(z.Fragment,{children:[z.jsx("div",{className:"",children:z.jsx("svg",{className:`
+          `,onClick:E,children:({isActive:w})=>z.jsxs(z.Fragment,{children:[z.jsx("div",{children:z.jsx("svg",{className:`
                 icon lg:mx-0
                 ${w?"item-selected":"bg-item-default"}
                 ${p}
-              `,fill:`${w?"#FFFFFF":"#0B1930"}`,children:z.jsx("use",{href:`${h}#${u}`})})}),z.jsx("div",{className:"",children:z.jsx("span",{className:`
+              `,fill:`${w?"#FFFFFF":"#0B1930"}`,children:z.jsx("use",{href:`${h}#${u}`})})}),z.jsx("div",{children:z.jsx("span",{className:`
               lg:block lg:font-medium 
               md:block md:text-left md:text-base
               font-normal ms-5 whitespace-nowrap text-sm
@@ -157,4 +157,4 @@ Please change the parent <Route path="${H}"> to <Route path="${H==="/"?"*":`${H}
             md:w-full md:px-6 md:ms-9 md:rounded-xl md:min-h-[1080px]\r
             w-full px-5 ms-0 bg-white min-h-[844px]\r
           `,children:z.jsx("img",{src:"./src/assets/temp/user.png",alt:""})})]})]})},ob=()=>{_e(r=>r.navbar.showNavbar),_e(qi),_e(aa),_e(Bi),Bt();let u=[{name:"agree1",summ:4e5,date:new Date(2025,5,6).toLocaleDateString(),address:"г. Якутск, ул. Ленина 123, 1 этаж, каб. №123",num:"num123"},{name:"agree2",summ:25e4,date:new Date(2025,7,15).toLocaleDateString(),address:"г. Москва, ул. Пушкина 10",num:"num456"}];nl();const[c,f]=M.useState(u);return z.jsx("div",{children:z.jsx("img",{src:"./src/assets/temp/login.png",alt:""})})};function db(){return z.jsx(m1,{children:z.jsxs(Zp,{children:[z.jsx(Nl,{path:"/arm-kdm2/",element:z.jsx(_h,{})}),z.jsx(Nl,{path:"/arm-kdm2/agreements",element:z.jsx(_h,{})}),z.jsx(Nl,{path:"/arm-kdm2/requests",element:z.jsx(cb,{})}),z.jsx(Nl,{path:"/arm-kdm2/contacts",element:z.jsx(fb,{})}),z.jsx(Nl,{path:"/arm-kdm2/settings",element:z.jsx(rb,{})}),z.jsx(Nl,{path:"/arm-kdm2/user",element:z.jsx(sb,{})}),z.jsx(Nl,{path:"/arm-kdm2/logout",element:z.jsx(ob,{})})]})})}Y0.createRoot(document.getElementById("root")).render(z.jsx(M.StrictMode,{children:z.jsx(tg,{store:Ig,children:z.jsx(db,{})})}));
-//# sourceMappingURL=index-ohJGdJMa.js.map
+//# sourceMappingURL=index-CAk0TM1t.js.map
