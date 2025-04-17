@@ -41,10 +41,7 @@ const TheMenuItem = ({ icon, text, to }) => {
       >
         {({ isActive }) => (
         <>
-          <div className={
-            ``
-          }>
-            {/* ${!showNavbar && (sm_breakpoint || md_breakpoint) ? 'ps-2' : ''} */}
+          <div>
             <svg
               className={`
                 icon lg:mx-0
@@ -57,9 +54,7 @@ const TheMenuItem = ({ icon, text, to }) => {
             </svg>
             
           </div>
-          <div className={
-            `${showNavbar ? '' : ''}`
-          }>
+          <div>
             <span className={`
               lg:block lg:font-medium 
               md:block md:text-left md:text-base
