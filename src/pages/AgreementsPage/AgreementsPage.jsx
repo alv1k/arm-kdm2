@@ -1,70 +1,47 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { hideNavbar } from '../../store/navbarSlice';
-import { setType, selectedType, isShowDetails, showDetails, setTab, selectedTab, selectedAgreement } from '../../store/agreementsSlice';
+import { selectedType, isShowDetails, showDetails, hideDetails, selectedTab, agreementsStoreList, setAgreementsList, selectedAgreement } from '../../store/agreementsSlice';
 import useMediaQueries from '../../hooks/useMediaQueries'; 
 import styles from './AgreementsPage.module.css';
 
 import Header from '../../components/TheHeader/TheHeader';
 import TheNavbar from '../../components/TheNavbar/TheNavbar';
 import AgreementItem from '../../components/TheAgreementItem/TheAgreementItem';
+import TheTabsComponent from '../../components/TheTabsComponent/TheTabsComponent';
 
 
 const AgreementsPage = () => {
-  // const navigate = useNavigate();
-  // const handleButtonClick = () => {
-  //   navigate('/settings')
-  // }
+  const sprite_path = './src/assets/images/i.svg';
   const showNavbar = useSelector(state => state.navbar.showNavbar);
-  const agreementType = useSelector(selectedType);
-  const showAgreementDetails = useSelector(isShowDetails);
-  const agreementTab = useSelector(selectedTab);
-  const singleAgreement = useSelector(selectedAgreement);
+  const isDetailsShown = useSelector(isShowDetails);
+  const agreementsList = useSelector(agreementsStoreList);
+  const currentAgreement = useSelector(selectedAgreement);
+  // useEffect(() => {
+  //   dispatch(fetchAgreementsList()); // Загружаем список договоров при монтировании компонента
+  // }, [dispatch]);
   
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const dispatch = useDispatch();
-  useEffect(() => {
-    if (xl_breakpoint) {
-      dispatch(setType('all'));
-    } else if (lg_breakpoint) {
-      dispatch(setType('all'));
-    } else if (md_breakpoint) {
-      dispatch(setType('all'));
-    } else if (sm_breakpoint) {
-      dispatch(setType('active'));
-    }
-  }, [xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint, dispatch]);
-  const agreements = [
-    {
-      name: 'agree1',
-      summ: 400000,
-      date: new Date(2025, 5, 6).toLocaleDateString(), // Преобразуем дату в строку
-      address: 'г. Якутск, ул. Ленина 123, 1 этаж, каб. №123',
-      num: 'num123'
-    },
-    {
-      name: 'agree2',
-      summ: 250000,
-      date: new Date(2025, 7, 15).toLocaleDateString(),
-      address: 'г. Москва, ул. Пушкина 10',
-      num: 'num456'
-    },
-  ]
   const sideClick = (event) => {
     event.stopPropagation();
     dispatch(hideNavbar());
   };
-  const setAgreementsType = (type) => {
-    dispatch(setType(type));
-  } 
-  const setAgreementDetailsTab = (tab) => {
-    dispatch(setTab(tab));
+  const backToAgreements = () => {
+    dispatch(hideDetails());
   }
-  const handleAgreementClick = (num) => {
-    dispatch(showDetails(num));
+  const handleAgreementClick = (data) => {
+    dispatch(showDetails(data));
+    dispatch(setAgreementsList(data));
+  };
+  const location = useLocation();
+  useEffect(() => {
+    dispatch(hideDetails());
+  }, [location]);
+  const tabsCalc = (tabsList) => {
+    
   }
-
 
   return (
     <main className={[styles.mainLogin, sm_breakpoint || md_breakpoint ? 'h-[500px]' : 'min-height'].join(' ')}>
@@ -79,7 +56,7 @@ const AgreementsPage = () => {
         
         <section 
           className="
-            xl:ml-10 xl:px-10 xl:py-11 xl:rounded-x
+            xl:ml-10 xl:px-10 xl:py-10 xl:rounded-x
             lg:ml-8 lg:px-4 lg:py-5 
             md:w-full md:px-6 md:ms-9 md:rounded-xl md:min-h-[1080px]
             w-full px-5 ms-0 bg-white min-h-[844px]
@@ -87,108 +64,84 @@ const AgreementsPage = () => {
           onClick={sideClick}
         >
           <div className="lg:text-base md:text-base text-sm">
-            <p className="
-              xl:mt-0 
-              lg:px-6 lg:text-[26px] lg:mt-4
-              md:px-2 md:text-left md:mt-9
-              text-center text-xl font-bold mt-4
-            ">
-              Мои договоры
-            </p>
-            <div className="
-              xl:mt-9
-              lg:mt-10 lg:gap-4
-              md:mt-7 md:rounded-t-xl md:gap-10
-              flex mt-6 bg-[#FAFBFD] border-b-1 border-slate-300 rounded-t-md font-medium
-            ">
+            <div className="flex items-center justify-center">
               {
-                (xl_breakpoint || lg_breakpoint || md_breakpoint) && 
-                <div className={`
-                    lg:px-10
-                    md:px-4
-                    px-10 py-4 cursor-pointer bg-item-default rounded-t-xl
-                    ${(showAgreementDetails && agreementTab == 'bills') || (!showAgreementDetails && agreementType == 'all') ? 'text-[#203887] border-b border-b-[#6374AD]' : ''}
-                  `}
-                  onClick={() => {
-                      if (showAgreementDetails) {
-                        setAgreementDetailsTab('bills')
-                      } else {
-                        setAgreementsType('all')
-                      }
-                    } 
-                  }
+                isDetailsShown && sm_breakpoint ? '' :
+                <p className="
+                  xl:mt-0 
+                  lg:px-6 lg:text-[26px] lg:mt-4
+                  md:px-2 md:text-left md:mt-9
+                  text-center text-xl font-bold mt-5
+                ">
+                  Мои договоры
+                </p>
+              }
+              {
+                isDetailsShown && !sm_breakpoint ? 
+                <button 
+                  className="btn-text ms-auto me-4 flex"
+                  onClick={backToAgreements}
                 >
-                  {
-                    showAgreementDetails ? 'Счета' : 'Все'
-                  }
-                  {/* 
-                      выбранный элемент #011E7D #6374AD 
-                      hover для элементов (каждого договора)
-                  */}
-                </div>
+                  <svg
+                    className="icon"
+                  >
+                    <use href={`${sprite_path}#back-icon`} />
+                  </svg>
+                  
+                  Назад
+                </button>
+                : ''
               }
-              <div 
-                className={`
-                  lg:px-10 lg:w-auto
-                  md:px-5 md:w-auto
-                  px-9 w-1/2 py-4 cursor-pointer bg-item-default rounded-t-xl
-                  ${(showAgreementDetails && agreementTab == 'acts') || (!showAgreementDetails && agreementType == 'active') ? 'text-[#203887] border-b border-b-[#6374AD]' : ''}
-                `}
-                
-                onClick={() => {
-                  if (showAgreementDetails) {
-                    setAgreementDetailsTab('acts')
-                  } else {
-                    setAgreementsType('active')
-                  }
-                } 
-              }
-              >
-              {
-                showAgreementDetails ? 'Акты' : 'Действующие'
-              }                
-              </div>
-              <div className={`
-                  lg:px-10 px-9 lg:w-auto 
-                  md:px-5 md:w-auto
-                  w-1/2 py-4 cursor-pointer bg-item-default rounded-t-xl
-                  ${(showAgreementDetails && agreementTab == 'counters') || (!showAgreementDetails && agreementType == 'inactive') ? 'text-[#203887] border-b border-b-[#6374AD]' : ''}
-                `}
-                
-                onClick={() => {
-                  if (showAgreementDetails) {
-                    setAgreementDetailsTab('counters')
-                  } else {
-                    setAgreementsType('inactive')
-                  }
-                } 
-              }
-              >
-              {
-                showAgreementDetails ? 'Показания' : 'Неакуальные'
-              }
-              </div>
             </div>
             {
-              showAgreementDetails ? 
-              <div></div> : 
+              isDetailsShown ? '' :
+              <TheTabsComponent titles={
+                [
+                  sm_breakpoint ? {} : { title_ru: 'Все', title_en: 'all' },
+                  { title_ru: 'Действующие', title_en: 'active' },
+                  { title_ru: 'Неактуальные', title_en: 'inactive' }
+                ]
+              } />
+            }
+            {
               <div className="md:pt-4 pt-5">
-                {agreements.map((agreement) => (
-                  <div key={agreement.num} onClick={() => handleAgreementClick(agreement)}>
-                    { (
-                      <AgreementItem 
-                        number={agreement.num}
-                        date={agreement.date}
-                        address={agreement.address}
-                        summ={agreement.summ}
-                        // Здесь можно добавить дополнительные пропсы для отображения подробностей
-                      />
-                    )}
-                  </div>
-                ))}
+                {
+                  !isDetailsShown ?
+                    agreementsList.map((agreement) => (
+                      <div key={agreement.num} onClick={() => handleAgreementClick(agreement)}>
+                        <AgreementItem 
+                          key={agreement.num}
+                          number={agreement.num}
+                          date={agreement.date}
+                          address={agreement.address}
+                          summ={agreement.summ}
+                        />
+                      </div>
+                    ))
+                  :
+                    currentAgreement.map((agreement) => (
+                      <div key={agreement.num} >
+                        <AgreementItem 
+                          key={agreement.num}
+                          number={agreement.num}
+                          date={agreement.date}
+                          address={agreement.address}
+                          summ={agreement.summ}
+                        />
+                      </div>
+                    ))
+                }
               </div>
             }
             
+            {
+              isDetailsShown ? 
+              <TheTabsComponent titles={[
+                { title_ru: 'Счета', title_en: 'bills' },
+                { title_ru: 'Акты', title_en: 'acts' },
+                { title_ru: 'Показания', title_en: 'counters' }
+              ]} /> : ''
+            }
           </div>
         </section>
       </div>

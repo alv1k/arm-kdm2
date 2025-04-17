@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import useMediaQueries from '../../hooks/useMediaQueries'; 
 import TheMenuItem from '@/components/TheMenuItem/TheMenuItem';
@@ -17,7 +17,7 @@ const TheNavbar = () => {
   return (      
     <aside 
       className={`
-        xl:p-11 xl:static xl:w-6/20
+        xl:p-10 xl:static xl:w-6/20
         lg:w-7/23 lg:static lg:p-5 lg:py-9 lg:rounded-xl
         md:w-1/7 md:absolute md:z-10 md:rounded-none md:rounded-e-xl md:min-h-[1080px]
         py-3 px-5 w-full rounded-2xl absolute bg-white min-h-[844px]

@@ -22,8 +22,80 @@ body {
 .bg-item-default:hover {
   background-color: #F6F8FF;
 }
+
 .bg-item-active {
   background-color: #F6F8FF;
+}
+
+.btn-default {
+  background-color: #fff;
+  border: 1px solid #6374AD;
+  color: #203887;
+  border-radius: 8px;
+  font-size: 16px;
+}
+.btn-default:hover {
+  background-color: #F6F8FF;
+}
+.btn-default:active {
+  background-color: #F6F8FF;
+  border: 1px solid #203887;
+}
+.btn-default:disabled {
+  background-color: #fff;
+  border: 1px solid #F0F0F1;
+  color: #F0F0F1;
+}
+
+.btn-success {
+  background-color: #00BA37;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 16px;
+}
+.btn-success:hover {
+  background-color: #00A42A;
+}
+.btn-success:active {
+  background-color: #008A21;
+}
+.btn-success:disabled {
+  background-color: #F0F0F1;
+  color: #787C82;
+}
+
+.btn-primary {
+  background-color: #203887;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 16px;
+}
+.btn-primary:hover {
+  background-color: #6374AD;
+}
+.btn-primary:active {
+  background-color: #4B5E9D;
+}
+.btn-primary:disabled {
+  background-color: #F0F0F1;
+  color: #787C82;
+}
+
+.btn-text {
+  color: #203887;
+  stroke: #203887;
+}
+.btn-text:hover {
+  color: #6374AD;
+  stroke: #6374AD;
+}
+.btn-text:active {
+  color: #6374AD;
+  stroke: #6374AD;
+}
+.btn-text:disabled {
+  color: #F0F0F1;
+  stroke: #F0F0F1;
 }
 
 .item-selected {

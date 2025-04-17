@@ -9,7 +9,7 @@ const navbarSlice = createSlice({
     toggleNavbar(state) {
       state.showNavbar = !state.showNavbar; // Переключаем состояние
     },
-    showNavbar(state) {
+    showNavbar(state) {      
       state.showNavbar = true; // Показываем navbar
     },
     hideNavbar(state) {

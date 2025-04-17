@@ -1,12 +1,15 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux'; 
 import { NavLink } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import useMediaQueries from '../../hooks/useMediaQueries'; 
+import { hideNavbar } from '../../store/navbarSlice';
+import { hideDetails } from '../../store/agreementsSlice';
 import styles from './TheMenuItem.module.css';
 
 const TheMenuItem = ({ icon, text, to }) => {
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const showNavbar = useSelector(state => state.navbar.showNavbar);
+  const dispatch = useDispatch();
   const sprite_path = './src/assets/images/i.svg';
   
   const navbarRemoteIcon = [
@@ -19,6 +22,9 @@ const TheMenuItem = ({ icon, text, to }) => {
     sm_breakpoint && showNavbar && !md_breakpoint ? 'md:block' : '',
     sm_breakpoint && !showNavbar && !md_breakpoint ? 'md:hidden' : ''
   ].filter(Boolean).join(' ');
+  const closeNavbar = () => {
+    dispatch(hideNavbar());
+  }
   
   return (
       <NavLink 
@@ -31,6 +37,7 @@ const TheMenuItem = ({ icon, text, to }) => {
             mt-0 mb-6 py-2 px-5 rounded-md flex 
           `
         }
+        onClick={closeNavbar}
       >
         {({ isActive }) => (
         <>
