@@ -12,21 +12,26 @@ const TheAgreementItem = ({ number, date, address, summ }) => {
   return (
     <div className={`
         lg:p-10 lg:rounded-2xl lg:mb-10 lg:flex
-        md:mb-4
-        rounded-xl mb-6 md:p-5
-        ${isDetailsShown ? 'lg:mt-6 md:bg-blue-100 bg-transparent p-0' : 'md:bg-item-default bg-item-active cursor-pointer p-5'}
-        
+        md:mb-4 md:bg-item-active
+        rounded-xl mb-6 block
+        ${isDetailsShown ? 'lg:mt-6 p-0' : 'cursor-pointer p-5 bg-item-default'}
+        ${isDetailsShown && lg_breakpoint ? 'bg-item-active': ''}
       `}
     >
-      <div className="lg:text-xl md:text-base text-sm">
+      <div className={`
+        lg:text-xl lg:p-0
+        md:text-base  md:rounded-xl
+        text-sm p-0 bg-none
+        ${isDetailsShown && md_breakpoint ? 'md:bg-item-active bg-item-active md:p-5' : 'md:bg-none bg-none md:p-0'}
+      `}>
         <h3 className={`
-          lg:font-bold lg:text-base md:text-left text-xl text-center
-          ${isDetailsShown ? 'font-semibold' : 'font-medium'}
+          lg:font-bold  md:text-left text-xl text-center
+          ${isDetailsShown ? 'lg:text-xl font-semibold' : 'lg:text-xl font-medium'}
         `}>
           Договор: {number} <span>от {date}</span></h3>
         <p className={`
-          ${isDetailsShown ? 'md:text-base md:mt-8' : 'lg:text-xl'}
-          md:my-4 md:block
+          ${isDetailsShown ? 'md:text-base md:mt-4' : 'lg:text-base md:mt-2'}
+          md:block
           my-2
         `}>
         {
@@ -62,7 +67,7 @@ const TheAgreementItem = ({ number, date, address, summ }) => {
               className={`
                 ${isDetailsShown ? 'md:text-base' : 'lg:text-xl'}
                 ${isDetailsShown && sm_breakpoint ? 'rounded-md bg-item-active px-5 py-2 my-0' : 'bg-none my-2'}
-                md:my-4 md:block md:order-1
+                md:my-2 md:block md:order-1
                 order-2
               `}>
               <span className={`
@@ -76,7 +81,7 @@ const TheAgreementItem = ({ number, date, address, summ }) => {
             <div className={`
                 ${isDetailsShown ? 'md:text-base' : 'lg:text-xl'}
                 ${isDetailsShown && sm_breakpoint ? 'my-0 gap-2' : 'my-2 gap-0'}
-                md:my-2
+                md:my-0
                 flex col-span-2 order-1
               `}>
               <p 
@@ -100,7 +105,7 @@ const TheAgreementItem = ({ number, date, address, summ }) => {
               className={`
                 ${isDetailsShown ? 'md:text-base' : 'lg:text-xl'}
                 ${isDetailsShown && sm_breakpoint ? 'bg-item-active px-5 py-2 rounded-md' : 'bg-none my-2'}
-                md:my-4 md:block
+                md:my- md:block md:col-span-2 md:mb-4
                 order-3
               `}>
               <span className={`
@@ -116,43 +121,67 @@ const TheAgreementItem = ({ number, date, address, summ }) => {
           <PriceFormatter amount={summ} /> && (
             <p className="xl:text-xl lg:text-base mt-2">Сумма долга: &nbsp;<span className="text-red-600"> -&nbsp;{
               <PriceFormatter amount={summ} />
-            }</span></p>
+            }</span>
+            </p>
           )
         }
-      </div>
-      <div className="lg:ms-auto ms-0 lg:mt-0 md:mt-4 mt-3">        
         {
-          isDetailsShown && sm_breakpoint ? 
-          <button className="mt-7 btn-default px-5 py-2 w-full">
-            Передать показания счетчиков
-          </button>
-          :
-          <button className="bg-white px-4 py-2 rounded-lg border border-[#6374AD] flex gap-3 text-[#203887] md:w-auto w-full ms-auto">
-            <svg
-              className="icon lg:ms-0 ms-auto"
-            >
-              <use href={`${sprite_path}#doc-icon`} />
-            </svg>
-            <span className="lg:me-0 me-auto">
-              Скачать договор
-            </span>
-          </button>
+          isDetailsShown && md_breakpoint ? 
+          <div>
+            <button className="bg-white px-4 py-2 rounded-lg border border-[#6374AD] flex gap-3 text-[#203887] md:w-auto w-full">
+              <svg
+                className="icon lg:ms-0 ms-auto"
+              >
+                <use href={`${sprite_path}#doc-icon`} />
+              </svg>
+              <span className="lg:me-0 me-auto">
+                Скачать договор
+              </span>
+            </button>
+            <button className="md:mt-4 mt-7 btn-default px-5 py-2">
+              Передать показания счетчиков
+            </button>
+          </div> : ''
         }
-        {
-          isDetailsShown ? 
-          <div className="
-            lg:p-10 
-            md:mt-8 md:border-slate-200
-            rounded-xl bg-white md:border mt-9 text-base text-center
-          ">
-            <p>Общая сумма долга на 01.01.2025:</p>
-            <p className="text-xl lg:my-4 my-2 text-red-600 font-semibold">- <PriceFormatter amount={100000} /> </p>
-            <button className="btn-success lg:px-10 lg:mt-0 py-2 w-full mt-2">Оплатить</button>
-          </div>
-          : ''
-        }
-        
+        <div className="lg:ms-auto ms-0 lg:mt-0 md:mt-4 mt-3">        
+          {
+            isDetailsShown && (sm_breakpoint || lg_breakpoint || xl_breakpoint) ? 
+            <button className="mt-7 btn-default px-5 py-2 lg:w-auto w-full">
+              Передать показания счетчиков
+            </button>
+            : ''
+          }
+        </div>
       </div>
+      {
+        <div className="lg:ms-auto">
+          {
+            isDetailsShown && (md_breakpoint || sm_breakpoint) ? '' :
+            <button className="lg:w-auto lg:ms-auto lg:mt-0 md:w-auto md:ms-0 bg-white px-4 py-2 rounded-lg border border-[#6374AD] flex gap-3 text-[#203887] w-full text-base ms-auto mt-4">
+              <svg
+                className="icon lg:ms-0 ms-auto"
+              >
+                <use href={`${sprite_path}#doc-icon`} />
+              </svg>
+              <span className="lg:me-0 me-auto">
+                Скачать договор
+              </span>
+            </button>
+          }
+          {
+            isDetailsShown ?
+            <div className="
+              lg:p-10 lg:mt-8
+              md:mt-5 md:border-slate-200 md:py-4 py-0
+              rounded-xl bg-white md:border mt-9 text-base text-center
+            ">
+              <p>Общая сумма долга на 01.01.2025:</p>
+              <p className="text-xl lg:my-4 my-2 text-red-600 font-semibold">- <PriceFormatter amount={100000} /> </p>
+              <button className="btn-success lg:px-10 lg:mt-0 lg:w-auto py-2 md:w-2/9 w-full mt-2">Оплатить</button>
+            </div> : ''
+          }
+        </div>
+      }
     </div>
   )
 }
