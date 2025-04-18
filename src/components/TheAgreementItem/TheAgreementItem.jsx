@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
-import useMediaQueries from '../../hooks/useMediaQueries'; 
-import { isShowDetails } from '../../store/agreementsSlice';
+import useMediaQueries from '@/hooks/useMediaQueries'; 
+import { isShowDetails } from '@/store/agreementsSlice';
 import PriceFormatter from '../PriceFormatter/PriceFormatter'; 
 
 const TheAgreementItem = ({ number, date, address, summ }) => {

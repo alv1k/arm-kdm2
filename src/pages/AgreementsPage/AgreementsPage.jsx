@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { hideNavbar } from '../../store/navbarSlice';
-import { toggleTabs } from '../../store/tabsSlice';
-import { isShowDetails, selectedAgreement, agreementsStoreList, showDetails, hideDetails, setAgreementsList } from '../../store/agreementsSlice';
-import useMediaQueries from '../../hooks/useMediaQueries'; 
+import { hideNavbar } from '@/store/navbarSlice';
+import { toggleTabs } from '@/store/tabsSlice';
+import { isShowDetails, selectedAgreement, agreementsStoreList, showDetails, hideDetails, setAgreementsList } from '@/store/agreementsSlice';
+import useMediaQueries from '@/hooks/useMediaQueries'; 
 import styles from './AgreementsPage.module.css';
 
-import Header from '../../components/TheHeader/TheHeader';
-import TheNavbar from '../../components/TheNavbar/TheNavbar';
-import AgreementItem from '../../components/TheAgreementItem/TheAgreementItem';
-import TheTabsComponent from '../../components/TheTabsComponent/TheTabsComponent';
+import Header from '@/components/TheHeader/TheHeader';
+import TheNavbar from '@/components/TheNavbar/TheNavbar';
+import AgreementItem from '@/components/TheAgreementItem/TheAgreementItem';
+import TheTabsComponent from '@/components/TheTabsComponent/TheTabsComponent';
 
 
 const AgreementsPage = () => {

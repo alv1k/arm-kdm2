@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { toggleNavbar } from '../../store/navbarSlice';
-import useMediaQueries from '../../hooks/useMediaQueries'; 
-import { isShowDetails, hideDetails, agreementsStoreList } from '../../store/agreementsSlice';
+import { toggleNavbar } from '@/store/navbarSlice';
+import useMediaQueries from '@/hooks/useMediaQueries'; 
+import { isShowDetails, hideDetails, agreementsStoreList } from '@/store/agreementsSlice';
 import styles from './TheHeader.module.css'
 
 const sprite_path = './src/assets/images/i.svg';

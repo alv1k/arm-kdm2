@@ -12,13 +12,13 @@ function App() {
   return (
       <Router>
         <Routes>
-          <Route path='/arm-kdm2/' element={<AgreementsPage/>} />
-          <Route path='/arm-kdm2/agreements' element={<AgreementsPage/>} />
-          <Route path='/arm-kdm2/requests' element={<RequestsPage/>} />
-          <Route path='/arm-kdm2/contacts' element={<ContactsPage/>} />
-          <Route path='/arm-kdm2/settings' element={<SettingsPage/>} />
-          <Route path='/arm-kdm2/user' element={<UserPage/>} />
-          <Route path='/arm-kdm2/logout' element={<LoginPage/>} />
+          <Route path='/' element={<AgreementsPage/>} />
+          <Route path='/agreements' element={<AgreementsPage/>} />
+          <Route path='/requests' element={<RequestsPage/>} />
+          <Route path='/contacts' element={<ContactsPage/>} />
+          <Route path='/settings' element={<SettingsPage/>} />
+          <Route path='/user' element={<UserPage/>} />
+          <Route path='/logout' element={<LoginPage/>} />
         </Routes>
       </Router>
   )

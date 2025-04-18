@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { hideNavbar } from '../../store/navbarSlice';
-import { setType, selectedType, isShowDetails, showDetails, setTab, selectedTab } from '../../store/agreementsSlice';
-import useMediaQueries from '../../hooks/useMediaQueries';
+import { hideNavbar } from '@/store/navbarSlice';
+import { setType, selectedType, isShowDetails, showDetails, setTab, selectedTab } from '@/store/agreementsSlice';
+import useMediaQueries from '@/hooks/useMediaQueries';
 
-import Header from '../../components/TheHeader/TheHeader';
-import TheNavbar from '../../components/TheNavbar/TheNavbar';
-import AgreementItem from '../../components/TheAgreementItem/TheAgreementItem';
-import TheTabsComponent from '../../components/TheTabsComponent/TheTabsComponent';
+import Header from '@/components/TheHeader/TheHeader';
+import TheNavbar from '@/components/TheNavbar/TheNavbar';
+import AgreementItem from '@/components/TheAgreementItem/TheAgreementItem';
+import TheTabsComponent from '@/components/TheTabsComponent/TheTabsComponent';
 
 
 const UserPage = () => {  

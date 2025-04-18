@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import useMediaQueries from '../../hooks/useMediaQueries'; 
+import useMediaQueries from '@/hooks/useMediaQueries'; 
 import TheMenuItem from '@/components/TheMenuItem/TheMenuItem';
 import styles from './TheNavbar.module.css'
 
@@ -38,14 +38,14 @@ const TheNavbar = () => {
       }
       <div className="md:mt-9 mt-3">
         <div>
-          <TheMenuItem icon="docs-icon" text="Мои договоры" to="/arm-kdm2/agreements" />
-          <TheMenuItem icon="requests-icon" text="Заявки" to="/arm-kdm2/requests" />
-          <TheMenuItem icon="contacts-icon" text="Контакты" to="/arm-kdm2/contacts" />
+          <TheMenuItem icon="docs-icon" text="Мои договоры" to="/agreements" />
+          <TheMenuItem icon="requests-icon" text="Заявки" to="/requests" />
+          <TheMenuItem icon="contacts-icon" text="Контакты" to="/contacts" />
         </div>
         
         <div className="xl:mt-96 lg:mt-64 md:mt-132">
-          <TheMenuItem  icon="user-icon" text="Профиль" to="/arm-kdm2/user" />
-          <TheMenuItem icon="logout-icon" text="Выйти" to="/arm-kdm2/logout" />
+          <TheMenuItem  icon="user-icon" text="Профиль" to="/user" />
+          <TheMenuItem icon="logout-icon" text="Выйти" to="/logout" />
         </div>
       </div>
     </aside>

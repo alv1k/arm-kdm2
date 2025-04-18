@@ -1,10 +1,10 @@
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { hideNavbar } from '../../store/navbarSlice';
-import useMediaQueries from '../../hooks/useMediaQueries'; 
+import { hideNavbar } from '@/store/navbarSlice';
+import useMediaQueries from '@/hooks/useMediaQueries'; 
 import styles from './RequestsPage.module.css';
-import Header from '../../components/TheHeader/TheHeader';
-import TheNavbar from '../../components/TheNavbar/TheNavbar';
+import Header from '@/components/TheHeader/TheHeader';
+import TheNavbar from '@/components/TheNavbar/TheNavbar';
 
 
 const RequestsPage = () => {

@@ -23,7 +23,6 @@ export default defineConfig({
     tailwindcss(),
     renameJsxToJs
   ],
-  base: "/arm-kdm2",
   server: {
     port: 3000,
     open: true

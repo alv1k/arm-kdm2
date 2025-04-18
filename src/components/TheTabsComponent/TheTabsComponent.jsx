@@ -1,7 +1,7 @@
 import React, { useEffect }  from 'react';
 import { useSelector, useDispatch } from 'react-redux'; 
-import useMediaQueries from '../../hooks/useMediaQueries'; 
-import { setType, selectedType, isShowDetails, showDetails, setTab, selectedTab } from '../../store/agreementsSlice';
+import useMediaQueries from '@/hooks/useMediaQueries'; 
+import { setType, selectedType, isShowDetails, showDetails, setTab, selectedTab } from '@/store/agreementsSlice';
 
 const TheTabsComponent = (props) => {
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
