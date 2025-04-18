@@ -34,16 +34,18 @@ const TheTabsComponent = (props) => {
       <div className="
         xl:mt-9
         lg:mt-10 lg:gap-4
-        md:mt-7 md:rounded-t-xl md:gap-10
-        flex mt-6 bg-[#FAFBFD] border-b-1 border-slate-300 rounded-t-md font-medium
+        md:mt-7 md:rounded-t-xl md:gap-10 md:justify-start
+        flex justify-between w-full gap-0 mt-6 bg-[#FAFBFD] border-b-1 border-slate-300 rounded-t-md font-medium
       ">
           {tabs.map((tab, index) => (
             <div 
               key={index} 
               className={`
+                text-center
                 lg:px-10
                 md:px-4
-                px-10 py-4 cursor-pointer bg-item-default rounded-t-xl
+                py-4 cursor-pointer bg-item-default rounded-t-xl
+                ${sm_breakpoint ? 'w-1/2' : ''}
                 ${agreementTab.title_en === tab.title_en ? 'text-[#203887] border-b border-b-[#6374AD]' : ''}
                 ${agreementType.title_en === tab.title_en ? 'text-[#203887] border-b border-b-[#6374AD]' : ''}
               `}

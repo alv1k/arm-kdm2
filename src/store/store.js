@@ -10,6 +10,11 @@ const store = configureStore({
     agreements_slice: agreementsReducer,
     tabs_slice: tabsReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat((store) => (next) => (action) => {
+      console.log('Dispatching:', action.type);
+      return next(action);
+    }),
 });
 
 export default store;

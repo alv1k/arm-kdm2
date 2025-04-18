@@ -19,7 +19,7 @@ const AgreementsPage = () => {
   const isDetailsShown = useSelector(isShowDetails);
   const agreementsList = useSelector(agreementsStoreList);
   const currentAgreement = useSelector(selectedAgreement);
-  const tabs = useSelector((state) => state.tabs_slice.tabs);
+  // const tabs = useSelector((state) => state.tabs_slice.tabs);
   // useEffect(() => {
   //   dispatch(fetchAgreementsList()); // Загружаем список договоров при монтировании компонента
   // }, [dispatch]);
@@ -66,14 +66,14 @@ const AgreementsPage = () => {
           onClick={sideClick}
         >
           <div className="lg:text-base md:text-base text-sm">
-            <div className="flex items-center justify-center">
+            <div className="flex md:justify-start justify-center">
               {
                 isDetailsShown && sm_breakpoint ? '' :
                 <p className="
                   xl:mt-0 
                   lg:px-6 lg:text-[26px] lg:mt-4
-                  md:px-2 md:text-left md:mt-9
-                  text-center text-xl font-bold mt-5
+                  md:px-2 md:mt-9
+                  text-xl font-bold mt-5
                 ">
                   Мои договоры
                 </p>
@@ -134,11 +134,9 @@ const AgreementsPage = () => {
             
             {
               isDetailsShown ? 
-              <TheTabsComponent titles={[
-                { title_ru: 'Счета', title_en: 'bills' },
-                { title_ru: 'Акты', title_en: 'acts' },
-                { title_ru: 'Показания', title_en: 'counters' }
-              ]} /> : ''
+              <TheTabsComponent titles={
+                setTabs('singleAgreement', sm_breakpoint ? 'sm-breakpoint' : '')
+              } /> : ''
             }
           </div>
         </section>

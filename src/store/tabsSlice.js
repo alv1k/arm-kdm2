@@ -18,20 +18,30 @@ const tabSlice = createSlice({
   },
   reducers: {
     toggleTabs(state, action) {
-      console.log(action.payload);
-      
       if (action.payload.target == 'agreements') {
-        state.tabs = agreementsList
+        switch (action.payload.breakpoint) {
+          case 'sm-breakpoint':
+            state.tabs = agreementsList.slice(1);
+            break;
+          default:
+            state.tabs = [...agreementsList]; 
+            break;
+        }        
       } else if (action.payload.target == 'singleAgreement') {
-        state.tabs = singleAgreementsList
+        switch (action.payload.breakpoint) {
+          case 'sm-breakpoint':
+            state.tabs = singleAgreementsList;
+            break;
+          default:
+            state.tabs = [...singleAgreementsList]; 
+            break;
+        }
       } else {
-        console.log('no target');
-        
+        console.log('no target');        
       }
     },
   },
 });
 
-// Экспортируем действия и редюсер
 export const { tabs, toggleTabs } = tabSlice.actions;
 export default tabSlice.reducer;
