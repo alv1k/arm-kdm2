@@ -54,7 +54,7 @@
 
 @keyframes slideRight {
   from {
-    width: 110px;
+    width: 100px;
     opacity: 1;
     visibility: visible;
   }
@@ -72,7 +72,7 @@
     visibility: visible;
   }
   to {
-    width: 110px;
+    width: 100px;
     opacity: 1;
     visibility: visible;
   }

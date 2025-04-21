@@ -34,6 +34,7 @@ const TheAgreementItem = ({ number, date, address, summ }) => {
           md:block
           my-2
         `}>
+          
         {
           isDetailsShown && sm_breakpoint ? 
           <button className="bg-white px-4 py-2 rounded-lg border border-[#6374AD] flex gap-3 text-[#203887] w-full text-base ms-auto mt-4">

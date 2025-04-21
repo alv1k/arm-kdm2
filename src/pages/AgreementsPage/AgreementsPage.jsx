@@ -11,24 +11,27 @@ import Header from '@/components/TheHeader/TheHeader';
 import TheNavbar from '@/components/TheNavbar/TheNavbar';
 import AgreementItem from '@/components/TheAgreementItem/TheAgreementItem';
 import TheTabsComponent from '@/components/TheTabsComponent/TheTabsComponent';
+import TheDocsListComponent from '@/components/TheDocsListComponent/TheDocsListComponent'
 
 
 const AgreementsPage = () => {
   const sprite_path = './src/assets/images/i.svg';
-  const showNavbar = useSelector(state => state.navbar.showNavbar);
+  const showNavbar = useSelector((state) => state.navbar.showNavbar);
   const isDetailsShown = useSelector(isShowDetails);
   const agreementsList = useSelector(agreementsStoreList);
   const currentAgreement = useSelector(selectedAgreement);
   // const tabs = useSelector((state) => state.tabs_slice.tabs);
   // useEffect(() => {
   //   dispatch(fetchAgreementsList()); // Загружаем список договоров при монтировании компонента
-  // }, [dispatch]);
+  // }, [dispatch]);  
   
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const dispatch = useDispatch();
   const sideClick = (event) => {
     event.stopPropagation();
-    dispatch(hideNavbar());
+    if (showNavbar) {
+      dispatch(hideNavbar());
+    }
   };
   const setTabs = (target, breakpoint) => {
     dispatch(toggleTabs({ target, breakpoint }));
@@ -59,9 +62,9 @@ const AgreementsPage = () => {
         <section 
           className="
             xl:ml-10 xl:px-10 xl:py-10 xl:rounded-x
-            lg:ml-8 lg:px-4 lg:py-5 
-            md:w-full md:px-6 md:ms-9 md:rounded-xl md:min-h-[1080px]
-            w-full px-5 ms-0 bg-white min-h-[844px]
+            lg:ml-8 lg:px-4 lg:py-5 lg:shadow-none
+            md:w-full md:px-6 md:ms-5 md:rounded-xl md:min-h-[1080px] md:shadow-lg
+            w-full px-5 ms-0 bg-white min-h-[844px] shadow-none
           "
           onClick={sideClick}
         >
@@ -134,9 +137,13 @@ const AgreementsPage = () => {
             
             {
               isDetailsShown ? 
-              <TheTabsComponent titles={
-                setTabs('singleAgreement', sm_breakpoint ? 'sm-breakpoint' : '')
-              } /> : ''
+              <div>
+                <TheTabsComponent titles={
+                  setTabs('singleAgreement', sm_breakpoint ? 'sm-breakpoint' : '')
+                } />
+                <TheDocsListComponent />
+              </div>
+              : ''
             }
           </div>
         </section>

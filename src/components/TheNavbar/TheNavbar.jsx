@@ -18,9 +18,9 @@ const TheNavbar = () => {
     <aside 
       className={`
         xl:p-10 xl:static xl:w-6/20
-        lg:w-7/23 lg:static lg:p-5 lg:py-9 lg:rounded-xl
-        md:w-1/7 md:absolute md:z-10 md:rounded-none md:rounded-e-xl md:min-h-[1080px]
-        py-3 px-5 w-full rounded-2xl absolute bg-white min-h-[844px]
+        lg:w-7/23 lg:static lg:p-5 lg:py-9 lg:rounded-xl lg:shadow-none
+        md:w-1/7 md:absolute md:z-10 md:rounded-none md:rounded-e-xl md:min-h-[1080px] md:shadow-md
+        py-3 px-5 w-full rounded-2xl absolute bg-white min-h-[844px] shadow-none
         ${sm_breakpoint || md_breakpoint ? styles.navbar : ''}
         ${navbarRemote}
         ${showNavbar ? 'shadow-xl' : ''}
