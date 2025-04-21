@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleNavbar } from '@/store/navbarSlice';
 import useMediaQueries from '@/hooks/useMediaQueries'; 

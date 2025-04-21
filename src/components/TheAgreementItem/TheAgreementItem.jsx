@@ -29,8 +29,8 @@ const TheAgreementItem = ({ number, date, address, summ }) => {
           ${isDetailsShown ? 'lg:text-xl font-semibold' : 'lg:text-xl font-medium'}
         `}>
           Договор: {number} <span>от {date}</span></h3>
-        <p className={`
-          ${isDetailsShown ? 'md:text-base md:mt-4' : 'lg:text-base md:mt-2'}
+        <div className={`
+          ${isDetailsShown ? 'md:text-base md:mt-8' : 'lg:text-base md:mt-2'}
           md:block
           my-2
         `}>
@@ -50,17 +50,17 @@ const TheAgreementItem = ({ number, date, address, summ }) => {
           : ''
         }
           
-        <div className={`
-          md:p-0 md:mt-0 
-          rounded-md
-          ${isDetailsShown ? 'px-5 py-3 mt-4' : 'mt-2'}
-          ${isDetailsShown && sm_breakpoint ? 'md:bg-none bg-item-active' : ''}
-        `}>
-          <span className="text-[#787C82] lg:inline md:inline block lg:mt-0">Адрес:&nbsp;</span>
-          <span className="lg:inline md:inline block">{address}</span>
-        </div> 
+          <div className={`
+            md:p-0 md:mt-0 
+            rounded-md
+            ${isDetailsShown ? 'px-5 py-3 mt-4' : 'mt-2'}
+            ${isDetailsShown && sm_breakpoint ? 'md:bg-none bg-item-active' : ''}
+          `}>
+            <span className="text-[#787C82] lg:inline md:inline block lg:mt-0">Адрес:&nbsp;</span>
+            <span className="lg:inline md:inline block">{address}</span>
+          </div> 
           
-        </p>
+        </div>
         {
           isDetailsShown ? 
           <div className="grid grid-cols-2 gap-2">
@@ -144,10 +144,10 @@ const TheAgreementItem = ({ number, date, address, summ }) => {
             </button>
           </div> : ''
         }
-        <div className="lg:ms-auto ms-0 lg:mt-0 md:mt-4 mt-3">        
+        <div className="lg:ms-auto ms-0 lg:mt-0 md:mt-3 mt-3">        
           {
             isDetailsShown && (sm_breakpoint || lg_breakpoint || xl_breakpoint) ? 
-            <button className="mt-7 btn-default px-5 py-2 lg:w-auto w-full">
+            <button className="lg:mt-4 mt-7 btn-default px-5 py-2 lg:w-auto w-full">
               Передать показания счетчиков
             </button>
             : ''

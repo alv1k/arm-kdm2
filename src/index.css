@@ -56,12 +56,15 @@ body {
 }
 .btn-success:hover {
   background-color: #00A42A;
+  border: 1px solid #00A42A;
 }
 .btn-success:active {
   background-color: #008A21;
+  border: 1px solid #008A21;
 }
 .btn-success:disabled {
   background-color: #F0F0F1;
+  border: 1px solid #F0F0F1;
   color: #787C82;
 }
 

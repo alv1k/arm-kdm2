@@ -1,0 +1,13 @@
+table {
+  padding-left: 20px;
+}
+table th {
+  padding: 10px 20px;
+}
+table td {
+  padding: 10px 20px;
+}
+.icon {
+  height: 10px;
+  width: 10px;
+}
