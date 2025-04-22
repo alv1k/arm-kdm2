@@ -40,10 +40,10 @@ const LoginPage = () => {
   }
 
   return (
-    <main>
+    <main className=""> 
       <div className="flex">
-        <div className="w-1/2 ">
-          <img src="./src/assets/images/bg.png" alt="" />
+        <div className="w-1/2">
+          <img className="" src="./src/assets/images/bg.png" alt="" />
         </div>
         <div className="w-1/2">
           <div className="bg-white p-8 mt-50 mx-auto w-2/3 text-center">

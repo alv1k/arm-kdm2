@@ -5,6 +5,8 @@ import SettingsPage from './pages/SettingsPage/SettingsPage'
 import ContactsPage from './pages/ContactsPage/ContactsPage'
 import UserPage from './pages/UserPage/UserPage';
 import LoginPage from './pages/LoginPage/LoginPage';
+import Header from '@/components/TheHeader/TheHeader';
+import Navbar from '@/components/TheNavbar/TheNavbar';
 
 function App() {
   // const [count, setCount] = useState(0)
@@ -19,7 +21,7 @@ function App() {
           <Route path='/settings' element={<SettingsPage/>} />
           <Route path='/user' element={<UserPage/>} />
           <Route path='/logout' element={<LoginPage/>} />
-        </Routes>
+        </Routes>       
       </Router>
   )
 }

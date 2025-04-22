@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux'; 
 import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
 import { hideNavbar, isNavbarShown } from '@/store/navbarSlice';
 import { hideDetails } from '@/store/agreementsSlice';

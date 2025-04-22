@@ -37,9 +37,9 @@ const UserPage = () => {
 
 
   return (
-    <main>
+    <main className="h-screen">
       <Header />
-      <div className="xl:p-10 lg:p-5 md:py-5 flex h-screen">        
+      <div className="xl:p-10 lg:p-5 md:py-5 flex h-[90vh]">      
         {
           md_breakpoint && (
             <div className="w-1/7"></div>
