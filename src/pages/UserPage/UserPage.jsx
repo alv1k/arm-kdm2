@@ -37,9 +37,9 @@ const UserPage = () => {
 
 
   return (
-    <main className="h-screen">
+    <main className="min-h-fit">
       <Header />
-      <div className="xl:p-10 lg:p-5 md:py-5 flex h-[90vh]">      
+      <div className="xl:p-10 lg:p-5 md:py-5 flex min-h-fit">      
         {
           md_breakpoint && (
             <div className="w-1/7"></div>
@@ -72,7 +72,7 @@ const UserPage = () => {
             </div>
             <div className="p-4 mt-6 text-xl gap-8">
               <div className="flex gap-5">
-                <img className="w-32" src="./src/assets/images/user.png" alt="profile" />
+                <img className="w-32" src="/src/assets/images/user.png" alt="profile" />
                 <div className="">
                   <p className="text-[#203887] font-extrabold text-xl">
                     ООО “Название организации”

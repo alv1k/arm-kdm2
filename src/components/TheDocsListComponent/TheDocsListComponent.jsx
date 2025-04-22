@@ -12,8 +12,7 @@ const TheDocsListComponent = () => {
   const showAgreementDetails = useSelector(isShowDetails);  
   const agreementType = useSelector(selectedType);
   const currentTab = useSelector(selectedTab);
-  const tabs = useSelector((state) => state.tabs_slice.tabs); 
-  console.log(currentTab,'ooo');
+  const tabs = useSelector((state) => state.tabs_slice.tabs);
   
   return (
     <div className={`
@@ -164,6 +163,44 @@ const TheDocsListComponent = () => {
               </td>
               <td>
                 <button className="btn-success px-6 py-2 mt-5 w-full">Оплатить</button>
+              </td>
+            </tr>
+            <tr>
+              <td>001</td>
+              <td>Счет за аренду</td>
+              <td>01.01.2025</td>
+              <td><PriceFormatter amount="100000" /></td>
+              <td className="ms-auto">                
+                <button className="btn-default px-6 py-2 flex mt-5 md:w-full md:justify-center">
+                    <svg
+                      className="icon me-3"
+                    >
+                      <use href={`${sprite_path}#doc-icon`} />
+                    </svg>
+                    Скачать
+                  </button>
+              </td>
+              <td>
+                <button disabled className="btn-success px-6 py-2 mt-5 w-full">Оплачено</button>
+              </td>
+            </tr>
+            <tr>
+              <td>001</td>
+              <td>Счет за аренду</td>
+              <td>01.01.2025</td>
+              <td><PriceFormatter amount="100000" /></td>
+              <td className="ms-auto">                
+                <button className="btn-default px-6 py-2 flex mt-5 md:w-full md:justify-center">
+                    <svg
+                      className="icon me-3"
+                    >
+                      <use href={`${sprite_path}#doc-icon`} />
+                    </svg>
+                    Скачать
+                  </button>
+              </td>
+              <td>
+                <button disabled className="btn-success px-6 py-2 mt-5 w-full">Оплачено</button>
               </td>
             </tr>
             <tr>

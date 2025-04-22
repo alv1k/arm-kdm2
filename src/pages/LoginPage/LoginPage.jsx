@@ -12,7 +12,7 @@ import TheTabsComponent from '@/components/TheTabsComponent/TheTabsComponent';
 import TheDocsListComponent from '@/components/TheDocsListComponent/TheDocsListComponent'
 
 const LoginPage = () => {
-  const sprite_path = './src/assets/images/i.svg';
+  const sprite_path = '/src/assets/images/i.svg';
   const showNavbar = useSelector((state) => state.navbar.showNavbar);
   const isNewRequest = useSelector(isNew);
   // const tabs = useSelector((state) => state.tabs_slice.tabs);
@@ -40,14 +40,14 @@ const LoginPage = () => {
   }
 
   return (
-    <main className=""> 
-      <div className="flex">
+    <main className="min-h-fit"> 
+      <div className="flex min-h-fit">
         <div className="w-1/2">
-          <img className="" src="./src/assets/images/bg.png" alt="" />
+          <img className="" src="/src/assets/images/bg.png" alt="" />
         </div>
         <div className="w-1/2">
           <div className="bg-white p-8 mt-50 mx-auto w-2/3 text-center">
-            <img className="mx-auto" src="./src/assets/images/logo.png" alt="logo" />
+            <img className="mx-auto" src="/src/assets/images/logo.png" alt="logo" />
             <p className="mt-4 text-[#4B5E9D] lg:text-2xl md:text-2xl text-sm uppercase font-bold lg:ms-5 md:ms-5 ms-2 my-auto" style={{fontFamily: 'PT Sans'}}>комдрагметалл рс(я)</p>
             <p className="font-bold text-2xl mt-12">Вход в личный кабинет</p>
             <div className="text-left">
