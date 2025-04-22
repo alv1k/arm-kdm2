@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const requestsSlice = createSlice({
-  name: 'tabs',
+  name: 'requests',
   initialState: {
     isNewRequest: false,
   },
@@ -9,11 +9,9 @@ const requestsSlice = createSlice({
     toggleTabs(state, action) {      
       
     },
-    setSelectedTab(state, action) {          
-    },
   },
 });
 
-export const isNewRequest = (state) => state.requests_slice.isNewRequest;
+export const isNew = (state) => state.requests_slice.isNewRequest;
 export const { toggleTabs } = requestsSlice.actions;
 export default requestsSlice.reducer;

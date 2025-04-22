@@ -1,62 +1,77 @@
-import React, { useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { hideNavbar } from '@/store/navbarSlice';
-import { selectedType, isShowDetails, showDetails, selectedTab } from '@/store/agreementsSlice';
+import { toggleTabs  } from '@/store/tabsSlice';
+import { isNew } from '@/store/requestsSlice';
 import useMediaQueries from '@/hooks/useMediaQueries';
 
 import Header from '@/components/TheHeader/TheHeader';
 import TheNavbar from '@/components/TheNavbar/TheNavbar';
-import AgreementItem from '@/components/TheAgreementItem/TheAgreementItem';
 import TheTabsComponent from '@/components/TheTabsComponent/TheTabsComponent';
+import TheDocsListComponent from '@/components/TheDocsListComponent/TheDocsListComponent'
 
-
-const LoginPage = () => {  
-  // const navigate = useNavigate();
-  // const handleButtonClick = () => {
-  //   navigate('/settings')
-  // }
-  const showNavbar = useSelector(state => state.navbar.showNavbar);
-  const agreementType = useSelector(selectedType);
-  const showAgreementDetails = useSelector(isShowDetails);
-  const agreementTab = useSelector(selectedTab);
+const LoginPage = () => {
+  const sprite_path = './src/assets/images/i.svg';
+  const showNavbar = useSelector((state) => state.navbar.showNavbar);
+  const isNewRequest = useSelector(isNew);
+  // const tabs = useSelector((state) => state.tabs_slice.tabs);
+  // useEffect(() => {
+  //   dispatch(fetchAgreementsList()); // Загружаем список договоров при монтировании компонента
+  // }, [dispatch]);  
   
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
-  let agreements = [
-    {
-      name: 'agree1',
-      summ: 400000,
-      date: new Date(2025, 5, 6).toLocaleDateString(), // Преобразуем дату в строку
-      address: 'г. Якутск, ул. Ленина 123, 1 этаж, каб. №123',
-      num: 'num123'
-    },
-    {
-      name: 'agree2',
-      summ: 250000,
-      date: new Date(2025, 7, 15).toLocaleDateString(),
-      address: 'г. Москва, ул. Пушкина 10',
-      num: 'num456'
-    },
-  ]
   const dispatch = useDispatch();
   const sideClick = (event) => {
     event.stopPropagation();
-    dispatch(hideNavbar());
+    if (showNavbar) {
+      dispatch(hideNavbar());
+    }
   };
-  
-  const [filteredAgreements, setFilteredAgreements] = useState(agreements);
-  const handleAgreementClick = (data) => {
-    dispatch(showDetails(data));
-    const newFilteredAgreements = agreements.filter(agreement => agreement.num === data.num);
-    setFilteredAgreements(newFilteredAgreements);
-    console.log(newFilteredAgreements, 'check5');
-  };
+  useEffect(() => {
+    // Устанавливаем tabs как agreementsList при монтировании компонента
+    dispatch(toggleTabs(isNewRequest ? 'singleAgrement' : 'agreementsList'));
+    
+  }, [dispatch]);
 
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate('/agreements'); // Изменяем маршрут на '/agreements'
+  }
 
   return (
-    <div>
-      <img src="./src/assets/temp/login.png" alt="" />
-    </div>
+    <main className={[sm_breakpoint || md_breakpoint ? 'h-[500px]' : 'min-height'].join(' ')}>
+      <div className="flex">
+        <div className="w-1/2 ">
+          <img src="./src/assets/images/bg.png" alt="" />
+        </div>
+        <div className="w-1/2">
+          <div className="bg-white p-8 mt-50 mx-auto w-2/3 text-center">
+            <img className="mx-auto" src="./src/assets/images/logo.png" alt="logo" />
+            <p className="mt-4 text-[#4B5E9D] lg:text-2xl md:text-2xl text-sm uppercase font-bold lg:ms-5 md:ms-5 ms-2 my-auto" style={{fontFamily: 'PT Sans'}}>комдрагметалл рс(я)</p>
+            <p className="font-bold text-2xl mt-12">Вход в личный кабинет</p>
+            <div className="text-left">
+              <p className="mb-2 mt-8">Логин</p>
+              <input className=" p-3 bg-item-active w-full rounded-xl" type="text" placeholder="Введите логин" />
+              <p className="mb-2 mt-2">Пароль</p>
+              <input className=" p-3 bg-item-active w-full rounded-xl" type="text" placeholder="Введите пароль" />
+            </div>
+            <div className="flex justify-between py-5">
+              <div className="">
+                <input className="input-checkbox p-8 bg-red-900" type="checkbox" id="forgot_pass" />
+                <label className="" htmlFor="forgot_pass">Запомнить меня</label>
+              </div>
+              <div>
+                <p className="text-[#203887]">Забыли пароль?</p>
+              </div>
+            </div>
+            <button className="mt-8 btn-primary w-full py-2" onClick={handleClick}>
+              Войти
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
   )
 }
 export default LoginPage;

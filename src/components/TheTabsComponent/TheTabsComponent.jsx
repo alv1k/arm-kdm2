@@ -2,7 +2,7 @@ import React, { useEffect }  from 'react';
 import { useSelector, useDispatch } from 'react-redux'; 
 import useMediaQueries from '@/hooks/useMediaQueries'; 
 import { isShowDetails } from '@/store/agreementsSlice';
-import { toggleTabs, setSelectedTab, selectedTab } from '@/store/tabsSlice';
+import { toggleTabs, setSelectedTab, selectedTab, agreementsSelectedTab, agreementSelectedTab, requestsSelectedTab, setAgreementsSelectedTab, setAgreementSelectedTab, setRequestsSelectedTab } from '@/store/tabsSlice';
 
 const TheTabsComponent = (props) => {
   const sprite_path = './src/assets/images/i.svg';
@@ -13,10 +13,14 @@ const TheTabsComponent = (props) => {
   const dispatch = useDispatch();
   const setTab = (tab) => {
     dispatch(setSelectedTab(tab))
-  }  
+  }
+  const currentRoute = window.location.pathname;
+  
   useEffect(() => {    
-    if (showAgreementDetails) {
+    if (currentRoute == '/agreements' && showAgreementDetails) {
       dispatch(setSelectedTab({title_en: 'bills', title_ru: 'Счета'}));
+    } else if (currentRoute == '/requests') {
+      dispatch(setSelectedTab({ title_en: 'all', title_ru: 'Все' }));
     } else {
       if (xl_breakpoint || lg_breakpoint || md_breakpoint) {
         dispatch(setSelectedTab({ title_en: 'all', title_ru: 'Все' }));
@@ -24,11 +28,6 @@ const TheTabsComponent = (props) => {
         dispatch(setSelectedTab({ title_en: 'active', title_ru: 'Действующие' }));
       }
     }
-    dispatch(toggleTabs({ 
-        type: showAgreementDetails ? 'singleAgreement' : 'agreementsList', 
-        breakpoint: sm_breakpoint ? 'sm-breakpoint' : '' 
-      }),
-    )
   }, [showAgreementDetails, xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint, dispatch]);
 
   const currentTab = useSelector((state) => state.tabs_slice.selectedTab);

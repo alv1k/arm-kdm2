@@ -1,8 +1,16 @@
 /* styles.css */
 .navbar {
+  width: 100px;
   transition: opacity 0.3s ease-in-out;
   opacity: 0;
   visibility: hidden;
+}
+
+.navbar_visible {
+  width: 100px;
+  transition: opacity 0.3s ease-in-out;
+  opacity: 1;
+  visibility: visible;
 }
 
 .navbar.visible_sm {

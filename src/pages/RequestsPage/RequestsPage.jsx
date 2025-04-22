@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { hideNavbar } from '@/store/navbarSlice';
-import { setTabs  } from '@/store/tabsSlice';
-import { isNewRequest } from '@/store/requestsSlice';
+import { toggleTabs  } from '@/store/tabsSlice';
+import { isNew } from '@/store/requestsSlice';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
 import styles from './RequestsPage.module.css';
 
@@ -17,7 +17,7 @@ import TheDocsListComponent from '@/components/TheDocsListComponent/TheDocsListC
 const RequestsPage = () => {
   const sprite_path = './src/assets/images/i.svg';
   const showNavbar = useSelector((state) => state.navbar.showNavbar);
-  const isNewR = useSelector(isNewRequest);
+  const isNewRequest = useSelector(isNew);
   // const tabs = useSelector((state) => state.tabs_slice.tabs);
   // useEffect(() => {
   //   dispatch(fetchAgreementsList()); // Загружаем список договоров при монтировании компонента
@@ -33,15 +33,9 @@ const RequestsPage = () => {
   };
   useEffect(() => {
     // Устанавливаем tabs как agreementsList при монтировании компонента
-    dispatch(setTabs(isNewR ? 'singleAgrement' : 'agreementsList'));
+    dispatch(toggleTabs(isNewRequest ? 'singleAgrement' : 'agreementsList'));
+    
   }, [dispatch]);
-  const handleAgreementClick = (data) => {
-    dispatch(showDetails(data));
-    dispatch(setAgreementsList(data));
-  };
-  const location = useLocation();
-  useEffect(() => {
-  }, [location]);
 
   return (
     <main className={[styles.mainLogin, sm_breakpoint || md_breakpoint ? 'h-[500px]' : 'min-height'].join(' ')}>
@@ -66,21 +60,20 @@ const RequestsPage = () => {
           <div className="lg:text-base md:text-base text-sm">
             <div className="flex md:justify-start justify-center">
               {
-                isNewR && sm_breakpoint ? '' :
+                isNewRequest && sm_breakpoint ? '' :
                 <p className="
                   xl:mt-0 
                   lg:px-6 lg:text-[26px] lg:mt-4
                   md:px-2 md:mt-9
                   text-xl font-bold mt-5
                 ">
-                  Заявка
+                  Заявки
                 </p>
               }
               {
-                isNewR && !sm_breakpoint ? 
+                isNewRequest && !sm_breakpoint ? 
                 <button 
                   className="btn-text ms-auto me-4 lg:mt-0 md:mt-9 flex"
-                  
                 >
                   <svg
                     className="icon"
@@ -93,6 +86,8 @@ const RequestsPage = () => {
                 : ''
               }
             </div>
+            <TheTabsComponent />
+            <TheDocsListComponent title="requests" />
           </div>
         </section>
       </div>

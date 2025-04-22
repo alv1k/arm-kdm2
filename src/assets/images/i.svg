@@ -44,4 +44,11 @@
     <symbol fill="currentColor" viewBox="0 0 8 4" id="chevron-down" xmlns="http://www.w3.org/2000/svg">
         <path d="M8 0 4 4 0 0h8Z" />
     </symbol>
+    <symbol fill="none" viewBox="0 0 24 24" id="pen-icon" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
+        <path d="m14.44 6.066 1.48-1.48a2 2 0 0 1 2.829 0L20.163 6a2 2 0 0 1 0 2.828l-1.48 1.48M14.44 6.066l-9.616 9.615a2 2 0 0 0-.578 1.238l-.242 2.74a1 1 0 0 0 1.084 1.085l2.74-.242a2 2 0 0 0 1.24-.578l9.615-9.616M14.44 6.066l4.243 4.242" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol fill="none" viewBox="0 0 19 19" id="eye-icon" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
+        <path d="M11.875 9.5a2.375 2.375 0 1 1-4.75 0 2.375 2.375 0 0 1 4.75 0Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M1.583 9.5C2.85 6.257 5.808 3.958 9.5 3.958s6.65 2.299 7.917 5.542c-1.267 3.244-4.225 5.542-7.917 5.542S2.85 12.744 1.583 9.5Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
 </svg>

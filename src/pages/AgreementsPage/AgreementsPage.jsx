@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { hideNavbar } from '@/store/navbarSlice';
-import { setTabs  } from '@/store/tabsSlice';
+import { toggleTabs  } from '@/store/tabsSlice';
 import { isShowDetails, selectedAgreement, agreementsStoreList, showDetails, hideDetails, setAgreementsList } from '@/store/agreementsSlice';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
 import styles from './AgreementsPage.module.css';
@@ -35,7 +35,7 @@ const AgreementsPage = () => {
   };
   useEffect(() => {
     // Устанавливаем tabs как agreementsList при монтировании компонента
-    dispatch(setTabs(isDetailsShown ? 'singleAgrement' : 'agreementsList'));
+    dispatch(toggleTabs(isDetailsShown ? 'singleAgrement' : 'agreementsList'));
   }, [dispatch]);
   const backToAgreements = () => {
     dispatch(hideDetails());
@@ -99,13 +99,7 @@ const AgreementsPage = () => {
                 : ''
               }
             </div>
-            {
-              isDetailsShown ? '' :
-              // <TheTabsComponent titles={
-              //   setTabs('agreements', sm_breakpoint ? 'sm-breakpoint' : '')
-              // } />
-              <TheTabsComponent titles='agreementsList' />
-            }
+            <TheTabsComponent titles='agreementsList' />
             {
               <div className="md:pt-4 pt-5">
                 {

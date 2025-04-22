@@ -13,6 +13,7 @@ const TheDocsListComponent = () => {
   const agreementType = useSelector(selectedType);
   const currentTab = useSelector(selectedTab);
   const tabs = useSelector((state) => state.tabs_slice.tabs); 
+  console.log(currentTab,'ooo');
   
   return (
     <div className={`

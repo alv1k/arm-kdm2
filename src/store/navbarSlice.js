@@ -12,7 +12,7 @@ const navbarSlice = createSlice({
     showNavbar(state) {      
       state.showNavbar = true; // Показываем navbar
     },
-    hideNavbar(state) {
+    hideNavbar(state) {      
       state.showNavbar = false; // Скрываем navbar
     },
   },

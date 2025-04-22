@@ -24,7 +24,7 @@ const TheMenuItem = ({ icon, text, to }) => {
     sm_breakpoint && !showNavbar && !md_breakpoint ? 'md:hidden' : ''
   ].filter(Boolean).join(' ');
   const closeNavbar = () => {
-    dispatch(hideNavbar());
+    showNavbar ? dispatch(hideNavbar()) : '' 
   }
   
   return (

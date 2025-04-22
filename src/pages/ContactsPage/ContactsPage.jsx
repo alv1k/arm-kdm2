@@ -1,56 +1,58 @@
-import React, { useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { hideNavbar } from '@/store/navbarSlice';
-import { selectedType, isShowDetails, showDetails, selectedTab } from '@/store/agreementsSlice';
+import { toggleTabs  } from '@/store/tabsSlice';
+import { isNew } from '@/store/requestsSlice';
 import useMediaQueries from '@/hooks/useMediaQueries';
 
 import Header from '@/components/TheHeader/TheHeader';
 import TheNavbar from '@/components/TheNavbar/TheNavbar';
-import AgreementItem from '@/components/TheAgreementItem/TheAgreementItem';
 import TheTabsComponent from '@/components/TheTabsComponent/TheTabsComponent';
+import TheDocsListComponent from '@/components/TheDocsListComponent/TheDocsListComponent'
 
 
-const ContactsPage = () => {  
-  // const navigate = useNavigate();
-  // const handleButtonClick = () => {
-  //   navigate('/settings')
-  // }
-  const showNavbar = useSelector(state => state.navbar.showNavbar);
-  const agreementType = useSelector(selectedType);
-  const showAgreementDetails = useSelector(isShowDetails);
-  const agreementTab = useSelector(selectedTab);
+const ContactsPage = () => {
+  const sprite_path = './src/assets/images/i.svg';
+  const showNavbar = useSelector((state) => state.navbar.showNavbar);
+  const isNewRequest = useSelector(isNew);
+  // const tabs = useSelector((state) => state.tabs_slice.tabs);
+  // useEffect(() => {
+  //   dispatch(fetchAgreementsList()); // Загружаем список договоров при монтировании компонента
+  // }, [dispatch]);  
   
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
-  let agreements = [
-    {
-      name: 'agree1',
-      summ: 400000,
-      date: new Date(2025, 5, 6).toLocaleDateString(), // Преобразуем дату в строку
-      address: 'г. Якутск, ул. Ленина 123, 1 этаж, каб. №123',
-      num: 'num123'
-    },
-    {
-      name: 'agree2',
-      summ: 250000,
-      date: new Date(2025, 7, 15).toLocaleDateString(),
-      address: 'г. Москва, ул. Пушкина 10',
-      num: 'num456'
-    },
-  ]
   const dispatch = useDispatch();
   const sideClick = (event) => {
     event.stopPropagation();
-    dispatch(hideNavbar());
+    if (showNavbar) {
+      dispatch(hideNavbar());
+    }
   };
+  useEffect(() => {
+    // Устанавливаем tabs как agreementsList при монтировании компонента
+    dispatch(toggleTabs(isNewRequest ? 'singleAgrement' : 'agreementsList'));
+    
+  }, [dispatch]);
+
+    const locations = Array.from({ length: 4 }, (_, index) => (
+      <div key={index} className="rounded-xl bg-item-active p-8">
+        <p className="text-2xl font-bold mb-8">Якутск</p>
+        <p className="my-4">
+          <span className="text-[#787C82]">Телефон:</span> &nbsp;
+          +7 (4112) 482-504
+        </p>
+        <p className="my-4">
+          <span className="text-[#787C82]">Эл. почта:</span> &nbsp;
+          info@aokdm.ru
+        </p>
+        <p className="my-4">
+          <span className="text-[#787C82]">Адрес:</span> &nbsp;
+          г. Якутск, ул. Кирова, 12
+        </p>
+      </div>
+    ));
   
-  const [filteredAgreements, setFilteredAgreements] = useState(agreements);
-  const handleAgreementClick = (data) => {
-    dispatch(showDetails(data));
-    const newFilteredAgreements = agreements.filter(agreement => agreement.num === data.num);
-    setFilteredAgreements(newFilteredAgreements);
-    console.log(newFilteredAgreements, 'check5');
-  };
 
 
   return (
@@ -63,16 +65,34 @@ const ContactsPage = () => {
           )          
         }
         <TheNavbar />
+        
         <section 
           className="
-            xl:ml-10 xl:px-10 xl:py-11 xl:rounded-x
-            lg:ml-8 lg:px-4 lg:py-5 
-            md:w-full md:px-6 md:ms-9 md:rounded-xl md:min-h-[1080px]
-            w-full px-5 ms-0 bg-white min-h-[844px]
+            xl:ml-10 xl:px-10 xl:py-10 xl:rounded-x
+            lg:ml-8 lg:px-4 lg:py-5 lg:shadow-none
+            md:w-full md:px-6 md:ms-5 md:rounded-xl md:min-h-[1080px] md:shadow-lg
+            w-full px-5 ms-0 bg-white min-h-[844px] shadow-none
           "
+          onClick={sideClick}
         >
-          <img src="./src/assets/temp/contacts.png" alt="" />
-
+          <div className="lg:text-base md:text-base text-sm">
+            <div className="flex md:justify-start justify-center">
+              {
+                isNewRequest && sm_breakpoint ? '' :
+                <p className="
+                  xl:mt-0 
+                  lg:px-6 lg:text-[26px] lg:mt-4
+                  md:px-2 md:mt-9
+                  text-xl font-bold mt-5
+                ">
+                  Контакты
+                </p>
+              }
+            </div>
+            <div className="p-4 mt-6 text-base grid grid-cols-2 gap-8">
+                {locations}
+            </div>
+          </div>
         </section>
       </div>
     </main>

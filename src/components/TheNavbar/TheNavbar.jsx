@@ -16,7 +16,6 @@ const TheNavbar = () => {
     sm_breakpoint && !showNavbar && !md_breakpoint ? styles.hidden_sm : ''
   ].filter(Boolean).join(' ');
     
-  console.log(showNavbar);
   return (      
     <aside 
       className={`
