@@ -56,9 +56,9 @@ const ContactsPage = () => {
 
 
   return (
-    <main className={[sm_breakpoint || md_breakpoint ? 'h-[500px]' : 'min-height'].join(' ')}>
+    <main>
       <Header />
-      <div className="xl:p-10 lg:p-5 md:py-5 flex">        
+      <div className="xl:p-10 lg:p-5 md:py-5 flex h-screen">        
         {
           md_breakpoint && (
             <div className="w-1/7"></div>
@@ -70,8 +70,8 @@ const ContactsPage = () => {
           className="
             xl:ml-10 xl:px-10 xl:py-10 xl:rounded-x
             lg:ml-8 lg:px-4 lg:py-5 lg:shadow-none
-            md:w-full md:px-6 md:ms-5 md:rounded-xl md:min-h-[1080px] md:shadow-lg
-            w-full px-5 ms-0 bg-white min-h-[844px] shadow-none
+            md:w-full md:px-6 md:ms-5 md:rounded-xl md:shadow-lg
+            w-full px-5 ms-0 bg-white shadow-none
           "
           onClick={sideClick}
         >

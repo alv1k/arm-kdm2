@@ -158,7 +158,7 @@ const TheAgreementItem = ({ number, date, address, summ }) => {
         <div className="lg:ms-auto">
           {
             isDetailsShown && (md_breakpoint || sm_breakpoint) ? '' :
-            <button className="lg:w-auto lg:ms-auto lg:mt-0 md:w-auto md:ms-0 bg-white px-4 py-2 rounded-lg border border-[#6374AD] flex gap-3 text-[#203887] w-full text-base ms-auto mt-4">
+            <button className="btn-default lg:w-auto lg:ms-auto lg:mt-0 md:w-auto md:ms-0 bg-white px-4 py-2 rounded-lg border flex gap-3 w-full text-base ms-auto mt-4">
               <svg
                 className="icon lg:ms-0 ms-auto"
               >

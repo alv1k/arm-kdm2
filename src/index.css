@@ -13,9 +13,6 @@
 body {
   background-color: #FAFBFD;
 }
-.min-height {
-  min-height: 1080px;
-}
 .bg-item-default {  
   background-color: #FAFBFD;
 }
@@ -33,6 +30,7 @@ body {
   color: #203887;
   border-radius: 8px;
   font-size: 16px;
+  cursor: pointer;
 }
 .btn-default:hover {
   background-color: #F6F8FF;
@@ -53,6 +51,7 @@ body {
   color: #fff;
   border-radius: 8px;
   font-size: 16px;
+  cursor: pointer;
 }
 .btn-success:hover {
   background-color: #00A42A;
@@ -73,6 +72,7 @@ body {
   color: #fff;
   border-radius: 8px;
   font-size: 16px;
+  cursor: pointer;
 }
 .btn-primary:hover {
   background-color: #6374AD;

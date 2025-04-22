@@ -40,7 +40,7 @@ const LoginPage = () => {
   }
 
   return (
-    <main className={[sm_breakpoint || md_breakpoint ? 'h-[500px]' : 'min-height'].join(' ')}>
+    <main>
       <div className="flex">
         <div className="w-1/2 ">
           <img src="./src/assets/images/bg.png" alt="" />
