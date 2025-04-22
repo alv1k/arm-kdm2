@@ -1,6 +1,5 @@
 /* styles.css */
 .navbar {
-  width: 100px;
   transition: opacity 0.3s ease-in-out;
   opacity: 0;
   visibility: hidden;

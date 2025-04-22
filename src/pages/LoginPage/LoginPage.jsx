@@ -41,19 +41,19 @@ const LoginPage = () => {
 
   return (
     <main className="min-h-fit"> 
-      <div className="flex min-h-fit">
-        <div className="w-1/2">
-          <img className="" src="/src/assets/images/bg.png" alt="" />
+      <div className="lg:flex min-h-fit relative">
+        <div className="lg:w-1/2 w-full absolute h-screen bg-[#F6F8FF]">
+          <img className="lg:blur-none blur-xs mt-62" src="/src/assets/images/bg.png" alt="" />
         </div>
-        <div className="w-1/2">
-          <div className="bg-white p-8 mt-50 mx-auto w-2/3 text-center">
+        <div className="lg:w-1/2 w-full absolute">
+          <div className="bg-white p-8 xl:mt-50 my-20 mx-auto lg:w-2/3 w-[90vw] rounded-2xl text-center">
             <img className="mx-auto" src="/src/assets/images/logo.png" alt="logo" />
             <p className="mt-4 text-[#4B5E9D] lg:text-2xl md:text-2xl text-sm uppercase font-bold lg:ms-5 md:ms-5 ms-2 my-auto" style={{fontFamily: 'PT Sans'}}>комдрагметалл рс(я)</p>
-            <p className="font-bold text-2xl mt-12">Вход в личный кабинет</p>
+            <p className="font-bold xl:text-2xl text-base mt-12">Вход в личный кабинет</p>
             <div className="text-left">
-              <p className="mb-2 mt-8">Логин</p>
+              <p className="mb-2 mt-8 md:text-base text-sm">Логин</p>
               <input className=" p-3 bg-item-active w-full rounded-xl" type="text" placeholder="Введите логин" />
-              <p className="mb-2 mt-2">Пароль</p>
+              <p className="mb-2 mt-2 md:text-base text-sm">Пароль</p>
               <input className=" p-3 bg-item-active w-full rounded-xl" type="text" placeholder="Введите пароль" />
             </div>
             <div className="flex justify-between py-5">

@@ -67,7 +67,7 @@ const AgreementsPage = () => {
               md:w-full md:px-6 md:ms-5 md:rounded-xl md:shadow-lg
               w-full px-5 ms-0 bg-white shadow-none
               ${isDetailsShown ? 'h-fit' : ''}
-            `}          
+            `}
           onClick={sideClick}
         >
           <div className="lg:text-base md:text-base text-sm">
