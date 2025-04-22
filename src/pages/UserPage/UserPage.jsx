@@ -56,25 +56,25 @@ const UserPage = () => {
           "
           onClick={sideClick}
         >
-          <div className="lg:text-base md:text-base text-sm w-2/3">
+          <div className="lg:text-base md:text-base text-sm md:w-2/3 w-full">
             <div className="md:justify-start justify-center">
               {
                 isNewRequest && sm_breakpoint ? '' :
                 <p className="
                   xl:mt-0 
                   lg:px-6 lg:text-[26px] lg:mt-4
-                  md:px-2 md:mt-9
-                  text-xl font-bold mt-5
+                  md:px-2 md:mt-9 md:text-left
+                  text-xl font-bold mt-5 text-center
                 ">
                   Профиль
                 </p>
               }
             </div>
             <div className="p-4 mt-6 text-xl gap-8">
-              <div className="flex gap-5">
-                <img className="w-32" src="/src/assets/images/user.png" alt="profile" />
-                <div className="">
-                  <p className="text-[#203887] font-extrabold text-xl">
+              <div className="md:flex block gap-5">
+                <img className="w-32 md:mx-0 mx-auto" src="/src/assets/images/user.png" alt="profile" />
+                <div className="md:mt-0 mt-8">
+                  <p className="text-[#203887] font-extrabold text-xl md:text-left text-center">
                     ООО “Название организации”
                   </p>
                   <p className="my-4">
@@ -87,7 +87,7 @@ const UserPage = () => {
                   </p>
                 </div>
               </div>
-              <div className="flex gap-5 w-full mt-8">
+              <div className="md:flex block gap-5 w-full mt-8">
                 <div className="w-full">
                   <p className="text-[#787C82]">Логин</p>
                   <input className="mt-2 p-3 bg-item-active w-full" type="text" placeholder='User001' />
