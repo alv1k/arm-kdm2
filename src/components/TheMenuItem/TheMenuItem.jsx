@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux'; 
 import { NavLink } from 'react-router-dom';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
-import { hideNavbar } from '@/store/navbarSlice';
+import { hideNavbar, isNavbarShown } from '@/store/navbarSlice';
 import { hideDetails } from '@/store/agreementsSlice';
 import styles from './TheMenuItem.module.css';
 
@@ -11,6 +11,7 @@ const TheMenuItem = ({ icon, text, to }) => {
   const showNavbar = useSelector(state => state.navbar.showNavbar);
   const dispatch = useDispatch();
   const sprite_path = './src/assets/images/i.svg';
+  
   
   const navbarRemoteIcon = [
     md_breakpoint && showNavbar && !sm_breakpoint ? 'md:mx-auto' : '',

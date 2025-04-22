@@ -36,21 +36,14 @@ const agreementsSlice = createSlice({
     selectedAgreement: [],
   },
   reducers: {
-    setType: (state, action) => {
-      state.type = action.payload;
-    },
     showDetails: (state, action) => {
-      state.showDetails = true;         
+      state.showDetails = true; 
     },
     hideDetails: (state) => {
       state.showDetails = false;
     },
-    setTab: (state, action) => {
-      state.tab = action.payload
-    },
     setAgreementsList: (state, action) => {
-      state.selectedAgreement = [action.payload]
-      console.log(state.selectedAgreement);      
+      state.selectedAgreement = [action.payload]  
     },
   },  
   // extraReducers: (builder) => {
@@ -60,10 +53,13 @@ const agreementsSlice = createSlice({
   //     });
   // }
 });
+
+
+
 export const selectedType = (state) => state.agreements_slice.type;
 export const isShowDetails = (state) => state.agreements_slice.showDetails;
 export const selectedTab = (state) => state.agreements_slice.tab;
 export const agreementsStoreList = (state) => state.agreements_slice.agreementsList;
 export const selectedAgreement = (state) => state.agreements_slice.selectedAgreement;
-export const { setType, showDetails, hideDetails, setTab, setAgreementsList } = agreementsSlice.actions;
+export const { showDetails, hideDetails, setAgreementsList } = agreementsSlice.actions;
 export default agreementsSlice.reducer;

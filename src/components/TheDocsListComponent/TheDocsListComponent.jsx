@@ -1,7 +1,8 @@
 import React, { useEffect }  from 'react';
 import { useSelector, useDispatch } from 'react-redux'; 
 import useMediaQueries from '@/hooks/useMediaQueries';
-import { selectedType, isShowDetails, selectedTab } from '@/store/agreementsSlice';
+import { selectedType, isShowDetails } from '@/store/agreementsSlice';
+import { selectedTab } from '@/store/tabsSlice';
 import PriceFormatter from '@/components/PriceFormatter/PriceFormatter'; 
 import styles from './TheDocsListComponent.module.css'
 
@@ -10,8 +11,8 @@ const TheDocsListComponent = () => {
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const showAgreementDetails = useSelector(isShowDetails);  
   const agreementType = useSelector(selectedType);
-  const agreementTab = useSelector(selectedTab);
-  const tabs = useSelector((state) => state.tabs_slice.tabs);
+  const currentTab = useSelector(selectedTab);
+  const tabs = useSelector((state) => state.tabs_slice.tabs); 
   
   return (
     <div className={`
@@ -22,11 +23,11 @@ const TheDocsListComponent = () => {
         sm_breakpoint || md_breakpoint  ? 
         <div className="w-full">
           {
-            agreementTab.title_en == 'counters' ? 
+            currentTab.title_en == 'counters' ? 
             <p className="mb-2"><span className="text-[#787C82]">Дата: </span>02.02.2026</p> : ''
           }
           {
-            agreementTab.title_en == 'acts' ? 
+            currentTab.title_en == 'acts' ? 
             <div className="md:flex block">
               <div>
                 <p className="mb-1">№001. Акт об оплате аренды</p>
@@ -49,10 +50,10 @@ const TheDocsListComponent = () => {
             <div className={`
               
               ${sm_breakpoint || md_breakpoint ? '' : 'flex'} 
-              ${agreementTab.title_en == 'bills' ? 'text-left w-1/2' : 'md:w-2/5'}
+              ${currentTab.title_en == 'bills' ? 'text-left w-1/2' : 'md:w-2/5'}
             `}>
               {
-                agreementTab.title_en == 'bills' ? 
+                currentTab.title_en == 'bills' ? 
                 <div className="md:pe-3">
                   <div className="mb-1">№001. Счет за аренду</div>
                   <div><span className="text-[#787C82]">Дата:</span> 01.01.2025</div>
@@ -66,7 +67,7 @@ const TheDocsListComponent = () => {
                   </button>
                 </div>
                 :
-                <div className={`${agreementTab == 'counters' ? 'md:ps-3' : ''} `}>
+                <div className={`${currentTab == 'counters' ? 'md:ps-3' : ''} `}>
                   <div><span className="text-[#787C82]">№ пр. учета:</span> 0000001</div>
                   <div className="my-1"><span className="text-[#787C82]">№ пр. учета:</span> 0000001</div>
                   <div><span className="text-[#787C82]">№ пр. учета:</span> 0000001</div>
@@ -76,10 +77,10 @@ const TheDocsListComponent = () => {
             <div className={`
               w-1/2
               ${sm_breakpoint || md_breakpoint ? '' : 'flex'}
-              ${agreementTab.title_en == 'bills' ? 'text-center' : 'text-left'}
+              ${currentTab.title_en == 'bills' ? 'text-center' : 'text-left'}
             `}>
             {
-              agreementTab.title_en == 'bills' ? 
+              currentTab.title_en == 'bills' ? 
               <div>
                 <div className="mb-1 text-[#787C82]">Сумма:</div>
                 <div className="text-red-600"><PriceFormatter amount="100000" /></div>

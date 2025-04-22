@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { hideNavbar } from '@/store/navbarSlice';
-import { setType, selectedType, isShowDetails, showDetails, setTab, selectedTab } from '@/store/agreementsSlice';
+import { selectedType, isShowDetails, showDetails, selectedTab } from '@/store/agreementsSlice';
 import useMediaQueries from '@/hooks/useMediaQueries';
 
 import Header from '@/components/TheHeader/TheHeader';

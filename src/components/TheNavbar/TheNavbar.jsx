@@ -7,13 +7,16 @@ import styles from './TheNavbar.module.css'
 const TheNavbar = () => {
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const showNavbar = useSelector(state => state.navbar.showNavbar);
+  // const [animationTriggered, setAnimationTriggered] = useState(false);
+
   const navbarRemote = [
     md_breakpoint && showNavbar && !sm_breakpoint ? styles.larger_md : '',
     md_breakpoint && !showNavbar && !sm_breakpoint ? styles.smaller_md : '',
-    sm_breakpoint && showNavbar && !md_breakpoint ? `${styles.visible_sm}` : '',
-    sm_breakpoint && !showNavbar && !md_breakpoint ? `${styles.hidden_sm}` : ''
+    sm_breakpoint && showNavbar && !md_breakpoint ? styles.visible_sm : '',
+    sm_breakpoint && !showNavbar && !md_breakpoint ? styles.hidden_sm : ''
   ].filter(Boolean).join(' ');
     
+  console.log(showNavbar);
   return (      
     <aside 
       className={`

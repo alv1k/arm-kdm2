@@ -19,5 +19,6 @@ const navbarSlice = createSlice({
 });
 
 // Экспортируем действия и редюсер
+export const isNavbarShown =  (state) => state.navbar.showNavbar;
 export const { toggleNavbar, showNavbar, hideNavbar } = navbarSlice.actions;
 export default navbarSlice.reducer;

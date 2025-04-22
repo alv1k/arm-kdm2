@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { hideNavbar } from '@/store/navbarSlice';
-import { toggleTabs } from '@/store/tabsSlice';
+import { setTabs  } from '@/store/tabsSlice';
 import { isShowDetails, selectedAgreement, agreementsStoreList, showDetails, hideDetails, setAgreementsList } from '@/store/agreementsSlice';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
 import styles from './AgreementsPage.module.css';
@@ -33,9 +33,10 @@ const AgreementsPage = () => {
       dispatch(hideNavbar());
     }
   };
-  const setTabs = (target, breakpoint) => {
-    dispatch(toggleTabs({ target, breakpoint }));
-  }
+  useEffect(() => {
+    // Устанавливаем tabs как agreementsList при монтировании компонента
+    dispatch(setTabs(isDetailsShown ? 'singleAgrement' : 'agreementsList'));
+  }, [dispatch]);
   const backToAgreements = () => {
     dispatch(hideDetails());
   }
@@ -100,9 +101,10 @@ const AgreementsPage = () => {
             </div>
             {
               isDetailsShown ? '' :
-              <TheTabsComponent titles={
-                setTabs('agreements', sm_breakpoint ? 'sm-breakpoint' : '')
-              } />
+              // <TheTabsComponent titles={
+              //   setTabs('agreements', sm_breakpoint ? 'sm-breakpoint' : '')
+              // } />
+              <TheTabsComponent titles='agreementsList' />
             }
             {
               <div className="md:pt-4 pt-5">
@@ -138,9 +140,7 @@ const AgreementsPage = () => {
             {
               isDetailsShown ? 
               <div>
-                <TheTabsComponent titles={
-                  setTabs('singleAgreement', sm_breakpoint ? 'sm-breakpoint' : '')
-                } />
+                <TheTabsComponent titles='singleAgreement' />
                 <TheDocsListComponent />
               </div>
               : ''

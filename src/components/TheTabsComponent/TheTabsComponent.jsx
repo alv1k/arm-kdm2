@@ -1,35 +1,38 @@
 import React, { useEffect }  from 'react';
 import { useSelector, useDispatch } from 'react-redux'; 
 import useMediaQueries from '@/hooks/useMediaQueries'; 
-import { setType, selectedType, isShowDetails, showDetails, setTab, selectedTab } from '@/store/agreementsSlice';
+import { isShowDetails } from '@/store/agreementsSlice';
+import { toggleTabs, setSelectedTab, selectedTab } from '@/store/tabsSlice';
 
 const TheTabsComponent = (props) => {
   const sprite_path = './src/assets/images/i.svg';
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
-  const showAgreementDetails = useSelector(isShowDetails);  
-  const agreementType = useSelector(selectedType);
-  const agreementTab = useSelector(selectedTab);
+  const showAgreementDetails = useSelector(isShowDetails);
   const tabs = useSelector((state) => state.tabs_slice.tabs);
-  
-  const setAgreementsType = (type) => {
-    dispatch(setType(type));
-  } 
-  const setAgreementDetailsTab = (tab) => {
-    dispatch(setTab(tab));
-  }
-  const dispatch = useDispatch();
-  useEffect(() => {
-    if (xl_breakpoint) {
-      dispatch(setType({title_en: 'all', title_ru: 'Все'}));
-    } else if (lg_breakpoint) {
-      dispatch(setType({title_en: 'all', title_ru: 'Все'}));
-    } else if (md_breakpoint) {
-      dispatch(setType({title_en: 'all', title_ru: 'Все'}));
-    } else if (sm_breakpoint) {
-      dispatch(setType({title_en: 'active', title_ru: 'Действующие'}));
-    }
-  }, [xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint, dispatch]);
 
+  const dispatch = useDispatch();
+  const setTab = (tab) => {
+    dispatch(setSelectedTab(tab))
+  }  
+  useEffect(() => {    
+    if (showAgreementDetails) {
+      dispatch(setSelectedTab({title_en: 'bills', title_ru: 'Счета'}));
+    } else {
+      if (xl_breakpoint || lg_breakpoint || md_breakpoint) {
+        dispatch(setSelectedTab({ title_en: 'all', title_ru: 'Все' }));
+      } else if (sm_breakpoint) {
+        dispatch(setSelectedTab({ title_en: 'active', title_ru: 'Действующие' }));
+      }
+    }
+    dispatch(toggleTabs({ 
+        type: showAgreementDetails ? 'singleAgreement' : 'agreementsList', 
+        breakpoint: sm_breakpoint ? 'sm-breakpoint' : '' 
+      }),
+    )
+  }, [showAgreementDetails, xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint, dispatch]);
+
+  const currentTab = useSelector((state) => state.tabs_slice.selectedTab);
+  
   return (
     <div className="
       xl:mt-9
@@ -43,21 +46,18 @@ const TheTabsComponent = (props) => {
             className={`
               text-center
               lg:px-10 lg:block
-              md:px-4 md:flex
-              py-4 cursor-pointer bg-item-default rounded-t-xl
+              md:px-4 md:flex md:items-center
+              py-4 cursor-pointer bg-item-default rounded-t-xl 
               ${sm_breakpoint ? 'w-1/2' : ''}
-              ${agreementTab.title_en === tab.title_en ? 'text-[#203887] border-b border-b-[#6374AD]' : ''}
-              ${agreementType.title_en === tab.title_en ? 'text-[#203887] border-b border-b-[#6374AD]' : ''}
+              ${currentTab && currentTab.title_en === tab.title_en ? 'text-[#203887] border-b border-b-[#6374AD]' : ''}
+              ${currentTab && currentTab.title_en === tab.title_en ? 'text-[#203887] border-b border-b-[#6374AD]' : ''}
             `}
-            onClick={() => {
-                if (showAgreementDetails) setAgreementDetailsTab(tab) 
-                else setAgreementsType(tab)
-            }}
+            onClick={() => {setTab(tab)}}
           >
             {
               md_breakpoint ? 
               <svg
-                className="icon me-2"
+                className="w-[10px] h-[10px] stroke-[#232323] me-2"
               >
                 <use href={`${sprite_path}#plus-icon`} />
               </svg> : ''
@@ -69,3 +69,4 @@ const TheTabsComponent = (props) => {
   )
 }
 export default TheTabsComponent;
+
