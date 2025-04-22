@@ -40,13 +40,15 @@ const LoginPage = () => {
   }
 
   return (
-    <main className="min-h-fit h-screen"> 
-      <div className="lg:flex min-h-fit h-screen lg:static relative">
-        <div className="lg:w-1/2 lg:static w-full absolute h-screen bg-[#F6F8FF]">
-          <img className="lg:blur-none lg:mt-0 blur-xs mt-62" src="/src/assets/images/bg.png" alt="" />
+    <main className="min-h-fit h-screen">
+      <div className="lg:flex min-h-fit h-screen relative">
+        <div className="lg:w-1/2 w-full h-screen bg-[#F6F8FF] flex ">
+          <img className="lg:blur-none lg:mt-0 blur-xs mt-auto h-screen mx-auto" src="/src/assets/images/bg.png" alt="" />
         </div>
-        <div className="lg:w-1/2 lg:static w-full absolute">
-          <div className="bg-white p-8 xl:mt-50 my-20 mx-auto lg:w-2/3 w-[90vw] rounded-2xl text-center">
+
+
+        <div className="lg:w-1/2 lg:static w-full absolute top-20 flex align-middle items-center justify-center">
+          <div className="bg-white p-8 lg:my-auto my-auto mx-auto lg:w-2/3 lg:rounded-none w-[90vw] rounded-2xl text-center">
             <img className="mx-auto" src="/src/assets/images/logo.png" alt="logo" />
             <p className="mt-4 text-[#4B5E9D] lg:text-2xl md:text-2xl text-sm uppercase font-bold lg:ms-5 md:ms-5 ms-2 my-auto" style={{fontFamily: 'PT Sans'}}>комдрагметалл рс(я)</p>
             <p className="font-bold xl:text-2xl text-base mt-12">Вход в личный кабинет</p>
