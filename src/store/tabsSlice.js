@@ -12,7 +12,7 @@ const singleAgreementsList = [
 ]
 const requestsList = [
   { title_ru: 'Мои заявки', title_en: 'my_requests' },
-  { title_ru: 'Все', title_en: 'all' },
+  { title_ru: 'Все', title_en: 'all_requests' },
   { title_ru: 'В работе', title_en: 'in_progress' },
   { title_ru: 'Завершенные', title_en: 'completed' },
   // { title_ru: 'Новая заявка', title_en: 'new_request' },
@@ -86,7 +86,7 @@ const tabSlice = createSlice({
       state.requestsSelectedTab = {
         title_en: action.payload.title_en,
         title_ru: action.payload.title_ru,
-      }
+      }      
     },
   },
 });

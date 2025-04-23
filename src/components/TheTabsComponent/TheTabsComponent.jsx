@@ -9,6 +9,7 @@ const TheTabsComponent = (props) => {
   const sprite_path = './src/assets/images/i.svg';
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const showAgreementDetails = useSelector(isShowDetails);
+  const selectedRequest = useSelector(requestsSelectedTab);
   // const tabs = useSelector((state) => state.tabs_slice.tabs);
 
   const agreementsTabs = useSelector((state) => state.tabs_slice.agreementsTabs);
@@ -20,18 +21,28 @@ const TheTabsComponent = (props) => {
   }
   let tabs = calculateTabs();
 
-  const dispatch = useDispatch();
-  const setTab = (tab) => {
-    dispatch(setSelectedTab(tab))
-  }
   const location = useLocation();
   const currentRoute = location.pathname;
+
+  const dispatch = useDispatch();
+  const handleTabAction = (tab) => {
+    // if (currentRoute == '/agreements' && showAgreementDetails) {
+    //   dispatch(setAgreementsSelectedTab(tab))
+    // } else if (currentRoute == '/agreements') {
+    //   dispatch(setAgreementSelectedTab(tab))
+    // } if (currentRoute == '/requests') {
+    //   dispatch(setRequestsSelectedTab(tab))
+    // } 
+    dispatch(setSelectedTab(tab))
+  }
   
   useEffect(() => {
     if (currentRoute == '/agreements' && showAgreementDetails) {
       dispatch(setSelectedTab({title_en: 'bills', title_ru: 'Счета'}));
+    } else if (currentRoute == '/requests' && sm_breakpoint) {
+      dispatch(setSelectedTab({ title_en: 'my_requests', title_ru: 'Мои заявки' }));
     } else if (currentRoute == '/requests') {
-      dispatch(setSelectedTab({ title_en: 'all', title_ru: 'Все' }));
+      dispatch(setSelectedTab({ title_en: 'all_requests', title_ru: 'Все' }));
     } else {
       if (xl_breakpoint || lg_breakpoint || md_breakpoint) {
         dispatch(setSelectedTab({ title_en: 'all', title_ru: 'Все' }));
@@ -63,7 +74,7 @@ const TheTabsComponent = (props) => {
               ${currentTab && currentTab.title_en === tab.title_en ? 'text-[#203887] border-b border-b-[#6374AD]' : ''}
               ${currentTab && currentTab.title_en === tab.title_en ? 'text-[#203887] border-b border-b-[#6374AD]' : ''}
             `}
-            onClick={() => {setTab(tab)}}
+            onClick={() => {handleTabAction(tab)}}
           >
             { tab.title_ru }
           </div>
