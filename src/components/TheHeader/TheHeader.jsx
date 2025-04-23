@@ -43,8 +43,8 @@ const TheHeader = () => {
         : ''
       }
       <div className="flex xl:ms-0 lg:ms-0 md:ms-20 md:flex ms-5 md:translate-0 absolute transform translate-x-1/2">
-        <img className="lg:w-8 md:w-8 w-5" src="/src/assets/images/" alt="" />
-        <p className=" lg:text-2xl md:text-2xl text-sm uppercase font-bold lg:ms-5 md:ms-5 ms-2 my-auto" style={{fontFamily: 'PT Sans'}}>комдрагметалл рс(я)</p>
+        <img className="lg:w-8 md:w-8 w-5" src="/src/assets/images/logo.png" alt="" />
+        <p className=" lg:text-2xl md:text-xl text-sm uppercase font-bold lg:ms-5 md:ms-5 ms-2 my-auto" style={{fontFamily: 'PT Sans'}}>комдрагметалл рс(я)</p>
       </div>
       <div className="lg:flex md:flex lg:ms-auto md:ms-auto hidden" >
         <span className="lg:mr-10 md:mr-4 font-semibold text-xl mt-[0.35rem] ">

@@ -35,7 +35,13 @@ const AgreementsPage = () => {
   };
   useEffect(() => {
     // Устанавливаем tabs как agreementsList при монтировании компонента
-    dispatch(toggleTabs(isDetailsShown ? 'singleAgrement' : 'agreementsList'));
+    dispatch(toggleTabs({
+      type: isDetailsShown ? 'singleAgrement' : 'agreementsList', 
+      breakpoint: sm_breakpoint ? 'sm-breakpoint' : ''
+    } ));
+    
+    console.log('and here?');
+    
   }, [dispatch]);
   const backToAgreements = () => {
     dispatch(hideDetails());
@@ -50,9 +56,9 @@ const AgreementsPage = () => {
   }, [location]);
 
   return (
-    <main className="w-full min-h-fit">
+    <main className="min-h-fit">
       <Header />
-      <div className="w-full xl:p-10 lg:p-5 md:py-5 flex h-fit min-h-[90vh]">
+      <div className="xl:p-10 lg:p-5 md:py-5 flex h-fit min-h-[90vh]">
         {
           md_breakpoint && (
             <div className="w-[100px]"></div>
@@ -64,7 +70,7 @@ const AgreementsPage = () => {
           className={`
             xl:ml-10 xl:px-10 xl:py-10 xl:rounded-x
             lg:ml-8 lg:px-4 lg:py-5 lg:shadow-none
-            md:w-full md:px-6 md:ms-5 md:rounded-xl md:shadow-lg
+            md:w-full md:px-6 md:ms-8 md:rounded-xl md:shadow-lg
             w-full px-5 ms-0 bg-white shadow-none
             ${isDetailsShown ? 'h-fit' : ''}
           `}
@@ -102,7 +108,7 @@ const AgreementsPage = () => {
             </div>
             {
               isDetailsShown ? '' :
-              <TheTabsComponent titles='agreementsList' />
+              <TheTabsComponent titles='agreementsList' breakpoint={sm_breakpoint ? 'sm-breakpoint' : ''}/>
             }
             {
               <div className="md:pt-4 pt-5">

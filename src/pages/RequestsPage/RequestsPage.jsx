@@ -34,7 +34,10 @@ const RequestsPage = () => {
   
   useEffect(() => {
     // Устанавливаем tabs как agreementsList при монтировании компонента
-    dispatch(toggleTabs(isNewRequest ? 'newRequest' : 'requests'));
+    dispatch(toggleTabs({
+      type: isNewRequest ? 'newRequest' : 'requests', 
+      breakpoint: sm_breakpoint ? 'sm-breakpoint' : ''
+    } ));
   }, [dispatch]);
 
   return (
@@ -52,7 +55,7 @@ const RequestsPage = () => {
           className="
             xl:ml-10 xl:px-10 xl:py-10 xl:rounded-x
             lg:ml-8 lg:px-4 lg:py-5 lg:shadow-none
-            md:w-full md:px-6 md:ms-5 md:rounded-xl md:shadow-lg
+            md:w-full md:px-6 md:ms-8 md:rounded-xl md:shadow-lg
             w-full px-5 ms-0 bg-white shadow-none
           "
           onClick={sideClick}
@@ -87,7 +90,7 @@ const RequestsPage = () => {
               }
             </div>
             <TheTabsComponent />
-            <TheDocsListComponent title="requests" />
+            <TheDocsListComponent titles="requests" breakpoint={sm_breakpoint ? 'sm-breakpoint' : ''} />
           </div>
         </section>
       </div>

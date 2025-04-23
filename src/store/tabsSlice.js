@@ -11,9 +11,11 @@ const singleAgreementsList = [
   { title_ru: 'Показания', title_en: 'counters' }
 ]
 const requestsList = [
+  { title_ru: 'Мои заявки', title_en: 'my_requests' },
   { title_ru: 'Все', title_en: 'all' },
   { title_ru: 'В работе', title_en: 'in_progress' },
-  { title_ru: 'Завершенные', title_en: 'completed' }
+  { title_ru: 'Завершенные', title_en: 'completed' },
+  // { title_ru: 'Новая заявка', title_en: 'new_request' },
 ]
 
 const tabSlice = createSlice({
@@ -29,33 +31,33 @@ const tabSlice = createSlice({
     requestsSelectedTab: null,
   },
   reducers: {
-    toggleTabs(state, action) {
-      
+    toggleTabs(state, action) {   
+      console.log(action, 'is there any action');   
       if (action.payload.type == 'agreementsList') {
         switch (action.payload.breakpoint) {
           case 'sm-breakpoint':
-            state.tabs = agreementsList.slice(1);            
+            state.agreementsTabs = agreementsList.slice(1);            
             break;
           default:
-            state.tabs = [...agreementsList]; 
+            state.agreementsTabs = [...agreementsList]; 
             break;
         }        
       } else if (action.payload.type == 'singleAgreement') {
         switch (action.payload.breakpoint) {
           case 'sm-breakpoint':
-            state.tabs = singleAgreementsList;
+            state.agreementTabs = singleAgreementsList;
             break;
           default:
-            state.tabs = [...singleAgreementsList]; 
+            state.agreementTabs = [...singleAgreementsList]; 
             break;
         }
       } else if (action.payload.type == 'requests') {
         switch (action.payload.breakpoint) {
           case 'sm-breakpoint':
-            state.tabs = requestsList.slice(1);
+            state.requestsTabs = [requestsList[0]];
             break;
           default:
-            state.tabs = [...requestsList]; 
+            state.requestsTabs = requestsList.slice(1);
             break;
         }
       } else {
@@ -90,6 +92,9 @@ const tabSlice = createSlice({
 });
 
 export const selectedTab = (state) => state.tabs_slice.selectedTab;
+export const agreementsTabs = (state) => state.tabs_slice.agreementsTabs;
+export const agreementTabs = (state) => state.tabs_slice.agreementTabs;
+export const requestsTabs = (state) => state.tabs_slice.requestsTabs;
 export const agreementsSelectedTab = (state) => state.tabs_slice.agreementsSelectedTab;
 export const agreementSelectedTab = (state) => state.tabs_slice.agreementSelectedTab;
 export const requestsSelectedTab = (state) => state.tabs_slice.requestsSelectedTab;

@@ -13,7 +13,7 @@ const TheAgreementItem = ({ number, date, address, summ }) => {
     <div className={`
         lg:p-10 lg:rounded-2xl lg:mb-10 lg:flex
         md:mb-4 md:bg-item-active
-        rounded-xl mb-6 block
+        rounded-xl mb-6 block w-full
         ${isDetailsShown ? 'lg:mt-6 p-0' : 'cursor-pointer p-5 bg-item-default'}
         ${isDetailsShown && lg_breakpoint ? 'bg-item-active': ''}
       `}

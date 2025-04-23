@@ -1,4 +1,5 @@
 import React, { useEffect }  from 'react';
+import { BrowserRouter as Router, Route, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux'; 
 import useMediaQueries from '@/hooks/useMediaQueries'; 
 import { isShowDetails } from '@/store/agreementsSlice';
@@ -8,15 +9,25 @@ const TheTabsComponent = (props) => {
   const sprite_path = './src/assets/images/i.svg';
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const showAgreementDetails = useSelector(isShowDetails);
-  const tabs = useSelector((state) => state.tabs_slice.tabs);
+  // const tabs = useSelector((state) => state.tabs_slice.tabs);
+
+  const agreementsTabs = useSelector((state) => state.tabs_slice.agreementsTabs);
+  const agreementTabs = useSelector((state) => state.tabs_slice.agreementTabs);
+  const requestsTabs = useSelector((state) => state.tabs_slice.requestsTabs);
+
+  let calculateTabs = () => {
+    return props.titles == 'agreementsList' ? agreementsTabs : props.titles == 'singleAgreement' ? agreementTabs : requestsTabs
+  }
+  let tabs = calculateTabs();
 
   const dispatch = useDispatch();
   const setTab = (tab) => {
     dispatch(setSelectedTab(tab))
   }
-  const currentRoute = window.location.pathname;
+  const location = useLocation();
+  const currentRoute = location.pathname;
   
-  useEffect(() => {    
+  useEffect(() => {
     if (currentRoute == '/agreements' && showAgreementDetails) {
       dispatch(setSelectedTab({title_en: 'bills', title_ru: 'Счета'}));
     } else if (currentRoute == '/requests') {
@@ -28,6 +39,7 @@ const TheTabsComponent = (props) => {
         dispatch(setSelectedTab({ title_en: 'active', title_ru: 'Действующие' }));
       }
     }
+    
   }, [showAgreementDetails, xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint, dispatch]);
 
   const currentTab = useSelector((state) => state.tabs_slice.selectedTab);
@@ -36,8 +48,8 @@ const TheTabsComponent = (props) => {
     <div className="
       xl:mt-9
       lg:mt-10 lg:gap-4
-      md:mt-7 md:rounded-t-xl md:gap-10 md:justify-start
-      flex justify-between w-full gap-0 mt-11 b bg-item-default border-b-1 border-slate-300 rounded-t-md font-medium overflow-auto
+      md:mt-7 md:rounded-t-xl md:justify-start
+      flex justify-between mt-11 b bg-[#FAFBFD] border-b-1 border-slate-300 rounded-t-md font-medium overflow-auto no-scrollbar
     ">
         {tabs.map((tab, index) => (
           <div 
@@ -58,7 +70,10 @@ const TheTabsComponent = (props) => {
         ))}
         {
           currentRoute == '/requests' ? 
-          <div className="flex items-center cursor-pointer ms-auto px-8">
+          <div 
+            className="flex items-center cursor-pointer ms-auto px-8"
+            onClick={() => {console.log('new request btn')}}
+          >
             <svg
               className="w-[10px] h-[10px] stroke-[#232323] me-2"
             >
