@@ -36,7 +36,7 @@ const ContactsPage = () => {
   }, [dispatch]);
 
     const locations = Array.from({ length: 4 }, (_, index) => (
-      <div key={index} className="rounded-xl bg-item-active p-8">
+      <div key={index} className="rounded-xl bg-item-active p-8 md:mb-0 mb-4">
         <p className="text-2xl font-bold mb-8">Якутск</p>
         <p className="my-4">
           <span className="text-[#787C82]">Телефон:</span> &nbsp;
@@ -71,7 +71,7 @@ const ContactsPage = () => {
             xl:ml-10 xl:px-10 xl:py-10 xl:rounded-x
             lg:ml-8 lg:px-4 lg:py-5 lg:shadow-none
             md:w-full md:px-6 md:ms-5 md:rounded-xl md:shadow-lg
-            w-full px-5 ms-0 bg-white shadow-none
+            w-full px-5 ms-0 bg-white shadow-none 
           "
           onClick={sideClick}
         >
@@ -89,7 +89,7 @@ const ContactsPage = () => {
                 </p>
               }
             </div>
-            <div className="p-4 mt-6 text-base grid grid-cols-2 gap-8">
+            <div className="p-4 mt-6 text-base md:grid md:grid-cols-2 gap-8">
                 {locations}
             </div>
           </div>
