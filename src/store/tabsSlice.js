@@ -29,7 +29,8 @@ const tabSlice = createSlice({
     requestsSelectedTab: null,
   },
   reducers: {
-    toggleTabs(state, action) {      
+    toggleTabs(state, action) {
+      
       if (action.payload.type == 'agreementsList') {
         switch (action.payload.breakpoint) {
           case 'sm-breakpoint':

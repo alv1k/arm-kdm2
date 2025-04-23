@@ -50,24 +50,24 @@ const AgreementsPage = () => {
   }, [location]);
 
   return (
-    <main className="min-h-fit">
+    <main className="w-full min-h-fit">
       <Header />
-      <div className="xl:p-10 lg:p-5 md:py-5 flex min-h-fit h-[90vh]">
+      <div className="w-full xl:p-10 lg:p-5 md:py-5 flex h-fit min-h-[90vh]">
         {
           md_breakpoint && (
-            <div className="w-1/7"></div>
-          )          
+            <div className="w-[100px]"></div>
+          )
         }
         <TheNavbar />
         
         <section 
           className={`
-              xl:ml-10 xl:px-10 xl:py-10 xl:rounded-x
-              lg:ml-8 lg:px-4 lg:py-5 lg:shadow-none
-              md:w-full md:px-6 md:ms-5 md:rounded-xl md:shadow-lg
-              w-full px-5 ms-0 bg-white shadow-none
-              ${isDetailsShown ? 'h-fit' : ''}
-            `}
+            xl:ml-10 xl:px-10 xl:py-10 xl:rounded-x
+            lg:ml-8 lg:px-4 lg:py-5 lg:shadow-none
+            md:w-full md:px-6 md:ms-5 md:rounded-xl md:shadow-lg
+            w-full px-5 ms-0 bg-white shadow-none
+            ${isDetailsShown ? 'h-fit' : ''}
+          `}
           onClick={sideClick}
         >
           <div className="lg:text-base md:text-base text-sm">

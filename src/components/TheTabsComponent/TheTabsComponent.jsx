@@ -37,7 +37,7 @@ const TheTabsComponent = (props) => {
       xl:mt-9
       lg:mt-10 lg:gap-4
       md:mt-7 md:rounded-t-xl md:gap-10 md:justify-start
-      flex justify-between w-full gap-0 mt-11 bg-[#FAFBFD] border-b-1 border-slate-300 rounded-t-md font-medium
+      flex justify-between w-full gap-0 mt-11 b bg-item-default border-b-1 border-slate-300 rounded-t-md font-medium overflow-auto
     ">
         {tabs.map((tab, index) => (
           <div 
@@ -45,25 +45,28 @@ const TheTabsComponent = (props) => {
             className={`
               text-center
               lg:px-10 lg:block
-              md:px-4 md:flex md:items-center
-              py-4 cursor-pointer bg-item-default rounded-t-xl 
+              md:px-6 md:flex md:items-center
+              py-4 px-6 cursor-pointer bg-item-default rounded-t-xl 
               ${sm_breakpoint ? 'w-1/2' : ''}
               ${currentTab && currentTab.title_en === tab.title_en ? 'text-[#203887] border-b border-b-[#6374AD]' : ''}
               ${currentTab && currentTab.title_en === tab.title_en ? 'text-[#203887] border-b border-b-[#6374AD]' : ''}
             `}
             onClick={() => {setTab(tab)}}
           >
-            {
-              md_breakpoint ? 
-              <svg
-                className="w-[10px] h-[10px] stroke-[#232323] me-2"
-              >
-                <use href={`${sprite_path}#plus-icon`} />
-              </svg> : ''
-            }
             { tab.title_ru }
           </div>
         ))}
+        {
+          currentRoute == '/requests' ? 
+          <div className="flex items-center cursor-pointer ms-auto px-8">
+            <svg
+              className="w-[10px] h-[10px] stroke-[#232323] me-2"
+            >
+              <use href={`${sprite_path}#plus-icon`} />
+            </svg>
+            Новая заявка
+          </div> : ''
+        }
     </div>
   )
 }

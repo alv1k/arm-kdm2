@@ -31,19 +31,19 @@ const RequestsPage = () => {
       dispatch(hideNavbar());
     }
   };
+  
   useEffect(() => {
     // Устанавливаем tabs как agreementsList при монтировании компонента
-    dispatch(toggleTabs(isNewRequest ? 'singleAgrement' : 'agreementsList'));
-    
+    dispatch(toggleTabs(isNewRequest ? 'newRequest' : 'requests'));
   }, [dispatch]);
 
   return (
     <main className="min-h-fit">
       <Header />
-      <div className="xl:p-10 lg:p-5 md:py-5 flex min-h-fit h-[90vh]">    
+      <div className="xl:p-10 lg:p-5 md:py-5 flex min-h-fit h-[90vh]">
         {
           md_breakpoint && (
-            <div className="w-1/7"></div>
+            <div className="w-[100px]"></div>
           )          
         }
         <TheNavbar />

@@ -1,11 +1,24 @@
 @import "tailwindcss";
 
 @theme { 
-  --breakpoint-sm: 24.375rem;
+  --breakpoint-sm: initial;
+  --breakpoint-md: 601px;
+  --breakpoint-lg: 821px;
+  --breakpoint-xl: 1441px;
+  --breakpoint-2xl: 1920px;
+  
+  /* original --breakpoint-sm: 24.375rem;
   --breakpoint-md: 51.25rem;
   --breakpoint-lg: 90rem;
   --breakpoint-xl: 120rem;
-  --breakpoint-2xl: initial;
+  --breakpoint-2xl: initial; */
+
+
+  /* redoed --breakpoint-sm: 37.5rem;
+  --breakpoint-md: 80rem;
+  --breakpoint-lg: 90rem;
+  --breakpoint-xl: 120rem;
+  --breakpoint-2xl: initial; */
 }
 * {
   font-family: Inter, sans-serif;

@@ -23,11 +23,11 @@ const TheDocsListComponent = () => {
         sm_breakpoint || md_breakpoint  ? 
         <div className="w-full">
           {
-            currentTab.title_en == 'counters' ? 
+            currentTab && currentTab.title_en == 'counters' ? 
             <p className="mb-2"><span className="text-[#787C82]">Дата: </span>02.02.2026</p> : ''
           }
           {
-            currentTab.title_en == 'acts' ? 
+            currentTab && currentTab.title_en == 'acts' ? 
             <div className="md:flex block">
               <div>
                 <p className="mb-1">№001. Акт об оплате аренды</p>
@@ -50,10 +50,10 @@ const TheDocsListComponent = () => {
             <div className={`
               
               ${sm_breakpoint || md_breakpoint ? '' : 'flex'} 
-              ${currentTab.title_en == 'bills' ? 'text-left w-1/2' : 'md:w-2/5'}
+              ${currentTab && currentTab.title_en == 'bills' ? 'text-left w-1/2' : 'md:w-2/5'}
             `}>
               {
-                currentTab.title_en == 'bills' ? 
+                currentTab && currentTab.title_en == 'bills' ? 
                 <div className="md:pe-3">
                   <div className="mb-1">№001. Счет за аренду</div>
                   <div><span className="text-[#787C82]">Дата:</span> 01.01.2025</div>
@@ -77,10 +77,10 @@ const TheDocsListComponent = () => {
             <div className={`
               w-1/2
               ${sm_breakpoint || md_breakpoint ? '' : 'flex'}
-              ${currentTab.title_en == 'bills' ? 'text-center' : 'text-left'}
+              ${currentTab && currentTab.title_en == 'bills' ? 'text-center' : 'text-left'}
             `}>
             {
-              currentTab.title_en == 'bills' ? 
+              currentTab && currentTab.title_en == 'bills' ? 
               <div>
                 <div className="mb-1 text-[#787C82]">Сумма:</div>
                 <div className="text-red-600"><PriceFormatter amount="100000" /></div>

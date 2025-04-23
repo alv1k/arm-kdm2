@@ -22,9 +22,9 @@ const TheNavbar = () => {
         xl:p-10 xl:static xl:w-6/20
         lg:w-7/23 lg:static lg:p-5 lg:py-9 lg:rounded-xl lg:shadow-none
         md:w-1/7 md:absolute md:z-10 md:rounded-none md:rounded-e-xl md:shadow-md
-        py-3 px-5 w-full rounded-2xl absolute bg-white shadow-none flex flex-col 
-        ${sm_breakpoint ? `${styles.navbar} h-[91vh]` : ''}
-        ${md_breakpoint ? `${styles.navbar} h-[87vh]` : ''}
+        py-3 px-5 w-full rounded-2xl absolute bg-white shadow-none flex flex-col   min-h-fit h-[92vh]
+        ${sm_breakpoint ? `${styles.navbar} h-[100vh]` : ''}
+        ${md_breakpoint ? `${styles.navbar}` : ''}
         ${navbarRemote}
         ${showNavbar ? 'shadow-xl' : ''}
       `}

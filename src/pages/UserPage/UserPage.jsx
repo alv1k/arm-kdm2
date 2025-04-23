@@ -42,7 +42,7 @@ const UserPage = () => {
       <div className="xl:p-10 lg:p-5 md:py-5 flex min-h-fit h-[90vh]">      
         {
           md_breakpoint && (
-            <div className="w-1/7"></div>
+            <div className="w-[100px]"></div>
           )          
         }
         <TheNavbar />
