@@ -4,6 +4,7 @@ import navbarReducer from '../store/navbarSlice'; // Импортируем ре
 import agreementsReducer from './agreementsSlice';
 import tabsReducer from './tabsSlice';
 import requestsReducer from './requestsSlice';
+import userSlice from './userSlice';
 
 const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ const store = configureStore({
     agreements_slice: agreementsReducer,
     tabs_slice: tabsReducer,
     requests_slice: requestsReducer,
+    user_slice: userSlice
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat((store) => (next) => (action) => {

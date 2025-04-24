@@ -4,6 +4,7 @@ import { toggleNavbar } from '@/store/navbarSlice';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
 import { isShowDetails, hideDetails, agreementsStoreList } from '@/store/agreementsSlice';
 import { isNew, toggleStatus } from '@/store/requestsSlice';
+import { isPasswordModification, togglePasswordChange } from '@/store/userSlice';
 import styles from './TheHeader.module.css'
 
 const sprite_path = './src/assets/images/i.svg';
@@ -13,6 +14,7 @@ const TheHeader = () => {
   const showAgreementDetails = useSelector(isShowDetails);
   const agreementsList = useSelector(agreementsStoreList);
   const isNewRequest = useSelector(isNew);
+  const isPasswordChange = useSelector(isPasswordModification);
 
   const handleClick = () => {
     dispatch(toggleNavbar());
@@ -22,12 +24,14 @@ const TheHeader = () => {
       dispatch(hideDetails());
     } else if (isNewRequest) {
       dispatch(toggleStatus());
+    } else if(isPasswordChange) {
+      dispatch(togglePasswordChange());
     }
   }
   return (
     <header className="xl:px-10 lg:px-10 md:px-6 px-0 text-[#203887] bg-white py-5 flex relative">
       {
-        ((isNewRequest || showAgreementDetails) && sm_breakpoint) ?
+        ((isNewRequest || showAgreementDetails || isPasswordChange) && sm_breakpoint) ?
         <button 
           className="md:text-base text-sm btn-text flex items-center ms-3 "
           onClick={handleBackwards}
