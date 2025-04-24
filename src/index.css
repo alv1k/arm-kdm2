@@ -139,16 +139,6 @@ body {
   stroke: #232323;
 }
 
-input[type='checkbox'] { 
-  padding: 66px;
-  background-color: purple;
-}
-.input-checkbox {
-  padding: 66px;
-  background-color: purple;
-
-}
-
 
 @media (prefers-color-scheme: light) {
   :root {

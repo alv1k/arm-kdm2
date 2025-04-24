@@ -1,18 +1,13 @@
 import React, { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { hideNavbar } from '@/store/navbarSlice';
 import { toggleTabs  } from '@/store/tabsSlice';
 import { isNew } from '@/store/requestsSlice';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
-import styles from './RequestsPage.module.css';
 
-import Header from '@/components/TheHeader/TheHeader';
-import TheNavbar from '@/components/TheNavbar/TheNavbar';
-import AgreementItem from '@/components/TheAgreementItem/TheAgreementItem';
+import NewRequestPage from '@/pages/NewRequestPage/NewRequestPage';
 import TheTabsComponent from '@/components/TheTabsComponent/TheTabsComponent';
-import TheDocsListComponent from '@/components/TheDocsListComponent/TheDocsListComponent'
-
+import TheDocsListComponent from '@/components/TheDocsListComponent/TheDocsListComponent';
 
 const RequestsPage = () => {
   const sprite_path = './src/assets/images/i.svg';
@@ -50,38 +45,43 @@ const RequestsPage = () => {
       "
       onClick={sideClick}
     >
-      <div className="lg:text-base md:text-base text-sm">
-        <div className="flex md:justify-start justify-center">
-          {
-            isNewRequest && sm_breakpoint ? '' :
-            <p className="
-              xl:mt-0 
-              lg:px-6 lg:text-[26px] lg:mt-4
-              md:px-2 md:mt-9
-              text-xl font-bold mt-5
-            ">
-              Заявки
-            </p>
-          }
-          {
-            isNewRequest && !sm_breakpoint ? 
-            <button 
-              className="btn-text ms-auto me-4 lg:mt-0 md:mt-9 flex"
-            >
-              <svg
-                className="icon"
-              >
-                <use href={`${sprite_path}#back-icon`} />
-              </svg>
-              
-              Назад
-            </button>
-            : ''
-          }
-        </div>
-        <TheTabsComponent />
-        <TheDocsListComponent titles="requests" breakpoint={sm_breakpoint ? 'sm-breakpoint' : ''} />
-      </div>
+      {
+        isNewRequest ? 
+          <NewRequestPage />
+          : 
+          <div className="lg:text-base md:text-base text-sm">
+            <div className="flex md:justify-start justify-center">
+              {
+                isNewRequest && sm_breakpoint ? '' :
+                <p className="
+                  xl:mt-0 
+                  lg:px-6 lg:text-[26px] lg:mt-4
+                  md:px-2 md:mt-9
+                  text-xl font-bold mt-5
+                ">
+                  Заявки
+                </p>
+              }
+              {
+                isNewRequest && !sm_breakpoint ? 
+                <button 
+                  className="btn-text ms-auto me-4 lg:mt-0 md:mt-9 flex"
+                >
+                  <svg
+                    className="icon"
+                  >
+                    <use href={`${sprite_path}#back-icon`} />
+                  </svg>
+                  
+                  Назад
+                </button>
+                : ''
+              }
+            </div>
+            <TheTabsComponent />
+            <TheDocsListComponent titles="requests" breakpoint={sm_breakpoint ? 'sm-breakpoint' : ''} />
+          </div>
+      }
     </section>
   )
 }

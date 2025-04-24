@@ -46,7 +46,6 @@ const LoginPage = () => {
           <img className="align-bottom justify-baseline justify-self-end lg:blur-none lg:mt-0 blur-xs h-fit mx-auto" src="/src/assets/images/bg-login.png" alt="" />
         </div>
 
-
         <div className="lg:w-1/2 lg:static w-full absolute top-20 flex align-middle items-center justify-center">
           <div className="bg-white p-8 lg:my-auto my-auto mx-auto lg:w-2/3 lg:rounded-none w-[90vw] rounded-2xl text-center">
             <img className="mx-auto" src="/src/assets/images/logo.png" alt="logo" />

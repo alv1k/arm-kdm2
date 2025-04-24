@@ -6,12 +6,13 @@ const requestsSlice = createSlice({
     isNewRequest: false,
   },
   reducers: {
-    toggleTabs(state, action) {      
-      
+    toggleStatus(state) {      
+      state.isNewRequest = !state.isNewRequest
     },
   },
 });
 
+
 export const isNew = (state) => state.requests_slice.isNewRequest;
-export const { toggleTabs } = requestsSlice.actions;
+export const { toggleStatus } = requestsSlice.actions;
 export default requestsSlice.reducer;

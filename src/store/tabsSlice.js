@@ -31,8 +31,7 @@ const tabSlice = createSlice({
     requestsSelectedTab: null,
   },
   reducers: {
-    toggleTabs(state, action) {   
-      console.log(action, 'is there any action');   
+    toggleTabs(state, action) { 
       if (action.payload.type == 'agreementsList') {
         switch (action.payload.breakpoint) {
           case 'sm-breakpoint':
@@ -71,19 +70,19 @@ const tabSlice = createSlice({
       }
     },
     setAgreementsSelectedTab(state, action) {      
-      state.agreementsSelectedTab = {
+      state.selectedTab = {
         title_en: action.payload.title_en,
         title_ru: action.payload.title_ru,
       }
     },
     setAgreementSelectedTab(state, action) {      
-      state.agreementSelectedTab = {
+      state.selectedTab = {
         title_en: action.payload.title_en,
         title_ru: action.payload.title_ru,
       }
     },
     setRequestsSelectedTab(state, action) {      
-      state.requestsSelectedTab = {
+      state.selectedTab = {
         title_en: action.payload.title_en,
         title_ru: action.payload.title_ru,
       }      

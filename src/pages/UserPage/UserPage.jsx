@@ -35,7 +35,6 @@ const UserPage = () => {
     
   }, [dispatch]);
 
-
   return (
     <section 
       className="
@@ -46,45 +45,57 @@ const UserPage = () => {
       "
       onClick={sideClick}
     >
-      <div className="lg:text-base md:text-base text-sm md:w-2/3 w-full">
+      <div className="lg:text-base md:text-base text-sm xl:w-4/5 w-full h-[110%]">
         <div className="md:justify-start justify-center">
           {
             isNewRequest && sm_breakpoint ? '' :
             <p className="
               xl:mt-0 
               lg:px-6 lg:text-[26px] lg:mt-4
-              md:px-2 md:mt-9 md:text-left
+              md:px-2 md:mt-4 md:text-left
               text-xl font-bold mt-5 text-center
             ">
               Профиль
             </p>
           }
         </div>
-        <div className="p-4 mt-6 text-xl gap-8">
+        <div className="lg:mt-6 md:mt-2 mt-4">
           <div className="md:flex block gap-5">
-            <img className="w-32 md:mx-0 mx-auto" src="/src/assets/images/user.png" alt="profile" />
-            <div className="md:mt-0 mt-8">
-              <p className="text-[#203887] font-extrabold text-xl md:text-left text-center">
+            <img className="mt-4 w-25 h-25 md:mx-0 mx-auto" src="/src/assets/images/user.png" alt="profile" />
+            <div className="lg:mt-3 md:mt-4 md:ms-5 mt-5">
+              <p className="text-[#203887] font-extrabold md:text-xl text-base md:text-left text-center">
                 ООО “Название организации”
               </p>
-              <p className="my-4">
+              <p className={`
+                md:mt-4 mt-4 md:p-0 px-5 py-2 rounded-xl text-sm
+                ${sm_breakpoint ? 'bg-item-default' : ''}
+              `}>
                 <span className="text-[#787C82]">Телефон:</span> &nbsp;
+                {
+                  sm_breakpoint ? <br /> : ''
+                }
                 +7 (4112) 482-504
               </p>
-              <p className="my-4">
+              <p className={`
+                md:mt-6 md:p-0 px-5 py-4 mt-4 rounded-xl text-sm md:bg-none
+                ${sm_breakpoint ? 'bg-item-default' : ''}
+              `}>
                 <span className="text-[#787C82]">Эл. почта:</span> &nbsp;
+                {
+                  sm_breakpoint ? <br /> : ''
+                }
                 info@aokdm.ru
               </p>
             </div>
           </div>
-          <div className="md:flex block gap-5 w-full mt-8">
-            <div className="w-full">
+          <div className="xl:mt-8 lg:mt-10 lg:flex block gap-5 w-full md:mt-4 mt-3 text-sm">
+            <div className="lg:w-1/2 w-full">
               <p className="text-[#787C82]">Логин</p>
-              <input className="mt-2 p-3 bg-item-active w-full" type="text" placeholder='User001' />
+              <input className="mt-2 p-5 bg-item-active w-full rounded-xl" type="text" placeholder='User001' />
             </div>
-            <div className="w-full">
+            <div className="lg:w-1/2 lg:mt-0 w-full mt-4">
               <p className="text-[#787C82]">Пароль</p>
-              <input className="mt-2 p-3 bg-item-active w-full" type="text" placeholder='******'/>
+              <input className="mt-2 p-5 bg-item-active w-full rounded-xl" type="text" placeholder='******'/>
                 {/* <svg
                   className="icon"
                 >
@@ -92,7 +103,7 @@ const UserPage = () => {
                 </svg> */}
             </div>
           </div>
-          <button className="btn-default px-4 py-1 flex mt-6">
+          <button className="btn-default py-2 flex md:mt-9 mt-9 md:w-auto md:px-6 w-full justify-center">
             <svg
               className="icon me-2"
             >

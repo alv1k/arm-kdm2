@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux'; 
 import useMediaQueries from '@/hooks/useMediaQueries'; 
 import { isShowDetails } from '@/store/agreementsSlice';
+import { toggleStatus } from '@/store/requestsSlice';
 import { toggleTabs, setSelectedTab, selectedTab, agreementsSelectedTab, agreementSelectedTab, requestsSelectedTab, setAgreementsSelectedTab, setAgreementSelectedTab, setRequestsSelectedTab } from '@/store/tabsSlice';
 
 const TheTabsComponent = (props) => {
@@ -26,34 +27,37 @@ const TheTabsComponent = (props) => {
 
   const dispatch = useDispatch();
   const handleTabAction = (tab) => {
-    // if (currentRoute == '/agreements' && showAgreementDetails) {
-    //   dispatch(setAgreementsSelectedTab(tab))
-    // } else if (currentRoute == '/agreements') {
-    //   dispatch(setAgreementSelectedTab(tab))
-    // } if (currentRoute == '/requests') {
-    //   dispatch(setRequestsSelectedTab(tab))
-    // } 
-    dispatch(setSelectedTab(tab))
+    if (currentRoute == '/agreements' && showAgreementDetails) {
+      dispatch(setAgreementsSelectedTab(tab))
+    } else if (currentRoute == '/agreements') {
+      dispatch(setAgreementSelectedTab(tab))
+    } if (currentRoute == '/requests') {
+      dispatch(setRequestsSelectedTab(tab))
+    }
   }
   
   useEffect(() => {
     if (currentRoute == '/agreements' && showAgreementDetails) {
-      dispatch(setSelectedTab({title_en: 'bills', title_ru: 'Счета'}));
+      dispatch(setAgreementSelectedTab({title_en: 'bills', title_ru: 'Счета'}));
     } else if (currentRoute == '/requests' && sm_breakpoint) {
-      dispatch(setSelectedTab({ title_en: 'my_requests', title_ru: 'Мои заявки' }));
+      dispatch(setRequestsSelectedTab({ title_en: 'my_requests', title_ru: 'Мои заявки' }));
     } else if (currentRoute == '/requests') {
-      dispatch(setSelectedTab({ title_en: 'all_requests', title_ru: 'Все' }));
+      dispatch(setRequestsSelectedTab({ title_en: 'all_requests', title_ru: 'Все' }));
     } else {
       if (xl_breakpoint || lg_breakpoint || md_breakpoint) {
-        dispatch(setSelectedTab({ title_en: 'all', title_ru: 'Все' }));
+        dispatch(setAgreementsSelectedTab({ title_en: 'all', title_ru: 'Все' }));
       } else if (sm_breakpoint) {
-        dispatch(setSelectedTab({ title_en: 'active', title_ru: 'Действующие' }));
+        dispatch(setAgreementsSelectedTab({ title_en: 'active', title_ru: 'Действующие' }));
       }
     }
     
-  }, [showAgreementDetails, xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint, dispatch]);
+  }, [dispatch, showAgreementDetails, xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint]);
 
   const currentTab = useSelector((state) => state.tabs_slice.selectedTab);
+ 
+  const handleNewRequestBtn = () => {    
+    dispatch(toggleStatus())
+  }
   
   return (
     <div className="
@@ -83,7 +87,7 @@ const TheTabsComponent = (props) => {
           currentRoute == '/requests' ? 
           <div 
             className="flex items-center cursor-pointer ms-auto px-8"
-            onClick={() => {console.log('new request btn')}}
+            onClick={handleNewRequestBtn}
           >
             <svg
               className="w-[10px] h-[10px] stroke-[#232323] me-2"
