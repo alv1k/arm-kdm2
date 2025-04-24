@@ -40,10 +40,10 @@ const LoginPage = () => {
   }
 
   return (
-    <main className="min-h-fit h-screen">
+    <main className="min-h-fit h-screen w-full">
       <div className="lg:flex min-h-fit h-screen relative">
-        <div className="lg:w-1/2 w-full h-screen bg-[#F6F8FF] flex ">
-          <img className="lg:blur-none lg:mt-0 blur-xs mt-auto h-screen mx-auto" src="/src/assets/images/bg.png" alt="" />
+        <div className="lg:w-1/2 w-full h-screen bg-[#F6F8FF] flex  flex-col justify-end">
+          <img className="align-bottom justify-baseline justify-self-end lg:blur-none lg:mt-0 blur-xs h-fit mx-auto" src="/src/assets/images/bg-login.png" alt="" />
         </div>
 
 

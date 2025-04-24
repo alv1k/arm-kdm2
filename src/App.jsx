@@ -19,7 +19,10 @@ const App = () => {
         location.pathname != '/login' ?
         <Header /> : ''
       }
-      <div className="w-full xl:p-10 lg:p-5 md:py-5 flex h-fit min-h-[90vh]">
+      <div className={`
+        w-full md:py-5 flex h-fit min-h-[90vh]
+        ${location.pathname == '/login' ? 'xl:p-0 lg:p-0' : 'xl:p-10 lg:p-5'}        
+      `}>
         {
           md_breakpoint && location.pathname != '/login' ? 
             <div className="w-[100px]"></div> : ''
