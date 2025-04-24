@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import AgreementsPage from './pages/AgreementsPage/AgreementsPage'
 import RequestsPage from './pages/RequestsPage/RequestsPage'
 import SettingsPage from './pages/SettingsPage/SettingsPage'
@@ -7,12 +7,27 @@ import UserPage from './pages/UserPage/UserPage';
 import LoginPage from './pages/LoginPage/LoginPage';
 import Header from '@/components/TheHeader/TheHeader';
 import Navbar from '@/components/TheNavbar/TheNavbar';
+import useMediaQueries from '@/hooks/useMediaQueries';
 
-function App() {
-  // const [count, setCount] = useState(0)
-
+const App = () => {
+  const location = useLocation();  
+  const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
+  
   return (
-      <Router>
+    <div className="min-h-screen flex flex-col w-full">
+      {
+        location.pathname != '/login' ?
+        <Header /> : ''
+      }
+      <div className="w-full xl:p-10 lg:p-5 md:py-5 flex h-fit min-h-[90vh]">
+        {
+          md_breakpoint && location.pathname != '/login' ? 
+            <div className="w-[100px]"></div> : ''
+        }
+        {
+          location.pathname != '/login' ?
+          <Navbar /> : ''
+        }
         <Routes>
           <Route path='/' element={<AgreementsPage/>} />
           <Route path='/agreements' element={<AgreementsPage/>} />
@@ -20,10 +35,18 @@ function App() {
           <Route path='/contacts' element={<ContactsPage/>} />
           <Route path='/settings' element={<SettingsPage/>} />
           <Route path='/user' element={<UserPage/>} />
-          <Route path='/logout' element={<LoginPage/>} />
-        </Routes>       
-      </Router>
+          <Route path='/login' element={<LoginPage/>} />
+        </Routes>
+      </div>
+    </div>
   )
-}
+};
+const Root = () => {
+  return (
+    <Router>
+      <App />
+    </Router>
+  );
+};
 
-export default App
+export default Root

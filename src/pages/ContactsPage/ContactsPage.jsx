@@ -56,46 +56,34 @@ const ContactsPage = () => {
 
 
   return (
-    <main className="min-h-fit">
-      <Header />
-      <div className="xl:p-10 lg:p-5 md:py-5 flex min-h-fit h-[90vh]">     
-        {
-          md_breakpoint && (
-            <div className="w-[100px]"></div>
-          )          
-        }
-        <TheNavbar />
-        
-        <section 
-          className="
-            xl:ml-10 xl:px-10 xl:py-10 xl:rounded-x
-            lg:ml-8 lg:px-4 lg:py-5 lg:shadow-none
-            md:w-full md:px-6 md:ms-8 md:rounded-xl md:shadow-lg
-            w-full px-5 ms-0 bg-white shadow-none
-          "
-          onClick={sideClick}
-        >
-          <div className="lg:text-base md:text-base text-sm">
-            <div className="flex md:justify-start justify-center">
-              {
-                isNewRequest && sm_breakpoint ? '' :
-                <p className="
-                  xl:mt-0 
-                  lg:px-6 lg:text-[26px] lg:mt-4
-                  md:px-2 md:mt-9
-                  text-xl font-bold mt-5
-                ">
-                  Контакты
-                </p>
-              }
-            </div>
-            <div className="p-4 mt-6 text-base md:grid md:grid-cols-2 gap-8">
-                {locations}
-            </div>
-          </div>
-        </section>
+    <section 
+      className="
+        xl:ml-10 xl:px-10 xl:py-10 xl:rounded-x
+        lg:ml-8 lg:px-4 lg:py-5 lg:shadow-none
+        md:w-full md:px-6 md:ms-8 md:rounded-xl md:shadow-lg
+        w-full px-5 ms-0 bg-white shadow-none
+      "
+      onClick={sideClick}
+    >
+      <div className="lg:text-base md:text-base text-sm">
+        <div className="flex md:justify-start justify-center">
+          {
+            isNewRequest && sm_breakpoint ? '' :
+            <p className="
+              xl:mt-0 
+              lg:px-6 lg:text-[26px] lg:mt-4
+              md:px-2 md:mt-9
+              text-xl font-bold mt-5
+            ">
+              Контакты
+            </p>
+          }
+        </div>
+        <div className="p-4 mt-6 text-base md:grid md:grid-cols-2 gap-8">
+            {locations}
+        </div>
       </div>
-    </main>
+    </section>
   )
 }
 export default ContactsPage;

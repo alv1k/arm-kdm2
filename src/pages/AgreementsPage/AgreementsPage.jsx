@@ -39,9 +39,7 @@ const AgreementsPage = () => {
       type: isDetailsShown ? 'singleAgrement' : 'agreementsList', 
       breakpoint: sm_breakpoint ? 'sm-breakpoint' : ''
     } ));
-    
-    console.log('and here?');
-    
+        
   }, [dispatch]);
   const backToAgreements = () => {
     dispatch(hideDetails());
@@ -56,103 +54,91 @@ const AgreementsPage = () => {
   }, [location]);
 
   return (
-    <main className="min-h-fit">
-      <Header />
-      <div className="xl:p-10 lg:p-5 md:py-5 flex h-fit min-h-[90vh]">
+    <section 
+      className={`
+        xl:ml-10 xl:px-10 xl:py-10 xl:rounded-x
+        lg:ml-8 lg:px-4 lg:py-5 lg:shadow-none
+        md:w-full md:px-6 md:ms-8 md:rounded-xl md:shadow-lg
+        w-full px-5 ms-0 bg-white shadow-none
+        ${isDetailsShown ? 'h-fit' : ''}
+      `}
+      onClick={sideClick}
+    >
+      <div className="lg:text-base md:text-base text-sm">
+        <div className="flex md:justify-start justify-center">
+          {
+            isDetailsShown && sm_breakpoint ? '' :
+            <p className="
+              xl:mt-0 
+              lg:px-6 lg:text-[26px] lg:mt-4
+              md:px-2 md:mt-9
+              text-xl font-bold mt-5
+            ">
+              Мои договоры
+            </p>
+          }
+          {
+            isDetailsShown && !sm_breakpoint ? 
+            <button 
+              className="btn-text ms-auto me-4 lg:mt-0 md:mt-9 flex"
+              onClick={backToAgreements}
+            >
+              <svg
+                className="icon"
+              >
+                <use href={`${sprite_path}#back-icon`} />
+              </svg>
+              
+              Назад
+            </button>
+            : ''
+          }
+        </div>
         {
-          md_breakpoint && (
-            <div className="w-[100px]"></div>
-          )
+          isDetailsShown ? '' :
+          <TheTabsComponent titles='agreementsList' breakpoint={sm_breakpoint ? 'sm-breakpoint' : ''}/>
         }
-        <TheNavbar />
-        
-        <section 
-          className={`
-            xl:ml-10 xl:px-10 xl:py-10 xl:rounded-x
-            lg:ml-8 lg:px-4 lg:py-5 lg:shadow-none
-            md:w-full md:px-6 md:ms-8 md:rounded-xl md:shadow-lg
-            w-full px-5 ms-0 bg-white shadow-none
-            ${isDetailsShown ? 'h-fit' : ''}
-          `}
-          onClick={sideClick}
-        >
-          <div className="lg:text-base md:text-base text-sm">
-            <div className="flex md:justify-start justify-center">
-              {
-                isDetailsShown && sm_breakpoint ? '' :
-                <p className="
-                  xl:mt-0 
-                  lg:px-6 lg:text-[26px] lg:mt-4
-                  md:px-2 md:mt-9
-                  text-xl font-bold mt-5
-                ">
-                  Мои договоры
-                </p>
-              }
-              {
-                isDetailsShown && !sm_breakpoint ? 
-                <button 
-                  className="btn-text ms-auto me-4 lg:mt-0 md:mt-9 flex"
-                  onClick={backToAgreements}
-                >
-                  <svg
-                    className="icon"
-                  >
-                    <use href={`${sprite_path}#back-icon`} />
-                  </svg>
-                  
-                  Назад
-                </button>
-                : ''
-              }
-            </div>
+        {
+          <div className="md:pt-4 pt-5">
             {
-              isDetailsShown ? '' :
-              <TheTabsComponent titles='agreementsList' breakpoint={sm_breakpoint ? 'sm-breakpoint' : ''}/>
-            }
-            {
-              <div className="md:pt-4 pt-5">
-                {
-                  !isDetailsShown ?
-                    agreementsList.map((agreement) => (
-                      <div key={agreement.num} onClick={() => handleAgreementClick(agreement)}>
-                        <AgreementItem 
-                          key={agreement.num}
-                          number={agreement.num}
-                          date={agreement.date}
-                          address={agreement.address}
-                          summ={agreement.summ}
-                        />
-                      </div>
-                    ))
-                  :
-                    currentAgreement.map((agreement) => (
-                      <div key={agreement.num} >
-                        <AgreementItem 
-                          key={agreement.num}
-                          number={agreement.num}
-                          date={agreement.date}
-                          address={agreement.address}
-                          summ={agreement.summ}
-                        />
-                      </div>
-                    ))
-                }
-              </div>
-            }
-            
-            {
-              isDetailsShown ? 
-              <div>
-                <TheTabsComponent titles='singleAgreement' />
-                <TheDocsListComponent />
-              </div>
-              : ''
+              !isDetailsShown ?
+                agreementsList.map((agreement) => (
+                  <div key={agreement.num} onClick={() => handleAgreementClick(agreement)}>
+                    <AgreementItem 
+                      key={agreement.num}
+                      number={agreement.num}
+                      date={agreement.date}
+                      address={agreement.address}
+                      summ={agreement.summ}
+                    />
+                  </div>
+                ))
+              :
+                currentAgreement.map((agreement) => (
+                  <div key={agreement.num} >
+                    <AgreementItem 
+                      key={agreement.num}
+                      number={agreement.num}
+                      date={agreement.date}
+                      address={agreement.address}
+                      summ={agreement.summ}
+                    />
+                  </div>
+                ))
             }
           </div>
-        </section>
+        }
+        
+        {
+          isDetailsShown ? 
+          <div>
+            <TheTabsComponent titles='singleAgreement' />
+            <TheDocsListComponent />
+          </div>
+          : ''
+        }
       </div>
-    </main>
+    </section>
   )
 }
 export default AgreementsPage;
