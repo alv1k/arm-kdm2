@@ -4,7 +4,6 @@ import { NavLink } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
 import { hideNavbar, isNavbarShown } from '@/store/navbarSlice';
-import { hideDetails } from '@/store/agreementsSlice';
 import styles from './TheMenuItem.module.css';
 
 const TheMenuItem = ({ icon, text, to }) => {
@@ -25,6 +24,8 @@ const TheMenuItem = ({ icon, text, to }) => {
     sm_breakpoint && !showNavbar && !md_breakpoint ? 'md:hidden' : ''
   ].filter(Boolean).join(' ');
   const closeNavbar = () => {
+    console.log('check01');
+    
     showNavbar ? dispatch(hideNavbar()) : '' 
   }
   

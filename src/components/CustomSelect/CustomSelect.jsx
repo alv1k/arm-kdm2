@@ -14,7 +14,6 @@ const CustomSelect = ({ options, defaultValue }) => {
     setIsOpen(false);
   };
 
-  // Закрытие дропдауна при клике вне его
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (selectRef.current && !selectRef.current.contains(event.target)) {

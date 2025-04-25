@@ -92,8 +92,11 @@ const NewRequestPage = () => {
           placeholder={`${!sm_breakpoint ? 'Введите текст' : 'Описание заявки'}`}
         ></textarea>
         <p className="text-[#787C82] md:mt-2">Прикрепить файл</p>
-        <div className="md:w-fit md:flex md:p-5 md:flex-row-reverse w-full rounded-lg px-5 py-3 mb-1 bg-item-active text-center items-center">
-          <p className="text-[#787C82] md:pb-0 md:ps-10 pb-4">Файл не выбран</p>
+        <div className="
+          md:w-fit md:flex md:p-5 md:flex-row-reverse 
+          w-full rounded-lg px-5 py-3 mb-1 bg-item-active text-center items-center
+        ">
+          <p className="text-[#787C82] md:pb-0 md:ps-10 pb-4 md:pe-6">Файл не выбран</p>
           <button className="md:w-auto md:px-5 w-full rounded-lg p-2 btn-default">
             Выберите файл
           </button>

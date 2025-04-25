@@ -9,10 +9,13 @@ const requestsSlice = createSlice({
     toggleStatus(state) {      
       state.isNewRequest = !state.isNewRequest
     },
+    requestStatusFalse: (state) => {
+      state.isNewRequest = false;
+    },
   },
 });
 
 
 export const isNew = (state) => state.requests_slice.isNewRequest;
-export const { toggleStatus } = requestsSlice.actions;
+export const { toggleStatus, requestStatusFalse } = requestsSlice.actions;
 export default requestsSlice.reducer;

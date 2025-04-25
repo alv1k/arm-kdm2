@@ -1,6 +1,7 @@
 import { useMediaQuery } from 'react-responsive';
 
 const useMediaQueries = () => {
+  // const xxl_breakpoint = useMediaQuery({ minWidth: 1921 });
   const xl_breakpoint = useMediaQuery({ maxWidth: 1920, minWidth: 1441 });
   const lg_breakpoint = useMediaQuery({ maxWidth: 1440, minWidth: 821 });
   const md_breakpoint = useMediaQuery({ maxWidth: 820, minWidth: 601 });

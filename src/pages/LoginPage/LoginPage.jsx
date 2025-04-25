@@ -6,10 +6,7 @@ import { toggleTabs  } from '@/store/tabsSlice';
 import { isNew } from '@/store/requestsSlice';
 import useMediaQueries from '@/hooks/useMediaQueries';
 
-import Header from '@/components/TheHeader/TheHeader';
-import TheNavbar from '@/components/TheNavbar/TheNavbar';
-import TheTabsComponent from '@/components/TheTabsComponent/TheTabsComponent';
-import TheDocsListComponent from '@/components/TheDocsListComponent/TheDocsListComponent'
+import CustomCheckbox from '@/components/CustomCheckbox/CustomCheckbox';
 
 const LoginPage = () => {
   const sprite_path = '/src/assets/images/i.svg';
@@ -42,33 +39,40 @@ const LoginPage = () => {
   return (
     <main className="min-h-fit h-screen w-full">
       <div className="lg:flex min-h-fit h-screen relative">
-        <div className="lg:w-1/2 w-full h-screen bg-[#F6F8FF] flex  flex-col justify-end">
+        <div className="lg:w-1/2 w-full h-screen bg-[#F6F8FF] flex flex-col justify-end">
           <img className="align-bottom justify-baseline justify-self-end lg:blur-none lg:mt-0 blur-xs h-fit mx-auto" src="/src/assets/images/bg-login.png" alt="" />
         </div>
 
-        <div className="lg:w-1/2 lg:static w-full absolute top-20 flex align-middle items-center justify-center">
-          <div className="bg-white p-8 lg:my-auto my-auto mx-auto lg:w-2/3 lg:rounded-none w-[90vw] rounded-2xl text-center">
-            <img className="mx-auto" src="/src/assets/images/logo.png" alt="logo" />
-            <p className="mt-4 text-[#4B5E9D] lg:text-2xl md:text-2xl text-sm uppercase font-bold lg:ms-5 md:ms-5 ms-2 my-auto" style={{fontFamily: 'PT Sans'}}>комдрагметалл рс(я)</p>
-            <p className="font-bold xl:text-2xl text-base mt-12">Вход в личный кабинет</p>
-            <div className="text-left">
-              <p className="mb-2 mt-8 md:text-base text-sm">Логин</p>
-              <input className=" p-3 bg-item-active w-full rounded-xl" type="text" placeholder="Введите логин" />
-              <p className="mb-2 mt-2 md:text-base text-sm">Пароль</p>
-              <input className=" p-3 bg-item-active w-full rounded-xl" type="text" placeholder="Введите пароль" />
+        <div className="lg:w-1/2 lg:static w-full absolute md:top-16 top-10 left-0 right-0 bottom-0 flex align-middle items-center justify-center">
+          <div className="xl:w-3/5 lg:w-3/4 md:w-2/3 md:my-44 w-[90vw] bg-white md:p-10 px-5 py-10 lg:my-auto mx-auto  lg:rounded-none rounded-2xl text-center">
+            <div className="flex flex-col justify-center">
+              <img className="mx-auto" src="/src/assets/images/logo.png" alt="logo" />
+              <img className="mx-auto mt-4 lg:text-2xl my-0 w-3/5" src="/src/assets/images/logo-text.png" alt="" />
             </div>
-            <div className="flex justify-between py-5">
-              <div className="">
-                <input className="input-checkbox p-8 bg-red-900" type="checkbox" id="forgot_pass" />
-                <label className="" htmlFor="forgot_pass">Запомнить меня</label>
+            
+            <p className="font-bold xl:mt-12 md:text-2xl md:mt-10 text-base mt-4">Вход в личный кабинет</p>
+            <form action="" method="post">
+              <div className="text-left">
+                <p className="mb-2 mt-4 md:text-base text-sm">Логин</p>
+                <input className=" p-4 bg-item-active w-full rounded-xl" type="text" placeholder="Введите логин" />
+                <p className="mb-2 mt-4 md:text-base text-sm">Пароль</p>
+                <input 
+                  className=" p-4 bg-item-active w-full rounded-xl" type="password" placeholder="Введите пароль"
+                  onClick={console.log('ggg')}
+                />
               </div>
-              <div>
-                <p className="text-[#203887]">Забыли пароль?</p>
+              <div className="flex justify-between py-5 mt-6">
+                <div>
+                  <CustomCheckbox label="Запомнить меня" />
+                </div>
+                <div>
+                  <p className="text-[#203887]">Забыли пароль?</p>
+                </div>
               </div>
-            </div>
-            <button className="mt-8 btn-primary w-full py-2" onClick={handleClick}>
-              Войти
-            </button>
+              <button className="mt-5 btn-primary w-full py-2" onClick={handleClick}>
+                Войти
+              </button>
+            </form>
           </div>
         </div>
       </div>

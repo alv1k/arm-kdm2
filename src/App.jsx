@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import AgreementsPage from './pages/AgreementsPage/AgreementsPage'
 import RequestsPage from './pages/RequestsPage/RequestsPage'
 import ContactsPage from './pages/ContactsPage/ContactsPage'
@@ -33,7 +33,7 @@ const App = () => {
           <Navbar /> : ''
         }
         <Routes>
-          <Route path='/' element={<AgreementsPage/>} />
+          <Route path='/' element={<Navigate to='/agreements' replace />} />
           <Route path='/agreements' element={<AgreementsPage/>} />
           <Route path='/requests' element={<RequestsPage/>} />
           <Route path='/contacts' element={<ContactsPage/>} />

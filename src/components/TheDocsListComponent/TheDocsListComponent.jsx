@@ -88,20 +88,20 @@ const TheDocsListComponent = () => {
               </button>
             </div>
             : 
-            <div className="flex">
+            <div className="grid grid-cols-2 gap-3">
             <div className={`
               
               ${sm_breakpoint || md_breakpoint ? '' : 'flex'} 
-              ${currentTab && currentTab.title_en == 'bills' ? 'text-left w-1/2' : 'md:w-2/5'}
+              ${currentTab && currentTab.title_en == 'bills' ? 'text-left' : 'md:w-2/5'}
             `}>
               {
                 currentTab && currentTab.title_en == 'bills' ? 
                 <div className="md:pe-3">
                   <div className="mb-1">№001. Счет за аренду</div>
                   <div><span className="text-[#787C82]">Дата:</span> 01.01.2025</div>
-                  <button className="btn-default px-6 py-2 flex mt-5 md:w-full md:justify-center">
+                  <button className="btn-default px-6 py-2 flex mt-5 w-full justify-center">
                     <svg
-                      className="icon me-3"
+                      className={`${styles.icon} me-3`}
                     >
                       <use href={`${sprite_path}#doc-icon`} />
                     </svg>
@@ -117,16 +117,16 @@ const TheDocsListComponent = () => {
               }            
             </div>
             <div className={`
-              w-1/2
+              
               ${sm_breakpoint || md_breakpoint ? '' : 'flex'}
               ${currentTab && currentTab.title_en == 'bills' ? 'text-center' : 'text-left'}
             `}>
             {
               currentTab && currentTab.title_en == 'bills' ? 
-              <div>
+              <div className="h-full justify-baseline flex flex-col">
                 <div className="mb-1 text-[#787C82]">Сумма:</div>
                 <div className="text-red-600"><PriceFormatter amount="100000" /></div>
-                <button className="btn-success px-6 py-2 mt-5 w-full">Оплатить</button>
+                <button className="btn-success px-6 py-2 mt-auto w-full">Оплатить</button>
               </div>
               :
               <div className="ms-3">
@@ -202,7 +202,7 @@ const TheDocsListComponent = () => {
                     }
                   </span>
                   <svg
-                    className={`${styles.icon} ms-2`}
+                    className={`${styles.downloadIcon} ms-2`}
                     >
                     <use href={`${sprite_path}#chevron-down`} />
                   </svg>

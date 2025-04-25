@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { hideNavbar } from '@/store/navbarSlice';
+import { useLocation } from 'react-router-dom';
 import { toggleTabs  } from '@/store/tabsSlice';
-import { isNew } from '@/store/requestsSlice';
+import { isNew, requestStatusFalse } from '@/store/requestsSlice';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
 
 import NewRequestPage from '@/pages/NewRequestPage/NewRequestPage';
@@ -34,6 +35,10 @@ const RequestsPage = () => {
       breakpoint: sm_breakpoint ? 'sm-breakpoint' : ''
     } ));
   }, [dispatch]);
+  const location = useLocation();
+  useEffect(() => {
+    dispatch(requestStatusFalse());
+  }, [location]);
 
   return (
     <section 
