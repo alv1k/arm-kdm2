@@ -27,7 +27,6 @@ const TheMenuItem = ({ icon, text, to }) => {
     showNavbar ? dispatch(hideNavbar()) : '' 
   }
   const logout = () => {
-    console.log('logging out!')
     localStorage.removeItem('token');
     return true;
   }

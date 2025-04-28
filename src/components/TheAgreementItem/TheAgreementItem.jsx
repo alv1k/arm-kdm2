@@ -5,6 +5,7 @@ import PriceFormatter from '../PriceFormatter/PriceFormatter';
 
 const TheAgreementItem = ({ number, date, address, summ }) => {
   const sprite_path = './src/assets/images/i.svg';
+  const today = new Date().toLocaleDateString();
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const dispatch = useDispatch();
   const isDetailsShown = useSelector(isShowDetails);
@@ -14,7 +15,7 @@ const TheAgreementItem = ({ number, date, address, summ }) => {
         lg:p-10 lg:rounded-2xl lg:mb-10 lg:flex
         md:mb-4 md:bg-item-active
         rounded-xl mb-6 block w-full
-        ${isDetailsShown ? 'lg:mt-6 p-0' : 'cursor-pointer p-5 bg-item-default'}
+        ${isDetailsShown ? 'lg:mt-6 p-0 bg-item-active' : 'cursor-pointer p-5 bg-item-default'}
         ${isDetailsShown && lg_breakpoint ? 'bg-item-active': ''}
       `}
     >
@@ -115,7 +116,7 @@ const TheAgreementItem = ({ number, date, address, summ }) => {
               `}>
                 Ежемес{isDetailsShown && sm_breakpoint ? '.' : 'ячный'} платеж{isDetailsShown && sm_breakpoint ? '' : ' по договору'}:&nbsp;
               </span>
-              <span className="lg:inline md:inline block mt-1"><PriceFormatter amount={100000} /></span>
+              <span className="lg:inline md:inline block mt-1"><PriceFormatter amount={summ} /></span>
             </div>
           </div>
           : 
@@ -176,8 +177,8 @@ const TheAgreementItem = ({ number, date, address, summ }) => {
               md:mt-5 md:border-slate-200 md:py-4 py-0
               rounded-xl bg-white md:border mt-9 text-base text-center
             ">
-              <p>Общая сумма долга на 01.01.2025:</p>
-              <p className="text-xl lg:my-4 my-2 text-red-600 font-semibold">- <PriceFormatter amount={100000} /> </p>
+              <p>Общая сумма долга на {today}:</p>
+              <p className="text-xl lg:my-4 my-2 text-red-600 font-semibold">- <PriceFormatter amount={summ} /> </p>
               <button className="btn-success lg:px-10 lg:mt-0 lg:w-auto py-2 md:w-2/9 w-full mt-2">Оплатить</button>
             </div> : ''
           }

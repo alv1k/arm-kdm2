@@ -10,7 +10,6 @@ const TheDocsListComponent = () => {
   const sprite_path = './src/assets/images/i.svg';
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const currentTab = useSelector(selectedTab);
-  console.log(currentTab, 'current tab here');
     
   const location = useLocation();
   const currentRoute = location.pathname;
@@ -140,6 +139,69 @@ const TheDocsListComponent = () => {
           }
         </div>
         : 
+        // <div className="grid grid-cols-[100px_minmax(200px,_1fr)_minmax(200px,_1fr)_minmax(100px,_1fr)_minmax(100px,_1fr)_minmax(100px,_1fr)]">
+        //   <div className="flex items-center ps-8">
+        //     <span className="inline">№</span>
+        //     <svg
+        //       className={`${styles.icon} ms-2`}
+        //     >
+        //       <use href={`${sprite_path}#chevron-down`} />
+        //     </svg>
+        //   </div>
+        //   <div className="flex items-center">
+        //     <span className="text-nowrap">
+        //       Название
+        //       {/* currentTab && (currentTab.title_en == 'acts' || currentTab.title_en == 'my_requests' || currentTab.title_en == 'all_requests') ?  */}
+        //       {
+        //         currentTab && currentTab.title_en == 'acts' ?
+        //         ' счета' : ' помещения'
+        //       }
+        //     </span>
+        //     <svg
+        //       className={`${styles.icon} ms-2`}
+        //       >
+        //       <use href={`${sprite_path}#chevron-down`} />
+        //     </svg>
+        //   </div>
+        //   <div className="flex items-center">
+        //     <span className="text-nowrap">Тема обращения</span>
+        //     <svg
+        //     className={`${styles.icon} ms-2`}
+        //     >
+        //       <use href={`${sprite_path}#chevron-down`} />
+        //     </svg>
+        //   </div>
+        //   <div className="flex items-center">
+        //     <span>Дата</span>
+        //     <svg
+        //       className={`${styles.icon} ms-2`}
+        //       >
+        //       <use href={`${sprite_path}#chevron-down`} />
+        //     </svg>
+        //   </div>
+        //   <div className="flex items-center">
+        //     <span>
+        //       {
+        //         currentTab && currentTab.title_en == 'acts' ?
+        //         'Сумма' : 'Статус'
+        //       }
+        //     </span>
+        //     <svg
+        //       className={`${styles.icon} ms-2`}
+        //       >
+        //       <use href={`${sprite_path}#chevron-down`} />
+        //     </svg>
+        //   </div>
+        //   <div>
+
+        //   </div>
+        //   <div className="grid-rows-subgrid">
+        //       <div>
+        //         8888
+        //       </div>
+        //   </div>
+        // </div>
+
         <table className="rounded-lg border-separate border-spacing-0 overflow-hidden w-full">
           <thead className="bg-item-active">
             <tr align="center" className="text-center justify-center">

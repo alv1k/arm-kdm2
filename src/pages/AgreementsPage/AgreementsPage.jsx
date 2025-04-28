@@ -24,24 +24,12 @@ const AgreementsPage = () => {
   // }, [dispatch]);  
   
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
-  const dispatch = useDispatch();
-
-  
+  const dispatch = useDispatch();  
 
   useEffect(() => {
     dispatch(fetchAgreementsList());
   }, [dispatch]);
-  
 
-  
-
-  
-  const sideClick = (event) => {
-    event.stopPropagation();
-    if (showNavbar) {
-      dispatch(hideNavbar());
-    }
-  };
   useEffect(() => {
     // Устанавливаем tabs как agreementsList при монтировании компонента
     dispatch(toggleTabs({
@@ -50,6 +38,13 @@ const AgreementsPage = () => {
     } ));
         
   }, [dispatch]);
+  
+  const sideClick = (event) => {
+    event.stopPropagation();
+    if (showNavbar) {
+      dispatch(hideNavbar());
+    }
+  };
   const backToAgreements = () => {
     dispatch(hideDetails());
   }
@@ -127,10 +122,10 @@ const AgreementsPage = () => {
                   <div key={agreement.num} >
                     <AgreementItem 
                       key={agreement.num}
-                      number={agreement.num}
+                      number={agreement.Договор}
                       date={agreement.date}
-                      address={agreement.address}
-                      summ={agreement.summ}
+                      address={agreement.Договор}
+                      summ={agreement.Сумма}
                     />
                   </div>
                 ))

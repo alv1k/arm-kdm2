@@ -18,7 +18,6 @@ export const fetchAgreementsList = createAsyncThunk(
       if (!response.data.success) {
         throw new Error(`HTTP error! status: ${response.data.status}`);
       }
-      console.log(response.data.data, 'data here'); 
       return await response.data.data;
     } catch (error) {      
       return rejectWithValue(error.message);
@@ -48,55 +47,14 @@ const agreementsSlice = createSlice({
         address: 'г. Москва, ул. Пушкина 10',
         num: 'num456'
       },
-      {
-        num: 'num789',
-        "Договор":"Договор аренды №16-116 от 24.05.2024 г. г. Якутск, ул. Каландаришвили, д.7",
-        "ОбъектыАренды":[
-           {
-              "ОбъектАренды":"нежилое помещение этаж чердачный, 40,4 кв.м.",
-              "Услуги":[
-                 {
-                    "Услуга":"Холодное водоснабжение",
-                    "НачалоАренды":"4024-06-01",
-                    "КонецАренды":"4025-04-30",
-                    "Сумма":0.00
-                 },
-                 {
-                    "Услуга":"Горячее водоснабжение",
-                    "НачалоАренды":"4024-06-01",
-                    "КонецАренды":"4025-04-30",
-                    "Сумма":0.00
-                 },
-                 {
-                    "Услуга":"Водоотведение",
-                    "НачалоАренды":"4024-06-01",
-                    "КонецАренды":"4025-04-30",
-                    "Сумма":0.00
-                 },
-                 {
-                    "Услуга":"Аренда нежилых помещений (мес)",
-                    "НачалоАренды":"4024-06-01",
-                    "КонецАренды":"4025-04-30",
-                    "Сумма":66000.00
-                 },
-                 {
-                    "Услуга":"Электроснабжение",
-                    "НачалоАренды":"4024-06-01",
-                    "КонецАренды":"4025-04-30",
-                    "Сумма":0.00
-                 }
-              ],
-              "Сумма":66000.00
-           }
-        ],
-        "Сумма":66000.00
-     },
     ],
     selectedAgreement: [],
   },
   reducers: {
     showDetails: (state, action) => {
+      
       state.showDetails = true; 
+      console.log(state.showDetails , 'state.showDetails');
     },
     hideDetails: (state) => {
       state.showDetails = false;
