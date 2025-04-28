@@ -1,18 +1,34 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import api from '@/api/api';
 
-// export const fetchAgreementsList = createAsyncThunk(
-//   'agreementTypes/fetchAgreementsList',
-//   async () => {
-//     const response = await fetch('localhost:3000/'); // Замените на ваш URL
-//     if (!response.ok) {
-//       throw new Error('Network response was not ok');
-//     }
-//     return await response.json(); // Предполагаем, что API возвращает JSON
-//   }
-// );
+export const fetchAgreementsList = createAsyncThunk(
+  'agreementsSlice/fetchAgreementsList',
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('Token not found');
+      }
+      
+      const response = await api.get(`/agrees?token=${token}`,{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (!response.data.success) {
+        throw new Error(`HTTP error! status: ${response.data.status}`);
+      }
+      console.log(response.data.data, 'data here'); 
+      return await response.data.data;
+    } catch (error) {      
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 
 const agreementsSlice = createSlice({
-  name: 'agreementTypes',
+  name: 'agreementsSlice',
   initialState: { 
     showDetails: false,
     type: { title_en: 'all', title_ru: 'Все' },
@@ -32,6 +48,49 @@ const agreementsSlice = createSlice({
         address: 'г. Москва, ул. Пушкина 10',
         num: 'num456'
       },
+      {
+        num: 'num789',
+        "Договор":"Договор аренды №16-116 от 24.05.2024 г. г. Якутск, ул. Каландаришвили, д.7",
+        "ОбъектыАренды":[
+           {
+              "ОбъектАренды":"нежилое помещение этаж чердачный, 40,4 кв.м.",
+              "Услуги":[
+                 {
+                    "Услуга":"Холодное водоснабжение",
+                    "НачалоАренды":"4024-06-01",
+                    "КонецАренды":"4025-04-30",
+                    "Сумма":0.00
+                 },
+                 {
+                    "Услуга":"Горячее водоснабжение",
+                    "НачалоАренды":"4024-06-01",
+                    "КонецАренды":"4025-04-30",
+                    "Сумма":0.00
+                 },
+                 {
+                    "Услуга":"Водоотведение",
+                    "НачалоАренды":"4024-06-01",
+                    "КонецАренды":"4025-04-30",
+                    "Сумма":0.00
+                 },
+                 {
+                    "Услуга":"Аренда нежилых помещений (мес)",
+                    "НачалоАренды":"4024-06-01",
+                    "КонецАренды":"4025-04-30",
+                    "Сумма":66000.00
+                 },
+                 {
+                    "Услуга":"Электроснабжение",
+                    "НачалоАренды":"4024-06-01",
+                    "КонецАренды":"4025-04-30",
+                    "Сумма":0.00
+                 }
+              ],
+              "Сумма":66000.00
+           }
+        ],
+        "Сумма":66000.00
+     },
     ],
     selectedAgreement: [],
   },
@@ -46,14 +105,13 @@ const agreementsSlice = createSlice({
       state.selectedAgreement = [action.payload]  
     },
   },  
-  // extraReducers: (builder) => {
-  //   builder
-  //     .addCase(fetchAgreementsList.fulfilled, (state, action) => {
-  //       state.agreementsList = action.payload; // Сохраняем загруженные данные в agreementsList
-  //     });
-  // }
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchAgreementsList.fulfilled, (state, action) => {
+        state.agreementsList = action.payload; // Сохраняем загруженные данные в agreementsList
+      });
+  }
 });
-
 
 
 export const selectedType = (state) => state.agreements_slice.type;

@@ -9,10 +9,13 @@ const userSlice = createSlice({
     togglePasswordChange(state) {      
       state.isPasswordChange = !state.isPasswordChange
     },
+    setToken(state, action) {      
+      localStorage.setItem('token', action.payload)
+    }
   },
 });
 
 
 export const isPasswordModification = (state) => state.user_slice.isPasswordChange;
-export const { togglePasswordChange } = userSlice.actions;
+export const { togglePasswordChange, setToken } = userSlice.actions;
 export default userSlice.reducer;

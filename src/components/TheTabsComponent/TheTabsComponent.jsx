@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
 import { isShowDetails } from '@/store/agreementsSlice';
 import { toggleStatus } from '@/store/requestsSlice';
-import { toggleTabs, setSelectedTab, selectedTab, agreementsSelectedTab, agreementSelectedTab, requestsSelectedTab, setAgreementsSelectedTab, setAgreementSelectedTab, setRequestsSelectedTab } from '@/store/tabsSlice';
+import { toggleTabs, setSelectedTab, selectedTab, agreementsSelectedTab, agreementSelectedTab, requestsSelectedTab, setAgreementsSelectedTab, setAgreementSelectedTab, setRequestsSelectedTab, setLoginSelectedTab } from '@/store/tabsSlice';
 
 const TheTabsComponent = (props) => {
   const sprite_path = './src/assets/images/i.svg';
@@ -31,8 +31,10 @@ const TheTabsComponent = (props) => {
       dispatch(setAgreementsSelectedTab(tab))
     } else if (currentRoute == '/agreements') {
       dispatch(setAgreementSelectedTab(tab))
-    } if (currentRoute == '/requests') {
+    } else if (currentRoute == '/requests') {
       dispatch(setRequestsSelectedTab(tab))
+    } else if (currentRoute == '/login') {
+      dispatch(setLoginSelectedTab(tab))
     }
   }
   
@@ -43,6 +45,8 @@ const TheTabsComponent = (props) => {
       dispatch(setRequestsSelectedTab({ title_en: 'my_requests', title_ru: 'Мои заявки' }));
     } else if (currentRoute == '/requests') {
       dispatch(setRequestsSelectedTab({ title_en: 'all_requests', title_ru: 'Все' }));
+    }  else if (currentRoute == '/login') {
+      dispatch(setLoginSelectedTab({ title_en: 'email', title_ru: 'Почта' }));
     } else {
       if (xl_breakpoint || lg_breakpoint || md_breakpoint) {
         dispatch(setAgreementsSelectedTab({ title_en: 'all', title_ru: 'Все' }));

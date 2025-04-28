@@ -17,6 +17,10 @@ const requestsList = [
   { title_ru: 'Завершенные', title_en: 'completed' },
   // { title_ru: 'Новая заявка', title_en: 'new_request' },
 ]
+const loginList = [
+  { title_ru: 'Телефон', title_en: 'phone' },
+  { title_ru: 'Почта', title_en: 'email' },
+];
 
 const tabSlice = createSlice({
   name: 'tabs',
@@ -25,10 +29,12 @@ const tabSlice = createSlice({
     agreementsTabs: agreementsList,
     agreementTabs: singleAgreementsList,
     requestsTabs: requestsList,
+    loginTabs: loginList,
     selectedTab: null,
     agreementsSelectedTab: null,
     agreementSelectedTab: null,
     requestsSelectedTab: null,
+    loginSelectedTab: null,
   },
   reducers: {
     toggleTabs(state, action) { 
@@ -59,6 +65,15 @@ const tabSlice = createSlice({
             state.requestsTabs = requestsList.slice(1);
             break;
         }
+      } else if (action.payload.type == 'login') {
+        switch (action.payload.breakpoint) {
+          case 'sm-breakpoint':
+            state.loginTabs = loginList;
+            break;
+          default:
+            state.loginTabs = loginList;
+            break;
+        }
       } else {
         console.log('no target');
       }
@@ -87,6 +102,12 @@ const tabSlice = createSlice({
         title_ru: action.payload.title_ru,
       }      
     },
+    setLoginSelectedTab(state, action) {      
+      state.selectedTab = {
+        title_en: action.payload.title_en,
+        title_ru: action.payload.title_ru,
+      }
+    },
   },
 });
 
@@ -94,8 +115,10 @@ export const selectedTab = (state) => state.tabs_slice.selectedTab;
 export const agreementsTabs = (state) => state.tabs_slice.agreementsTabs;
 export const agreementTabs = (state) => state.tabs_slice.agreementTabs;
 export const requestsTabs = (state) => state.tabs_slice.requestsTabs;
+export const loginTabs = (state) => state.tabs_slice.loginTabs;
 export const agreementsSelectedTab = (state) => state.tabs_slice.agreementsSelectedTab;
 export const agreementSelectedTab = (state) => state.tabs_slice.agreementSelectedTab;
 export const requestsSelectedTab = (state) => state.tabs_slice.requestsSelectedTab;
-export const { tabs, toggleTabs, setSelectedTab, setAgreementsSelectedTab, setAgreementSelectedTab, setRequestsSelectedTab } = tabSlice.actions;
+export const loginSelectedTab = (state) => state.tabs_slice.loginSelectedTab;
+export const { tabs, toggleTabs, setSelectedTab, setAgreementsSelectedTab, setAgreementSelectedTab, setRequestsSelectedTab, setLoginSelectedTab } = tabSlice.actions;
 export default tabSlice.reducer;

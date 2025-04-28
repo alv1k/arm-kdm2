@@ -3,12 +3,10 @@ import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { hideNavbar } from '@/store/navbarSlice';
 import { toggleTabs  } from '@/store/tabsSlice';
-import { isShowDetails, selectedAgreement, agreementsStoreList, showDetails, hideDetails, setAgreementsList } from '@/store/agreementsSlice';
+import { isShowDetails, selectedAgreement, agreementsStoreList, showDetails, hideDetails, setAgreementsList, fetchAgreementsList } from '@/store/agreementsSlice';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
 import styles from './AgreementsPage.module.css';
 
-import Header from '@/components/TheHeader/TheHeader';
-import TheNavbar from '@/components/TheNavbar/TheNavbar';
 import AgreementItem from '@/components/TheAgreementItem/TheAgreementItem';
 import TheTabsComponent from '@/components/TheTabsComponent/TheTabsComponent';
 import TheDocsListComponent from '@/components/TheDocsListComponent/TheDocsListComponent'
@@ -27,6 +25,17 @@ const AgreementsPage = () => {
   
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const dispatch = useDispatch();
+
+  
+
+  useEffect(() => {
+    dispatch(fetchAgreementsList());
+  }, [dispatch]);
+  
+
+  
+
+  
   const sideClick = (event) => {
     event.stopPropagation();
     if (showNavbar) {
@@ -51,7 +60,7 @@ const AgreementsPage = () => {
   const location = useLocation();
   useEffect(() => {
     dispatch(hideDetails());
-  }, [location]);
+  }, [location]);  
 
   return (
     <section 
@@ -106,10 +115,10 @@ const AgreementsPage = () => {
                   <div key={agreement.num} onClick={() => handleAgreementClick(agreement)}>
                     <AgreementItem 
                       key={agreement.num}
-                      number={agreement.num}
+                      number={agreement.Договор}
                       date={agreement.date}
-                      address={agreement.address}
-                      summ={agreement.summ}
+                      address={agreement.Договор}
+                      summ={agreement.Сумма}
                     />
                   </div>
                 ))

@@ -18,7 +18,7 @@ const TheHeader = () => {
   const isPasswordChange = useSelector(isPasswordModification);
   const navigate = useNavigate();
 
-  const handleClick = () => {
+  const handleClick = () => {    
     dispatch(toggleNavbar());
   };
   const handleLogoClick = () => {
@@ -34,7 +34,7 @@ const TheHeader = () => {
     }
   }
   return (
-    <header className="xl:px-10 lg:px-10 md:px-6 px-0 text-[#203887] bg-white py-5 flex relative">
+    <header className="xl:px-10 lg:px-10 md:px-6 px-0 text-[#203887] bg-white py-5 flex">
       {
         ((isNewRequest || showAgreementDetails || isPasswordChange) && sm_breakpoint) ?
         <button 
@@ -54,18 +54,18 @@ const TheHeader = () => {
           onClick={handleClick}
         >
           <use href={`${sprite_path}#menu-icon`} />
-        </svg>        
+        </svg>
         : ''
       }
-      <div className="xl:ms-0 lg:ms-0 md:justify-normal md:mt-1 absolute justify-center items-center flex w-full">
+      <div className="xl:ms-0 lg:ms-0 md:justify-normal md:mt-1 items-center flex w-full">
         <img 
-          className="lg:w-[240px] md:w-[220px] md:ms-15 w-[200px] ms-2" src="/src/assets/images/logo-main.png" alt=""
+          className="lg:ms-2 lg:w-[240px] md:w-[220px] md:ms-15 w-[200px] mx-auto" src="/src/assets/images/logo-main.png" alt=""
           onClick={handleLogoClick}
         />
         {/* <p className=" lg:text-2xl md:text-xl text-sm uppercase font-bold lg:ms-5 md:ms-5 ms-2 my-auto" style={{fontFamily: 'PT Sans'}}>комдрагметалл рс(я)</p> */}
       </div>
-      <div className="lg:flex md:flex lg:ms-auto md:ms-auto hidden" >
-        <span className="lg:mr-10 md:mr-4 font-semibold text-xl mt-[0.35rem] ">
+      <div className="lg:flex md:flex lg:ms-auto lg:me-6 md:ms-auto md:me-6 hidden" >
+        <span className="lg:mr-10 md:mr-4 font-semibold text-xl mt-[0.35rem] text-nowrap">
           ООО «Название»
         </span>
         <img src="./src/assets/images/Ellipse.png" alt=""  />

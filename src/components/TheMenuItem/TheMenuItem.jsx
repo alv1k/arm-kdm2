@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'; 
 import { NavLink } from 'react-router-dom';
 import { Link } from 'react-router-dom';
@@ -11,8 +11,7 @@ const TheMenuItem = ({ icon, text, to }) => {
   const showNavbar = useSelector(state => state.navbar.showNavbar);
   const dispatch = useDispatch();
   const sprite_path = './src/assets/images/i.svg';
-  
-  
+    
   const navbarRemoteIcon = [
     md_breakpoint && showNavbar && !sm_breakpoint ? 'md:mx-auto' : '',
     md_breakpoint && !showNavbar && !sm_breakpoint ? 'md:mx-auto' : ''
@@ -23,11 +22,27 @@ const TheMenuItem = ({ icon, text, to }) => {
     sm_breakpoint && showNavbar && !md_breakpoint ? 'md:block' : '',
     sm_breakpoint && !showNavbar && !md_breakpoint ? 'md:hidden' : ''
   ].filter(Boolean).join(' ');
+
   const closeNavbar = () => {
-    console.log('check01');
-    
     showNavbar ? dispatch(hideNavbar()) : '' 
   }
+  const logout = () => {
+    console.log('logging out!')
+    localStorage.removeItem('token');
+    return true;
+  }
+  const handleClick = () => {
+    if (text === 'Выйти') {
+      logout();
+    }
+    closeNavbar();
+  };
+
+  // useEffect(() => {
+  //   if (closeNavbar) {
+  //     closeNavbar();
+  //   }
+  // }, [closeNavbar]);
   
   return (
       <NavLink 
@@ -40,7 +55,7 @@ const TheMenuItem = ({ icon, text, to }) => {
             mt-0 mb-6 py-2 px-5 rounded-md flex 
           `
         }
-        onClick={closeNavbar}
+        onClick={handleClick}
       >
         {({ isActive }) => (
         <>

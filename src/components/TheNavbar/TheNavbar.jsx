@@ -49,7 +49,7 @@ const TheNavbar = () => {
         <div className={`
           ${sm_breakpoint || md_breakpoint ? 'mt-0' : 'mt-auto '}
         `}>
-          <TheMenuItem  icon="user-icon" text="Профиль" to="/user" />
+          <TheMenuItem icon="user-icon" text="Профиль" to="/user" />
           <TheMenuItem icon="logout-icon" text="Выйти" to="/login" />
         </div>
       </div>
