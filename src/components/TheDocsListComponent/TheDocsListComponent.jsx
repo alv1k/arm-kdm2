@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import useMediaQueries from '@/hooks/useMediaQueries';
-import { selectedTab } from '@/store/tabsSlice';
+import { selectedTab } from '@/store/slices/tabsSlice';
 import PriceFormatter from '@/components/PriceFormatter/PriceFormatter'; 
 import styles from './TheDocsListComponent.module.css'
 
@@ -100,7 +100,7 @@ const TheDocsListComponent = () => {
                   <div><span className="text-[#787C82]">Дата:</span> 01.01.2025</div>
                   <button className="btn-default px-6 py-2 flex mt-5 w-full justify-center">
                     <svg
-                      className={`${styles.icon} me-3`}
+                      className={`icon me-3`}
                     >
                       <use href={`${sprite_path}#doc-icon`} />
                     </svg>
@@ -109,9 +109,9 @@ const TheDocsListComponent = () => {
                 </div>
                 :
                 <div className={`${currentTab && currentTab == 'counters' ? 'md:ps-3' : ''} `}>
-                  <div><span className="text-[#787C82]">№ пр. учета:</span> 0000001</div>
-                  <div className="my-1"><span className="text-[#787C82]">№ пр. учета:</span> 0000001</div>
-                  <div><span className="text-[#787C82]">№ пр. учета:</span> 0000001</div>
+                  <div className="text-nowrap"><span className="text-[#787C82]">№ пр. учета:</span> 0000001</div>
+                  <div className="text-nowrap my-1"><span className="text-[#787C82]">№ пр. учета:</span> 0000001</div>
+                  <div className="text-nowrap"><span className="text-[#787C82]">№ пр. учета:</span> 0000001</div>
                 </div>
               }            
             </div>
@@ -131,7 +131,7 @@ const TheDocsListComponent = () => {
               <div className="ms-3">
                 <div>ГВС: 123.45 м3</div>
                 <div className="my-1">ХВС: 123.45 м3</div>
-                <div>ЭЭ: 123.45 м3</div>
+                <div>{sm_breakpoint ? 'ЭЭ' : 'Электроэнегрия'}: 123.45 м3</div>
               </div>
             }
             </div>
@@ -139,75 +139,88 @@ const TheDocsListComponent = () => {
           }
         </div>
         : 
-        // <div className="grid grid-cols-[100px_minmax(200px,_1fr)_minmax(200px,_1fr)_minmax(100px,_1fr)_minmax(100px,_1fr)_minmax(100px,_1fr)]">
-        //   <div className="flex items-center ps-8">
-        //     <span className="inline">№</span>
-        //     <svg
-        //       className={`${styles.icon} ms-2`}
-        //     >
-        //       <use href={`${sprite_path}#chevron-down`} />
-        //     </svg>
-        //   </div>
-        //   <div className="flex items-center">
-        //     <span className="text-nowrap">
-        //       Название
-        //       {/* currentTab && (currentTab.title_en == 'acts' || currentTab.title_en == 'my_requests' || currentTab.title_en == 'all_requests') ?  */}
-        //       {
-        //         currentTab && currentTab.title_en == 'acts' ?
-        //         ' счета' : ' помещения'
-        //       }
-        //     </span>
-        //     <svg
-        //       className={`${styles.icon} ms-2`}
-        //       >
-        //       <use href={`${sprite_path}#chevron-down`} />
-        //     </svg>
-        //   </div>
-        //   <div className="flex items-center">
-        //     <span className="text-nowrap">Тема обращения</span>
-        //     <svg
-        //     className={`${styles.icon} ms-2`}
-        //     >
-        //       <use href={`${sprite_path}#chevron-down`} />
-        //     </svg>
-        //   </div>
-        //   <div className="flex items-center">
-        //     <span>Дата</span>
-        //     <svg
-        //       className={`${styles.icon} ms-2`}
-        //       >
-        //       <use href={`${sprite_path}#chevron-down`} />
-        //     </svg>
-        //   </div>
-        //   <div className="flex items-center">
-        //     <span>
-        //       {
-        //         currentTab && currentTab.title_en == 'acts' ?
-        //         'Сумма' : 'Статус'
-        //       }
-        //     </span>
-        //     <svg
-        //       className={`${styles.icon} ms-2`}
-        //       >
-        //       <use href={`${sprite_path}#chevron-down`} />
-        //     </svg>
-        //   </div>
+        // <div className="grid grid-cols-[100px_minmax(230px,_1fr)_minmax(210px,_1fr)_minmax(100px,_1fr)_minmax(100px,_1fr)_minmax(100px,_1fr)]">
         //   <div>
+        //     <div className="flex items-center ps-8">
+        //       <span className="inline">№</span>
+        //       <svg
+        //         className={`${styles.icon} ms-2`}
+        //       >
+        //         <use href={`${sprite_path}#chevron-down`} />
+        //       </svg>
+        //     </div>
+        //     <div className="flex items-center">
+        //       <span className="text-nowrap">
+        //         Название
+        //         {/* currentTab && (currentTab.title_en == 'acts' || currentTab.title_en == 'my_requests' || currentTab.title_en == 'all_requests') ?  */}
+        //         {
+        //           currentTab && currentTab.title_en == 'acts' ?
+        //           ' счета' : ' помещения'
+        //         }
+        //       </span>
+        //       <svg
+        //         className={`${styles.icon} ms-2`}
+        //         >
+        //         <use href={`${sprite_path}#chevron-down`} />
+        //       </svg>
+        //     </div>
+        //     <div className="flex items-center">
+        //       <span className="text-nowrap">Тема обращения</span>
+        //       <svg
+        //       className={`${styles.icon} ms-2`}
+        //       >
+        //         <use href={`${sprite_path}#chevron-down`} />
+        //       </svg>
+        //     </div>
+        //     <div className="flex items-center">
+        //       <span>Дата</span>
+        //       <svg
+        //         className={`${styles.icon} ms-2`}
+        //         >
+        //         <use href={`${sprite_path}#chevron-down`} />
+        //       </svg>
+        //     </div>
+        //     <div className="flex items-center">
+        //       <span>
+        //         {
+        //           currentTab && currentTab.title_en == 'acts' ?
+        //           'Сумма' : 'Статус'
+        //         }
+        //       </span>
+        //       <svg
+        //         className={`${styles.icon} ms-2`}
+        //         >
+        //         <use href={`${sprite_path}#chevron-down`} />
+        //       </svg>
+        //     </div>
+        //     <div>
 
+        //     </div>
         //   </div>
-        //   <div className="grid-rows-subgrid">
-        //       <div>
-        //         8888
-        //       </div>
+        //   <div className="flex">
+        //     <div>
+        //       {
+        //         currentTab && currentTab.title_en == 'bills' ?
+        //         'Счет за аренду' : 'Название помещения2'
+        //       }
+        //     </div>
+        //     <div>
+        //       {
+        //         currentTab && currentTab.title_en == 'bills' ?
+        //         '' : 'Авария'                  
+        //       }
+        //     </div>
         //   </div>
         // </div>
 
         <table className="rounded-lg border-separate border-spacing-0 overflow-hidden w-full">
           <thead className="bg-item-active">
             <tr align="center" className="text-center justify-center">
-              <th>
+              <th width={currentTab.title_en == 'counters' ? '200px' : ''}>
                 <div className="flex items-center ps-8">
-                  <span className="inline">№</span>
+                  <span className="inline">
+                    {currentTab.title_en == 'counters' ? 'Дата' : '№'}
+                  </span>
                   <svg
                     className={`${styles.icon} ms-2`}
                   >
@@ -215,14 +228,15 @@ const TheDocsListComponent = () => {
                   </svg>
                 </div>
               </th>
-              <th>
-                <div className="flex items-center">
+              <th width={currentTab.title_en == 'counters' ? '100px' : ''}>
+                <div className="flex items-center min-w-22">
                   <span className="text-nowrap">
-                    Название
-                    {/* currentTab && (currentTab.title_en == 'acts' || currentTab.title_en == 'my_requests' || currentTab.title_en == 'all_requests') ?  */}
+                    {currentTab.title_en == 'counters' ? '' : 'Название'}                    
                     {
                       currentTab && currentTab.title_en == 'acts' ?
-                      ' счета' : ' помещения'
+                      ' акта' : currentTab.title_en == 'bills' ? 
+                      ' счета' : currentTab.title_en == 'counters' ? 
+                      ' ХВС' : ' помещения'
                     }
                   </span>
                   <svg
@@ -233,7 +247,7 @@ const TheDocsListComponent = () => {
                 </div>
               </th>
               {
-                currentTab && currentTab.title_en == 'acts' ? '' :
+                currentRoute == '/requests' ?
                 <th>
                   <div className="flex items-center">
                     <span className="text-nowrap">Тема обращения</span>
@@ -243,11 +257,11 @@ const TheDocsListComponent = () => {
                       <use href={`${sprite_path}#chevron-down`} />
                     </svg>
                   </div>
-                </th>
+                </th> : ''
               }
-              <th>
-                <div className="flex items-center">
-                  <span>Дата</span>
+              <th width={currentTab.title_en == 'counters' ? '200px' : ''}>
+                <div className="flex items-center min-w-22">
+                  <span>{currentTab.title_en == 'counters' ? 'ГВС' : 'Дата'}</span>
                   <svg
                     className={`${styles.icon} ms-2`}
                     >
@@ -255,71 +269,99 @@ const TheDocsListComponent = () => {
                   </svg>
                 </div>
               </th>
-              <th align="center">
+              <th width={currentTab.title_en == 'counters' ? '200px' : ''} align="center">
                 <div className="flex items-center">
                   <span>
                     {
-                      currentTab && currentTab.title_en == 'acts' ?
-                      'Сумма' : 'Статус'
+                      currentTab && (currentTab.title_en == 'acts' || currentTab.title_en == 'bills') ?
+                      'Сумма' : currentTab.title_en == 'counters' ? 'Электроэнергия' : 'Статус'
                     }
                   </span>
                   <svg
-                    className={`${styles.downloadIcon} ms-2`}
+                    className={`${styles.icon} ms-2`}
                     >
                     <use href={`${sprite_path}#chevron-down`} />
                   </svg>
                 </div>
               </th>
-              {
-                currentTab && currentTab.title_en == 'acts' ?
-                <th></th> : ''
-              }
+              <th></th>
               <th></th>
             </tr>
           </thead>
           <tbody className="bg-item-default ">
             <tr>
-              <td>
+              <td className={currentTab.title_en == 'counters' ? 'align-top' : ''}>
                 <div className="ps-8">
-                  001
+                  {currentTab.title_en == 'counters' ? '01.01.2011' : '001'}
                 </div>
               </td>
               <td>
                 {
                   currentTab && currentTab.title_en == 'acts' ?
-                  'Счет за аренду' : 'Название помещения'
+                  'Акт об оплате аренды' : currentTab.title_en == 'bills' ? 'Счет за аренду' 
+                  : currentTab.title_en == 'counters' ? 
+                  <div>
+                    <p className="text-[#787C82]">№000001</p>
+                    <p>123.45 м3</p>
+                  </div> 
+                  : 'Название помещения'
                 }
-              </td>
-              {
-                currentTab && currentTab.title_en == 'acts' ?
-                '' : 
-                <td>
-                  Авария
-                </td>
-              }
-              <td>01.01.2025</td>
-              <td>
+              </td>              
                 {
                   currentTab && currentTab.title_en == 'acts' ?
-                  <PriceFormatter amount="100000" /> : <span className="text-green-600">Завершен</span>
+                  '' : currentTab.title_en == 'bills' ? '' :
+                  currentTab.title_en == 'counters' ? 
+                  <td>
+                    <div>
+                      <p className="text-[#787C82]">№000001</p>
+                      <p>123.45 м3</p>
+                    </div> 
+                  </td>
+                  :                
+                  <td>Авария</td>
+                }              
+              <td>
+                {
+                  currentTab.title_en == 'counters' ? 
+                  <div>
+                    <p className="text-[#787C82]">№000001</p>
+                    <p>123.45 кВтч</p>
+                  </div> : '01.01.2025'
+                }
+                
+              </td>
+              <td>
+                {
+                  currentTab && (currentTab.title_en == 'acts' || currentTab.title_en == 'bills') ?
+                  <PriceFormatter amount="100000" /> 
+                  : currentTab.title_en == 'counters' ? '' 
+                  : <span className="text-green-600">Завершен</span>
                 }
               </td>
+              <td className="ms-auto">                
               {
-                currentTab && currentTab.title_en == 'acts' ?
-                <td className="ms-auto">                
+                currentTab && (currentTab.title_en == 'bills') ?
                   <button className="btn-default px-6 py-2 flex mt-5 md:w-full md:justify-center">
-                      <svg
-                        className="icon me-3"
-                      >
-                        <use href={`${sprite_path}#doc-icon`} />
-                      </svg>
-                      Скачать
-                    </button>
-                </td> : ''
+                    <svg
+                      className="icon me-3"
+                    >
+                      <use href={`${sprite_path}#doc-icon`} />
+                    </svg>
+                    Скачать
+                  </button> : ''
               }
+              </td>                
               <td>
-                <button className="btn-success px-6 py-2 mt-5 w-full">Оплатить</button>
-              </td>
+                {
+                  currentTab.title_en == 'counters' ? '' 
+                  : 
+                  <button className="btn-success px-6 py-2 mt-5 w-full">
+                    {
+                      currentTab && (currentTab.title_en == 'bills') ? 'Оплатить' : 'Скачать'
+                    }
+                  </button>
+                }
+              </td>              
             </tr>
           </tbody>
         </table>

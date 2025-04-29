@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { hideNavbar } from '@/store/navbarSlice';
-import { toggleTabs  } from '@/store/tabsSlice';
-import { isNew } from '@/store/requestsSlice';
-import { isPasswordModification, togglePasswordChange } from '@/store/userSlice';
+import { hideNavbar } from '@/store/slices/navbarSlice';
+import { toggleTabs  } from '@/store/slices/tabsSlice';
+import { isNew } from '@/store/slices/requestsSlice';
+import { isPasswordModification, togglePasswordChange } from '@/store/slices/userSlice';
 import useMediaQueries from '@/hooks/useMediaQueries';
 
 const UserPage = () => {

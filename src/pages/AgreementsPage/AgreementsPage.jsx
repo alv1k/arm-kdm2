@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { hideNavbar } from '@/store/navbarSlice';
-import { toggleTabs  } from '@/store/tabsSlice';
-import { isShowDetails, selectedAgreement, agreementsStoreList, showDetails, hideDetails, setAgreementsList, fetchAgreementsList } from '@/store/agreementsSlice';
+import { hideNavbar } from '@/store/slices/navbarSlice';
+import { toggleTabs  } from '@/store/slices/tabsSlice';
+import { isShowDetails, selectedAgreement, agreementsStoreList, showDetails, hideDetails, setAgreementsList, fetchAgreementsList } from '@/store/slices/agreementsSlice';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
 import styles from './AgreementsPage.module.css';
 
@@ -11,27 +11,21 @@ import AgreementItem from '@/components/TheAgreementItem/TheAgreementItem';
 import TheTabsComponent from '@/components/TheTabsComponent/TheTabsComponent';
 import TheDocsListComponent from '@/components/TheDocsListComponent/TheDocsListComponent'
 
-
 const AgreementsPage = () => {
   const sprite_path = './src/assets/images/i.svg';
   const showNavbar = useSelector((state) => state.navbar.showNavbar);
   const isDetailsShown = useSelector(isShowDetails);
   const agreementsList = useSelector(agreementsStoreList);
   const currentAgreement = useSelector(selectedAgreement);
-  // const tabs = useSelector((state) => state.tabs_slice.tabs);
-  // useEffect(() => {
-  //   dispatch(fetchAgreementsList()); // Загружаем список договоров при монтировании компонента
-  // }, [dispatch]);  
-  
+
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
-  const dispatch = useDispatch();  
+  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchAgreementsList());
   }, [dispatch]);
 
   useEffect(() => {
-    // Устанавливаем tabs как agreementsList при монтировании компонента
     dispatch(toggleTabs({
       type: isDetailsShown ? 'singleAgrement' : 'agreementsList', 
       breakpoint: sm_breakpoint ? 'sm-breakpoint' : ''

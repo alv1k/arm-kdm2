@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleTabs, setLoginSelectedTab  } from '@/store/tabsSlice';
-import { togglePasswordChange, setToken } from '@/store/userSlice';
+import { toggleTabs, setLoginSelectedTab  } from '@/store/slices/tabsSlice';
+import { togglePasswordChange, setToken } from '@/store/slices/userSlice';
 import axios from 'axios';
 import api from '@/api/api';
 import useMediaQueries from '@/hooks/useMediaQueries';
@@ -12,7 +12,6 @@ import TheTabsComponent from '@/components/TheTabsComponent/TheTabsComponent';
 
 const LoginPage = () => {
   const sprite_path = '/src/assets/images/i.svg';
-  const showPass = false;
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const dispatch = useDispatch();
   useEffect(() => {
@@ -23,63 +22,66 @@ const LoginPage = () => {
 
   const navigate = useNavigate();
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [passwordVisible, setPasswordVisibility] = useState(false);
+  const [isCorrectLoginData, setIsCorrectLoginData] = useState(true);
 
+    // test@mail.ru
+    // 159753
   
-  const handleSubmit = async (e) =>  {
-    e.preventDefault();
-    const form = e.target;
-    const formData = new FormData(form);
-    const formJson = Object.fromEntries(formData.entries());
-    formJson.login = 'test@mail.ru';
-    formJson.password = '159753';
-    if (formJson.login.length < 3) {
-      setError('Пожалуйста, введите корректный логин');
+  const handleSubmit = async (e) =>  {    
+    e.preventDefault();    
+    setIsCorrectLoginData(true);
+    const formData = new FormData(e.target);
+
+    const credentials = {
+      email: formData.get('email')?.toString() || '',
+      password: formData.get('password')?.toString() || ''
+    };
+
+    if (!credentials.email.includes('@')) {
+      setError('Введите корректный email');
       return;
-    } else if(formJson.password < 3) {
-      console.log('password');
+    }    
+    if (credentials.password.length < 6) {
+      setError('Пароль должен содержать минимум 6 символов');
       return;
     }
-
+    
+    setIsLoading(true);
     try {
-      const response = await api.get(`/authorization?email=${formJson.login}&password=${formJson.password}`);
-      if (response && response.data.success) {
-        navigate('/agreements');
-        dispatch(setToken(response.data.data.token))
+      const response = await api.get(`/authorization?email=${credentials.email}&password=${credentials.password}`);
+      
+      // 3. Отправка POST-запроса (безопаснее чем GET)
+      // const response = await api.post('/auth/login', credentials);
+      if (response.data.success) {
+        localStorage.setItem('token', response.data.data.token); // Сохраняем токен
+        dispatch(setToken(response.data.data.token)); // Обновляем Redux
+        navigate('/agreements'); // Перенаправляем
       } else {
-        // Сервер вернул success: false
-        const errorMessage = response.data.message || 'Авторизация не удалась';
-        setError(errorMessage); // Показываем пользователю
+        setIsCorrectLoginData(false);
+        throw new Error(response.data.message || 'Ошибка авторизации');
+      }
         
-        // Логируем детали для разработчика
-        console.error('Auth failed:', {
-          status: response.status,
-          data: response.data
-        });
-        
-        throw new Error(errorMessage); // Пробрасываем для дальнейшей обработки
+    } catch (error) {
+
+      setIsCorrectLoginData(false);
+      setIsLoading(false);
+      // 5. Обработка ошибок
+      let errorMessage = 'Ошибка при авторизации';
+      
+      if (axios.isAxiosError(error)) {
+        errorMessage = error.response?.data?.message || 
+          error.message || 
+          'Серверная ошибка';
       }
       
-      return response.data;
-  
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        // Ошибка специфичная для axios
-        console.error('Ошибка axios:', {
-          message: error.message,
-          status: error.response?.status,
-          data: error.response?.data
-        });
-        if (error.response?.status === 401) {
-          throw new Error('Неверный логин или пароль');
-        }
-      } else {
-        // Другие ошибки (например, сетевые)
-        console.error('Неожиданная ошибка:', error);
-      }
-  
-      throw error; // Пробрасываем ошибку для обработки в компоненте
+      setError(errorMessage);
+      console.error('Auth error:', error);
+
     }
   };
+  
   const handleSendPassword = () => {
     console.log('send me password');
     
@@ -92,15 +94,18 @@ const LoginPage = () => {
         <form method="GET" onSubmit={handleSubmit}>
           <div className="text-left">
             <p className="mb-2 mt-4 md:text-base text-sm">Логин</p>
-            <input name="login" className="p-4 bg-item-active w-full rounded-xl" type="text" placeholder="Введите логин" />
+            <input name="email" className="p-4 bg-item-active w-full rounded-xl" type="email" placeholder="Введите логин" required />
             <p className="mb-2 mt-4 md:text-base text-sm">Пароль</p>
             <input name="password"
-              className=" p-4 bg-item-active w-full rounded-xl" placeholder="Введите пароль" type={showPass ? 'text' : 'password'} onClick={()=>{showPass != showPass}}
+              className=" p-4 bg-item-active w-full rounded-xl" placeholder="Введите пароль" type={passwordVisible ? 'text' : 'password'} onClick={()=>{passwordVisible != passwordVisible}}  required minLength={6} 
             />
             <div className={`
               text-left text-red-600 mt-4
             `}>
-              <p>Введен неверный логин или пароль</p>
+              {
+                isCorrectLoginData ? '' :
+                  <p className="appearance">Введен неверный логин или пароль</p>       
+              }
             </div>
           </div>
           <div className="flex justify-between py-5 mt-4">
@@ -111,8 +116,8 @@ const LoginPage = () => {
               <p className="text-[#203887]">Забыли пароль?</p>
             </div>
           </div>
-          <button type="submit" className="mt-5 btn-primary w-full py-2">
-            Войти
+          <button type="submit" className="mt-5 btn-primary w-full py-2" disabled={isLoading}>
+            {isLoading ? 'Вход...' : 'Войти'}
           </button>
         </form>
       </section>

@@ -3,7 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
-import { hideNavbar, isNavbarShown } from '@/store/navbarSlice';
+import { hideNavbar, isNavbarShown } from '@/store/slices/navbarSlice';
+import { removeToken } from '@/store/slices/userSlice';
 import styles from './TheMenuItem.module.css';
 
 const TheMenuItem = ({ icon, text, to }) => {
@@ -27,7 +28,7 @@ const TheMenuItem = ({ icon, text, to }) => {
     showNavbar ? dispatch(hideNavbar()) : '' 
   }
   const logout = () => {
-    localStorage.removeItem('token');
+    dispatch(removeToken());
     return true;
   }
   const handleClick = () => {

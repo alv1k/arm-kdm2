@@ -2,9 +2,9 @@ import React, { useEffect }  from 'react';
 import { BrowserRouter as Router, Route, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux'; 
 import useMediaQueries from '@/hooks/useMediaQueries'; 
-import { isShowDetails } from '@/store/agreementsSlice';
-import { toggleStatus } from '@/store/requestsSlice';
-import { toggleTabs, setSelectedTab, selectedTab, agreementsSelectedTab, agreementSelectedTab, requestsSelectedTab, setAgreementsSelectedTab, setAgreementSelectedTab, setRequestsSelectedTab, setLoginSelectedTab } from '@/store/tabsSlice';
+import { isShowDetails } from '@/store/slices/agreementsSlice';
+import { toggleStatus } from '@/store/slices/requestsSlice';
+import { toggleTabs, setSelectedTab, selectedTab, agreementsSelectedTab, agreementSelectedTab, requestsSelectedTab, setAgreementsSelectedTab, setAgreementSelectedTab, setRequestsSelectedTab, setLoginSelectedTab } from '@/store/slices/tabsSlice';
 
 const TheTabsComponent = (props) => {
   const sprite_path = './src/assets/images/i.svg';

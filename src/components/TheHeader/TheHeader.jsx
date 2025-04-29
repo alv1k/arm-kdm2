@@ -1,11 +1,11 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { toggleNavbar } from '@/store/navbarSlice';
+import { toggleNavbar } from '@/store/slices/navbarSlice';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
-import { isShowDetails, hideDetails, agreementsStoreList } from '@/store/agreementsSlice';
-import { isNew, toggleStatus, requestStatusFalse } from '@/store/requestsSlice';
-import { isPasswordModification, togglePasswordChange } from '@/store/userSlice';
+import { isShowDetails, hideDetails, agreementsStoreList } from '@/store/slices/agreementsSlice';
+import { isNew, toggleStatus, requestStatusFalse } from '@/store/slices/requestsSlice';
+import { isPasswordModification, togglePasswordChange } from '@/store/slices/userSlice';
 import styles from './TheHeader.module.css'
 
 const sprite_path = './src/assets/images/i.svg';

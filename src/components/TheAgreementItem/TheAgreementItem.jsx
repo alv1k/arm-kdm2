@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
-import { isShowDetails } from '@/store/agreementsSlice';
+import { isShowDetails } from '@/store/slices/agreementsSlice';
 import PriceFormatter from '../PriceFormatter/PriceFormatter'; 
 
 const TheAgreementItem = ({ number, date, address, summ }) => {
@@ -12,11 +12,11 @@ const TheAgreementItem = ({ number, date, address, summ }) => {
   
   return (
     <div className={`
-        lg:p-10 lg:rounded-2xl lg:mb-10 lg:flex
+        lg:p-10 lg:rounded-2xl lg:mb-10 lg:flex lg:gap-4
         md:mb-4 md:bg-item-active
         rounded-xl mb-6 block w-full
-        ${isDetailsShown ? 'lg:mt-6 p-0 bg-item-active' : 'cursor-pointer p-5 bg-item-default'}
-        ${isDetailsShown && lg_breakpoint ? 'bg-item-active': ''}
+        ${isDetailsShown ? 'lg:mt-6 p-0' : 'cursor-pointer p-5 bg-item-default'}
+        ${isDetailsShown && (lg_breakpoint || xl_breakpoint) ? 'bg-item-active': ''}
       `}
     >
       <div className={`
@@ -44,7 +44,7 @@ const TheAgreementItem = ({ number, date, address, summ }) => {
             >
               <use href={`${sprite_path}#doc-icon`} />
             </svg>
-            <span className="lg:me-0 me-auto">
+            <span className="lg:me-0 me-auto text-nowrap">
               Скачать договор
             </span>
           </button>
@@ -136,7 +136,7 @@ const TheAgreementItem = ({ number, date, address, summ }) => {
               >
                 <use href={`${sprite_path}#doc-icon`} />
               </svg>
-              <span className="lg:me-0 me-auto">
+              <span className="lg:me-0 me-auto text-nowrap">
                 Скачать договор
               </span>
             </button>
@@ -165,7 +165,7 @@ const TheAgreementItem = ({ number, date, address, summ }) => {
               >
                 <use href={`${sprite_path}#doc-icon`} />
               </svg>
-              <span className="lg:me-0 me-auto">
+              <span className="lg:me-0 me-auto text-nowrap">
                 Скачать договор
               </span>
             </button>

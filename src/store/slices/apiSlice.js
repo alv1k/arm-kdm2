@@ -1,4 +1,4 @@
-// src/store/apiSlice.js
+// src/store/slices/apiSlice.js
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import api from '@/api/api';
 

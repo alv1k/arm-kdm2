@@ -19,7 +19,8 @@ export const fetchAgreementsList = createAsyncThunk(
         throw new Error(`HTTP error! status: ${response.data.status}`);
       }
       return await response.data.data;
-    } catch (error) {      
+    } catch (error) {
+      console.log('change location to login');
       return rejectWithValue(error.message);
     }
   }

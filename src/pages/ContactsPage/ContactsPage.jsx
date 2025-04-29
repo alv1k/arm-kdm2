@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { hideNavbar } from '@/store/navbarSlice';
-import { toggleTabs  } from '@/store/tabsSlice';
-import { isNew } from '@/store/requestsSlice';
+import { hideNavbar } from '@/store/slices/navbarSlice';
+import { toggleTabs  } from '@/store/slices/tabsSlice';
+import { isNew } from '@/store/slices/requestsSlice';
 import useMediaQueries from '@/hooks/useMediaQueries';
 
 import Header from '@/components/TheHeader/TheHeader';

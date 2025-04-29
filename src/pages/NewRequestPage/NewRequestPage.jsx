@@ -3,8 +3,8 @@ import { Description, Field, Label, Select } from '@headlessui/react';
 // import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
-import { hideNavbar } from '@/store/navbarSlice';
-import { toggleStatus } from '@/store/requestsSlice';
+import { hideNavbar } from '@/store/slices/navbarSlice';
+import { toggleStatus } from '@/store/slices/requestsSlice';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
 import styles from './NewRequestPage.module.css';
 import CustomSelect from '@/components/CustomSelect/CustomSelect'

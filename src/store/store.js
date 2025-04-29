@@ -1,10 +1,10 @@
 // store.js
 import { configureStore } from '@reduxjs/toolkit';
-import navbarReducer from '../store/navbarSlice'; // Импортируем редюсер
-import agreementsReducer from './agreementsSlice';
-import tabsReducer from './tabsSlice';
-import requestsReducer from './requestsSlice';
-import userSlice from './userSlice';
+import navbarReducer from './slices/navbarSlice'; // Импортируем редюсер
+import agreementsReducer from './slices/agreementsSlice';
+import tabsReducer from './slices/tabsSlice';
+import requestsReducer from './slices/requestsSlice';
+import userSlice from './slices/userSlice';
 
 const store = configureStore({
   reducer: {
@@ -19,6 +19,7 @@ const store = configureStore({
       console.log('Dispatching:', action.type);
       return next(action);
     }),
+
 });
 
 export default store;

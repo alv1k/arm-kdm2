@@ -152,3 +152,14 @@ body {
     background-color: #f9f9f9;
   }
 }
+.appearance {
+  animation: come_out 0.5s ease-out;
+}
+@keyframes come_out {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
