@@ -24,13 +24,7 @@ const TheAgreementItem = ({ number, date, address, summ }) => {
   }
   
   return (
-    <div className={`
-        lg:p-10 lg:rounded-2xl lg:mb-10 lg:flex lg:gap-4
-        md:mb-4 md:bg-item-active
-        rounded-xl mb-6 block w-full
-        ${isDetailsShown ? 'lg:mt-6 p-0' : 'cursor-pointer p-5 bg-item-default'}
-        ${isDetailsShown && (lg_breakpoint || xl_breakpoint) ? 'bg-item-active': ''}
-      `}
+    <div 
     >
       {
         showCountersModal ? 
@@ -38,7 +32,13 @@ const TheAgreementItem = ({ number, date, address, summ }) => {
           <CountersModal />
         </div> 
         : 
-        <div>
+        <div className={`
+          lg:p-10 lg:rounded-2xl lg:mb-10 lg:flex lg:gap-4
+          md:mb-4 md:bg-item-active
+          rounded-xl mb-6 block w-full
+          ${isDetailsShown ? 'lg:mt-6 p-0' : 'cursor-pointer p-5 bg-item-default'}
+          ${isDetailsShown && (lg_breakpoint || xl_breakpoint) ? 'bg-item-active': ''}
+        `}>
           <div className={`
             lg:text-xl lg:p-0
             md:text-base  md:rounded-xl
