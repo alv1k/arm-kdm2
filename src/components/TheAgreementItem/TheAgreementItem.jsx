@@ -3,16 +3,24 @@ import { useSelector, useDispatch } from 'react-redux';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
 import { isShowDetails, isShowCountersModal, setShowCountersModal } from '@/store/slices/agreementsSlice';
 import PriceFormatter from '../PriceFormatter/PriceFormatter'; 
-import CountersModal from '@/components/CountersModal/CountersModal'; 
+import CountersModal from '@/components/TheCountersModal/TheCountersModal'; 
 import { dataType, setDataType, setShowModal } from '@/store/slices/modalSlice';
 
-const TheAgreementItem = ({ number, date, address, summ }) => {
+const TheAgreementItem = ({ number, date, address, summ, data }) => {
   const sprite_path = './src/assets/images/i.svg';
   const today = new Date().toLocaleDateString();
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const dispatch = useDispatch();
   const isDetailsShown = useSelector(isShowDetails);
-  const showCountersModal = useSelector(isShowCountersModal);
+  const showCountersModal = useSelector(isShowCountersModal);  
+
+  // console.log(data[0], 'data');
+  
+
+  // const address1 = data[0].Адрес;
+  // const object = data[0].ОбъектАренды;
+  // const summ1 = data[0].Сумма;
+  // const services = data[0].Услуги;
 
   const handleSetDataType = (type) => {
     dispatch(setDataType(type));
@@ -22,6 +30,8 @@ const TheAgreementItem = ({ number, date, address, summ }) => {
       dispatch(setShowCountersModal())
     }
   }
+
+
   
   return (
     <div 

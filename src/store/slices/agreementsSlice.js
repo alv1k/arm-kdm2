@@ -7,6 +7,7 @@ export const fetchAgreementsList = createAsyncThunk(
     try {
       const token = localStorage.getItem('token');
       if (!token) {
+        window.location.href = '/login';
         throw new Error('Token not found');
       }
       
@@ -16,11 +17,14 @@ export const fetchAgreementsList = createAsyncThunk(
         }
       });
       if (!response.data.success) {
+        localStorage.removeItem('token')
+        window.location.href = '/login';
         throw new Error(`HTTP error! status: ${response.data.status}`);
       }
       return await response.data.data;
     } catch (error) {
-      console.log('change location to login');
+      localStorage.removeItem('token')
+      window.location.href = '/login';
       return rejectWithValue(error.message);
     }
   }
@@ -32,6 +36,8 @@ const agreementsSlice = createSlice({
   initialState: { 
     showDetails: false,
     isShowCountersModal: false,
+    loading: false,
+    error: null,
     type: { title_en: 'all', title_ru: 'Все' },
     tab: { title_en: 'bills', title_ru: 'Счета' },
     agreementsList: [
@@ -73,10 +79,23 @@ const agreementsSlice = createSlice({
     builder
       .addCase(fetchAgreementsList.fulfilled, (state, action) => {
         state.agreementsList = action.payload; // Сохраняем загруженные данные в agreementsList
+        state.loading = false;
+      })
+      .addCase(fetchAgreementsList.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      // Обработка ошибки
+      .addCase(fetchAgreementsList.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || 'Failed to fetch agreements';
       });
   }
 });
 
+
+export const selectAgreementsLoading = (state) => state.agreements_slice.loading;
+export const selectAgreementsError = (state) => state.agreements_slice.error;
 
 export const selectedType = (state) => state.agreements_slice.type;
 export const isShowDetails = (state) => state.agreements_slice.showDetails;

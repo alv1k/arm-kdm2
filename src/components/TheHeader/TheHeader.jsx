@@ -60,7 +60,7 @@ const TheHeader = () => {
         </svg>
         : ''
       }
-      <div className="xl:ms-0 lg:ms-0 md:justify-normal md:mt-1 items-center flex w-full">
+      <div className="xl:ms-0 lg:ms-0 md:justify-normal md:mt-1 items-center flex w-full absolute">
         <img 
           className="lg:ms-2 lg:w-[240px] md:w-[220px] md:ms-15 w-[200px] mx-auto" src="/src/assets/images/logo-main.png" alt=""
           onClick={handleLogoClick}

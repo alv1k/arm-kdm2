@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { hideNavbar } from '@/store/slices/navbarSlice';
 import { toggleTabs  } from '@/store/slices/tabsSlice';
-import { isShowDetails, selectedAgreement, agreementsStoreList, showDetails, hideDetails, setAgreementsList, fetchAgreementsList, isShowCountersModal } from '@/store/slices/agreementsSlice';
+import { isShowDetails, selectedAgreement, agreementsStoreList, showDetails, hideDetails, setAgreementsList, fetchAgreementsList, isShowCountersModal, selectAgreementsLoading } from '@/store/slices/agreementsSlice';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
 import styles from './AgreementsPage.module.css';
 
@@ -18,21 +18,29 @@ const AgreementsPage = () => {
   const showCountersModal = useSelector(isShowCountersModal);
   const agreementsList = useSelector(agreementsStoreList);
   const currentAgreement = useSelector(selectedAgreement);
+  const loading = useSelector(selectAgreementsLoading);
+  
 
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchAgreementsList());
-  }, [dispatch]);
-
-  useEffect(() => {
     dispatch(toggleTabs({
       type: isDetailsShown ? 'singleAgrement' : 'agreementsList', 
       breakpoint: sm_breakpoint ? 'sm-breakpoint' : ''
     } ));
-        
   }, [dispatch]);
+
+  const prevLoading = useRef(loading);
+  useEffect(() => {
+    if (prevLoading.current && !loading) {
+      console.log('Загрузка ТОЛЬКО ЧТО завершилась');
+      // Действия после завершения загрузки
+    }
+    prevLoading.current = loading;
+  }, [loading]);
+  
   
   const sideClick = (event) => {
     event.stopPropagation();
@@ -100,7 +108,7 @@ const AgreementsPage = () => {
         {
           <div className="md:pt-4 pt-5">
             {
-              !isDetailsShown ?
+              !isDetailsShown && !loading ?
                 agreementsList.map((agreement) => (
                   <div key={agreement.Код} onClick={() => handleAgreementClick(agreement)}>
                     <AgreementItem 
@@ -109,9 +117,14 @@ const AgreementsPage = () => {
                       date={agreement.date}
                       address={agreement.Договор}
                       summ={agreement.Сумма}
+                      data={agreement.ОбъектыАренды}
                     />
                   </div>
                 ))
+              : loading ? 
+              <div className="p-14">
+                Загрузка...
+              </div>
               :
                 currentAgreement.map((agreement) => (
                   <div key={agreement.Код} >

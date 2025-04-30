@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import AgreementsPage from './pages/AgreementsPage/AgreementsPage'
@@ -11,6 +12,18 @@ import TheModal from '@/components/TheModal/TheModal';
 import useMediaQueries from '@/hooks/useMediaQueries';
 import { showModal } from '@/store/slices/modalSlice';
 
+const HTTPSRedirect = () => {
+  const location = useLocation();
+  
+  useEffect(() => {
+    if (window.location.protocol !== 'https:' && process.env.NODE_ENV === 'production') {
+      window.location.href = `https://${window.location.host}${location.pathname}`;
+    }
+  }, [location]);
+
+  return null;
+};
+
 const App = () => {
   const location = useLocation();  
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
@@ -18,6 +31,8 @@ const App = () => {
 
   return (
     <div className="min-h-screen flex flex-col w-full">
+      <HTTPSRedirect />
+
       {
         isShowModal && !sm_breakpoint ? 
         <TheModal /> : ''

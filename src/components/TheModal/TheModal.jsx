@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { dataType, setDataType, setShowModal } from '@/store/slices/modalSlice';
 import { useSelector, useDispatch } from 'react-redux';
-import CountersModal from '@/components/CountersModal/CountersModal'
+import CountersModal from '@/components/TheCountersModal/TheCountersModal'
 
 const TheModal = () => {
   const sprite_path = './src/assets/images/i.svg';
