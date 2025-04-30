@@ -29,7 +29,7 @@ const TheModal = () => {
 
   
   return (
-    <div className={` opacity-0 animate-fadeIn
+    <div className={`opacity-0 animate-fadeIn
       md:fixed inset-0 bg-[#00000033] z-20 flex items-center justify-center
     `} onClick={() => handleCloseModal()} >
       <div className="bg-white p-12 h-fit my-auto rounded-xl w-[645px]" onClick={(e) => handleClick(e)} >

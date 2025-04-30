@@ -6,7 +6,7 @@ import PriceFormatter from '../PriceFormatter/PriceFormatter';
 import CountersModal from '@/components/TheCountersModal/TheCountersModal'; 
 import { dataType, setDataType, setShowModal } from '@/store/slices/modalSlice';
 
-const TheAgreementItem = ({ number, date, address, summ, data }) => {
+const TheAgreementItem = ({ number, date, summ, data }) => {
   const sprite_path = './src/assets/images/i.svg';
   const today = new Date().toLocaleDateString();
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
@@ -14,12 +14,12 @@ const TheAgreementItem = ({ number, date, address, summ, data }) => {
   const isDetailsShown = useSelector(isShowDetails);
   const showCountersModal = useSelector(isShowCountersModal);  
 
-  // console.log(data[0], 'data');
+  const address = "address";
   
 
-  // const address1 = data[0].Адрес;
+  // const address = data[0].Адрес;
   // const object = data[0].ОбъектАренды;
-  // const summ1 = data[0].Сумма;
+  // const debt = data[0].Сумма;
   // const services = data[0].Услуги;
 
   const handleSetDataType = (type) => {
@@ -31,8 +31,6 @@ const TheAgreementItem = ({ number, date, address, summ, data }) => {
     }
   }
 
-
-  
   return (
     <div 
     >

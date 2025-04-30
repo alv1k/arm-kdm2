@@ -29,10 +29,15 @@ const App = () => {
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const isShowModal = useSelector(showModal);
 
+  document.querySelectorAll('*').forEach(el => {
+    if (el.scrollWidth > el.clientWidth) {
+      console.log('Элемент с переполнением:', el);
+    }
+  });
+
   return (
     <div className="min-h-screen flex flex-col w-full">
       <HTTPSRedirect />
-
       {
         isShowModal && !sm_breakpoint ? 
         <TheModal /> : ''

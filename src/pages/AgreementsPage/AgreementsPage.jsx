@@ -115,7 +115,6 @@ const AgreementsPage = () => {
                       key={agreement.Код}
                       number={agreement.Договор}
                       date={agreement.date}
-                      address={agreement.Договор}
                       summ={agreement.Сумма}
                       data={agreement.ОбъектыАренды}
                     />
@@ -132,8 +131,8 @@ const AgreementsPage = () => {
                       key={agreement.Код}
                       number={agreement.Договор}
                       date={agreement.date}
-                      address={agreement.Договор}
                       summ={agreement.Сумма}
+                      data={agreement.ОбъектыАренды}
                     />
                   </div>
                 ))
