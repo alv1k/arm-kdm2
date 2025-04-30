@@ -40,27 +40,36 @@ const TheTabsComponent = (props) => {
     }
   }
   
-  useEffect(() => {
-    if (currentRoute == '/agreements' && showAgreementDetails) {
+  const currentTab = useSelector((state) => state.tabs_slice.selectedTab);
+  useEffect(() => {  
+    console.log('Current route:', currentRoute, 'Show details:', showAgreementDetails);
+    
+    if (currentRoute === '/agreements' && showAgreementDetails) {
       dispatch(setAgreementSelectedTab({title_en: 'bills', title_ru: 'Счета'}));
-    } else if (currentRoute == '/requests' && sm_breakpoint) {
-      dispatch(setRequestsSelectedTab({ title_en: 'my_requests', title_ru: 'Мои заявки' }));
-    } else if (currentRoute == '/requests') {
-      dispatch(setRequestsSelectedTab({ title_en: 'all_requests', title_ru: 'Все' }));
-    }  else if (currentRoute == '/login') {
-      dispatch(setLoginSelectedTab({ title_en: 'email', title_ru: 'Почта' }));
-    } else {
-      if (xl_breakpoint || lg_breakpoint || md_breakpoint) {
-        dispatch(setAgreementsSelectedTab({ title_en: 'all', title_ru: 'Все' }));
-      } else if (sm_breakpoint) {
-        dispatch(setAgreementsSelectedTab({ title_en: 'active', title_ru: 'Действующие' }));
-      }
+      return;
+    }
+
+    if (currentRoute === '/requests') {
+      const tab = sm_breakpoint 
+        ? { title_en: 'my_requests', title_ru: 'Мои заявки' }
+        : { title_en: 'all_requests', title_ru: 'Все' };
+      dispatch(setRequestsSelectedTab(tab));
+      return;
     }
     
-  }, [dispatch, showAgreementDetails, xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint]);
+    if (currentRoute === '/login') {
+      dispatch(setLoginSelectedTab({ title_en: 'email', title_ru: 'Почта' }));
+      return;
+    }
+    
+    // Default case
+    const agreementTab = (xl_breakpoint || lg_breakpoint || md_breakpoint)
+      ? { title_en: 'all', title_ru: 'Все' }
+      : { title_en: 'active', title_ru: 'Действующие' };
+    dispatch(setAgreementsSelectedTab(agreementTab));
 
-  const currentTab = useSelector((state) => state.tabs_slice.selectedTab);
- 
+  }, [dispatch, currentRoute, showAgreementDetails, sm_breakpoint, xl_breakpoint, lg_breakpoint, md_breakpoint]);
+  
   const handleNewRequestBtn = () => {    
     dispatch(toggleStatus())
   }

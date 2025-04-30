@@ -18,8 +18,7 @@ const AgreementsPage = () => {
   const showCountersModal = useSelector(isShowCountersModal);
   const agreementsList = useSelector(agreementsStoreList);
   const currentAgreement = useSelector(selectedAgreement);
-  const loading = useSelector(selectAgreementsLoading);
-  
+  const loading = useSelector(selectAgreementsLoading);  
 
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const dispatch = useDispatch();

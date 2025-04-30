@@ -10,8 +10,8 @@ const CountersModal = () => {
         <p className="text-center md:text-2xl text-xl font-bold">Передать показания</p>
         <div className="my-8 flex flex-col">
           <div className="md:order-none order-2 md:my-0 my-2 md:flex block"><p className="text-[#787C82]">Текущая дата:&nbsp;</p> 20.02.2025</div>
-          <p className="md:order-none order-3 my-2 md:flex block"><p className="text-[#787C82]">Период:&nbsp;</p> 20.01.2025 - 20.02.2025</p>
-          <p className="md:order-none order-1 md:flex block"><p className="text-[#787C82]">Адрес:&nbsp;</p> г. Якутск, ул. Ленина 123, 1 этаж, каб. №123</p>
+          <div className="md:order-none order-3 my-2 md:flex block"><p className="text-[#787C82]">Период:&nbsp;</p> 20.01.2025 - 20.02.2025</div>
+          <div className="md:order-none order-1 md:flex block"><p className="text-[#787C82]">Адрес:&nbsp;</p> г. Якутск, ул. Ленина 123, 1 этаж, каб. №123</div>
         </div>
         <div className="my-6">
           <p>ХВС</p>

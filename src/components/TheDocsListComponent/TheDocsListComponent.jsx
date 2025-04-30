@@ -10,6 +10,8 @@ const TheDocsListComponent = () => {
   const sprite_path = './src/assets/images/i.svg';
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const currentTab = useSelector(selectedTab);
+  console.log(currentTab, 'currentTab');
+  
     
   const location = useLocation();
   const currentRoute = location.pathname;

@@ -7,24 +7,6 @@ import requestsReducer from './slices/requestsSlice';
 import userReducer from './slices/userSlice';
 import modalReducer from './slices/modalSlice';
 
-
-const createAuthMiddleware = (navigate) => (store) => (next) => (action) => {
-  const token = localStorage.getItem('token'); 
-  
-  if (!token) {
-    console.warn('Токен отсутствует для защищенного действия');
-    // Используем переданную функцию навигации
-    // navigate('/login');
-    // window.location.href = "/login";
-    // return; // Прерываем цепочку middleware
-  } else {
-    console.log('check createAuthMiddleware');
-
-  }
-  
-  return next(action);
-};
-
 // Middleware для логирования действий
 const loggingMiddleware = (store) => (next) => (action) => {
   console.log('Dispatching:', action.type);
@@ -42,7 +24,6 @@ const store = configureStore({
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
-      .concat(createAuthMiddleware())
       .concat(loggingMiddleware)
 });
 

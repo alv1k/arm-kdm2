@@ -37,11 +37,11 @@ const TheHeader = () => {
     }
   }
   return (
-    <header className="xl:px-10 lg:px-10 md:px-6 px-0 text-[#203887] bg-white py-5 flex">
+    <header className="xl:px-10 lg:px-10 md:px-6 px-0 text-[#203887] bg-white py-5 md:pb-0 pb-9 flex">
       {
         ((isNewRequest || showAgreementDetails || isPasswordChange) && sm_breakpoint) ?
         <button 
-          className="md:text-base text-sm btn-text flex items-center ms-3 "
+          className="md:text-base text-sm btn-text flex items-center ms-3 z-20 md:static absolute"
           onClick={handleBackwards}
         >
           <svg
