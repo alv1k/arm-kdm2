@@ -53,7 +53,7 @@ const TheHeader = () => {
         </button>
         : (sm_breakpoint || md_breakpoint) ? 
         <svg
-          className={`icon md:my-auto md:ms-0 ms-5 ${md_breakpoint ? styles.icon_md : ''}`}
+          className={`icon md:my-auto md:ms-0 ms-5 z-20 md:static absolute ${md_breakpoint ? styles.icon_md : ''}`}
           onClick={handleClick}
         >
           <use href={`${sprite_path}#menu-icon`} />
