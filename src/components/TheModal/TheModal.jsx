@@ -1,0 +1,47 @@
+import { useEffect, useState } from 'react';
+import { dataType, setDataType, setShowModal } from '@/store/slices/modalSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import CountersModal from '@/components/CountersModal/CountersModal'
+
+const TheModal = () => {
+  const sprite_path = './src/assets/images/i.svg';
+  
+  const dispatch = useDispatch();
+  const typeOfModal = useSelector(dataType);
+  const handleCloseModal = () => {
+    dispatch(setShowModal())
+  }
+  const handleClick = (e) => {
+    e.stopPropagation()
+  }
+  console.log(typeOfModal, 'typeOfModal');
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') handleCloseModal();
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+  // Добавляем анимацию появления/исчезновения
+  if (!typeOfModal) return null; // Не рендерим модалку, если typeOfModal не задан
+
+  
+  return (
+    <div className={` opacity-0 animate-fadeIn
+      md:fixed inset-0 bg-[#00000033] z-20 flex items-center justify-center
+    `} onClick={() => handleCloseModal()} >
+      <div className="bg-white p-12 h-fit my-auto rounded-xl w-[645px]" onClick={(e) => handleClick(e)} >
+        <svg
+          className="icon ms-auto"
+          onClick={() => handleCloseModal()}
+        >
+          <use href={`${sprite_path}#close-icon`} />
+        </svg>
+        {typeOfModal === 'counters' &&  <CountersModal  onClick={(e) => handleClick(e)}  />}
+      </div>
+    </div>
+  )
+}
+export default TheModal;

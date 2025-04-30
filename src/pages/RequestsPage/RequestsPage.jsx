@@ -83,7 +83,7 @@ const RequestsPage = () => {
                 : ''
               }
             </div>
-            <TheTabsComponent />
+            <TheTabsComponent titles='requests' breakpoint={sm_breakpoint ? 'sm-breakpoint' : ''}/>
             <TheDocsListComponent titles="requests" breakpoint={sm_breakpoint ? 'sm-breakpoint' : ''} />
           </div>
       }

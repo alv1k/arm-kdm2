@@ -51,4 +51,7 @@
         <path d="M11.875 9.5a2.375 2.375 0 1 1-4.75 0 2.375 2.375 0 0 1 4.75 0Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         <path d="M1.583 9.5C2.85 6.257 5.808 3.958 9.5 3.958s6.65 2.299 7.917 5.542c-1.267 3.244-4.225 5.542-7.917 5.542S2.85 12.744 1.583 9.5Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
     </symbol>
+    <symbol fill="none" viewBox="0 0 24 24" id="close-icon" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
+        <path d="m7 17.486 5.243-5.243 5.243 5.243m0-10.486-5.244 5.243L7 7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
 </svg>

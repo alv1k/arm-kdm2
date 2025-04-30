@@ -4,7 +4,32 @@ import navbarReducer from './slices/navbarSlice'; // Импортируем ре
 import agreementsReducer from './slices/agreementsSlice';
 import tabsReducer from './slices/tabsSlice';
 import requestsReducer from './slices/requestsSlice';
-import userSlice from './slices/userSlice';
+import userReducer from './slices/userSlice';
+import modalReducer from './slices/modalSlice';
+
+
+const createAuthMiddleware = (navigate) => (store) => (next) => (action) => {
+  const token = localStorage.getItem('token'); 
+  
+  if (!token) {
+    console.warn('Токен отсутствует для защищенного действия');
+    // Используем переданную функцию навигации
+    // navigate('/login');
+    // window.location.href = "/login";
+    // return; // Прерываем цепочку middleware
+  } else {
+    console.log('check createAuthMiddleware');
+
+  }
+  
+  return next(action);
+};
+
+// Middleware для логирования действий
+const loggingMiddleware = (store) => (next) => (action) => {
+  console.log('Dispatching:', action.type);
+  return next(action);
+};
 
 const store = configureStore({
   reducer: {
@@ -12,14 +37,13 @@ const store = configureStore({
     agreements_slice: agreementsReducer,
     tabs_slice: tabsReducer,
     requests_slice: requestsReducer,
-    user_slice: userSlice
+    user_slice: userReducer,
+    modal_slice: modalReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat((store) => (next) => (action) => {
-      console.log('Dispatching:', action.type);
-      return next(action);
-    }),
-
+    getDefaultMiddleware()
+      .concat(createAuthMiddleware())
+      .concat(loggingMiddleware)
 });
 
 export default store;

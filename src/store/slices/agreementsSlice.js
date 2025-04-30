@@ -31,6 +31,7 @@ const agreementsSlice = createSlice({
   name: 'agreementsSlice',
   initialState: { 
     showDetails: false,
+    isShowCountersModal: false,
     type: { title_en: 'all', title_ru: 'Все' },
     tab: { title_en: 'bills', title_ru: 'Счета' },
     agreementsList: [
@@ -52,16 +53,20 @@ const agreementsSlice = createSlice({
     selectedAgreement: [],
   },
   reducers: {
-    showDetails: (state, action) => {
-      
+    showDetails: (state) => {      
       state.showDetails = true; 
-      console.log(state.showDetails , 'state.showDetails');
     },
     hideDetails: (state) => {
       state.showDetails = false;
     },
     setAgreementsList: (state, action) => {
       state.selectedAgreement = [action.payload]  
+    },
+    setShowCountersModal: (state) => {
+      state.isShowCountersModal = true
+    },
+    setHideCountersModal: (state) => {
+      state.isShowCountersModal = false
     },
   },  
   extraReducers: (builder) => {
@@ -78,5 +83,6 @@ export const isShowDetails = (state) => state.agreements_slice.showDetails;
 export const selectedTab = (state) => state.agreements_slice.tab;
 export const agreementsStoreList = (state) => state.agreements_slice.agreementsList;
 export const selectedAgreement = (state) => state.agreements_slice.selectedAgreement;
-export const { showDetails, hideDetails, setAgreementsList } = agreementsSlice.actions;
+export const isShowCountersModal = (state) => state.agreements_slice.isShowCountersModal;
+export const { showDetails, hideDetails, setAgreementsList, setShowCountersModal, setHideCountersModal } = agreementsSlice.actions;
 export default agreementsSlice.reducer;

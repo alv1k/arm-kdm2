@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { hideNavbar } from '@/store/slices/navbarSlice';
@@ -22,6 +22,9 @@ const ContactsPage = () => {
   // }, [dispatch]);  
   
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
+  const [height1, changeHeight1] = useState('600px')
+  const [testShow, changeTest] = useState(false);
+
   const dispatch = useDispatch();
   const sideClick = (event) => {
     event.stopPropagation();
@@ -36,7 +39,7 @@ const ContactsPage = () => {
   }, [dispatch]);
 
     const locations = Array.from({ length: 4 }, (_, index) => (
-      <div key={index} className="rounded-xl bg-item-active p-8 md:mb-0 mb-4">
+      <div key={index} className={`rounded-xl bg-item-active p-8 md:mb-0 mb-4 `}>
         <p className="text-2xl font-bold mb-8">Якутск</p>
         <p className="my-4">
           <span className="text-[#787C82]">Телефон:</span> &nbsp;

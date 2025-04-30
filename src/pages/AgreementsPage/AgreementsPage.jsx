@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { hideNavbar } from '@/store/slices/navbarSlice';
 import { toggleTabs  } from '@/store/slices/tabsSlice';
-import { isShowDetails, selectedAgreement, agreementsStoreList, showDetails, hideDetails, setAgreementsList, fetchAgreementsList } from '@/store/slices/agreementsSlice';
+import { isShowDetails, selectedAgreement, agreementsStoreList, showDetails, hideDetails, setAgreementsList, fetchAgreementsList, isShowCountersModal } from '@/store/slices/agreementsSlice';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
 import styles from './AgreementsPage.module.css';
 
@@ -15,6 +15,7 @@ const AgreementsPage = () => {
   const sprite_path = './src/assets/images/i.svg';
   const showNavbar = useSelector((state) => state.navbar.showNavbar);
   const isDetailsShown = useSelector(isShowDetails);
+  const showCountersModal = useSelector(isShowCountersModal);
   const agreementsList = useSelector(agreementsStoreList);
   const currentAgreement = useSelector(selectedAgreement);
 
@@ -101,9 +102,9 @@ const AgreementsPage = () => {
             {
               !isDetailsShown ?
                 agreementsList.map((agreement) => (
-                  <div key={agreement.num} onClick={() => handleAgreementClick(agreement)}>
+                  <div key={agreement.Код} onClick={() => handleAgreementClick(agreement)}>
                     <AgreementItem 
-                      key={agreement.num}
+                      key={agreement.Код}
                       number={agreement.Договор}
                       date={agreement.date}
                       address={agreement.Договор}
@@ -113,9 +114,9 @@ const AgreementsPage = () => {
                 ))
               :
                 currentAgreement.map((agreement) => (
-                  <div key={agreement.num} >
+                  <div key={agreement.Код} >
                     <AgreementItem 
-                      key={agreement.num}
+                      key={agreement.Код}
                       number={agreement.Договор}
                       date={agreement.date}
                       address={agreement.Договор}
@@ -128,7 +129,7 @@ const AgreementsPage = () => {
         }
         
         {
-          isDetailsShown ? 
+          isDetailsShown && !showCountersModal ? 
           <div>
             <TheTabsComponent titles='singleAgreement' />
             <TheDocsListComponent />

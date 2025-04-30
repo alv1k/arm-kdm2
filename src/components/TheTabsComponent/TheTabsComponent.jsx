@@ -5,6 +5,7 @@ import useMediaQueries from '@/hooks/useMediaQueries';
 import { isShowDetails } from '@/store/slices/agreementsSlice';
 import { toggleStatus } from '@/store/slices/requestsSlice';
 import { toggleTabs, setSelectedTab, selectedTab, agreementsSelectedTab, agreementSelectedTab, requestsSelectedTab, setAgreementsSelectedTab, setAgreementSelectedTab, setRequestsSelectedTab, setLoginSelectedTab } from '@/store/slices/tabsSlice';
+import { loginTabs } from '../../store/slices/tabsSlice';
 
 const TheTabsComponent = (props) => {
   const sprite_path = './src/assets/images/i.svg';
@@ -16,14 +17,15 @@ const TheTabsComponent = (props) => {
   const agreementsTabs = useSelector((state) => state.tabs_slice.agreementsTabs);
   const agreementTabs = useSelector((state) => state.tabs_slice.agreementTabs);
   const requestsTabs = useSelector((state) => state.tabs_slice.requestsTabs);
+  const loginTabs = useSelector((state) => state.tabs_slice.loginTabs);
 
   let calculateTabs = () => {
-    return props.titles == 'agreementsList' ? agreementsTabs : props.titles == 'singleAgreement' ? agreementTabs : requestsTabs
+    return props.titles == 'agreementsList' ? agreementsTabs : props.titles == 'singleAgreement' ? agreementTabs : props.titles == 'requests' ? requestsTabs : loginTabs
   }
   let tabs = calculateTabs();
 
   const location = useLocation();
-  const currentRoute = location.pathname;
+  const currentRoute = location.pathname;  
 
   const dispatch = useDispatch();
   const handleTabAction = (tab) => {
@@ -64,12 +66,12 @@ const TheTabsComponent = (props) => {
   }
   
   return (
-    <div className="
-      xl:mt-9
+    <div className={`
+      xl:mt-9 
       lg:mt-10 lg:gap-4
       md:mt-7 md:rounded-t-xl md:justify-start
       flex justify-between mt-11 b bg-[#FAFBFD] border-b-1 border-slate-300 rounded-t-md font-medium overflow-auto no-scrollbar
-    ">
+    `}>
         {tabs.map((tab, index) => (
           <div 
             key={index} 
@@ -78,6 +80,7 @@ const TheTabsComponent = (props) => {
               lg:px-10 lg:block
               md:px-6 md:flex md:items-center
               py-4 px-6 cursor-pointer bg-item-default rounded-t-xl 
+              ${currentRoute == '/login' ? 'w-full justify-center' : ''}
               ${sm_breakpoint ? 'w-1/2' : ''}
               ${currentTab && currentTab.title_en === tab.title_en ? 'text-[#203887] border-b border-b-[#6374AD]' : ''}
               ${currentTab && currentTab.title_en === tab.title_en ? 'text-[#203887] border-b border-b-[#6374AD]' : ''}

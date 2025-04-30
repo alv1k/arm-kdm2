@@ -285,7 +285,10 @@ const TheDocsListComponent = () => {
                 </div>
               </th>
               <th></th>
-              <th></th>
+              {
+                currentRoute != '/requests' ? 
+                <th></th> : ''
+              }
             </tr>
           </thead>
           <tbody className="bg-item-default ">
@@ -338,9 +341,9 @@ const TheDocsListComponent = () => {
                   : <span className="text-green-600">Завершен</span>
                 }
               </td>
-              <td className="ms-auto">                
               {
                 currentTab && (currentTab.title_en == 'bills') ?
+                <td className="ms-auto">                
                   <button className="btn-default px-6 py-2 flex mt-5 md:w-full md:justify-center">
                     <svg
                       className="icon me-3"
@@ -348,9 +351,9 @@ const TheDocsListComponent = () => {
                       <use href={`${sprite_path}#doc-icon`} />
                     </svg>
                     Скачать
-                  </button> : ''
-              }
-              </td>                
+                  </button> 
+                </td> : ''
+              }                             
               <td>
                 {
                   currentTab.title_en == 'counters' ? '' 

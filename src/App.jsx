@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import AgreementsPage from './pages/AgreementsPage/AgreementsPage'
 import RequestsPage from './pages/RequestsPage/RequestsPage'
 import ContactsPage from './pages/ContactsPage/ContactsPage'
@@ -6,16 +7,21 @@ import UserPage from './pages/UserPage/UserPage';
 import LoginPage from './pages/LoginPage/LoginPage';
 import Header from '@/components/TheHeader/TheHeader';
 import Navbar from '@/components/TheNavbar/TheNavbar';
+import TheModal from '@/components/TheModal/TheModal';
 import useMediaQueries from '@/hooks/useMediaQueries';
-
-
+import { showModal } from '@/store/slices/modalSlice';
 
 const App = () => {
   const location = useLocation();  
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
-  
+  const isShowModal = useSelector(showModal);
+
   return (
     <div className="min-h-screen flex flex-col w-full">
+      {
+        isShowModal && !sm_breakpoint ? 
+        <TheModal /> : ''
+      }
       {
         location.pathname != '/login' ?
         <Header /> : ''

@@ -152,14 +152,16 @@ body {
     background-color: #f9f9f9;
   }
 }
-.appearance {
-  animation: come_out 0.5s ease-out;
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s forwards;
 }
-@keyframes come_out {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+input[type="password"]:after {
+  content: 'y';
+  background-color: red;
 }
