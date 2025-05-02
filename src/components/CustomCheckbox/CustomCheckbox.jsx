@@ -1,11 +1,13 @@
 import styles from './CustomCheckbox.module.css';
 const CustomCheckbox = (props) => {
+
   return (
     <div className={styles.custom_checkbox}>
-      <input type="checkbox" id="checkbox" className={styles.checkbox_input}/>
+      <input type="checkbox" checked={props.checked} id={props.id} className={styles.checkbox_input} 
+        onChange={() => {}}/>
       {
-        props.label ?
-        <label htmlFor="checkbox" className={`${styles.checkbox_label} + md:ps-11 ps-8`}>{ props.label }</label>
+         props && props.label ?
+        <label htmlFor={props.id} className={`${styles.checkbox_label} ${props.type == 'payment' ? 'ps-5' : 'md:ps-11 ps-8'} `}>{ props.label }</label>
         : ''
       }
     </div>

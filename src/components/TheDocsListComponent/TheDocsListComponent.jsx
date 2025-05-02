@@ -1,20 +1,34 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import useMediaQueries from '@/hooks/useMediaQueries';
 import { selectedTab } from '@/store/slices/tabsSlice';
 import PriceFormatter from '@/components/PriceFormatter/PriceFormatter'; 
-import styles from './TheDocsListComponent.module.css'
+import styles from './TheDocsListComponent.module.css';
+import { setDataType, setShowModal } from '@/store/slices/modalSlice';
+import { setShowCountersModal, setShowPaymentModal } from '@/store/slices/agreementsSlice';
+
 
 const TheDocsListComponent = () => {
   const sprite_path = './src/assets/images/i.svg';
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
+  const dispatch = useDispatch();  
   const currentTab = useSelector(selectedTab);
-  console.log(currentTab, 'currentTab');
-  
     
   const location = useLocation();
   const currentRoute = location.pathname;
+
+  const handleSetDataType = (type) => {
+    dispatch(setDataType(type));
+    if (!sm_breakpoint) {
+      dispatch(setShowModal())
+    } else if (type == 'counters') {
+      dispatch(setShowCountersModal())
+    } else if (type == 'payment') {
+      dispatch(setShowPaymentModal())
+    }
+  }  
+
 
   return (
     <div className={`
@@ -127,7 +141,7 @@ const TheDocsListComponent = () => {
               <div className="h-full justify-baseline flex flex-col">
                 <div className="mb-1 text-[#787C82]">Сумма:</div>
                 <div className="text-red-600"><PriceFormatter amount="100000" /></div>
-                <button className="btn-success px-6 py-2 mt-auto w-full">Оплатить</button>
+                <button className="btn-success px-6 py-2 mt-auto w-full" onClick={() => handleSetDataType('payment')}>Оплатить</button>
               </div>
               :
               <div className="ms-3">
@@ -218,10 +232,10 @@ const TheDocsListComponent = () => {
         <table className="rounded-lg border-separate border-spacing-0 overflow-hidden w-full">
           <thead className="bg-item-active">
             <tr align="center" className="text-center justify-center">
-              <th width={currentTab.title_en == 'counters' ? '200px' : ''}>
+              <th width={currentTab && currentTab.title_en == 'counters' ? '200px' : ''}>
                 <div className="flex items-center ps-8">
                   <span className="inline">
-                    {currentTab.title_en == 'counters' ? 'Дата' : '№'}
+                    {currentTab && currentTab.title_en == 'counters' ? 'Дата' : '№'}
                   </span>
                   <svg
                     className={`${styles.icon} ms-2`}
@@ -230,14 +244,14 @@ const TheDocsListComponent = () => {
                   </svg>
                 </div>
               </th>
-              <th width={currentTab.title_en == 'counters' ? '100px' : ''}>
+              <th width={currentTab && currentTab.title_en == 'counters' ? '100px' : ''}>
                 <div className="flex items-center min-w-22">
                   <span className="text-nowrap">
-                    {currentTab.title_en == 'counters' ? '' : 'Название'}                    
+                    {currentTab && currentTab.title_en == 'counters' ? '' : 'Название'}                    
                     {
                       currentTab && currentTab.title_en == 'acts' ?
-                      ' акта' : currentTab.title_en == 'bills' ? 
-                      ' счета' : currentTab.title_en == 'counters' ? 
+                      ' акта' : currentTab && currentTab.title_en == 'bills' ? 
+                      ' счета' : currentTab && currentTab.title_en == 'counters' ? 
                       ' ХВС' : ' помещения'
                     }
                   </span>
@@ -261,9 +275,9 @@ const TheDocsListComponent = () => {
                   </div>
                 </th> : ''
               }
-              <th width={currentTab.title_en == 'counters' ? '200px' : ''}>
+              <th width={currentTab && currentTab.title_en == 'counters' ? '200px' : ''}>
                 <div className="flex items-center min-w-22">
-                  <span>{currentTab.title_en == 'counters' ? 'ГВС' : 'Дата'}</span>
+                  <span>{currentTab && currentTab.title_en == 'counters' ? 'ГВС' : 'Дата'}</span>
                   <svg
                     className={`${styles.icon} ms-2`}
                     >
@@ -271,12 +285,12 @@ const TheDocsListComponent = () => {
                   </svg>
                 </div>
               </th>
-              <th width={currentTab.title_en == 'counters' ? '200px' : ''} align="center">
+              <th width={currentTab && currentTab.title_en == 'counters' ? '200px' : ''} align="center">
                 <div className="flex items-center">
                   <span>
                     {
-                      currentTab && (currentTab.title_en == 'acts' || currentTab.title_en == 'bills') ?
-                      'Сумма' : currentTab.title_en == 'counters' ? 'Электроэнергия' : 'Статус'
+                      currentTab && (currentTab && currentTab.title_en == 'acts' || currentTab && currentTab.title_en == 'bills') ?
+                      'Сумма' : currentTab && currentTab.title_en == 'counters' ? 'Электроэнергия' : 'Статус'
                     }
                   </span>
                   <svg
@@ -295,16 +309,16 @@ const TheDocsListComponent = () => {
           </thead>
           <tbody className="bg-item-default ">
             <tr>
-              <td className={currentTab.title_en == 'counters' ? 'align-top' : ''}>
+              <td className={currentTab && currentTab.title_en == 'counters' ? 'align-top' : ''}>
                 <div className="ps-8">
-                  {currentTab.title_en == 'counters' ? '01.01.2011' : '001'}
+                  {currentTab && currentTab.title_en == 'counters' ? '01.01.2011' : '001'}
                 </div>
               </td>
               <td>
                 {
                   currentTab && currentTab.title_en == 'acts' ?
-                  'Акт об оплате аренды' : currentTab.title_en == 'bills' ? 'Счет за аренду' 
-                  : currentTab.title_en == 'counters' ? 
+                  'Акт об оплате аренды' : currentTab && currentTab.title_en == 'bills' ? 'Счет за аренду' 
+                  : currentTab && currentTab.title_en == 'counters' ? 
                   <div>
                     <p className="text-[#787C82]">№000001</p>
                     <p>123.45 м3</p>
@@ -314,8 +328,8 @@ const TheDocsListComponent = () => {
               </td>              
                 {
                   currentTab && currentTab.title_en == 'acts' ?
-                  '' : currentTab.title_en == 'bills' ? '' :
-                  currentTab.title_en == 'counters' ? 
+                  '' : currentTab && currentTab.title_en == 'bills' ? '' :
+                  currentTab && currentTab.title_en == 'counters' ? 
                   <td>
                     <div>
                       <p className="text-[#787C82]">№000001</p>
@@ -327,7 +341,7 @@ const TheDocsListComponent = () => {
                 }              
               <td>
                 {
-                  currentTab.title_en == 'counters' ? 
+                  currentTab && currentTab.title_en == 'counters' ? 
                   <div>
                     <p className="text-[#787C82]">№000001</p>
                     <p>123.45 кВтч</p>
@@ -339,12 +353,12 @@ const TheDocsListComponent = () => {
                 {
                   currentTab && (currentTab.title_en == 'acts' || currentTab.title_en == 'bills') ?
                   <PriceFormatter amount="100000" /> 
-                  : currentTab.title_en == 'counters' ? '' 
+                  : currentTab && currentTab.title_en == 'counters' ? '' 
                   : <span className="text-green-600">Завершен</span>
                 }
               </td>
               {
-                currentTab && (currentTab.title_en == 'bills') ?
+                currentTab && currentTab.title_en == 'bills' ?
                 <td className="ms-auto">                
                   <button className="btn-default px-6 py-2 flex mt-5 md:w-full md:justify-center">
                     <svg
@@ -358,11 +372,11 @@ const TheDocsListComponent = () => {
               }                             
               <td>
                 {
-                  currentTab.title_en == 'counters' ? '' 
+                  currentTab && currentTab.title_en == 'counters' ? '' 
                   : 
-                  <button className="btn-success px-6 py-2 mt-5 w-full">
+                  <button className="btn-success px-6 py-2 mt-5 w-full" onClick={() => currentTab && currentTab.title_en == 'bills' ? handleSetDataType('payment') : ''}>
                     {
-                      currentTab && (currentTab.title_en == 'bills') ? 'Оплатить' : 'Скачать'
+                      currentTab && currentTab.title_en == 'bills' ? 'Оплатить' : 'Скачать'
                     }
                   </button>
                 }

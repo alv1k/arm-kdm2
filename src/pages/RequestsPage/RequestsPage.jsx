@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { hideNavbar } from '@/store/slices/navbarSlice';
 import { useLocation } from 'react-router-dom';
-import { toggleTabs  } from '@/store/slices/tabsSlice';
+import { toggleTabs, setRequestsSelectedTab } from '@/store/slices/tabsSlice';
 import { isNew, requestStatusFalse } from '@/store/slices/requestsSlice';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
 
@@ -17,7 +17,7 @@ const RequestsPage = () => {
   // const tabs = useSelector((state) => state.tabs_slice.tabs);
   // useEffect(() => {
   //   dispatch(fetchAgreementsList()); // Загружаем список договоров при монтировании компонента
-  // }, [dispatch]);  
+  // }, [dispatch]);
   
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const dispatch = useDispatch();
@@ -37,8 +37,8 @@ const RequestsPage = () => {
   }, [dispatch]);
   const location = useLocation();
   useEffect(() => {
-    dispatch(requestStatusFalse());
-  }, [location]);
+    dispatch(requestStatusFalse());    
+  }, [location]);  
 
   return (
     <section 
@@ -84,7 +84,7 @@ const RequestsPage = () => {
               }
             </div>
             <TheTabsComponent titles='requests' breakpoint={sm_breakpoint ? 'sm-breakpoint' : ''}/>
-            <TheDocsListComponent titles="requests" breakpoint={sm_breakpoint ? 'sm-breakpoint' : ''} />
+            <TheDocsListComponent />
           </div>
       }
     </section>

@@ -78,14 +78,7 @@ const tabSlice = createSlice({
         console.log('no target');
       }
     },
-    setSelectedTab(state, action) {      
-      state.selectedTab = {
-        title_en: action.payload.title_en,
-        title_ru: action.payload.title_ru,
-      }
-    },
-    setAgreementsSelectedTab(state, action) {  
-      console.log('check2!');    
+    setAgreementsSelectedTab(state, action) {
       state.selectedTab = {
         title_en: action.payload.title_en,
         title_ru: action.payload.title_ru,
@@ -98,8 +91,6 @@ const tabSlice = createSlice({
       }
     },
     setRequestsSelectedTab(state, action) {      
-      console.log('check1!');
-      
       state.selectedTab = {
         title_en: action.payload.title_en,
         title_ru: action.payload.title_ru,
@@ -123,5 +114,5 @@ export const agreementsSelectedTab = (state) => state.tabs_slice.agreementsSelec
 export const agreementSelectedTab = (state) => state.tabs_slice.agreementSelectedTab;
 export const requestsSelectedTab = (state) => state.tabs_slice.requestsSelectedTab;
 export const loginSelectedTab = (state) => state.tabs_slice.loginSelectedTab;
-export const { tabs, toggleTabs, setSelectedTab, setAgreementsSelectedTab, setAgreementSelectedTab, setRequestsSelectedTab, setLoginSelectedTab } = tabSlice.actions;
+export const { tabs, toggleTabs, setAgreementsSelectedTab, setAgreementSelectedTab, setRequestsSelectedTab, setLoginSelectedTab } = tabSlice.actions;
 export default tabSlice.reducer;

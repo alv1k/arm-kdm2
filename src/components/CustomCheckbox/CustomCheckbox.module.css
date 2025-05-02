@@ -24,6 +24,7 @@
   border: 1px solid #787C82; /* Цвет рамки */
   border-radius: 4px; /* Закругление углов */
   background-color: white; /* Цвет фона */
+  box-sizing: border-box;
 }
 .checkbox_label:hover::before {
   border-color: #203887;
@@ -54,6 +55,7 @@
   -o-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
 }
+
 
 .checkbox_input:disabled + .checkbox_label::before {
   background-color: #FAFBFD;

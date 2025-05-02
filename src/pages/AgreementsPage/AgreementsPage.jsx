@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { hideNavbar } from '@/store/slices/navbarSlice';
 import { toggleTabs  } from '@/store/slices/tabsSlice';
-import { isShowDetails, selectedAgreement, agreementsStoreList, showDetails, hideDetails, setAgreementsList, fetchAgreementsList, isShowCountersModal, selectAgreementsLoading } from '@/store/slices/agreementsSlice';
+import { isShowDetails, selectedAgreement, agreementsStoreList, showDetails, hideDetails, setAgreementsList, fetchAgreementsList, isShowCountersModal, isShowPaymentModal, selectAgreementsLoading } from '@/store/slices/agreementsSlice';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
 import styles from './AgreementsPage.module.css';
 
@@ -16,6 +16,7 @@ const AgreementsPage = () => {
   const showNavbar = useSelector((state) => state.navbar.showNavbar);
   const isDetailsShown = useSelector(isShowDetails);
   const showCountersModal = useSelector(isShowCountersModal);
+  const showPaymentModal = useSelector(isShowPaymentModal);
   const agreementsList = useSelector(agreementsStoreList);
   const currentAgreement = useSelector(selectedAgreement);
   const loading = useSelector(selectAgreementsLoading);  
@@ -33,10 +34,6 @@ const AgreementsPage = () => {
 
   const prevLoading = useRef(loading);
   useEffect(() => {
-    if (prevLoading.current && !loading) {
-      console.log('Загрузка ТОЛЬКО ЧТО завершилась');
-      // Действия после завершения загрузки
-    }
     prevLoading.current = loading;
   }, [loading]);
   
@@ -108,14 +105,15 @@ const AgreementsPage = () => {
           <div className="md:pt-4 pt-5">
             {
               !isDetailsShown && !loading ?
-                agreementsList.map((agreement) => (
-                  <div key={agreement.Код} onClick={() => handleAgreementClick(agreement)}>
+                agreementsList.map((agreement, index) => (
+                  <div key={index} onClick={() => handleAgreementClick(agreement)}>
                     <AgreementItem 
                       key={agreement.Код}
-                      number={agreement.Договор}
-                      date={agreement.date}
-                      summ={agreement.Сумма}
-                      data={agreement.ОбъектыАренды}
+                      number={agreement.Номер}
+                      date={agreement.Дата}
+                      debt={agreement.Долг}
+                      agree={agreement.Договор}
+                      services={agreement.Услуги}
                     />
                   </div>
                 ))
@@ -124,14 +122,15 @@ const AgreementsPage = () => {
                 Загрузка...
               </div>
               :
-                currentAgreement.map((agreement) => (
-                  <div key={agreement.Код} >
+                currentAgreement.map((agreement, index) => (
+                  <div key={index} >
                     <AgreementItem 
                       key={agreement.Код}
-                      number={agreement.Договор}
-                      date={agreement.date}
-                      summ={agreement.Сумма}
-                      data={agreement.ОбъектыАренды}
+                      number={agreement.Номер}
+                      date={agreement.Дата}
+                      debt={agreement.Долг}
+                      agree={agreement.Договор}
+                      services={agreement.Услуги}
                     />
                   </div>
                 ))
@@ -140,7 +139,7 @@ const AgreementsPage = () => {
         }
         
         {
-          isDetailsShown && !showCountersModal ? 
+          isDetailsShown && !showCountersModal && !showPaymentModal ? 
           <div>
             <TheTabsComponent titles='singleAgreement' />
             <TheDocsListComponent />

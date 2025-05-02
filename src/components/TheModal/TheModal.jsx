@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { dataType, setDataType, setShowModal } from '@/store/slices/modalSlice';
 import { useSelector, useDispatch } from 'react-redux';
-import CountersModal from '@/components/TheCountersModal/TheCountersModal'
+import CountersModal from '@/components/TheCountersModal/TheCountersModal';
+import PaymentModal from '@/components/ThePaymentModal/ThePaymentModal'
 
 const TheModal = () => {
   const sprite_path = './src/assets/images/i.svg';
@@ -14,7 +15,6 @@ const TheModal = () => {
   const handleClick = (e) => {
     e.stopPropagation()
   }
-  console.log(typeOfModal, 'typeOfModal');
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -40,6 +40,7 @@ const TheModal = () => {
           <use href={`${sprite_path}#close-icon`} />
         </svg>
         {typeOfModal === 'counters' &&  <CountersModal  onClick={(e) => handleClick(e)}  />}
+        {typeOfModal === 'payment' &&  <PaymentModal  onClick={(e) => handleClick(e)}  />}
       </div>
     </div>
   )

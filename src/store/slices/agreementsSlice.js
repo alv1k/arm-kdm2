@@ -30,12 +30,12 @@ export const fetchAgreementsList = createAsyncThunk(
   }
 );
 
-
 const agreementsSlice = createSlice({
   name: 'agreementsSlice',
   initialState: { 
     showDetails: false,
     isShowCountersModal: false,
+    isShowPaymentModal: false,
     loading: false,
     error: null,
     type: { title_en: 'all', title_ru: 'Все' },
@@ -74,6 +74,12 @@ const agreementsSlice = createSlice({
     setHideCountersModal: (state) => {
       state.isShowCountersModal = false
     },
+    setShowPaymentModal: (state) => {
+      state.isShowPaymentModal = true
+    },
+    setHidePaymentModal: (state) => {
+      state.isShowPaymentModal = false
+    }
   },  
   extraReducers: (builder) => {
     builder
@@ -103,5 +109,6 @@ export const selectedTab = (state) => state.agreements_slice.tab;
 export const agreementsStoreList = (state) => state.agreements_slice.agreementsList;
 export const selectedAgreement = (state) => state.agreements_slice.selectedAgreement;
 export const isShowCountersModal = (state) => state.agreements_slice.isShowCountersModal;
-export const { showDetails, hideDetails, setAgreementsList, setShowCountersModal, setHideCountersModal } = agreementsSlice.actions;
+export const isShowPaymentModal = (state) => state.agreements_slice.isShowPaymentModal;
+export const { showDetails, hideDetails, setAgreementsList, setShowCountersModal, setHideCountersModal, setShowPaymentModal, setHidePaymentModal } = agreementsSlice.actions;
 export default agreementsSlice.reducer;

@@ -1,35 +1,39 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
-import { isShowDetails, isShowCountersModal, setShowCountersModal } from '@/store/slices/agreementsSlice';
+import { isShowDetails, isShowCountersModal, setShowCountersModal, isShowPaymentModal, setShowPaymentModal, setHidePaymentModal } from '@/store/slices/agreementsSlice';
 import PriceFormatter from '../PriceFormatter/PriceFormatter'; 
 import CountersModal from '@/components/TheCountersModal/TheCountersModal'; 
+import PaymentModal from '@/components/ThePaymentModal/ThePaymentModal'; 
 import { dataType, setDataType, setShowModal } from '@/store/slices/modalSlice';
 
-const TheAgreementItem = ({ number, date, summ, data }) => {
+const TheAgreementItem = ({ number, date, debt, agree, services }) => {
   const sprite_path = './src/assets/images/i.svg';
   const today = new Date().toLocaleDateString();
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const dispatch = useDispatch();
   const isDetailsShown = useSelector(isShowDetails);
   const showCountersModal = useSelector(isShowCountersModal);  
-
-  const address = "address";
+  const showPaymentModal = useSelector(isShowPaymentModal);  
   
+  const address = "address";
 
-  // const address = data[0].Адрес;
-  // const object = data[0].ОбъектАренды;
-  // const debt = data[0].Сумма;
-  // const services = data[0].Услуги;
 
   const handleSetDataType = (type) => {
     dispatch(setDataType(type));
     if (!sm_breakpoint) {
       dispatch(setShowModal())
-    } else {
+    } else if (type == 'counters') {
       dispatch(setShowCountersModal())
+    } else if (type == 'payment') {
+      dispatch(setShowPaymentModal())
     }
-  }
+  }  
+
+
+  // let address = services[0].ОбъектыАренды[0].АдресАренды;
+  // let address = services.filter(service => service.ОбъектыАренды[0].АдресАренды);
+
 
   return (
     <div 
@@ -40,6 +44,11 @@ const TheAgreementItem = ({ number, date, summ, data }) => {
           <CountersModal />
         </div> 
         : 
+        showPaymentModal ?         
+        <div className=" bg-white">
+          <PaymentModal />
+        </div> 
+        :
         <div className={`
           lg:p-10 lg:rounded-2xl lg:mb-10 lg:flex lg:gap-4
           md:mb-4 md:bg-item-active
@@ -144,13 +153,13 @@ const TheAgreementItem = ({ number, date, summ, data }) => {
                   `}>
                     Ежемес{isDetailsShown && sm_breakpoint ? '.' : 'ячный'} платеж{isDetailsShown && sm_breakpoint ? '' : ' по договору'}:&nbsp;
                   </span>
-                  <span className="lg:inline md:inline block mt-1"><PriceFormatter amount={summ} /></span>
+                  <span className="lg:inline md:inline block mt-1"><PriceFormatter amount={debt} /></span>
                 </div>
               </div>
               : 
-              <PriceFormatter amount={summ} /> && (
+              <PriceFormatter amount={debt} /> && (
                 <p className="xl:text-xl lg:text-base mt-2">Сумма долга: &nbsp;<span className="text-red-600"> -&nbsp;{
-                  <PriceFormatter amount={summ} />
+                  <PriceFormatter amount={debt} />
                 }</span>
                 </p>
               )
@@ -206,8 +215,8 @@ const TheAgreementItem = ({ number, date, summ, data }) => {
                   rounded-xl bg-white md:border mt-9 text-base text-center
                 ">
                   <p>Общая сумма долга на {today}:</p>
-                  <p className="text-xl lg:my-4 my-2 text-red-600 font-semibold">- <PriceFormatter amount={summ} /> </p>
-                  <button className="btn-success lg:px-10 lg:mt-0 lg:w-auto py-2 md:w-2/9 w-full mt-2">Оплатить</button>
+                  <p className="text-xl lg:my-4 my-2 text-red-600 font-semibold">- <PriceFormatter amount={debt} /> </p>
+                  <button className="btn-success lg:px-10 lg:mt-0 lg:w-auto py-2 md:w-2/9 w-full mt-2" onClick={() => handleSetDataType('payment')}>Оплатить</button>
                 </div> : ''
               }
             </div>

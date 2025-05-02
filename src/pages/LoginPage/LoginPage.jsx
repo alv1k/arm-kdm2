@@ -118,7 +118,7 @@ const LoginPage = () => {
           </div>
           <div className="flex justify-between py-5 mt-4">
             <div>
-              <CustomCheckbox label="Запомнить меня" />
+              <CustomCheckbox label="Запомнить меня" id="remember_me" />
             </div>
             <div>
               <p className="text-[#203887] cursor-pointer" onClick={setIsRestorePassword}>Забыли пароль?</p>

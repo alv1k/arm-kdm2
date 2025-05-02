@@ -4,8 +4,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
 import { isShowDetails } from '@/store/slices/agreementsSlice';
 import { toggleStatus } from '@/store/slices/requestsSlice';
-import { toggleTabs, setSelectedTab, selectedTab, agreementsSelectedTab, agreementSelectedTab, requestsSelectedTab, setAgreementsSelectedTab, setAgreementSelectedTab, setRequestsSelectedTab, setLoginSelectedTab } from '@/store/slices/tabsSlice';
-import { loginTabs } from '../../store/slices/tabsSlice';
+import { requestsSelectedTab, setAgreementsSelectedTab, setAgreementSelectedTab, setRequestsSelectedTab, setLoginSelectedTab } from '@/store/slices/tabsSlice';
+
 
 const TheTabsComponent = (props) => {
   const sprite_path = './src/assets/images/i.svg';
@@ -23,7 +23,7 @@ const TheTabsComponent = (props) => {
     return props.titles == 'agreementsList' ? agreementsTabs : props.titles == 'singleAgreement' ? agreementTabs : props.titles == 'requests' ? requestsTabs : loginTabs
   }
   let tabs = calculateTabs();
-
+  
   const location = useLocation();
   const currentRoute = location.pathname;  
 
@@ -41,15 +41,16 @@ const TheTabsComponent = (props) => {
   }
   
   const currentTab = useSelector((state) => state.tabs_slice.selectedTab);
-  useEffect(() => {  
-    console.log('Current route:', currentRoute, 'Show details:', showAgreementDetails);
-    
+  
+  useEffect(() => {
+        
     if (currentRoute === '/agreements' && showAgreementDetails) {
       dispatch(setAgreementSelectedTab({title_en: 'bills', title_ru: 'Счета'}));
       return;
     }
 
     if (currentRoute === '/requests') {
+      
       const tab = sm_breakpoint 
         ? { title_en: 'my_requests', title_ru: 'Мои заявки' }
         : { title_en: 'all_requests', title_ru: 'Все' };

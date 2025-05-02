@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toggleNavbar } from '@/store/slices/navbarSlice';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
-import { isShowDetails, hideDetails, agreementsStoreList, isShowCountersModal, setHideCountersModal } from '@/store/slices/agreementsSlice';
+import { isShowDetails, hideDetails, agreementsStoreList, isShowCountersModal, setHideCountersModal, isShowPaymentModal, setHidePaymentModal } from '@/store/slices/agreementsSlice';
 import { isNew, toggleStatus, requestStatusFalse } from '@/store/slices/requestsSlice';
 import { isPasswordModification, togglePasswordChange } from '@/store/slices/userSlice';
 import styles from './TheHeader.module.css'
@@ -15,6 +15,7 @@ const TheHeader = () => {
   const showAgreementDetails = useSelector(isShowDetails);
   const agreementsList = useSelector(agreementsStoreList);
   const isVisibleCountersModal = useSelector(isShowCountersModal);
+  const isVisiblePaymentModal = useSelector(isShowPaymentModal);
   const isNewRequest = useSelector(isNew);
   const isPasswordChange = useSelector(isPasswordModification);
   const navigate = useNavigate();
@@ -28,6 +29,8 @@ const TheHeader = () => {
   const handleBackwards = () => {
     if(isVisibleCountersModal) {
       dispatch(setHideCountersModal())
+    } else if (isVisiblePaymentModal) {
+      dispatch(setHidePaymentModal());
     } else if (isNewRequest) {
       dispatch(toggleStatus());
     } else if(isPasswordChange) {
