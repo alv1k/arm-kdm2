@@ -1,9 +1,10 @@
-import React, { useEffect }  from 'react';
+import React, { useEffect, useRef }  from 'react';
 import { BrowserRouter as Router, Route, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux'; 
 import useMediaQueries from '@/hooks/useMediaQueries'; 
 import { isShowDetails } from '@/store/slices/agreementsSlice';
 import { toggleStatus } from '@/store/slices/requestsSlice';
+import { isRestorePass, toggleRestorePassword } from '@/store/slices/loginSlice';
 import { requestsSelectedTab, setAgreementsSelectedTab, setAgreementSelectedTab, setRequestsSelectedTab, setLoginSelectedTab } from '@/store/slices/tabsSlice';
 
 
@@ -18,7 +19,9 @@ const TheTabsComponent = (props) => {
   const agreementTabs = useSelector((state) => state.tabs_slice.agreementTabs);
   const requestsTabs = useSelector((state) => state.tabs_slice.requestsTabs);
   const loginTabs = useSelector((state) => state.tabs_slice.loginTabs);
-
+  const isRestorePassword = useSelector(isRestorePass);
+ 
+  
   let calculateTabs = () => {
     return props.titles == 'agreementsList' ? agreementsTabs : props.titles == 'singleAgreement' ? agreementTabs : props.titles == 'requests' ? requestsTabs : loginTabs
   }
@@ -42,15 +45,56 @@ const TheTabsComponent = (props) => {
   
   const currentTab = useSelector((state) => state.tabs_slice.selectedTab);
   
-  useEffect(() => {
-        
+  // useEffect(() => {
+  //   console.log(isRestorePassword, 'isRestorePassword789');
+  //   console.log(currentRoute, 'how mush');
+    
+  //   if (currentRoute) {
+  //     console.log('Login route detected');
+  //     dispatch(setAgreementSelectedTab({title_en: 'bills', title_ru: 'Счета'}));
+  //     // dispatch(setLoginSelectedTab({ title_en: 'email', title_ru: 'Почта' }));
+  //     console.log('dispatchedddd');
+  //   }
+  // }, [dispatch]);
+
+  // useEffect(() => {    
+  //   if (currentRoute === '/agreements' && showAgreementDetails) {
+  //     console.log('Agreements details view');
+  //     dispatch(setAgreementSelectedTab({title_en: 'bills', title_ru: 'Счета'}));
+  //   }
+  // }, [currentRoute, showAgreementDetails, dispatch]);
+
+  // useEffect(() => {
+  //   if (currentRoute === '/requests') {
+  //     console.log('Requests route');
+  //     const tab = sm_breakpoint 
+  //       ? { title_en: 'my_requests', title_ru: 'Мои заявки' }
+  //       : { title_en: 'all_requests', title_ru: 'Все' };
+  //     dispatch(setRequestsSelectedTab(tab));
+  //   }
+  // }, [currentRoute, sm_breakpoint, dispatch]);
+
+  // useEffect(() => {
+  //   if (!['/login', '/agreements', '/requests'].includes(currentRoute)) {
+  //     console.log('Default case');
+  //     const agreementTab = (xl_breakpoint || lg_breakpoint || md_breakpoint)
+  //       ? { title_en: 'all', title_ru: 'Все' }
+  //       : { title_en: 'active', title_ru: 'Действующие' };
+  //     dispatch(setAgreementsSelectedTab(agreementTab));
+  //   }
+  // }, [xl_breakpoint, lg_breakpoint, md_breakpoint, dispatch]);
+
+
+
+  useEffect(() => {  
+    console.log('Current route:', currentRoute, 'Show details:', showAgreementDetails);
+    
     if (currentRoute === '/agreements' && showAgreementDetails) {
       dispatch(setAgreementSelectedTab({title_en: 'bills', title_ru: 'Счета'}));
       return;
     }
 
     if (currentRoute === '/requests') {
-      
       const tab = sm_breakpoint 
         ? { title_en: 'my_requests', title_ru: 'Мои заявки' }
         : { title_en: 'all_requests', title_ru: 'Все' };
@@ -59,7 +103,7 @@ const TheTabsComponent = (props) => {
     }
     
     if (currentRoute === '/login') {
-      dispatch(setLoginSelectedTab({ title_en: 'email', title_ru: 'Почта' }));
+      // dispatch(setLoginSelectedTab({ title_en: 'email', title_ru: 'Почта' }));
       return;
     }
     
@@ -67,10 +111,12 @@ const TheTabsComponent = (props) => {
     const agreementTab = (xl_breakpoint || lg_breakpoint || md_breakpoint)
       ? { title_en: 'all', title_ru: 'Все' }
       : { title_en: 'active', title_ru: 'Действующие' };
+
     dispatch(setAgreementsSelectedTab(agreementTab));
 
   }, [dispatch, currentRoute, showAgreementDetails, sm_breakpoint, xl_breakpoint, lg_breakpoint, md_breakpoint]);
   
+
   const handleNewRequestBtn = () => {    
     dispatch(toggleStatus())
   }

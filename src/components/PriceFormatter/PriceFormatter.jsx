@@ -1,6 +1,8 @@
 import React from 'react';
 
 function Price({ amount }) {
+  console.log(amount,'amo');
+  
   const formatted = new Intl.NumberFormat('ru-RU', {
     style: 'currency',
     currency: 'RUB',

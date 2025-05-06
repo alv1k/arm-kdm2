@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
-import { isShowDetails, isShowCountersModal, setShowCountersModal, isShowPaymentModal, setShowPaymentModal, setHidePaymentModal } from '@/store/slices/agreementsSlice';
+import { isShowDetails, isShowCountersModal, setShowCountersModal, isShowPaymentModal, setShowPaymentModal, setHidePaymentModal, fetchAgreementFile, fetchAgreementCounters } from '@/store/slices/agreementsSlice';
 import PriceFormatter from '../PriceFormatter/PriceFormatter'; 
+import DateFormatter from '../DateFormatter/DateFormatter';
 import CountersModal from '@/components/TheCountersModal/TheCountersModal'; 
 import PaymentModal from '@/components/ThePaymentModal/ThePaymentModal'; 
 import { dataType, setDataType, setShowModal } from '@/store/slices/modalSlice';
@@ -16,9 +17,6 @@ const TheAgreementItem = ({ number, date, debt, agree, services }) => {
   const showCountersModal = useSelector(isShowCountersModal);  
   const showPaymentModal = useSelector(isShowPaymentModal);  
   
-  const address = "address";
-
-
   const handleSetDataType = (type) => {
     dispatch(setDataType(type));
     if (!sm_breakpoint) {
@@ -30,10 +28,23 @@ const TheAgreementItem = ({ number, date, debt, agree, services }) => {
     }
   }  
 
+  const address = services ? services[0].ОбъектыАренды[0].АдресАренды : null;
+  const floor_area = services ? services[0].ОбъектыАренды[0].Количество : null;
+  const rent_start = services ? services[0].ОбъектыАренды[0].НачалоАренды : null;
+  const rent_end = services ? services[0].ОбъектыАренды[0].КонецАренды : null;
+  const rate = services ? services[0].ОбъектыАренды[0].Ставка : null;
+  const summ = services ? services[0].ОбъектыАренды[0].Сумма : null;
 
-  // let address = services[0].ОбъектыАренды[0].АдресАренды;
-  // let address = services.filter(service => service.ОбъектыАренды[0].АдресАренды);
+  // Получить массив всех адресов:
+  // const allAddresses = services.map(service => 
+  //   service.ОбъектыАренды[0].АдресАренды
+  // );
 
+  const handleDownloadAgree = (e) => {
+    e.stopPropagation()
+    console.log('dowload start');
+    dispatch(fetchAgreementFile())
+  }  
 
   return (
     <div 
@@ -81,7 +92,7 @@ const TheAgreementItem = ({ number, date, debt, agree, services }) => {
                 >
                   <use href={`${sprite_path}#doc-icon`} />
                 </svg>
-                <span className="lg:me-0 me-auto text-nowrap">
+                <span className="lg:me-0 me-auto text-nowrap" onClick={(e) => handleDownloadAgree(e)}>
                   Скачать договор
                 </span>
               </button>
@@ -115,7 +126,7 @@ const TheAgreementItem = ({ number, date, debt, agree, services }) => {
                   `}>
                       Площадь:&nbsp;
                   </span>
-                  <span className="lg:inline md:inline block mt-1">123 м2</span>
+                  <span className="lg:inline md:inline block mt-1">{floor_area} м2</span>
                 </div>
                 <div className={`
                     ${isDetailsShown ? 'md:text-base' : 'lg:text-xl'}
@@ -129,7 +140,9 @@ const TheAgreementItem = ({ number, date, debt, agree, services }) => {
                       md:block
                     `}>
                     <span className={`text-[#787C82] lg:inline md:inline block lg:mt-0 ${isDetailsShown && sm_breakpoint ? 'mt-0' : ' mt-2'}`}>Дата начала:&nbsp;</span>
-                    <span className={`lg:inline md:inline block ${isDetailsShown && sm_breakpoint ? 'mt-0' : ' mt-1'}`}>01.01.2011</span>
+                    <span className={`lg:inline md:inline block ${isDetailsShown && sm_breakpoint ? 'mt-0' : ' mt-1'}`}>
+                      {<DateFormatter dateString={rent_start} />}
+                    </span>
                   </p>
                   <p 
                     className={`
@@ -137,7 +150,9 @@ const TheAgreementItem = ({ number, date, debt, agree, services }) => {
                       md:block                  
                     `}>
                     <span className={`text-[#787C82] lg:inline md:inline block lg:mt-0 ${isDetailsShown && sm_breakpoint ? 'mt-0' : ' mt-2'}`}>Дата окончания:&nbsp;</span>
-                    <span className={`lg:inline md:inline block ${isDetailsShown && sm_breakpoint ? 'mt-0' : ' mt-1'}`}>02.02.2013</span>
+                    <span className={`lg:inline md:inline block ${isDetailsShown && sm_breakpoint ? 'mt-0' : ' mt-1'}`}>
+                      {<DateFormatter dateString={rent_end} />}
+                    </span>
                   </p>
                 </div>
                 <div 
@@ -153,14 +168,18 @@ const TheAgreementItem = ({ number, date, debt, agree, services }) => {
                   `}>
                     Ежемес{isDetailsShown && sm_breakpoint ? '.' : 'ячный'} платеж{isDetailsShown && sm_breakpoint ? '' : ' по договору'}:&nbsp;
                   </span>
-                  <span className="lg:inline md:inline block mt-1"><PriceFormatter amount={debt} /></span>
+                  <span className="lg:inline md:inline block mt-1"><PriceFormatter amount={summ} /></span>
                 </div>
               </div>
               : 
-              <PriceFormatter amount={debt} /> && (
-                <p className="xl:text-xl lg:text-base mt-2">Сумма долга: &nbsp;<span className="text-red-600"> -&nbsp;{
-                  <PriceFormatter amount={debt} />
-                }</span>
+              <PriceFormatter amount={debt ?? 0} /> && (
+                <p className="xl:text-xl lg:text-base mt-2">Сумма долга: &nbsp;
+                  <span className={`${debt ? 'text-red-600' : ''}`}>
+                    {debt ? '-' : ''} &nbsp;
+                    {
+                      <PriceFormatter amount={debt ?? 0} />
+                    }
+                  </span>
                 </p>
               )
             }
@@ -173,7 +192,7 @@ const TheAgreementItem = ({ number, date, debt, agree, services }) => {
                   >
                     <use href={`${sprite_path}#doc-icon`} />
                   </svg>
-                  <span className="lg:me-0 me-auto text-nowrap">
+                  <span className="lg:me-0 me-auto text-nowrap" onClick={(e) => handleDownloadAgree(e)}>
                     Скачать договор
                   </span>
                 </button>
@@ -202,7 +221,7 @@ const TheAgreementItem = ({ number, date, debt, agree, services }) => {
                   >
                     <use href={`${sprite_path}#doc-icon`} />
                   </svg>
-                  <span className="lg:me-0 me-auto text-nowrap">
+                  <span className="lg:me-0 me-auto text-nowrap" onClick={(e) => handleDownloadAgree(e)}>
                     Скачать договор
                   </span>
                 </button>
@@ -215,8 +234,14 @@ const TheAgreementItem = ({ number, date, debt, agree, services }) => {
                   rounded-xl bg-white md:border mt-9 text-base text-center
                 ">
                   <p>Общая сумма долга на {today}:</p>
-                  <p className="text-xl lg:my-4 my-2 text-red-600 font-semibold">- <PriceFormatter amount={debt} /> </p>
-                  <button className="btn-success lg:px-10 lg:mt-0 lg:w-auto py-2 md:w-2/9 w-full mt-2" onClick={() => handleSetDataType('payment')}>Оплатить</button>
+                  <p className={`text-xl lg:my-4 my-2 ${debt ? 'text-red-600' : ''} font-semibold`}>
+                    {debt ? '-' : ''} 
+                    <PriceFormatter amount={debt ?? 0} /> 
+                  </p>
+                  {
+                    debt ? 
+                    <button className="btn-success lg:px-10 lg:mt-0 lg:w-auto py-2 md:w-2/9 w-full mt-2" onClick={() => handleSetDataType('payment')}>Оплатить</button> : ''
+                  }
                 </div> : ''
               }
             </div>

@@ -30,6 +30,55 @@ export const fetchAgreementsList = createAsyncThunk(
   }
 );
 
+export const fetchAgreementFile = createAsyncThunk(
+  'agreementsSlice/fetchAgreementFile',
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        window.location.href = '/login';
+        throw new Error('Token not found');
+      }
+      
+      const response = await api.get(`/files?token=${token}`,{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (!response.data.success) {
+        throw new Error(`HTTP error! status: ${response.data.status}`);
+      }
+      return await response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+)
+export const fetchAgreementCounters = createAsyncThunk(
+  'agreementsSlice/fetchAgreementCounters',
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        window.location.href = '/login';
+        throw new Error('Token not found');
+      }
+      
+      const response = await api.get(`/counters?token=${token}`,{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (!response.data.success) {
+        throw new Error(`HTTP error! status: ${response.data.status}`);
+      }
+      return await response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+)
+
 const agreementsSlice = createSlice({
   name: 'agreementsSlice',
   initialState: { 

@@ -79,6 +79,7 @@ const tabSlice = createSlice({
       }
     },
     setAgreementsSelectedTab(state, action) {
+      console.log('setAgreementsSelectedTab');
       state.selectedTab = {
         title_en: action.payload.title_en,
         title_ru: action.payload.title_ru,
@@ -96,7 +97,9 @@ const tabSlice = createSlice({
         title_ru: action.payload.title_ru,
       }      
     },
-    setLoginSelectedTab(state, action) {      
+    setLoginSelectedTab(state, action) {
+      console.log('setLoginSelectedTab');
+      
       state.selectedTab = {
         title_en: action.payload.title_en,
         title_ru: action.payload.title_ru,

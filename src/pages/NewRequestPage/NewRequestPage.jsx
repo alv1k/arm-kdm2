@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react';
 import { Description, Field, Label, Select } from '@headlessui/react';
-// import { ChevronDownIcon } from '@heroicons/react/20/solid';
-import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
 import { hideNavbar } from '@/store/slices/navbarSlice';
 import { toggleStatus } from '@/store/slices/requestsSlice';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
 import styles from './NewRequestPage.module.css';
 import CustomSelect from '@/components/CustomSelect/CustomSelect'
+import api from '@/api/api';
 
 const NewRequestPage = () => {
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
@@ -17,6 +16,23 @@ const NewRequestPage = () => {
   const dispatch = useDispatch();
   const backToRequests = () => {
       dispatch(toggleStatus());
+  }
+  const handleCreateNewRequest = () => {
+    const testData = {
+      object: '9CAC4CEDFB681CFD11EECFD4E8444884',
+      type: 'test1',
+      descr: 'test description 999',
+      status: null,
+      token: localStorage.getItem('token')
+    }
+
+    const response = api.get(`/setApp?id=${testData.id}&object=${testData.object}&type=${testData.type}&descr=${testData.descr}&status=${testData.status}&token=${testData.token}`);
+    if (!response.data.success) {
+      
+      throw new Error(`HTTP error! status: ${response.data.status}`);
+    }
+
+
   }
   return (
     <div className="lg:text-base md:text-base text-sm md:h-auto h-[110%]">
@@ -102,7 +118,7 @@ const NewRequestPage = () => {
           </button>
         </div>
       </div>
-      <button className="btn-primary py-2 md:w-auto md:px-10 md:mt-8 w-full mt-11" type="submit">
+      <button className="btn-primary py-2 md:w-auto md:px-10 md:mt-8 w-full mt-11" type="submit" onClick={handleCreateNewRequest}>
         Отправить
       </button>
     </div>

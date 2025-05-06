@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import useMediaQueries from '@/hooks/useMediaQueries';
@@ -6,8 +6,7 @@ import { selectedTab } from '@/store/slices/tabsSlice';
 import PriceFormatter from '@/components/PriceFormatter/PriceFormatter'; 
 import styles from './TheDocsListComponent.module.css';
 import { setDataType, setShowModal } from '@/store/slices/modalSlice';
-import { setShowCountersModal, setShowPaymentModal } from '@/store/slices/agreementsSlice';
-
+import { setShowCountersModal, setShowPaymentModal, fetchAgreementCounters } from '@/store/slices/agreementsSlice';
 
 const TheDocsListComponent = () => {
   const sprite_path = './src/assets/images/i.svg';
@@ -28,6 +27,14 @@ const TheDocsListComponent = () => {
       dispatch(setShowPaymentModal())
     }
   }  
+
+  useEffect(() => {
+    if (currentTab.title_en == 'counters') {
+      dispatch(fetchAgreementCounters())
+    }
+    // Акты
+    // Счета
+  }, [currentTab])
 
 
   return (
@@ -360,7 +367,7 @@ const TheDocsListComponent = () => {
               {
                 currentTab && currentTab.title_en == 'bills' ?
                 <td className="ms-auto">                
-                  <button className="btn-default px-6 py-2 flex mt-5 md:w-full md:justify-center">
+                  <button className="btn-default px-6 py-2 flex lg:mt-0 mt-5 md:w-full md:justify-center">
                     <svg
                       className="icon me-3"
                     >
@@ -374,7 +381,7 @@ const TheDocsListComponent = () => {
                 {
                   currentTab && currentTab.title_en == 'counters' ? '' 
                   : 
-                  <button className="btn-success px-6 py-2 mt-5 w-full" onClick={() => currentTab && currentTab.title_en == 'bills' ? handleSetDataType('payment') : ''}>
+                  <button className="btn-success px-6 py-2 lg:mt-0 mt-5 w-full" onClick={() => currentTab && currentTab.title_en == 'bills' ? handleSetDataType('payment') : ''}>
                     {
                       currentTab && currentTab.title_en == 'bills' ? 'Оплатить' : 'Скачать'
                     }

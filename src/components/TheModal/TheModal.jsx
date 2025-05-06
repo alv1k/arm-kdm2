@@ -34,7 +34,7 @@ const TheModal = () => {
     `} onClick={() => handleCloseModal()} >
       <div className="bg-white p-12 h-fit my-auto rounded-xl w-[645px]" onClick={(e) => handleClick(e)} >
         <svg
-          className="icon ms-auto"
+          className="icon ms-auto cursor-pointer"
           onClick={() => handleCloseModal()}
         >
           <use href={`${sprite_path}#close-icon`} />

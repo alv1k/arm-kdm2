@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { hideNavbar } from '@/store/slices/navbarSlice';
 import { toggleTabs  } from '@/store/slices/tabsSlice';
 import { isNew } from '@/store/slices/requestsSlice';
+import { userData } from '@/store/slices/userSlice';
 import { isPasswordModification, togglePasswordChange } from '@/store/slices/userSlice';
 import useMediaQueries from '@/hooks/useMediaQueries';
 
@@ -12,12 +13,14 @@ const UserPage = () => {
   const showNavbar = useSelector((state) => state.navbar.showNavbar);
   const isNewRequest = useSelector(isNew);
   const isPasswordChange = useSelector(isPasswordModification);
+  const userAuthData = useSelector(userData);
   // const tabs = useSelector((state) => state.tabs_slice.tabs);
   // useEffect(() => {
   //   dispatch(fetchAgreementsList()); // Загружаем список договоров при монтировании компонента
   // }, [dispatch]);  
   
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
+  const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
   const sideClick = (event) => {
     event.stopPropagation();
@@ -27,17 +30,31 @@ const UserPage = () => {
   };
   useEffect(() => {
     // Устанавливаем tabs как agreementsList при монтировании компонента
-    dispatch(toggleTabs(isNewRequest ? 'singleAgrement' : 'agreementsList'));
-    
+    dispatch(toggleTabs(isNewRequest ? 'singleAgrement' : 'agreementsList'));    
   }, [dispatch]);
   const handlePasswordChangeBtn = () => {
     dispatch(togglePasswordChange());
   }
+  const formatPhoneSpecial = (phone) => {
+    const cleaned = ('' + phone).replace(/\D/g, '');
+    
+    // Проверяем, содержит ли номер 4112 именно как код (позиции 1-4)
+    if (cleaned.length === 11 && cleaned.substring(1, 5) === '4112') {
+      return `8 (4112) ${cleaned.substring(5, 8)}-${cleaned.substring(8, 10)}-${cleaned.substring(10)}`;
+    }
+    
+    // Стандартное форматирование
+    if (cleaned.length === 11 && (cleaned.startsWith('7') || cleaned.startsWith('8'))) {
+      return `+7 (${cleaned.substring(1, 4)}) ${cleaned.substring(4, 7)}-${cleaned.substring(7, 9)}-${cleaned.substring(9)}`;
+    }
+    
+    return phone;
+  };
 
   const profileData = () => (
     <div className="md:flex block gap-5">
-      <img className="mt-4 w-25 h-25 md:mx-0 mx-auto" src="/src/assets/images/user.png" alt="profile" />
-      <div className="lg:mt-3 md:mt-4 md:ms-5 mt-5">
+      {/* <img className="mt-4 w-25 h-25 md:mx-0 mx-auto" src="/src/assets/images/user.png" alt="profile" /> */}
+      <div className="lg:mt-3 md:mt-4 mt-5">
         <p className="text-[#203887] font-extrabold md:text-xl text-base md:text-left text-center">
           ООО “Название организации”
         </p>
@@ -49,7 +66,9 @@ const UserPage = () => {
           {
             sm_breakpoint ? <br /> : ''
           }
-          +7 (4112) 482-504
+          {
+            formatPhoneSpecial(userAuthData.phone)
+          }
         </p>
         <p className={`
           md:mt-6 md:p-0 px-5 py-4 mt-4 rounded-xl text-sm md:bg-none
@@ -59,7 +78,9 @@ const UserPage = () => {
           {
             sm_breakpoint ? <br /> : ''
           }
-          info@aokdm.ru
+          {
+            userAuthData.email
+          }
         </p>
       </div>
     </div>
@@ -69,16 +90,34 @@ const UserPage = () => {
       <div className="xl:mt-8 lg:mt-10 lg:flex block gap-5 w-full md:mt-4 mt-3 text-sm">
         <div className="lg:w-1/2 w-full">
           <p className="text-[#787C82]">Логин</p>
-          <input className="mt-2 p-5 bg-item-active w-full rounded-xl" type="text" placeholder='User001' />
+          <input className="mt-2 p-5 bg-item-active w-full rounded-xl" type="text" placeholder={userAuthData.email} />
         </div>
-        <div className="lg:w-1/2 lg:mt-0 w-full mt-4">
+        <div className="lg:w-1/2 lg:mt-0 w-full mt-4 relative">
           <p className="text-[#787C82]">Пароль</p>
-          <input className="mt-2 p-5 bg-item-active w-full rounded-xl" type="text" placeholder='******'/>
-            {/* <svg
-              className="icon"
-            >
-              <use href={`${sprite_path}#eye-icon`} />
-            </svg> */}
+          <input id="password" className="mt-2 p-5 bg-item-active w-full rounded-xl" type={showPassword ? "text" : "password"} placeholder='******'/>
+          <button
+            type="button"
+            className="absolute right-4 top-15 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-transform active:scale-95"
+            aria-label={showPassword ? "Скрыть пароль" : "Показать пароль"}
+            onClick={() => {
+              setShowPassword(!showPassword); 
+              setTimeout(() => document.getElementById('password').focus(), 100)
+            }}
+          >
+            {
+              showPassword ? 
+                <svg
+                  className="icon me-2"
+                >
+                  <use href={`${sprite_path}#eye-icon`} />
+                </svg> : 
+                <svg
+                  className="icon me-2"
+                >
+                  <use href={`${sprite_path}#eyeoff-icon`} />
+                </svg>
+            }
+          </button>
         </div>
       </div>
       <button className="btn-default py-2 flex md:mt-9 mt-9 md:w-auto md:px-6 w-full justify-center" onClick={handlePasswordChangeBtn}>
@@ -105,11 +144,11 @@ const UserPage = () => {
         <p className="text-[#787C82]">Повторите новый пароль</p>
         <input className="mt-2 p-5 bg-item-active w-full rounded-xl" type="text" placeholder='Новый пароль' />
       </div>
-      <div className="flex gap-5">
-        <button className="btn-default py-2 md:mt-9 mt-9 md:w-auto md:px-6 w-full" onClick={handlePasswordChangeBtn}>
+      <div className="md:flex block gap-5">
+        <button className="btn-default py-2 md:mt-9 mt-3 md:w-auto md:px-6 w-full" onClick={handlePasswordChangeBtn}>
           Отменить
         </button>
-        <button className="btn-primary py-2 md:mt-9 mt-9 md:w-auto md:px-6 w-full" onClick={handlePasswordChangeBtn}>
+        <button className="btn-primary py-2 md:mt-9 mt-3 md:w-auto md:px-6 w-full" onClick={handlePasswordChangeBtn}>
           Сохранить
         </button>
       </div>
@@ -126,21 +165,18 @@ const UserPage = () => {
       "
       onClick={sideClick}
     >
-      <div className="lg:text-base md:text-base text-sm xl:w-4/5 w-full h-[110%]">
+      <div className={`lg:text-base md:text-base text-sm w-full h-[110%] ${isPasswordChange ? '' : ' xl:w-4/5'}`}>
         <div className="flex items-center md:justify-start justify-center md:pt-6">
-          {
-            sm_breakpoint ? '' :
-            <p className="
-              xl:mt-0 
-              lg:px-6 lg:text-[26px] lg:mt-4
-              md:px-2 md:mt-0 md:text-left
-              text-xl font-bold mt-5 text-center
-            ">
-              {
-                isPasswordChange ? 'Изменить пароль' : 'Профиль'
-              }
-            </p>
-          }
+          <p className="
+            xl:mt-0 
+            lg:px-6 lg:text-[26px] lg:mt-4
+            md:px-2 md:mt-0 md:text-left
+            text-xl font-bold mt-5 text-center
+          ">
+            {
+              isPasswordChange ? 'Изменить пароль' : 'Профиль'
+            }
+          </p>
           {
             isPasswordChange && !sm_breakpoint ? 
             <button 

@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleTabs, setLoginSelectedTab } from '@/store/slices/tabsSlice';
-import { togglePasswordChange, setToken } from '@/store/slices/userSlice';
+import { toggleTabs, selectedTab } from '@/store/slices/tabsSlice';
+import { togglePasswordChange, setToken, setUserData } from '@/store/slices/userSlice';
+import { isRestorePass, toggleRestorePassword } from '@/store/slices/loginSlice';
 import axios from 'axios';
 import api from '@/api/api';
 import useMediaQueries from '@/hooks/useMediaQueries';
+import styles from './LoginPage.module.css'
 
 import CustomCheckbox from '@/components/CustomCheckbox/CustomCheckbox';
 import TheTabsComponent from '@/components/TheTabsComponent/TheTabsComponent';
@@ -13,30 +15,47 @@ import TheTabsComponent from '@/components/TheTabsComponent/TheTabsComponent';
 const LoginPage = () => {
   const sprite_path = '/src/assets/images/i.svg';
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
+  const currentTab = useSelector(selectedTab);
+  const isRestorePassword = useSelector(isRestorePass);
+  
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(toggleTabs({
-      type: 'login',
-      breakpoint: sm_breakpoint ? 'sm-breakpoint' : ''
-    }));
-    
-  }, [dispatch]);
- 
 
   const navigate = useNavigate();
+
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [passwordVisible, setPasswordVisibility] = useState(false);
   const [isCorrectLoginData, setIsCorrectLoginData] = useState(true);
-  const [isRestorePassword, setIsRestorePassword] = useState(false);
+  const [isCodeVerification, setCodeVerification] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [restoreData, setRestoreData] = useState(false);
 
-    // test@mail.ru
-    // 159753
-    
-    // "email": "baydam",
-    // "password": "123456"
+  // baydam
+  // 123456
 
+  // tomograf
+  // 123456
   
+  const [data, setData] = useState({
+    email: '',
+    password: ''
+  });
+  const handleInputChange = (e) => {
+    
+    e.preventDefault();
+    const { name, value } = e.target;
+    setData(prev => ({ ...prev, [name]: value }));
+  };  
+
+  const handleRestoreInputChange = (e) => {
+    console.log('restoreeeee');
+    const value = e.target;
+    setRestoreData(value);
+  }
+
+  const handleRestoreButton = () => {    
+    dispatch(toggleRestorePassword())
+  }
+
   const handleSubmit = async (e) =>  {
     
     e.preventDefault();    
@@ -56,24 +75,24 @@ const LoginPage = () => {
       setError('Пароль должен содержать минимум 6 символов');
       return;
     }
-    
     setIsLoading(true);
     try {
       
       const response = await api.post('/authorization', credentials);
-      console.log(credentials, 'credent');
       
       if (response.data.success) {
         localStorage.setItem('token', response.data.data.token); // Сохраняем токен
         dispatch(setToken(response.data.data.token)); // Обновляем Redux
         navigate('/agreements'); // Перенаправляем
+        dispatch(setUserData(response.data.data))
       } else {
-        setIsCorrectLoginData(false);
+        setIsCorrectLoginData(false);        
+        setData(prev => ({ ...prev, password: '' }));
         throw new Error(response.data.message || 'Ошибка авторизации');
       }
         
     } catch (error) {
-
+      setData(prev => ({ ...prev, password: '' }));
       setIsCorrectLoginData(false);
       setIsLoading(false);
       // 5. Обработка ошибок
@@ -90,62 +109,50 @@ const LoginPage = () => {
     }
   };
   
-  const handleSendPassword = () => {
-    console.log('send me password');
-    
-  }
+  const handleSendPassword = (e) => {
 
-  const LoginSection = () => {
-    return (
-      <section>
-        <p className="font-bold xl:mt-12 md:text-2xl md:mt-10 text-base mt-4">Вход в личный кабинет</p>
-        <form method="GET" onSubmit={handleSubmit}>
-          <div className="text-left  transition-all duration-2000 ease-in-out overflow-hidden max-h-[1000px]">
-            <p className="mb-2 mt-4 md:text-base text-sm">Логин</p>
-            <input name="email" className="p-4 bg-item-active w-full rounded-xl" type="text" placeholder="Введите логин" required />
-            <p className="mb-2 mt-4 md:text-base text-sm">Пароль</p>
-            <input name="password"
-              className=" p-4 bg-item-active w-full rounded-xl" placeholder="Введите пароль" type={passwordVisible ? 'text' : 'password'} onClick={()=>{passwordVisible != passwordVisible}} required minLength={6} 
-            />
-            <div className={`
-              text-left text-red-600 mt-4
-            `}>
-              {
-                isCorrectLoginData ? '' :
-                  <p className="animate-fadeIn">Введен неверный логин или пароль</p>       
-              }
-            </div>
-          </div>
-          <div className="flex justify-between py-5 mt-4">
-            <div>
-              <CustomCheckbox label="Запомнить меня" id="remember_me" />
-            </div>
-            <div>
-              <p className="text-[#203887] cursor-pointer" onClick={setIsRestorePassword}>Забыли пароль?</p>
-            </div>
-          </div>
-          <button type="submit" className="mt-5 btn-primary w-full py-2" disabled={isLoading}>
-            {isLoading ? 'Вход...' : 'Войти'}
-          </button>
-        </form>
-      </section>
-    )
+    setCodeVerification(true)
+    
+    const formData = new FormData(e.target);
+
+    const credentials = {
+      email: formData.get('email')?.toString() || ''
+    };
+    console.log(credentials, 'send me password');
   }
+  
+  useEffect(() => {
+    dispatch(toggleTabs({
+      type: 'login',
+      breakpoint: sm_breakpoint ? 'sm-breakpoint' : ''
+    }));    
+  }, [dispatch]);
+  
+  useEffect(() => {
+    if (!isCorrectLoginData && data.password === '') {
+      document.getElementById('password').focus();
+    }
+  }, [isCorrectLoginData, data.password]); 
 
   const RestorePassword = () => {
     return (
       <section>
         <p className="font-bold xl:mt-12 md:text-2xl md:mt-10 text-base mt-4">Восстановление пароля</p>
-        <form action="">
-          <TheTabsComponent />
+        <form method="GET" onSubmit={(e) => handleSendPassword(e)}>
+          {
+            true ? 
+            <TheTabsComponent titles='login' /> : ''
+
+          }
           <div className="text-left">
             <p className="mb-2 mt-4 md:text-base text-sm">
               {
+                currentTab && currentTab.title_en == 'phone' ? 'Телефон' :
                 'Эл.почта:'
               }
             </p>
-            <input className=" p-4 bg-item-active w-full rounded-xl" type="text" placeholder="Введите почту" />
-            <button className="mt-5 btn-primary w-full py-2" onClick={() => handleSendPassword}>
+            <input className=" p-4 bg-item-active w-full rounded-xl" type="text" value={currentTab && currentTab.title_en == 'phone' ? data.phone : data.email} readOnly placeholder={`Введите` + [currentTab && currentTab.title_en == 'phone' ?  ' номер телефона' : ' почту']} required />
+            <button className="mt-5 btn-primary w-full py-2"  type="submit">
               Отправить пароль
             </button>
           </div>
@@ -153,6 +160,14 @@ const LoginPage = () => {
       </section>
     )
   }
+
+  const CodeVerification = () => {
+    return (
+      <div>
+        123
+      </div>
+    )
+  }  
 
   return (
     <main className="min-h-fit h-screen w-full">
@@ -167,11 +182,75 @@ const LoginPage = () => {
               <img className="mx-auto" src="/src/assets/images/logo.png" alt="logo" />
               <img className="mx-auto mt-4 lg:text-2xl my-0 w-3/5" src="/src/assets/images/logo-text.png" alt="" />
             </div>
-            {
-              isRestorePassword ? 
-              <RestorePassword /> :
-              <LoginSection />
-            }
+              {
+                isRestorePassword && <RestorePassword />
+              }
+              {
+                !isRestorePassword && 
+                <section>
+                  <p className="font-bold xl:mt-12 md:text-2xl md:mt-10 text-base mt-4">Вход в личный кабинет</p>
+                  <form method="GET" onSubmit={handleSubmit}>
+                    <div className="text-left  transition-all duration-2000 ease-in-out overflow-hidden max-h-[1000px]">
+                      <p className="mb-2 mt-4 md:text-base text-sm">Логин</p>
+                      <input name="email" value={data.email} onChange={handleInputChange} className="p-4 bg-item-active w-full rounded-xl" type="text" placeholder="Введите логин" required />
+                      <div className="relative">
+                        <p className="mb-2 mt-4 md:text-base text-sm">Пароль</p>
+                        <input name="password" id="password" 
+                          className={`${!isCorrectLoginData ? 'danger_animation' : ''} p-4 bg-item-active w-full rounded-xl`} placeholder="Введите пароль" type={showPassword ? 'text' : 'password'} required minLength={6} 
+                          value={data.password}
+                          onChange={handleInputChange}
+                        />
+                        <button
+                          type="button"
+                          className="absolute right-4 top-15 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-transform active:scale-95"
+                          aria-label={showPassword ? "Скрыть пароль" : "Показать пароль"}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setShowPassword(!showPassword); 
+                            setTimeout(() => document.getElementById('password').focus(), 100)
+                          }}
+                        >
+                          {
+                            showPassword ? 
+                              <svg
+                                className="icon me-2"
+                              >
+                                <use href={`${sprite_path}#eye-icon`} />
+                              </svg> : 
+                              <svg
+                                className="icon me-2"
+                              >
+                                <use href={`${sprite_path}#eyeoff-icon`} />
+                              </svg>
+                          }
+                        </button>
+                      </div>
+                      <div className={`
+                        text-left text-red-600 mt-4
+                      `}>
+                        {
+                          isCorrectLoginData ? '' :
+                            <p className="animate-fadeIn">Введен неверный логин или пароль</p>       
+                        }
+                      </div>
+                    </div>
+                    <div className="flex justify-between py-5 mt-4">
+                      <div>
+                        <CustomCheckbox label="Запомнить меня" id="remember_me" />
+                      </div>
+                      <div>
+                        <p className="text-[#203887] cursor-pointer" onClick={handleRestoreButton}>Забыли пароль?</p>
+                      </div>
+                    </div>
+                    <button type="submit" className="mt-5 btn-primary w-full py-2" disabled={isLoading}>
+                      {isLoading ? 'Вход...' : 'Войти'}
+                    </button>
+                  </form>
+                </section>
+              }
+              {
+                isRestorePassword && isCodeVerification && <CodeVerification />
+              }
           </div>
         </div>
       </div>
