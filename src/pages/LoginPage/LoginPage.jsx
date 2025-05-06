@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleTabs, selectedTab } from '@/store/slices/tabsSlice';
+import { toggleTabs, selectedTab, setLoginSelectedTab } from '@/store/slices/tabsSlice';
 import { togglePasswordChange, setToken, setUserData } from '@/store/slices/userSlice';
 import { isRestorePass, toggleRestorePassword } from '@/store/slices/loginSlice';
 import axios from 'axios';
@@ -27,14 +27,18 @@ const LoginPage = () => {
   const [isCorrectLoginData, setIsCorrectLoginData] = useState(true);
   const [isCodeVerification, setCodeVerification] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [restoreData, setRestoreData] = useState(false);
+  const [inputRestorePassword, setInputRestorePassword] = useState();
 
+
+  // https://cloud.aokdm.ru/method/profile?token=065C8F4A-70A0-4802-A110-58C33255CE2D
+  // можно редактировать email, login, phone и password
+  
   // baydam
   // 123456
 
   // tomograf
   // 123456
-  
+
   const [data, setData] = useState({
     email: '',
     password: ''
@@ -44,13 +48,7 @@ const LoginPage = () => {
     e.preventDefault();
     const { name, value } = e.target;
     setData(prev => ({ ...prev, [name]: value }));
-  };  
-
-  const handleRestoreInputChange = (e) => {
-    console.log('restoreeeee');
-    const value = e.target;
-    setRestoreData(value);
-  }
+  };
 
   const handleRestoreButton = () => {    
     dispatch(toggleRestorePassword())
@@ -111,14 +109,49 @@ const LoginPage = () => {
   
   const handleSendPassword = (e) => {
 
-    setCodeVerification(true)
-    
+    setCodeVerification(true)    
     const formData = new FormData(e.target);
-
     const credentials = {
       email: formData.get('email')?.toString() || ''
     };
     console.log(credentials, 'send me password');
+  }
+
+  const handleInputRestorePassword = (e) => {
+    let value = e.target.value; // Удаляем все не-цифры
+    let formattedValue = null;
+    let newValue = null;
+
+    if (currentTab && currentTab.title_en == 'phone') {
+      value = e.target.value.replace(/\D/g, '');
+      if (value.length > 0) {
+        formattedValue = '+7 (';
+        if (value.length > 1) {
+          formattedValue += value.substring(1, 4);
+        }
+        if (value.length > 4) {
+          formattedValue += ') ' + value.substring(4, 7);
+        }
+        if (value.length > 7) {
+          formattedValue += '-' + value.substring(7, 9);
+        }
+        if (value.length > 9) {
+          formattedValue += '-' + value.substring(9, 11);
+        }
+        if (value.length > 10) {
+          formattedValue = formattedValue          
+        }
+      }
+    }
+    newValue = formattedValue ?? value
+    
+    setInputRestorePassword(newValue);
+    
+    if (currentTab?.title_en === 'phone') {
+      setError(/^[+]?[\d\s()-]{10,20}$/.test(value) ? '' : 'Неверный формат телефона');
+    } else {
+      setError(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? '' : 'Неверный формат email');
+    }
   }
   
   useEffect(() => {
@@ -133,6 +166,13 @@ const LoginPage = () => {
       document.getElementById('password').focus();
     }
   }, [isCorrectLoginData, data.password]); 
+
+  useEffect(() => {
+    dispatch(setLoginSelectedTab({ 
+      title_en: 'email', 
+      title_ru: 'Почта' 
+    }));
+  }, []);
 
   const RestorePassword = () => {
     return (
@@ -151,7 +191,16 @@ const LoginPage = () => {
                 'Эл.почта:'
               }
             </p>
-            <input className=" p-4 bg-item-active w-full rounded-xl" type="text" value={currentTab && currentTab.title_en == 'phone' ? data.phone : data.email} readOnly placeholder={`Введите` + [currentTab && currentTab.title_en == 'phone' ?  ' номер телефона' : ' почту']} required />
+            <input id="restorePassword" className=" p-4 bg-item-active w-full rounded-xl" 
+              type={currentTab && currentTab.title_en == 'phone' ? 'tel' : 'text'} 
+              value={inputRestorePassword} 
+              onChange={(e) => {
+                  handleInputRestorePassword(e);
+                  setTimeout(() => document.getElementById('restorePassword').focus(), 100)
+                }
+              } 
+              placeholder={`Введите` + [currentTab && currentTab.title_en == 'phone' ?  ' номер телефона' : ' почту']} required
+            />
             <button className="mt-5 btn-primary w-full py-2"  type="submit">
               Отправить пароль
             </button>

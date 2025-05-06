@@ -7,7 +7,6 @@ import { toggleStatus } from '@/store/slices/requestsSlice';
 import { isRestorePass, toggleRestorePassword } from '@/store/slices/loginSlice';
 import { requestsSelectedTab, setAgreementsSelectedTab, setAgreementSelectedTab, setRequestsSelectedTab, setLoginSelectedTab } from '@/store/slices/tabsSlice';
 
-
 const TheTabsComponent = (props) => {
   const sprite_path = './src/assets/images/i.svg';
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
@@ -45,18 +44,6 @@ const TheTabsComponent = (props) => {
   
   const currentTab = useSelector((state) => state.tabs_slice.selectedTab);
   
-  // useEffect(() => {
-  //   console.log(isRestorePassword, 'isRestorePassword789');
-  //   console.log(currentRoute, 'how mush');
-    
-  //   if (currentRoute) {
-  //     console.log('Login route detected');
-  //     dispatch(setAgreementSelectedTab({title_en: 'bills', title_ru: 'Счета'}));
-  //     // dispatch(setLoginSelectedTab({ title_en: 'email', title_ru: 'Почта' }));
-  //     console.log('dispatchedddd');
-  //   }
-  // }, [dispatch]);
-
   // useEffect(() => {    
   //   if (currentRoute === '/agreements' && showAgreementDetails) {
   //     console.log('Agreements details view');
@@ -86,33 +73,28 @@ const TheTabsComponent = (props) => {
 
 
 
-  useEffect(() => {  
-    console.log('Current route:', currentRoute, 'Show details:', showAgreementDetails);
-    
-    if (currentRoute === '/agreements' && showAgreementDetails) {
-      dispatch(setAgreementSelectedTab({title_en: 'bills', title_ru: 'Счета'}));
-      return;
-    }
-
+  useEffect(() => {
+        
     if (currentRoute === '/requests') {
       const tab = sm_breakpoint 
-        ? { title_en: 'my_requests', title_ru: 'Мои заявки' }
-        : { title_en: 'all_requests', title_ru: 'Все' };
+       ? { title_en: 'my_requests', title_ru: 'Мои заявки' }
+       : { title_en: 'all_requests', title_ru: 'Все' };
       dispatch(setRequestsSelectedTab(tab));
       return;
     }
     
-    if (currentRoute === '/login') {
-      // dispatch(setLoginSelectedTab({ title_en: 'email', title_ru: 'Почта' }));
+    if (currentRoute === '/agreements' && showAgreementDetails) {
+      dispatch(setAgreementSelectedTab({title_en: 'bills', title_ru: 'Счета'}));
       return;
-    }
+    } 
     
-    // Default case
-    const agreementTab = (xl_breakpoint || lg_breakpoint || md_breakpoint)
-      ? { title_en: 'all', title_ru: 'Все' }
-      : { title_en: 'active', title_ru: 'Действующие' };
-
-    dispatch(setAgreementsSelectedTab(agreementTab));
+    if (currentRoute === '/agreements') {
+      const agreementTab = (xl_breakpoint || lg_breakpoint || md_breakpoint)
+        ? { title_en: 'all', title_ru: 'Все' }
+        : { title_en: 'active', title_ru: 'Действующие' };
+  
+      dispatch(setAgreementsSelectedTab(agreementTab));    
+    }
 
   }, [dispatch, currentRoute, showAgreementDetails, sm_breakpoint, xl_breakpoint, lg_breakpoint, md_breakpoint]);
   

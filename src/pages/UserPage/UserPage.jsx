@@ -14,6 +14,7 @@ const UserPage = () => {
   const isNewRequest = useSelector(isNew);
   const isPasswordChange = useSelector(isPasswordModification);
   const userAuthData = useSelector(userData);
+  
   // const tabs = useSelector((state) => state.tabs_slice.tabs);
   // useEffect(() => {
   //   dispatch(fetchAgreementsList()); // Загружаем список договоров при монтировании компонента
@@ -67,7 +68,7 @@ const UserPage = () => {
             sm_breakpoint ? <br /> : ''
           }
           {
-            formatPhoneSpecial(userAuthData.phone)
+            userAuthData.phone ? formatPhoneSpecial(userAuthData.phone) : ''
           }
         </p>
         <p className={`

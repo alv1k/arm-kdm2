@@ -34,6 +34,9 @@ const requestsSlice = createSlice({
   name: 'requests',
   initialState: {
     isNewRequest: false,
+    requestsList: null,
+    loading: false,
+    error: null,
   },
   reducers: {
     toggleStatus(state) {      
@@ -43,9 +46,26 @@ const requestsSlice = createSlice({
       state.isNewRequest = false;
     },
   },
+    extraReducers: (builder) => {
+      builder
+        .addCase(fetchRequestsList.fulfilled, (state, action) => {
+          state.requestsList = action.payload; // Сохраняем загруженные данные в agreementsList
+          state.loading = false;
+        })
+        .addCase(fetchRequestsList.pending, (state) => {
+          state.loading = true;
+          state.error = null;
+        })
+        // Обработка ошибки
+        .addCase(fetchRequestsList.rejected, (state, action) => {
+          state.loading = false;
+          state.error = action.payload || 'Failed to fetch agreements';
+        });
+    }
 });
 
 
 export const isNew = (state) => state.requests_slice.isNewRequest;
+export const requestsList = (state) => state.requests_slice.requestsList;
 export const { toggleStatus, requestStatusFalse } = requestsSlice.actions;
 export default requestsSlice.reducer;

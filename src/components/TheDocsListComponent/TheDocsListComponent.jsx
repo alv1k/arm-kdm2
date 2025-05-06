@@ -1,21 +1,47 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import useMediaQueries from '@/hooks/useMediaQueries';
-import { selectedTab } from '@/store/slices/tabsSlice';
 import PriceFormatter from '@/components/PriceFormatter/PriceFormatter'; 
+import DateFormatter from '@/components/DateFormatter/DateFormatter'; 
 import styles from './TheDocsListComponent.module.css';
 import { setDataType, setShowModal } from '@/store/slices/modalSlice';
+import { selectedTab } from '@/store/slices/tabsSlice';
 import { setShowCountersModal, setShowPaymentModal, fetchAgreementCounters } from '@/store/slices/agreementsSlice';
+import { isNew, requestStatusFalse, fetchRequestsList, requestsList } from '@/store/slices/requestsSlice';
 
 const TheDocsListComponent = () => {
   const sprite_path = './src/assets/images/i.svg';
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const dispatch = useDispatch();  
   const currentTab = useSelector(selectedTab);
+  const requests = useSelector(requestsList);
     
   const location = useLocation();
   const currentRoute = location.pathname;
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        if (currentTab && currentTab.title_en == 'counters') {
+          await dispatch(fetchRequestsList());
+        }
+        // Акты
+        // Счета
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    loadData();
+  }, [dispatch]);
+
+  const getItemsList = () => {
+    return requests || [];
+  }
+  
+  if (isLoading) return <div className="p-14">Загрузка...</div>;
 
   const handleSetDataType = (type) => {
     dispatch(setDataType(type));
@@ -28,13 +54,6 @@ const TheDocsListComponent = () => {
     }
   }  
 
-  useEffect(() => {
-    if (currentTab.title_en == 'counters') {
-      dispatch(fetchAgreementCounters())
-    }
-    // Акты
-    // Счета
-  }, [currentTab])
 
 
   return (
@@ -51,64 +70,68 @@ const TheDocsListComponent = () => {
           }
           {
             currentTab && (currentTab.title_en == 'acts' || currentTab.title_en == 'my_requests' || currentTab.title_en == 'all_requests') ? 
-            <div className="md:flex block">
-              <div>
-                <p className="mb-1">
-                  {
-                    currentTab && currentTab.title_en == 'acts' ? '№001. Акт об оплате аренды' : '№001. Название помещения'
-                  }                  
-                </p>
-                {
-                  currentTab && currentTab.title_en == 'acts' ? '' :
+            
+            getItemsList().map((item, index) => (
+              <div key={index} className="md:flex block">
+                <div>
                   <p className="mb-1">
-                    <span className="text-[#787C82]">
-                      Тема:&nbsp;
-                    </span>
-                    Авария
-                  </p>
-                }
-                <div className="flex">
-                  <p>
-                    <span className="text-[#787C82]">
-                      Дата:&nbsp;
-                    </span>
-                    02.02.2025
-                  </p>
-                  <div>
                     {
-                      currentTab && currentTab.title_en == 'acts' ? '' :
-                      <div className="ms-4">
-                        <span className="text-[#787C82]">
-                          Статус:
-                        </span>
-                        <span className="text-green-700"> 
-                          Завершен
-                        </span>
-                      </div>
+                      currentTab && currentTab.title_en == 'acts' ? '№001. Акт об оплате аренды' : item.object
                     }
+                  </p>
+                  {
+                    currentTab && currentTab.title_en == 'acts' ? '' :
+                    <p className="mb-1">
+                      <span className="text-[#787C82]">
+                        Тема:&nbsp;
+                      </span>
+                      {item.type}
+                    </p>
+                  }
+                  <div className="flex">
+                    <p>
+                      <span className="text-[#787C82]">
+                        Дата:&nbsp;
+                      </span>
+                      <DateFormatter dateString={item.date} />
+                    </p>
+                    <div>
+                      {
+                        currentTab && currentTab.title_en == 'acts' ? '' :
+                        <div className="ms-4">
+                          <span className="text-[#787C82]">
+                            Статус:&nbsp;
+                          </span>
+                          <span className="text-green-700"> 
+                            {item.status}
+                          </span>
+                        </div>
+                      }
+                    </div>
                   </div>
                 </div>
+                <button className={`
+                  md:px-6 md:py-2 md:w-auto md:mt-0 md:h-fit md:ms-auto
+                  w-full mt-5 flex text-center justify-center py-1
+                  ${currentTab && currentTab.title_en == 'acts' ? 'btn-default' : 'btn-success'}
+                `}>
+                  {
+                    currentTab && currentTab.title_en == 'acts' ? 
+                    <div className="flex">
+                      <svg
+                        className="icon me-3"
+                      >
+                        <use href={`${sprite_path}#doc-icon`} />
+                      </svg> 
+                      <span>Скачать</span>
+                    </div>
+                    : 'Открыть'
+                  }
+                  
+                </button>
               </div>
-              <button className={`
-                md:px-6 md:py-2 md:w-auto md:mt-0 md:h-fit md:ms-auto
-                w-full mt-5 flex text-center justify-center py-1
-                ${currentTab && currentTab.title_en == 'acts' ? 'btn-default' : 'btn-success'}
-              `}>
-                {
-                  currentTab && currentTab.title_en == 'acts' ? 
-                  <div className="flex">
-                    <svg
-                      className="icon me-3"
-                    >
-                      <use href={`${sprite_path}#doc-icon`} />
-                    </svg> 
-                    <span>Скачать</span>
-                  </div>
-                   : 'Открыть'
-                }
-                
-              </button>
-            </div>
+            ))
+            
             : 
             <div className="grid grid-cols-2 gap-3">
             <div className={`
@@ -237,7 +260,7 @@ const TheDocsListComponent = () => {
         // </div>
 
         <table className="rounded-lg border-separate border-spacing-0 overflow-hidden w-full">
-          <thead className="bg-item-active">
+          <thead className="bg-item-active">              
             <tr align="center" className="text-center justify-center">
               <th width={currentTab && currentTab.title_en == 'counters' ? '200px' : ''}>
                 <div className="flex items-center ps-8">
@@ -315,80 +338,85 @@ const TheDocsListComponent = () => {
             </tr>
           </thead>
           <tbody className="bg-item-default ">
-            <tr>
-              <td className={currentTab && currentTab.title_en == 'counters' ? 'align-top' : ''}>
-                <div className="ps-8">
-                  {currentTab && currentTab.title_en == 'counters' ? '01.01.2011' : '001'}
-                </div>
-              </td>
-              <td>
-                {
-                  currentTab && currentTab.title_en == 'acts' ?
-                  'Акт об оплате аренды' : currentTab && currentTab.title_en == 'bills' ? 'Счет за аренду' 
-                  : currentTab && currentTab.title_en == 'counters' ? 
-                  <div>
-                    <p className="text-[#787C82]">№000001</p>
-                    <p>123.45 м3</p>
-                  </div> 
-                  : 'Название помещения'
-                }
-              </td>              
-                {
-                  currentTab && currentTab.title_en == 'acts' ?
-                  '' : currentTab && currentTab.title_en == 'bills' ? '' :
-                  currentTab && currentTab.title_en == 'counters' ? 
-                  <td>
-                    <div>
-                      <p className="text-[#787C82]">№000001</p>
-                      <p>123.45 м3</p>
-                    </div> 
+            {
+              getItemsList().map((item, index) => (
+                <tr key={index}>
+                  <td className={currentTab && currentTab.title_en == 'counters' ? 'align-top' : ''}>
+                    <div className="ps-8">
+                      {currentTab && currentTab.title_en == 'counters' ? '01.01.2011' : '001'}
+                    </div>
                   </td>
-                  :                
-                  <td>Авария</td>
-                }              
-              <td>
-                {
-                  currentTab && currentTab.title_en == 'counters' ? 
-                  <div>
-                    <p className="text-[#787C82]">№000001</p>
-                    <p>123.45 кВтч</p>
-                  </div> : '01.01.2025'
-                }
-                
-              </td>
-              <td>
-                {
-                  currentTab && (currentTab.title_en == 'acts' || currentTab.title_en == 'bills') ?
-                  <PriceFormatter amount="100000" /> 
-                  : currentTab && currentTab.title_en == 'counters' ? '' 
-                  : <span className="text-green-600">Завершен</span>
-                }
-              </td>
-              {
-                currentTab && currentTab.title_en == 'bills' ?
-                <td className="ms-auto">                
-                  <button className="btn-default px-6 py-2 flex lg:mt-0 mt-5 md:w-full md:justify-center">
-                    <svg
-                      className="icon me-3"
-                    >
-                      <use href={`${sprite_path}#doc-icon`} />
-                    </svg>
-                    Скачать
-                  </button> 
-                </td> : ''
-              }                             
-              <td>
-                {
-                  currentTab && currentTab.title_en == 'counters' ? '' 
-                  : 
-                  <button className="btn-success px-6 py-2 lg:mt-0 mt-5 w-full" onClick={() => currentTab && currentTab.title_en == 'bills' ? handleSetDataType('payment') : ''}>
+                  <td>
                     {
-                      currentTab && currentTab.title_en == 'bills' ? 'Оплатить' : 'Скачать'
+                      currentTab && currentTab.title_en == 'acts' ?
+                      'Акт об оплате аренды' : currentTab && currentTab.title_en == 'bills' ? 'Счет за аренду' 
+                      : currentTab && currentTab.title_en == 'counters' ? 
+                      <div>
+                        <p className="text-[#787C82]">№000001</p>
+                        <p>123.45 м3</p>
+                      </div> 
+                      : item.object
                     }
-                  </button>
-                }
-              </td>              
-            </tr>
+                  </td>              
+                    {
+                      currentTab && currentTab.title_en == 'acts' ?
+                      '' : currentTab && currentTab.title_en == 'bills' ? '' :
+                      currentTab && currentTab.title_en == 'counters' ? 
+                      <td>
+                        <div>
+                          <p className="text-[#787C82]">№000001</p>
+                          <p>123.45 м3</p>
+                        </div> 
+                      </td>
+                      :                
+                      <td>{item.type}</td>
+                    }              
+                  <td>
+                    {
+                      currentTab && currentTab.title_en == 'counters' ? 
+                      <div>
+                        <p className="text-[#787C82]">№000001</p>
+                        <p>123.45 кВтч</p>
+                      </div> : <DateFormatter dateString={item.date} />
+                    }
+                    
+                  </td>
+                  <td>
+                    {
+                      currentTab && (currentTab.title_en == 'acts' || currentTab.title_en == 'bills') ?
+                      <PriceFormatter amount="100000" /> 
+                      : currentTab && currentTab.title_en == 'counters' ? '' 
+                      : <span className="text-green-600">{item.status}</span>
+                    }
+                  </td>
+                  {
+                    currentTab && currentTab.title_en == 'bills' ?
+                    <td className="ms-auto">                
+                      <button className="btn-default px-6 py-2 flex lg:mt-0 mt-5 md:w-full md:justify-center">
+                        <svg
+                          className="icon me-3"
+                        >
+                          <use href={`${sprite_path}#doc-icon`} />
+                        </svg>
+                        Скачать
+                      </button> 
+                    </td> : ''
+                  }                             
+                  <td>
+                    {
+                      currentTab && currentTab.title_en == 'counters' ? '' 
+                      : 
+                      <button className="btn-success px-6 py-2 lg:mt-0 mt-5 w-full" onClick={() => currentTab && currentTab.title_en == 'bills' ? handleSetDataType('payment') : ''}>
+                        {
+                          currentTab && currentTab.title_en == 'bills' ? 'Оплатить' : 'Скачать'
+                        }
+                      </button>
+                    }
+                  </td>              
+                </tr>
+              ))
+            }
+            
           </tbody>
         </table>
       }

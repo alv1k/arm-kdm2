@@ -35,6 +35,7 @@ const tabSlice = createSlice({
     agreementSelectedTab: null,
     requestsSelectedTab: null,
     loginSelectedTab: null,
+    testing: ''
   },
   reducers: {
     toggleTabs(state, action) {       
@@ -98,8 +99,6 @@ const tabSlice = createSlice({
       }      
     },
     setLoginSelectedTab(state, action) {
-      console.log('setLoginSelectedTab');
-      
       state.selectedTab = {
         title_en: action.payload.title_en,
         title_ru: action.payload.title_ru,

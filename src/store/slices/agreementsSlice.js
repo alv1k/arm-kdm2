@@ -63,8 +63,12 @@ export const fetchAgreementCounters = createAsyncThunk(
         window.location.href = '/login';
         throw new Error('Token not found');
       }
+      // 9CAC4CEDFB681CFD11EECB0060E2F363
+      const object = '9CE94CEDFB681CFD11EFA31909B004AF'
+      const service = '9CAC4CEDFB681CFD11EECBD8C97D9772';
+
       
-      const response = await api.get(`/counters?token=${token}`,{
+      const response = await api.get(`/counters?token=${token}&object=${object}&service=${service}`,{
         headers: {
           'Authorization': `Bearer ${token}`
         }

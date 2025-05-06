@@ -175,7 +175,7 @@ const TheAgreementItem = ({ number, date, debt, agree, services }) => {
               <PriceFormatter amount={debt ?? 0} /> && (
                 <p className="xl:text-xl lg:text-base mt-2">Сумма долга: &nbsp;
                   <span className={`${debt ? 'text-red-600' : ''}`}>
-                    {debt ? '-' : ''} &nbsp;
+                    {debt ? '-' : ''}
                     {
                       <PriceFormatter amount={debt ?? 0} />
                     }
