@@ -5,20 +5,16 @@ import { hideNavbar } from '@/store/slices/navbarSlice';
 import { toggleTabs  } from '@/store/slices/tabsSlice';
 import { isNew } from '@/store/slices/requestsSlice';
 import { userData } from '@/store/slices/userSlice';
-import { isPasswordModification, togglePasswordChange } from '@/store/slices/userSlice';
+import { isPasswordModification, togglePasswordChange, fetchProfileData } from '@/store/slices/userSlice';
 import useMediaQueries from '@/hooks/useMediaQueries';
 
 const UserPage = () => {
   const sprite_path = './src/assets/images/i.svg';
   const showNavbar = useSelector((state) => state.navbar.showNavbar);
+  const profileFetchedData = useSelector((state) => state.user_slice.profileData);
   const isNewRequest = useSelector(isNew);
   const isPasswordChange = useSelector(isPasswordModification);
-  const userAuthData = useSelector(userData);
-  
-  // const tabs = useSelector((state) => state.tabs_slice.tabs);
-  // useEffect(() => {
-  //   dispatch(fetchAgreementsList()); // Загружаем список договоров при монтировании компонента
-  // }, [dispatch]);  
+  const userAuthData = useSelector(userData);  
   
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const [showPassword, setShowPassword] = useState(false);
@@ -30,11 +26,14 @@ const UserPage = () => {
     }
   };
   useEffect(() => {
-    // Устанавливаем tabs как agreementsList при монтировании компонента
-    dispatch(toggleTabs(isNewRequest ? 'singleAgrement' : 'agreementsList'));    
+    dispatch(fetchProfileData())
   }, [dispatch]);
-  const handlePasswordChangeBtn = () => {
-    dispatch(togglePasswordChange());
+  const handlePasswordChangeBtn = (status) => {
+    dispatch(togglePasswordChange(status));
+  }
+  const handleSendNewPassword = () => {
+    console.log('11111   handleSendNewPassword');
+    
   }
   const formatPhoneSpecial = (phone) => {
     const cleaned = ('' + phone).replace(/\D/g, '');
@@ -57,7 +56,7 @@ const UserPage = () => {
       {/* <img className="mt-4 w-25 h-25 md:mx-0 mx-auto" src="/src/assets/images/user.png" alt="profile" /> */}
       <div className="lg:mt-3 md:mt-4 mt-5">
         <p className="text-[#203887] font-extrabold md:text-xl text-base md:text-left text-center">
-          ООО “Название организации”
+          {profileFetchedData && profileFetchedData?.kontragent?.name}
         </p>
         <p className={`
           md:mt-4 mt-4 md:p-0 px-5 py-2 rounded-xl text-sm
@@ -68,7 +67,7 @@ const UserPage = () => {
             sm_breakpoint ? <br /> : ''
           }
           {
-            userAuthData.phone ? formatPhoneSpecial(userAuthData.phone) : ''
+            profileFetchedData ? formatPhoneSpecial(profileFetchedData.phone) : ''
           }
         </p>
         <p className={`
@@ -80,7 +79,7 @@ const UserPage = () => {
             sm_breakpoint ? <br /> : ''
           }
           {
-            userAuthData.email
+            profileFetchedData ? profileFetchedData.email : ''
           }
         </p>
       </div>
@@ -91,7 +90,7 @@ const UserPage = () => {
       <div className="xl:mt-8 lg:mt-10 lg:flex block gap-5 w-full md:mt-4 mt-3 text-sm">
         <div className="lg:w-1/2 w-full">
           <p className="text-[#787C82]">Логин</p>
-          <input className="mt-2 p-5 bg-item-active w-full rounded-xl" type="text" placeholder={userAuthData.email} />
+          <input className="mt-2 p-5 bg-item-active w-full rounded-xl" type="text" placeholder={profileFetchedData ? profileFetchedData.login : ''} />
         </div>
         <div className="lg:w-1/2 lg:mt-0 w-full mt-4 relative">
           <p className="text-[#787C82]">Пароль</p>
@@ -121,7 +120,7 @@ const UserPage = () => {
           </button>
         </div>
       </div>
-      <button className="btn-default py-2 flex md:mt-9 mt-9 md:w-auto md:px-6 w-full justify-center" onClick={handlePasswordChangeBtn}>
+      <button className="btn-default py-2 flex md:mt-9 mt-9 md:w-auto md:px-6 w-full justify-center" onClick={() => handlePasswordChangeBtn(true)}>
         <svg
           className="icon me-2"
         >
@@ -146,10 +145,10 @@ const UserPage = () => {
         <input className="mt-2 p-5 bg-item-active w-full rounded-xl" type="text" placeholder='Новый пароль' />
       </div>
       <div className="md:flex block gap-5">
-        <button className="btn-default py-2 md:mt-9 mt-3 md:w-auto md:px-6 w-full" onClick={handlePasswordChangeBtn}>
+        <button className="btn-default py-2 md:mt-9 mt-3 md:w-auto md:px-6 w-full" onClick={() => handlePasswordChangeBtn(false)}>
           Отменить
         </button>
-        <button className="btn-primary py-2 md:mt-9 mt-3 md:w-auto md:px-6 w-full" onClick={handlePasswordChangeBtn}>
+        <button className="btn-primary py-2 md:mt-9 mt-3 md:w-auto md:px-6 w-full" onClick={(e) => handleSendNewPassword(e)}>
           Сохранить
         </button>
       </div>
@@ -182,7 +181,7 @@ const UserPage = () => {
             isPasswordChange && !sm_breakpoint ? 
             <button 
               className="btn-text ms-auto me-4 lg:mt-0 md:mt-0 flex"
-              onClick={handlePasswordChangeBtn}
+              onClick={() => handlePasswordChangeBtn(false)}
             >
               <svg
                 className="icon"

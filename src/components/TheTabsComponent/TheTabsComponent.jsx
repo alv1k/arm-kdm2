@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
 import { isShowDetails } from '@/store/slices/agreementsSlice';
 import { toggleStatus } from '@/store/slices/requestsSlice';
-import { isRestorePass, toggleRestorePassword } from '@/store/slices/loginSlice';
+import { isRestorePass, toggleRestorePassword } from '@/store/slices/authSlice';
 import { requestsSelectedTab, setAgreementsSelectedTab, setAgreementSelectedTab, setRequestsSelectedTab, setLoginSelectedTab } from '@/store/slices/tabsSlice';
 
 const TheTabsComponent = (props) => {

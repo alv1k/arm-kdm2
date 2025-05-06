@@ -15,11 +15,6 @@ const RequestsPage = () => {
   const showNavbar = useSelector((state) => state.navbar.showNavbar);
   const isNewRequest = useSelector(isNew);
   
-  // const tabs = useSelector((state) => state.tabs_slice.tabs);
-  // useEffect(() => {
-  //   dispatch(fetchAgreementsList()); // Загружаем список договоров при монтировании компонента
-  // }, [dispatch]);
-  
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const dispatch = useDispatch();
   const sideClick = (event) => {
@@ -30,7 +25,6 @@ const RequestsPage = () => {
   };
   
   useEffect(() => {
-    // Устанавливаем tabs как agreementsList при монтировании компонента
     dispatch(toggleTabs({
       type: isNewRequest ? 'newRequest' : 'requests', 
       breakpoint: sm_breakpoint ? 'sm-breakpoint' : ''

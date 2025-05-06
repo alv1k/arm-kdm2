@@ -23,7 +23,7 @@ const NewRequestPage = () => {
       type: 'test1',
       descr: 'test description 999',
       status: null,
-      token: localStorage.getItem('token')
+      token: localStorage.getItem('token') ?? sessionStorage.getItem('token')
     }
 
     const response = api.get(`/setApp?id=${testData.id}&object=${testData.object}&type=${testData.type}&descr=${testData.descr}&status=${testData.status}&token=${testData.token}`);

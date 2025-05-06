@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleTabs, selectedTab, setLoginSelectedTab } from '@/store/slices/tabsSlice';
 import { togglePasswordChange, setToken, setUserData } from '@/store/slices/userSlice';
-import { isRestorePass, toggleRestorePassword } from '@/store/slices/loginSlice';
+import { isRestorePass, toggleRestorePassword, rememberMe, setRememberMe } from '@/store/slices/authSlice';
 import axios from 'axios';
 import api from '@/api/api';
 import useMediaQueries from '@/hooks/useMediaQueries';
@@ -17,6 +17,7 @@ const LoginPage = () => {
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const currentTab = useSelector(selectedTab);
   const isRestorePassword = useSelector(isRestorePass);
+  const pressedRememberMe = useSelector(rememberMe);
   
   const dispatch = useDispatch();
 
@@ -32,7 +33,12 @@ const LoginPage = () => {
 
   // https://cloud.aokdm.ru/method/profile?token=065C8F4A-70A0-4802-A110-58C33255CE2D
   // можно редактировать email, login, phone и password
-  
+
+
+  // https://cloud.aokdm.ru/method/restore?email=atlasov.n.r@gmail.com
+  // восстановление пароля
+
+
   // baydam
   // 123456
 
@@ -40,7 +46,7 @@ const LoginPage = () => {
   // 123456
 
   const [data, setData] = useState({
-    email: '',
+    login: '',
     password: ''
   });
   const handleInputChange = (e) => {
@@ -54,6 +60,10 @@ const LoginPage = () => {
     dispatch(toggleRestorePassword())
   }
 
+  const handleRememberMeChange = (e) => {    
+    dispatch(setRememberMe(e.target.checked));
+  };
+
   const handleSubmit = async (e) =>  {
     
     e.preventDefault();    
@@ -61,11 +71,11 @@ const LoginPage = () => {
     const formData = new FormData(e.target);
 
     const credentials = {
-      email: formData.get('email')?.toString() || '',
+      login: formData.get('login')?.toString() || '',
       password: formData.get('password')?.toString() || ''
     };
     
-    if (!credentials.email.includes('@')) {
+    if (!credentials.login.includes('@')) {
       setError('Введите корректный email');
       // return;
     }
@@ -79,8 +89,14 @@ const LoginPage = () => {
       const response = await api.post('/authorization', credentials);
       
       if (response.data.success) {
-        localStorage.setItem('token', response.data.data.token); // Сохраняем токен
-        dispatch(setToken(response.data.data.token)); // Обновляем Redux
+        if (pressedRememberMe) {
+          localStorage.setItem('login', credentials.login);
+          localStorage.setItem('token', response.data.data.token);
+          // Установка cookie с длительным сроком
+          document.cookie = `token=${token}; max-age=${30 * 24 * 60 * 60}; path=/; Secure`;
+        } else {
+          sessionStorage.setItem('token', response.data.data.token);
+        }
         navigate('/agreements'); // Перенаправляем
         dispatch(setUserData(response.data.data))
       } else {
@@ -107,14 +123,15 @@ const LoginPage = () => {
     }
   };
   
-  const handleSendPassword = (e) => {
-
-    setCodeVerification(true)    
-    const formData = new FormData(e.target);
+  const handleSendPassword = (e) => {    
+    e.stopPropagation();
+    const formData = new FormData(e.currentTarget);
     const credentials = {
-      email: formData.get('email')?.toString() || ''
+      login: formData.get('restorePassword')?.toString() || ''
     };
     console.log(credentials, 'send me password');
+    setCodeVerification(true)
+
   }
 
   const handleInputRestorePassword = (e) => {
@@ -177,35 +194,38 @@ const LoginPage = () => {
   const RestorePassword = () => {
     return (
       <section>
-        <p className="font-bold xl:mt-12 md:text-2xl md:mt-10 text-base mt-4">Восстановление пароля</p>
-        <form method="GET" onSubmit={(e) => handleSendPassword(e)}>
-          {
-            true ? 
-            <TheTabsComponent titles='login' /> : ''
-
-          }
-          <div className="text-left">
-            <p className="mb-2 mt-4 md:text-base text-sm">
-              {
-                currentTab && currentTab.title_en == 'phone' ? 'Телефон' :
-                'Эл.почта:'
-              }
-            </p>
-            <input id="restorePassword" className=" p-4 bg-item-active w-full rounded-xl" 
-              type={currentTab && currentTab.title_en == 'phone' ? 'tel' : 'text'} 
-              value={inputRestorePassword} 
-              onChange={(e) => {
-                  handleInputRestorePassword(e);
-                  setTimeout(() => document.getElementById('restorePassword').focus(), 100)
-                }
-              } 
-              placeholder={`Введите` + [currentTab && currentTab.title_en == 'phone' ?  ' номер телефона' : ' почту']} required
-            />
-            <button className="mt-5 btn-primary w-full py-2"  type="submit">
-              Отправить пароль
-            </button>
+        {
+          !isCodeVerification ?
+          <div>
+            <p className="font-bold xl:mt-12 md:text-2xl md:mt-10 text-base mt-4">Восстановление пароля</p>
+            <form method="GET" onSubmit={(e) => handleSendPassword(e)}>          
+              <TheTabsComponent titles='login' />           
+              <div className="text-left">
+                <p className="mb-2 mt-4 md:text-base text-sm">
+                  {
+                    currentTab && currentTab.title_en == 'phone' ? 'Телефон' :
+                    'Эл.почта:'
+                  }
+                </p>
+                <input id="restorePassword" name="restorePassword" className=" p-4 bg-item-active w-full rounded-xl" 
+                  type={currentTab && currentTab.title_en == 'phone' ? 'tel' : 'text'} 
+                  value={inputRestorePassword} 
+                  onChange={(e) => {
+                      handleInputRestorePassword(e);
+                      setTimeout(() => document.getElementById('restorePassword').focus(), 100)
+                    }
+                  } 
+                  placeholder={`Введите` + [currentTab && currentTab.title_en == 'phone' ?  ' номер телефона' : ' почту']} required
+                />
+                <button className="mt-5 btn-primary w-full py-2" type="submit">
+                  Отправить пароль
+                </button>
+              </div>
+            </form>
           </div>
-        </form>
+          : 
+          <CodeVerification />
+        }
       </section>
     )
   }
@@ -213,7 +233,7 @@ const LoginPage = () => {
   const CodeVerification = () => {
     return (
       <div>
-        123
+        CodeVerification
       </div>
     )
   }  
@@ -241,7 +261,7 @@ const LoginPage = () => {
                   <form method="GET" onSubmit={handleSubmit}>
                     <div className="text-left  transition-all duration-2000 ease-in-out overflow-hidden max-h-[1000px]">
                       <p className="mb-2 mt-4 md:text-base text-sm">Логин</p>
-                      <input name="email" value={data.email} onChange={handleInputChange} className="p-4 bg-item-active w-full rounded-xl" type="text" placeholder="Введите логин" required />
+                      <input name="login" value={data.login} onChange={handleInputChange} className="p-4 bg-item-active w-full rounded-xl" type="text" placeholder="Введите логин" required />
                       <div className="relative">
                         <p className="mb-2 mt-4 md:text-base text-sm">Пароль</p>
                         <input name="password" id="password" 
@@ -284,8 +304,8 @@ const LoginPage = () => {
                       </div>
                     </div>
                     <div className="flex justify-between py-5 mt-4">
-                      <div>
-                        <CustomCheckbox label="Запомнить меня" id="remember_me" />
+                      <div onClick={(e) => handleRememberMeChange(e)}>
+                        <CustomCheckbox label="Запомнить меня" id="remember_me"  />
                       </div>
                       <div>
                         <p className="text-[#203887] cursor-pointer" onClick={handleRestoreButton}>Забыли пароль?</p>
@@ -296,9 +316,6 @@ const LoginPage = () => {
                     </button>
                   </form>
                 </section>
-              }
-              {
-                isRestorePassword && isCodeVerification && <CodeVerification />
               }
           </div>
         </div>

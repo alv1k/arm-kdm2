@@ -6,7 +6,7 @@ import tabsReducer from './slices/tabsSlice';
 import requestsReducer from './slices/requestsSlice';
 import userReducer from './slices/userSlice';
 import modalReducer from './slices/modalSlice';
-import loginReducer from './slices/loginSlice';
+import authReducer from './slices/authSlice';
 
 // Middleware для логирования действий
 const loggingMiddleware = (store) => (next) => (action) => {
@@ -22,7 +22,7 @@ const store = configureStore({
     requests_slice: requestsReducer,
     user_slice: userReducer,
     modal_slice: modalReducer,
-    login_slice: loginReducer
+    auth_slice: authReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()

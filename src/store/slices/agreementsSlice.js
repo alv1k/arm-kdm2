@@ -5,7 +5,7 @@ export const fetchAgreementsList = createAsyncThunk(
   'agreementsSlice/fetchAgreementsList',
   async (_, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('token') ?? sessionStorage.getItem('token');
       if (!token) {
         window.location.href = '/login';
         throw new Error('Token not found');
@@ -18,12 +18,16 @@ export const fetchAgreementsList = createAsyncThunk(
       });
       if (!response.data.success) {
         localStorage.removeItem('token')
+        sessionStorage.removeItem('token');
+        document.cookie = 'token=; Max-Age=0; path=/;';
         window.location.href = '/login';
         throw new Error(`HTTP error! status: ${response.data.status}`);
       }
       return await response.data.data;
     } catch (error) {
       localStorage.removeItem('token')
+      sessionStorage.removeItem('token');
+      document.cookie = 'token=; Max-Age=0; path=/;';
       window.location.href = '/login';
       return rejectWithValue(error.message);
     }
@@ -34,7 +38,7 @@ export const fetchAgreementFile = createAsyncThunk(
   'agreementsSlice/fetchAgreementFile',
   async (_, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('token') ?? sessionStorage.getItem('token');
       if (!token) {
         window.location.href = '/login';
         throw new Error('Token not found');
@@ -58,7 +62,7 @@ export const fetchAgreementCounters = createAsyncThunk(
   'agreementsSlice/fetchAgreementCounters',
   async (_, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('token') ?? sessionStorage.getItem('token');
       if (!token) {
         window.location.href = '/login';
         throw new Error('Token not found');
@@ -156,7 +160,6 @@ const agreementsSlice = createSlice({
 export const selectAgreementsLoading = (state) => state.agreements_slice.loading;
 export const selectAgreementsError = (state) => state.agreements_slice.error;
 
-export const selectedType = (state) => state.agreements_slice.type;
 export const isShowDetails = (state) => state.agreements_slice.showDetails;
 export const selectedTab = (state) => state.agreements_slice.tab;
 export const agreementsStoreList = (state) => state.agreements_slice.agreementsList;

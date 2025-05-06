@@ -31,7 +31,7 @@ const TheMenuItem = ({ icon, text, to }) => {
     dispatch(removeToken());
     return true;
   }
-  const handleClick = () => {
+  const handleClick = () => {    
     if (text === 'Выйти') {
       logout();
     }
