@@ -3,16 +3,22 @@ import { useState, useRef, useEffect } from 'react';
 const CustomSelect = ({ options, defaultValue, onDataSend }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(defaultValue);
+  const [selectedObject, setSelectedObject] = useState();
+  const [selectedType, setSelectedType] = useState();
   const selectRef = useRef(null);
-
 
   const toggleDropdown = () => {
     setIsOpen((prev) => !prev);
   };
 
-  const handleOptionClick = (option) => {    
-    onDataSend(option);
-    setSelectedOption(option)
+  const handleOptionClick = (option) => {
+    if (typeof option == 'string') {
+      setSelectedType(option)
+    } else {
+      setSelectedObject(option.address)
+    }
+    onDataSend(typeof option == 'string' ? option : option.address);
+    setSelectedOption(typeof option == 'string' ? option : option.address)
     setIsOpen(false);
   };
 
@@ -29,14 +35,17 @@ const CustomSelect = ({ options, defaultValue, onDataSend }) => {
     };
   }, []);
 
+  console.log(options);
+  
+
   return (
     <div className="relative inline-block text-left w-full" ref={selectRef}>
       <div className="">
         <button
           onClick={toggleDropdown}
-          className={`inline-flex justify-between w-full rounded-lg px-5 py-5 bg-item-active focus:outline-none focus:ring-1 focus:ring-[#6374AD] focus:border-[#6374AD] 
+          className={`inline-flex justify-between w-full rounded-lg px-5 py-5 bg-item-active focus:outline-none focus:ring-1 focus:ring-[#6374AD] focus:border-[#6374AD] text-nowrap overflow-auto
           ${isOpen ? 'ring-2 ring-[#6374AD] ' : ''} 
-          ${options.includes(selectedOption) ? '' : 'text-[#787C82]'}
+          ${selectedObject || selectedType ? '' : 'text-[#787C82]'}
         `}>
           {selectedOption}
           <svg className="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -52,9 +61,9 @@ const CustomSelect = ({ options, defaultValue, onDataSend }) => {
               <button
                 key={index}
                 onClick={() => handleOptionClick(option)}
-                className={`text-[#787C82] block px-4 py-4 text-sm hover:bg-item-active w-full text-left ${selectedOption === option ? 'text-black bg-item-active' : ''}`}
+                className={`text-[#787C82] block px-4 py-4 text-sm hover:bg-item-active w-full text-left ${selectedObject || selectedType ? 'text-black bg-item-active' : ''}`}
               >
-                {option}
+                {typeof option == 'string' ? option : option.address}
               </button>
             ))}
           </div>

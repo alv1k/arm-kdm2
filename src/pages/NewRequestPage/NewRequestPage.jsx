@@ -12,17 +12,17 @@ const NewRequestPage = () => {
   const allObjects = useSelector((state) => state.agreements_slice.allObjects)
   const dispatch = useDispatch();
   const [selectedObject, setSelectedObject] = useState("");
+  const [requestDescr, handleRequestDescrChange] = useState("");
   
   const [selectedType, setSelectedType] = useState("");
 
   const handleDataSelectedObject = (data) => {
+    
     setSelectedObject(data);
   };
   const handleDataSelectedType = (data) => {
     setSelectedType(data);
-  };
-  console.log(allObjects, 'allObjects');
-  
+  };  
 
   const backToRequests = () => {
       dispatch(toggleStatus());
@@ -30,8 +30,8 @@ const NewRequestPage = () => {
   const handleCreateNewRequest = () => {
     const data = {
       object: '9CAC4CEDFB681CFD11EECB0060E2F363',
-      type: 'Авария',
-      descr: 'прорвало трубу',
+      type: selectedType,
+      descr: 'descrip',
       status: 'В работе',
       token: localStorage.getItem('token') ?? sessionStorage.getItem('token')
     }
@@ -41,6 +41,7 @@ const NewRequestPage = () => {
     //   throw new Error(`HTTP error! status: ${response.data.status}`);
     // }
   }
+
   return (
     <div className="lg:text-base md:text-base text-sm md:h-auto h-[110%]">
       <div className="flex md:justify-start justify-center">
@@ -109,6 +110,8 @@ const NewRequestPage = () => {
         <textarea 
           className="w-full rounded-lg px-5 py-4 bg-item-active md:min-h-43 min-h-50"
           placeholder={`${!sm_breakpoint ? 'Введите текст' : 'Описание заявки'}`}
+          value={requestDescr}
+          onChange={(e) => handleRequestDescrChange(e)}
         ></textarea>
         <p className="text-[#787C82] md:mt-2">Прикрепить файл</p>
         <div className="
