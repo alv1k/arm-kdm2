@@ -103,7 +103,10 @@ const TheTabsComponent = (props) => {
     dispatch(toggleStatus())
   }
   const handleNewRequestBitrix = () => {
-    window.location = 'https://b24-0l7xxi.bitrix24.site/crm_form_oa47x/'
+    let a= document.createElement('a');
+    a.target= '_blank';
+    a.href= 'https://b24-0l7xxi.bitrix24.site/crm_form_oa47x/';
+    a.click();
   }
   
   return (
