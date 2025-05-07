@@ -102,6 +102,9 @@ const TheTabsComponent = (props) => {
   const handleNewRequestBtn = () => {    
     dispatch(toggleStatus())
   }
+  const handleNewRequestBitrix = () => {
+    window.location = 'https://b24-0l7xxi.bitrix24.site/crm_form_oa47x/'
+  }
   
   return (
     <div className={`
@@ -117,7 +120,7 @@ const TheTabsComponent = (props) => {
               text-center
               lg:px-10 lg:block
               md:px-6 md:flex md:items-center
-              py-4 px-6 cursor-pointer bg-item-default rounded-t-xl 
+              py-4 px-6 cursor-pointer bg-item-default rounded-t-xl text-nowrap
               ${currentRoute == '/login' ? 'w-full justify-center' : ''}
               ${sm_breakpoint ? 'w-1/2' : ''}
               ${currentTab && currentTab.title_en === tab.title_en ? 'text-[#203887] border-b border-b-[#6374AD]' : ''}
@@ -130,16 +133,30 @@ const TheTabsComponent = (props) => {
         ))}
         {
           currentRoute == '/requests' ? 
-          <div 
-            className="flex items-center cursor-pointer ms-auto px-8"
-            onClick={handleNewRequestBtn}
-          >
-            <svg
-              className="w-[10px] h-[10px] stroke-[#232323] me-2"
+          <div className="flex ms-auto">
+            <div 
+              className="flex items-center cursor-pointer px-8 text-nowrap"
+              onClick={handleNewRequestBtn}
             >
-              <use href={`${sprite_path}#plus-icon`} />
-            </svg>
-            Новая заявка
+              <svg
+                className="w-[10px] h-[10px] stroke-[#232323] me-2"
+              >
+                <use href={`${sprite_path}#plus-icon`} />
+              </svg>
+              Новая заявка
+            </div>
+            <div
+              className="flex items-center cursor-pointer px-8 text-nowrap"
+              onClick={handleNewRequestBitrix}
+            >
+              <svg
+                className="icon stroke-[#232323] me-2"
+              >
+                <use href={`${sprite_path}#bitrix-icon`} />
+              </svg>
+              Заявка в Битрикс24
+            </div>
+
           </div> : ''
         }
     </div>
