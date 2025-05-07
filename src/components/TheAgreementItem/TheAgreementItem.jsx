@@ -16,7 +16,7 @@ const TheAgreementItem = ({ id, number, date, debt, objects, name, monthly }) =>
   const isDetailsShown = useSelector(isShowDetails);
   const showCountersModal = useSelector(isShowCountersModal);
   const showPaymentModal = useSelector(isShowPaymentModal);  
-  const fileToDownload = useSelector((state) => state.agreements_slice.fileToDownload);
+  const fileToDownload = useSelector((state) => state.agreements_slice.fileToDownload);  
   
   const handleSetDataType = (type) => {
     dispatch(setDataType(type));
@@ -45,7 +45,7 @@ const TheAgreementItem = ({ id, number, date, debt, objects, name, monthly }) =>
   // );
 
   async function downloadBase64PDF(base64String, filename) {
-    // Проверяем валидность base64
+    // Проверяем валидность base64    
     if (!base64String.startsWith('data:application/pdf;base64,')) {
       throw new Error('Некорректный формат Base64 PDF');
     }
@@ -80,12 +80,21 @@ const TheAgreementItem = ({ id, number, date, debt, objects, name, monthly }) =>
     }
   }
 
-  const handleDownloadAgree = (e, id) => {
+  const handleDownloadAgree = async (e, id) => {    
     e.stopPropagation();
-    dispatch(fetchAgreementFile(id))    
-    let docName = fileToDownload ? fileToDownload[0].type : null
-    let dataUrl = fileToDownload ? fileToDownload[0].dataUrl : null
-    downloadBase64PDF(dataUrl, docName);
+    try {
+      await dispatch(fetchAgreementFile(id))
+      
+      const docName = fileToDownload ? fileToDownload[0]?.type : null
+      const dataUrl = fileToDownload ? fileToDownload[0]?.dataUrl : null
+      if (dataUrl) {
+        downloadBase64PDF(dataUrl, docName);
+      } else {
+        console.error("Файл не загружен");
+      }
+    } catch (error) {
+      console.error("Ошибка загрузки файла:", error);
+    }   
   }  
 
   return (

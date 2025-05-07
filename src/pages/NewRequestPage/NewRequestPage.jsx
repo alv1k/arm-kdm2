@@ -10,14 +10,13 @@ const NewRequestPage = () => {
   const sprite_path = './src/assets/images/i.svg';
   const showNavbar = useSelector((state) => state.navbar.showNavbar);
   const allObjects = useSelector((state) => state.agreements_slice.allObjects)
+  const isNewRequestSaved = useSelector((state) => state.requests_slice.isNewRequestSaved)
   const dispatch = useDispatch();
   const [selectedObject, setSelectedObject] = useState("");
-  const [requestDescr, handleRequestDescrChange] = useState("");
-  
+  const [requestDescr, setRequestDescr] = useState("");  
   const [selectedType, setSelectedType] = useState("");
 
-  const handleDataSelectedObject = (data) => {
-    
+  const handleDataSelectedObject = (data) => {    
     setSelectedObject(data);
   };
   const handleDataSelectedType = (data) => {
@@ -31,7 +30,7 @@ const NewRequestPage = () => {
     const data = {
       object: '9CAC4CEDFB681CFD11EECB0060E2F363',
       type: selectedType,
-      descr: 'descrip',
+      descr: requestDescr,
       status: 'В работе',
       token: localStorage.getItem('token') ?? sessionStorage.getItem('token')
     }
@@ -41,7 +40,14 @@ const NewRequestPage = () => {
     //   throw new Error(`HTTP error! status: ${response.data.status}`);
     // }
   }
+  const handleRequestDescrChange = (e) => {
+    setRequestDescr(e.target.value);
+  };
 
+  useEffect(() => {
+    console.log(isNewRequestSaved, 'isNewRequestSaved');
+    
+  }, isNewRequestSaved)
   return (
     <div className="lg:text-base md:text-base text-sm md:h-auto h-[110%]">
       <div className="flex md:justify-start justify-center">

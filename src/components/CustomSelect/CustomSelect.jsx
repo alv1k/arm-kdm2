@@ -17,7 +17,7 @@ const CustomSelect = ({ options, defaultValue, onDataSend }) => {
     } else {
       setSelectedObject(option.address)
     }
-    onDataSend(typeof option == 'string' ? option : option.address);
+    onDataSend(typeof option == 'string' ? option : option.id);
     setSelectedOption(typeof option == 'string' ? option : option.address)
     setIsOpen(false);
   };
@@ -33,10 +33,7 @@ const CustomSelect = ({ options, defaultValue, onDataSend }) => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
-
-  console.log(options);
-  
+  }, []);  
 
   return (
     <div className="relative inline-block text-left w-full" ref={selectRef}>

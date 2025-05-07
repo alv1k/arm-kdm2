@@ -18,7 +18,10 @@ const TheHeader = () => {
   const isVisiblePaymentModal = useSelector(isShowPaymentModal);
   const isNewRequest = useSelector(isNew);
   const isPasswordChange = useSelector(isPasswordModification);
+  const profileFetchedData = useSelector((state) => state.user_slice.profileData);
   const navigate = useNavigate();
+
+  console.log(profileFetchedData, 'profileFetchedData');  
 
   const handleClick = () => {    
     dispatch(toggleNavbar());
@@ -70,11 +73,11 @@ const TheHeader = () => {
         />
         {/* <p className=" lg:text-2xl md:text-xl text-sm uppercase font-bold lg:ms-5 md:ms-5 ms-2 my-auto" style={{fontFamily: 'PT Sans'}}>комдрагметалл рс(я)</p> */}
       </div>
-      <div className="lg:flex md:flex lg:ms-auto lg:me-6 md:ms-auto md:me-6 hidden" >
-        <span className="lg:mr-10 md:mr-4 font-semibold text-xl mt-[0.35rem] text-nowrap">
-          ООО «Название»
+      <div className="lg:flex md:flex lg:ms-auto  md:ms-auto  hidden" >
+        <span className="font-semibold text-xl mt-[0.35rem] text-nowrap">
+          {profileFetchedData.kontragent.name}
         </span>
-        <img src="./src/assets/images/Ellipse.png" alt=""  />
+        {/* <img src="./src/assets/images/Ellipse.png" alt=""  /> */}
       </div>
     </header>
   )

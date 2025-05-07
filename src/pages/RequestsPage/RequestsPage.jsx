@@ -4,6 +4,7 @@ import { hideNavbar } from '@/store/slices/navbarSlice';
 import { useLocation } from 'react-router-dom';
 import { toggleTabs, setRequestsSelectedTab } from '@/store/slices/tabsSlice';
 import { isNew, requestStatusFalse, fetchRequestsList } from '@/store/slices/requestsSlice';
+import { fetchAgreementsList } from '@/store/slices/agreementsSlice';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
 
 import NewRequestPage from '@/pages/NewRequestPage/NewRequestPage';
@@ -29,6 +30,7 @@ const RequestsPage = () => {
       type: isNewRequest ? 'newRequest' : 'requests', 
       breakpoint: sm_breakpoint ? 'sm-breakpoint' : ''
     } ));
+    dispatch(fetchAgreementsList());
     dispatch(fetchRequestsList());
   }, [dispatch]);
   const location = useLocation();

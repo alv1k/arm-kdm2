@@ -28,9 +28,7 @@ export const fetchRequestsList = createAsyncThunk(
 export const fetchNewRequest = createAsyncThunk(
   'requestsSlice/fetchNewRequest',
   async (_, { rejectWithValue }) => {
-    let payload = _;
-    console.log(payload, 'ppppayloooad');
-    
+    let payload = _;    
     try {
       const token = localStorage.getItem('token') ?? sessionStorage.getItem('token');
       if (!token) {
@@ -38,14 +36,10 @@ export const fetchNewRequest = createAsyncThunk(
         throw new Error('Token not found');
       }
       
-      // const response = await api.get(`/setApp?token=${token}`,{
-      //   headers: {
-      //     'Authorization': `Bearer ${token}`
-      //   }
-      // });
-      // if (!response.data.success) {
-      //   throw new Error(`HTTP error! status: ${response.data.status}`);
-      // }
+      const response = await api.post(`/setApp`, payload);
+      if (!response.data.success) {
+        throw new Error(`HTTP error! status: ${response.data.status}`);
+      }
       return await response.data.data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -60,6 +54,7 @@ const requestsSlice = createSlice({
     requestsList: null,
     loading: false,
     error: null,
+    isNewRequestSaved: false
   },
   reducers: {
     toggleStatus(state) {      
@@ -81,6 +76,19 @@ const requestsSlice = createSlice({
         })
         // Обработка ошибки
         .addCase(fetchRequestsList.rejected, (state, action) => {
+          state.loading = false;
+          state.error = action.payload || 'Failed to fetch agreements';
+        })
+        .addCase(fetchNewRequest.fulfilled, (state, action) => {
+          state.isNewRequestSaved = action.payload;
+          state.loading = false;
+        })
+        .addCase(fetchNewRequest.pending, (state) => {
+          state.loading = true;
+          state.error = null;
+        })
+        // Обработка ошибки
+        .addCase(fetchNewRequest.rejected, (state, action) => {
           state.loading = false;
           state.error = action.payload || 'Failed to fetch agreements';
         });
