@@ -1,4 +1,19 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+
+export const fetchAuth = createAsyncThunk(
+  'authSlice/fetchAuth',
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token') ?? sessionStorage.getItem('token');
+      if (!token) {
+        window.location.href = '/login';
+        throw new Error('Token not found');
+      }      
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 const authSlice = createSlice({
   name: 'login',

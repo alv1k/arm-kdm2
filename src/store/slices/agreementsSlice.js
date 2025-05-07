@@ -37,14 +37,15 @@ export const fetchAgreementsList = createAsyncThunk(
 export const fetchAgreementFile = createAsyncThunk(
   'agreementsSlice/fetchAgreementFile',
   async (_, { rejectWithValue }) => {
+    const id = _;
     try {
       const token = localStorage.getItem('token') ?? sessionStorage.getItem('token');
       if (!token) {
         window.location.href = '/login';
         throw new Error('Token not found');
       }
-      
-      const response = await api.get(`/files?token=${token}`,{
+
+      const response = await api.get(`/files?token=${token}&id=${id}`,{
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -114,6 +115,7 @@ const agreementsSlice = createSlice({
       },
     ],
     selectedAgreement: [],
+    fileToDownload: null,
   },
   reducers: {
     showDetails: (state) => {      
@@ -148,11 +150,24 @@ const agreementsSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      // Обработка ошибки
       .addCase(fetchAgreementsList.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || 'Failed to fetch agreements';
-      });
+      })
+      .addCase(fetchAgreementFile.fulfilled, (state, action) => {
+        state.fileToDownload = action.payload;
+        state.loading = false;
+      })
+      .addCase(fetchAgreementFile.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      // Обработка ошибки
+      .addCase(fetchAgreementFile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || 'Failed to fetch file';
+      })
+      
   }
 });
 

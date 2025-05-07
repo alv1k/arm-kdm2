@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { hideNavbar } from '@/store/slices/navbarSlice';
 import { toggleTabs  } from '@/store/slices/tabsSlice';
 import { isNew } from '@/store/slices/requestsSlice';
+import { fetchAuth } from '@/store/slices/authSlice';
 import useMediaQueries from '@/hooks/useMediaQueries';
 
 import Header from '@/components/TheHeader/TheHeader';
@@ -33,9 +34,7 @@ const ContactsPage = () => {
     }
   };
   useEffect(() => {
-    // Устанавливаем tabs как agreementsList при монтировании компонента
-    dispatch(toggleTabs(isNewRequest ? 'singleAgrement' : 'agreementsList'));
-    
+    dispatch(fetchAuth())
   }, [dispatch]);
 
     const locations = Array.from({ length: 4 }, (_, index) => (

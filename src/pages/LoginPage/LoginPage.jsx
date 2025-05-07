@@ -31,10 +31,6 @@ const LoginPage = () => {
   const [inputRestorePassword, setInputRestorePassword] = useState();
 
 
-  // https://cloud.aokdm.ru/method/profile?token=065C8F4A-70A0-4802-A110-58C33255CE2D
-  // можно редактировать email, login, phone и password
-
-
   // https://cloud.aokdm.ru/method/restore?email=atlasov.n.r@gmail.com
   // восстановление пароля
 

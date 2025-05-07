@@ -8,14 +8,15 @@ import CountersModal from '@/components/TheCountersModal/TheCountersModal';
 import PaymentModal from '@/components/ThePaymentModal/ThePaymentModal'; 
 import { dataType, setDataType, setShowModal } from '@/store/slices/modalSlice';
 
-const TheAgreementItem = ({ number, date, debt, agree, services }) => {
+const TheAgreementItem = ({ id, number, date, debt, agree, services }) => {
   const sprite_path = './src/assets/images/i.svg';
   const today = new Date().toLocaleDateString();
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const dispatch = useDispatch();
   const isDetailsShown = useSelector(isShowDetails);
-  const showCountersModal = useSelector(isShowCountersModal);  
+  const showCountersModal = useSelector(isShowCountersModal);
   const showPaymentModal = useSelector(isShowPaymentModal);  
+  const fileToDownload = useSelector((state) => state.agreements_slice.fileToDownload);
   
   const handleSetDataType = (type) => {
     dispatch(setDataType(type));
@@ -40,15 +41,52 @@ const TheAgreementItem = ({ number, date, debt, agree, services }) => {
   //   service.ОбъектыАренды[0].АдресАренды
   // );
 
-  const handleDownloadAgree = (e) => {
-    e.stopPropagation()
-    console.log('dowload start');
-    dispatch(fetchAgreementFile())
+  async function downloadBase64PDF(base64String, filename) {
+    // Проверяем валидность base64
+    if (!base64String.startsWith('data:application/pdf;base64,')) {
+      throw new Error('Некорректный формат Base64 PDF');
+    }
+  
+    try {
+      // Извлекаем чистый base64 (удаляем префикс)
+      const pureBase64 = base64String.split(',')[1];
+      const binaryString = atob(pureBase64);
+      const bytes = new Uint8Array(binaryString.length);
+      
+      for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+  
+      const blob = new Blob([bytes], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename || 'document.pdf';
+      document.body.appendChild(a);
+      a.click();
+      
+      // Очистка
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 100);
+    } catch (error) {
+      console.error('Ошибка при скачивании PDF:', error);
+      throw error;
+    }
+  }
+
+  const handleDownloadAgree = (e, id) => {
+    e.stopPropagation();
+    dispatch(fetchAgreementFile(id))    
+    let docName = fileToDownload[0].type
+    let dataUrl = fileToDownload[0].dataUrl
+    downloadBase64PDF(dataUrl, docName);
   }  
 
   return (
-    <div 
-    >
+    <div>
       {
         showCountersModal ? 
         <div className=" bg-white">
@@ -92,7 +130,7 @@ const TheAgreementItem = ({ number, date, debt, agree, services }) => {
                 >
                   <use href={`${sprite_path}#doc-icon`} />
                 </svg>
-                <span className="lg:me-0 me-auto text-nowrap" onClick={(e) => handleDownloadAgree(e)}>
+                <span className="lg:me-0 me-auto text-nowrap" onClick={(e) => handleDownloadAgree(e, id)}>
                   Скачать договор
                 </span>
               </button>
@@ -192,7 +230,7 @@ const TheAgreementItem = ({ number, date, debt, agree, services }) => {
                   >
                     <use href={`${sprite_path}#doc-icon`} />
                   </svg>
-                  <span className="lg:me-0 me-auto text-nowrap" onClick={(e) => handleDownloadAgree(e)}>
+                  <span className="lg:me-0 me-auto text-nowrap" onClick={(e) => handleDownloadAgree(e, id)}>
                     Скачать договор
                   </span>
                 </button>
@@ -221,7 +259,7 @@ const TheAgreementItem = ({ number, date, debt, agree, services }) => {
                   >
                     <use href={`${sprite_path}#doc-icon`} />
                   </svg>
-                  <span className="lg:me-0 me-auto text-nowrap" onClick={(e) => handleDownloadAgree(e)}>
+                  <span className="lg:me-0 me-auto text-nowrap" onClick={(e) => handleDownloadAgree(e, id)}>
                     Скачать договор
                   </span>
                 </button>

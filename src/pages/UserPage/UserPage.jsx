@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { hideNavbar } from '@/store/slices/navbarSlice';
+import { fetchAuth } from '@/store/slices/authSlice';
 import { toggleTabs  } from '@/store/slices/tabsSlice';
 import { isNew } from '@/store/slices/requestsSlice';
 import { userData } from '@/store/slices/userSlice';
@@ -15,6 +16,10 @@ const UserPage = () => {
   const isNewRequest = useSelector(isNew);
   const isPasswordChange = useSelector(isPasswordModification);
   const userAuthData = useSelector(userData);  
+
+  // https://cloud.aokdm.ru/method/profile?token=065C8F4A-70A0-4802-A110-58C33255CE2D
+  // можно редактировать email, login, phone и password
+
   
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const [showPassword, setShowPassword] = useState(false);
@@ -26,13 +31,30 @@ const UserPage = () => {
     }
   };
   useEffect(() => {
+    dispatch(fetchAuth())
     dispatch(fetchProfileData())
   }, [dispatch]);
   const handlePasswordChangeBtn = (status) => {
     dispatch(togglePasswordChange(status));
   }
-  const handleSendNewPassword = () => {
-    console.log('11111   handleSendNewPassword');
+  const handleSendNewPassword = (e) => {
+    e.stopPropagation();
+    
+    let formData = new FormData(e.currentTarget)
+    let oldPassword = formData.get('oldPassword');
+    let newPassword = formData.get('newPassword');
+    let newPasswordDoubled = formData.get('newPasswordDoubled');
+    // Валидация паролей
+    if (newPassword !== newPasswordDoubled) {
+      alert('Пароли не совпадают!');
+      handlePasswordChangeBtn(true);
+    }
+    let credentials = {
+      "oldPassword" : oldPassword,
+      "newPassword" : newPassword
+    }
+    dispatch(fetchProfileData(credentials))
+    handlePasswordChangeBtn(false); // Закрываем форму
     
   }
   const formatPhoneSpecial = (phone) => {
@@ -131,28 +153,28 @@ const UserPage = () => {
     </div>
   )
   const profilePasswordChange = () => (
-    <div className="flex flex-col gap-5 mt-8">
+    <form className="flex flex-col gap-5 mt-8" onSubmit={(e) => handleSendNewPassword(e)} method="POST">
       <div className="lg:w-1/2 w-full">
         <p className="text-[#787C82]">Введите текущий пароль</p>
-        <input className="mt-2 p-5 bg-item-active w-full rounded-xl" type="text" placeholder='Текущий пароль' />
+        <input name="oldPassword" className="mt-2 p-5 bg-item-active w-full rounded-xl" type="text" placeholder='Текущий пароль' required />
       </div>
       <div className="lg:w-1/2 w-full">
         <p className="text-[#787C82]">Укажите новый пароль</p>
-        <input className="mt-2 p-5 bg-item-active w-full rounded-xl" type="text" placeholder='Новый пароль' />
+        <input name="newPassword" className="mt-2 p-5 bg-item-active w-full rounded-xl" type="text" placeholder='Новый пароль' required />
       </div>
       <div className="lg:w-1/2 w-full">
         <p className="text-[#787C82]">Повторите новый пароль</p>
-        <input className="mt-2 p-5 bg-item-active w-full rounded-xl" type="text" placeholder='Новый пароль' />
+        <input name="newPasswordDoubled" className="mt-2 p-5 bg-item-active w-full rounded-xl" type="text" placeholder='Новый пароль' required />
       </div>
       <div className="md:flex block gap-5">
-        <button className="btn-default py-2 md:mt-9 mt-3 md:w-auto md:px-6 w-full" onClick={() => handlePasswordChangeBtn(false)}>
+        <button className="btn-default py-2 md:mt-9 mt-3 md:w-auto md:px-6 w-full" type="button" onClick={() => handlePasswordChangeBtn(false)}>
           Отменить
         </button>
-        <button className="btn-primary py-2 md:mt-9 mt-3 md:w-auto md:px-6 w-full" onClick={(e) => handleSendNewPassword(e)}>
+        <button className="btn-primary py-2 md:mt-9 mt-3 md:w-auto md:px-6 w-full" type="submit">
           Сохранить
         </button>
       </div>
-    </div>
+    </form>
   )
 
   return (

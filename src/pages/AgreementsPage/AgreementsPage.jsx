@@ -19,7 +19,7 @@ const AgreementsPage = () => {
   const showPaymentModal = useSelector(isShowPaymentModal);
   const agreementsList = useSelector(agreementsStoreList);
   const currentAgreement = useSelector(selectedAgreement);
-  const loading = useSelector(selectAgreementsLoading);  
+  const loading = useSelector(selectAgreementsLoading);
 
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const dispatch = useDispatch();
@@ -109,6 +109,7 @@ const AgreementsPage = () => {
                   <div key={index} onClick={() => handleAgreementClick(agreement)}>
                     <AgreementItem 
                       key={agreement.Код}
+                      id={agreement.id}
                       number={agreement.Номер}
                       date={agreement.Дата}
                       debt={agreement.Долг}
@@ -126,6 +127,7 @@ const AgreementsPage = () => {
                   <div key={index} >
                     <AgreementItem 
                       key={agreement.Код}
+                      id={agreement.id}
                       number={agreement.Номер}
                       date={agreement.Дата}
                       debt={agreement.Долг}

@@ -247,7 +247,7 @@ const TheDocsListComponent = () => {
         //     <div>
         //       {
         //         currentTab && currentTab.title_en == 'bills' ?
-        //         'Счет за аренду' : 'Название помещения2'
+        //         'Счет за аренду' : 'Объект аренды'
         //       }
         //     </div>
         //     <div>

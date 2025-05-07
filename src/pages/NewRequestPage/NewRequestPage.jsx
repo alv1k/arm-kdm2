@@ -77,12 +77,12 @@ const NewRequestPage = () => {
         <div className='lg:flex lg:gap-5 block'>
           <div className="lg:mt-0 mt-4 w-full lg:w-1/2">
             {
-              !sm_breakpoint ? <span className="text-[#787C82]">Название помещения</span> : ''
+              !sm_breakpoint ? <span className="text-[#787C82]">Объект аренды</span> : ''
             }
             <input 
               className="w-full rounded-lg p-5 bg-item-active" 
               type="text" 
-              placeholder={`${!sm_breakpoint ? 'Введите' : 'Название помещения'}`}
+              placeholder={`${!sm_breakpoint ? 'Введите' : 'Объект аренды'}`}
             />
           </div>
           <div className="lg:mt-0 mt-4 w-full lg:w-1/2">

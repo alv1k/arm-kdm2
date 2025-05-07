@@ -4,18 +4,25 @@ import api from '@/api/api';
 export const fetchProfileData = createAsyncThunk(
   'userSlice/fetchProfileData',
   async (_, { rejectWithValue }) => {
+    let payload = null;
+    _ ? payload = _ : null;
     try {
       const token = localStorage.getItem('token') ?? sessionStorage.getItem('token');
       if (!token) {
         window.location.href = '/login';
         throw new Error('Token not found');
       }
+      let params = {
+        'token' : token
+      }
+      payload ? 
+      params = {
+        'token' : token,
+        'oldPassword': payload.oldPassword,
+        'newPassword': payload.newPassword
+      } : ''
       
-      const response = await api.get(`/profile?token=${token}`,{
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const response = await api.post(`/profile`, params);
       if (!response.data.success) {
         throw new Error(`HTTP error! status: ${response.data.status}`);
       }
@@ -56,7 +63,7 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchProfileData.fulfilled, (state, action) => {
-        state.profileData = action.payload; // Сохраняем загруженные данные в agreementsList
+        state.profileData = action.payload;
         state.loading = false;
       })
       .addCase(fetchProfileData.pending, (state) => {
@@ -64,9 +71,9 @@ const userSlice = createSlice({
         state.error = null;
       })
       // Обработка ошибки
-      .addCase(fetchProfileData.rejected, (state, action) => {
+      .addCase(fetchProfileData.rejected, (state, action) => {        
         state.loading = false;
-        state.error = action.payload || 'Failed to fetch agreements';
+        state.error = action.payload || 'Failed to fetch profileData';
       });
   }
 });

@@ -75,12 +75,9 @@ const tabSlice = createSlice({
             state.loginTabs = loginList;
             break;
         }
-      } else {
-        console.log('no target');
       }
     },
     setAgreementsSelectedTab(state, action) {
-      console.log('setAgreementsSelectedTab');
       state.selectedTab = {
         title_en: action.payload.title_en,
         title_ru: action.payload.title_ru,
