@@ -79,7 +79,7 @@ const TheMenuItem = ({ icon, text, to }) => {
               font-normal ms-5 whitespace-nowrap text-sm
               ${styles.text_animation} 
               ${navbarRemoteText}
-              ${showNavbar && (sm_breakpoint || md_breakpoint) ? 'visible' : lg_breakpoint || xl_breakpoint ? 'visible' : 'invisible'}
+              ${showNavbar && (sm_breakpoint || md_breakpoint) ? 'visible' : lg_breakpoint || xl_breakpoint ? 'visible' : md_breakpoint ? 'invisible' : ''}
             `}
             >
               {text}

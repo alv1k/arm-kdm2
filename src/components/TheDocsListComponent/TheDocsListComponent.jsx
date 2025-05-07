@@ -7,7 +7,7 @@ import DateFormatter from '@/components/DateFormatter/DateFormatter';
 import styles from './TheDocsListComponent.module.css';
 import { setDataType, setShowModal } from '@/store/slices/modalSlice';
 import { selectedTab } from '@/store/slices/tabsSlice';
-import { setShowCountersModal, setShowPaymentModal, fetchAgreementCounters } from '@/store/slices/agreementsSlice';
+import { setShowCountersModal, setShowPaymentModal } from '@/store/slices/agreementsSlice';
 import { isNew, requestStatusFalse, fetchRequestsList, requestsList } from '@/store/slices/requestsSlice';
 
 const TheDocsListComponent = () => {
@@ -24,9 +24,10 @@ const TheDocsListComponent = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        if (currentTab && currentTab.title_en == 'counters') {
+        if (currentTab && currentTab.title_en == 'requests') {
           await dispatch(fetchRequestsList());
-        }
+        }        
+
         // Акты
         // Счета
       } finally {

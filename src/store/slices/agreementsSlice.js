@@ -25,10 +25,6 @@ export const fetchAgreementsList = createAsyncThunk(
       }
       return await response.data.data;
     } catch (error) {
-      localStorage.removeItem('token')
-      sessionStorage.removeItem('token');
-      document.cookie = 'token=; Max-Age=0; path=/;';
-      window.location.href = '/login';
       return rejectWithValue(error.message);
     }
   }
@@ -38,6 +34,8 @@ export const fetchAgreementFile = createAsyncThunk(
   'agreementsSlice/fetchAgreementFile',
   async (_, { rejectWithValue }) => {
     const id = _;
+    console.log(id, 'id');
+    
     try {
       const token = localStorage.getItem('token') ?? sessionStorage.getItem('token');
       if (!token) {
@@ -59,34 +57,10 @@ export const fetchAgreementFile = createAsyncThunk(
     }
   }
 )
-export const fetchAgreementCounters = createAsyncThunk(
-  'agreementsSlice/fetchAgreementCounters',
-  async (_, { rejectWithValue }) => {
-    try {
-      const token = localStorage.getItem('token') ?? sessionStorage.getItem('token');
-      if (!token) {
-        window.location.href = '/login';
-        throw new Error('Token not found');
-      }
-      // 9CAC4CEDFB681CFD11EECB0060E2F363
-      const object = '9CE94CEDFB681CFD11EFA31909B004AF'
-      const service = '9CAC4CEDFB681CFD11EECBD8C97D9772';
-
-      
-      const response = await api.get(`/counters?token=${token}&object=${object}&service=${service}`,{
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      if (!response.data.success) {
-        throw new Error(`HTTP error! status: ${response.data.status}`);
-      }
-      return await response.data.data;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-)
+const getObjects = (agreeList) => {
+  const allObjects = agreeList.flatMap(agree => agree.objects || []);  
+  return allObjects;
+}
 
 const agreementsSlice = createSlice({
   name: 'agreementsSlice',
@@ -116,6 +90,7 @@ const agreementsSlice = createSlice({
     ],
     selectedAgreement: [],
     fileToDownload: null,
+    allObjects: null,
   },
   reducers: {
     showDetails: (state) => {      
@@ -144,6 +119,7 @@ const agreementsSlice = createSlice({
     builder
       .addCase(fetchAgreementsList.fulfilled, (state, action) => {
         state.agreementsList = action.payload; // Сохраняем загруженные данные в agreementsList
+        state.allObjects = getObjects(action.payload)
         state.loading = false;
       })
       .addCase(fetchAgreementsList.pending, (state) => {
@@ -156,15 +132,12 @@ const agreementsSlice = createSlice({
       })
       .addCase(fetchAgreementFile.fulfilled, (state, action) => {
         state.fileToDownload = action.payload;
-        state.loading = false;
       })
       .addCase(fetchAgreementFile.pending, (state) => {
-        state.loading = true;
         state.error = null;
       })
       // Обработка ошибки
       .addCase(fetchAgreementFile.rejected, (state, action) => {
-        state.loading = false;
         state.error = action.payload || 'Failed to fetch file';
       })
       

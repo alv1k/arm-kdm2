@@ -107,14 +107,14 @@ const AgreementsPage = () => {
               !isDetailsShown && !loading ?
                 agreementsList.map((agreement, index) => (
                   <div key={index} onClick={() => handleAgreementClick(agreement)}>
-                    <AgreementItem 
-                      key={agreement.Код}
+                    <AgreementItem
                       id={agreement.id}
-                      number={agreement.Номер}
-                      date={agreement.Дата}
-                      debt={agreement.Долг}
-                      agree={agreement.Договор}
-                      services={agreement.Услуги}
+                      number={agreement.number}
+                      date={agreement.date}
+                      debt={agreement.debts}
+                      objects={agreement.objects}
+                      name={agreement.name}
+                      monthly={agreement.monthly}
                     />
                   </div>
                 ))
@@ -125,14 +125,14 @@ const AgreementsPage = () => {
               :
                 currentAgreement.map((agreement, index) => (
                   <div key={index} >
-                    <AgreementItem 
-                      key={agreement.Код}
+                    <AgreementItem
                       id={agreement.id}
-                      number={agreement.Номер}
-                      date={agreement.Дата}
-                      debt={agreement.Долг}
-                      agree={agreement.Договор}
-                      services={agreement.Услуги}
+                      number={agreement.number}
+                      date={agreement.date}
+                      debt={agreement.debts}
+                      objects={agreement.objects}
+                      name={agreement.name}
+                      monthly={agreement.monthly}
                     />
                   </div>
                 ))

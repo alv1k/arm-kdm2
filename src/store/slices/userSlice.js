@@ -21,15 +21,20 @@ export const fetchProfileData = createAsyncThunk(
         'oldPassword': payload.oldPassword,
         'newPassword': payload.newPassword
       } : ''
-      
       const response = await api.post(`/profile`, params);
       if (!response.data.success) {
+        localStorage.removeItem('token')
+        sessionStorage.removeItem('token');
+        document.cookie = 'token=; Max-Age=0; path=/;';
+        window.location.href = '/login';
         throw new Error(`HTTP error! status: ${response.data.status}`);
+      } 
+      if (payload && response.data.message == 'Пароль изменен') {
+        alert('Пароль изменен');
       }
       return await response.data.data;
     } catch (error) {
-      console.log(error, 'error');
-      
+      console.log(error, 'error');   
       return rejectWithValue(error.message);
     }
   }

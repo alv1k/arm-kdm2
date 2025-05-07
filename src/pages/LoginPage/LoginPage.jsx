@@ -119,7 +119,7 @@ const LoginPage = () => {
     }
   };
   
-  const handleSendPassword = (e) => {    
+  const handleSendPassword = (e) => {
     e.stopPropagation();
     const formData = new FormData(e.currentTarget);
     const credentials = {

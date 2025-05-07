@@ -1,38 +1,45 @@
-import React, { useEffect } from 'react';
-import { Description, Field, Label, Select } from '@headlessui/react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { hideNavbar } from '@/store/slices/navbarSlice';
-import { toggleStatus } from '@/store/slices/requestsSlice';
-import useMediaQueries from '@/hooks/useMediaQueries'; 
-import styles from './NewRequestPage.module.css';
+import { toggleStatus, fetchNewRequest } from '@/store/slices/requestsSlice';
+import useMediaQueries from '@/hooks/useMediaQueries';
 import CustomSelect from '@/components/CustomSelect/CustomSelect'
-import api from '@/api/api';
 
 const NewRequestPage = () => {
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
-  const options = ['Авария', 'Проблема', 'Запрос'];
+  const types = ['Авария', 'Проблема', 'Запрос'];
   const sprite_path = './src/assets/images/i.svg';
   const showNavbar = useSelector((state) => state.navbar.showNavbar);
+  const allObjects = useSelector((state) => state.agreements_slice.allObjects)
   const dispatch = useDispatch();
+  const [selectedObject, setSelectedObject] = useState("");
+  
+  const [selectedType, setSelectedType] = useState("");
+
+  const handleDataSelectedObject = (data) => {
+    setSelectedObject(data);
+  };
+  const handleDataSelectedType = (data) => {
+    setSelectedType(data);
+  };
+  console.log(allObjects, 'allObjects');
+  
+
   const backToRequests = () => {
       dispatch(toggleStatus());
   }
   const handleCreateNewRequest = () => {
-    const testData = {
-      object: '9CAC4CEDFB681CFD11EECFD4E8444884',
-      type: 'test1',
-      descr: 'test description 999',
-      status: null,
+    const data = {
+      object: '9CAC4CEDFB681CFD11EECB0060E2F363',
+      type: 'Авария',
+      descr: 'прорвало трубу',
+      status: 'В работе',
       token: localStorage.getItem('token') ?? sessionStorage.getItem('token')
     }
-
-    const response = api.get(`/setApp?id=${testData.id}&object=${testData.object}&type=${testData.type}&descr=${testData.descr}&status=${testData.status}&token=${testData.token}`);
-    if (!response.data.success) {
-      
-      throw new Error(`HTTP error! status: ${response.data.status}`);
-    }
-
-
+    dispatch(fetchNewRequest(data))
+    // const response = api.get(`/setApp?object=${testData.object}&type=${testData.type}&descr=${testData.descr}&status=${testData.status}&token=${testData.token}`);
+    // if (!response.data.success) {      
+    //   throw new Error(`HTTP error! status: ${response.data.status}`);
+    // }
   }
   return (
     <div className="lg:text-base md:text-base text-sm md:h-auto h-[110%]">
@@ -79,11 +86,7 @@ const NewRequestPage = () => {
             {
               !sm_breakpoint ? <span className="text-[#787C82]">Объект аренды</span> : ''
             }
-            <input 
-              className="w-full rounded-lg p-5 bg-item-active" 
-              type="text" 
-              placeholder={`${!sm_breakpoint ? 'Введите' : 'Объект аренды'}`}
-            />
+            <CustomSelect onDataSend={setSelectedObject} options={allObjects} defaultValue='Выбрать' />
           </div>
           <div className="lg:mt-0 mt-4 w-full lg:w-1/2">
             {
@@ -97,7 +100,7 @@ const NewRequestPage = () => {
               </option>
               <option className="text-black max-w-[100px]" value="disaster">Авария</option>
             </select> */}
-            <CustomSelect options={options} defaultValue={sm_breakpoint ? 'Тема обращения' : 'Выбрать'} />
+            <CustomSelect onDataSend={setSelectedType} options={types} defaultValue={sm_breakpoint ? 'Тема обращения' : 'Выбрать'} />
           </div>
         </div>
         {

@@ -1,16 +1,18 @@
 import { useState, useRef, useEffect } from 'react';
 
-const CustomSelect = ({ options, defaultValue }) => {
+const CustomSelect = ({ options, defaultValue, onDataSend }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(defaultValue);
   const selectRef = useRef(null);
+
 
   const toggleDropdown = () => {
     setIsOpen((prev) => !prev);
   };
 
-  const handleOptionClick = (option) => {
-    setSelectedOption(option);
+  const handleOptionClick = (option) => {    
+    onDataSend(option);
+    setSelectedOption(option)
     setIsOpen(false);
   };
 
@@ -46,9 +48,9 @@ const CustomSelect = ({ options, defaultValue }) => {
       {isOpen && (
         <div className="absolute right-0 z-10 mt-1 w-full rounded-md shadow-lg bg-white">
           <div className="py-1" role="menu" aria-orientation="vertical">
-            {options.map((option) => (
+            {options.map((option, index) => (
               <button
-                key={option}
+                key={index}
                 onClick={() => handleOptionClick(option)}
                 className={`text-[#787C82] block px-4 py-4 text-sm hover:bg-item-active w-full text-left ${selectedOption === option ? 'text-black bg-item-active' : ''}`}
               >

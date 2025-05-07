@@ -76,6 +76,7 @@ const UserPage = () => {
   const profileData = () => (
     <div className="md:flex block gap-5">
       {/* <img className="mt-4 w-25 h-25 md:mx-0 mx-auto" src="/src/assets/images/user.png" alt="profile" /> */}
+      
       <div className="lg:mt-3 md:mt-4 mt-5">
         <p className="text-[#203887] font-extrabold md:text-xl text-base md:text-left text-center">
           {profileFetchedData && profileFetchedData?.kontragent?.name}
@@ -156,15 +157,15 @@ const UserPage = () => {
     <form className="flex flex-col gap-5 mt-8" onSubmit={(e) => handleSendNewPassword(e)} method="POST">
       <div className="lg:w-1/2 w-full">
         <p className="text-[#787C82]">Введите текущий пароль</p>
-        <input name="oldPassword" className="mt-2 p-5 bg-item-active w-full rounded-xl" type="text" placeholder='Текущий пароль' required />
+        <input name="oldPassword" className="mt-2 p-5 bg-item-active w-full rounded-xl" type="text" placeholder='Текущий пароль' required minLength={6} />
       </div>
       <div className="lg:w-1/2 w-full">
         <p className="text-[#787C82]">Укажите новый пароль</p>
-        <input name="newPassword" className="mt-2 p-5 bg-item-active w-full rounded-xl" type="text" placeholder='Новый пароль' required />
+        <input name="newPassword" className="mt-2 p-5 bg-item-active w-full rounded-xl" type="text" placeholder='Новый пароль' required minLength={6} />
       </div>
       <div className="lg:w-1/2 w-full">
         <p className="text-[#787C82]">Повторите новый пароль</p>
-        <input name="newPasswordDoubled" className="mt-2 p-5 bg-item-active w-full rounded-xl" type="text" placeholder='Новый пароль' required />
+        <input name="newPasswordDoubled" className="mt-2 p-5 bg-item-active w-full rounded-xl" type="text" placeholder='Новый пароль' required minLength={6} />
       </div>
       <div className="md:flex block gap-5">
         <button className="btn-default py-2 md:mt-9 mt-3 md:w-auto md:px-6 w-full" type="button" onClick={() => handlePasswordChangeBtn(false)}>

@@ -8,8 +8,8 @@ export const fetchAuth = createAsyncThunk(
       if (!token) {
         window.location.href = '/login';
         throw new Error('Token not found');
-      }      
-    } catch (error) {
+      } 
+    } catch (error) {      
       return rejectWithValue(error.message);
     }
   }

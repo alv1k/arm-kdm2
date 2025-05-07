@@ -25,6 +25,33 @@ export const fetchRequestsList = createAsyncThunk(
     }
   }
 );
+export const fetchNewRequest = createAsyncThunk(
+  'requestsSlice/fetchNewRequest',
+  async (_, { rejectWithValue }) => {
+    let payload = _;
+    console.log(payload, 'ppppayloooad');
+    
+    try {
+      const token = localStorage.getItem('token') ?? sessionStorage.getItem('token');
+      if (!token) {
+        window.location.href = '/login';
+        throw new Error('Token not found');
+      }
+      
+      // const response = await api.get(`/setApp?token=${token}`,{
+      //   headers: {
+      //     'Authorization': `Bearer ${token}`
+      //   }
+      // });
+      // if (!response.data.success) {
+      //   throw new Error(`HTTP error! status: ${response.data.status}`);
+      // }
+      return await response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 const requestsSlice = createSlice({
   name: 'requests',
