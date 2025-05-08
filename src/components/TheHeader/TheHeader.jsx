@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toggleNavbar } from '@/store/slices/navbarSlice';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
 import { isShowDetails, hideDetails, agreementsStoreList, isShowCountersModal, setHideCountersModal, isShowPaymentModal, setHidePaymentModal } from '@/store/slices/agreementsSlice';
 import { isNew, toggleStatus, requestStatusFalse } from '@/store/slices/requestsSlice';
-import { isPasswordModification, togglePasswordChange } from '@/store/slices/userSlice';
+import { isPasswordModification, togglePasswordChange, fetchProfileData } from '@/store/slices/userSlice';
 import styles from './TheHeader.module.css'
 
 const sprite_path = './src/assets/images/i.svg';
@@ -20,8 +20,6 @@ const TheHeader = () => {
   const isPasswordChange = useSelector(isPasswordModification);
   const profileFetchedData = useSelector((state) => state.user_slice.profileData);
   const navigate = useNavigate();
-
-  console.log(profileFetchedData, 'profileFetchedData');  
 
   const handleClick = () => {    
     dispatch(toggleNavbar());
@@ -42,6 +40,11 @@ const TheHeader = () => {
       dispatch(hideDetails());
     }
   }
+  useEffect(() => {
+    dispatch(fetchProfileData())
+  }, [dispatch])
+
+
   return (
     <header className="xl:px-10 lg:px-10 md:px-6 px-0 text-[#203887] bg-white py-5 md:pb-0 pb-9 flex">
       {
@@ -75,7 +78,7 @@ const TheHeader = () => {
       </div>
       <div className="lg:flex md:flex lg:ms-auto  md:ms-auto  hidden" >
         <span className="font-semibold text-xl mt-[0.35rem] text-nowrap">
-          {profileFetchedData.kontragent.name}
+          {profileFetchedData?.kontragent?.name}
         </span>
         {/* <img src="./src/assets/images/Ellipse.png" alt=""  /> */}
       </div>

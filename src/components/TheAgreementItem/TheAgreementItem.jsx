@@ -16,7 +16,8 @@ const TheAgreementItem = ({ id, number, date, debt, objects, name, monthly }) =>
   const isDetailsShown = useSelector(isShowDetails);
   const showCountersModal = useSelector(isShowCountersModal);
   const showPaymentModal = useSelector(isShowPaymentModal);  
-  const fileToDownload = useSelector((state) => state.agreements_slice.fileToDownload);  
+  const fileToDownload = useSelector((state) => state.agreements_slice.fileToDownload);
+  
   
   const handleSetDataType = (type) => {
     dispatch(setDataType(type));
@@ -33,11 +34,6 @@ const TheAgreementItem = ({ id, number, date, debt, objects, name, monthly }) =>
   const objectdebts = objects ? objects[0].debts : null;
   const objectMonthly = objects ? objects[0].monthly : null;
   const objectName = objects ? objects[0].name : null;
-  // const floor_area = objects ? objects[0].services[0].Количество : null;
-  // const rent_start = objects ? objects[0].services[0].НачалоАренды : null;
-  // const rent_end = objects ? objects[0].services[0].КонецАренды : null;
-  // const rate = objects ? objects[0].services[0].Ставка : null;
-  // const summ = objects ? objects[0].services[0].Сумма : null;
 
   // Получить массив всех адресов:
   // const allAddresses = objects.map(service => 
@@ -80,18 +76,22 @@ const TheAgreementItem = ({ id, number, date, debt, objects, name, monthly }) =>
     }
   }
 
-  const handleDownloadAgree = async (e, id) => {    
+  const handleDownloadAgree = async (e, id) => {   
+    console.log(fileToDownload, 'before fetch');
+     
     e.stopPropagation();
     try {
-      await dispatch(fetchAgreementFile(id))
-      
-      const docName = fileToDownload ? fileToDownload[0]?.type : null
-      const dataUrl = fileToDownload ? fileToDownload[0]?.dataUrl : null
-      if (dataUrl) {
-        downloadBase64PDF(dataUrl, docName);
-      } else {
-        console.error("Файл не загружен");
-      }
+      const resultAction = await dispatch(fetchAgreementFile(id))
+
+      const fileData = resultAction.payload;
+      console.log(fileData, 'resultAction');
+      fileData.map(item => {
+        if (item?.dataUrl) {
+          downloadBase64PDF(item.dataUrl, item.type);
+        } else {
+          console.error(`Файл ${item.type} не загружен: отсутствует dataUrl`);
+        }
+      })
     } catch (error) {
       console.error("Ошибка загрузки файла:", error);
     }   

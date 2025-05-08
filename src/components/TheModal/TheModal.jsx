@@ -9,6 +9,8 @@ const TheModal = () => {
   
   const dispatch = useDispatch();
   const typeOfModal = useSelector(dataType);
+  const dataOfModal = useSelector((state) => state.modal_slice.dataOfModal);
+  
   const handleCloseModal = () => {
     dispatch(setShowModal())
   }
@@ -40,7 +42,7 @@ const TheModal = () => {
           <use href={`${sprite_path}#close-icon`} />
         </svg>
         {typeOfModal === 'counters' &&  <CountersModal  onClick={(e) => handleClick(e)}  />}
-        {typeOfModal === 'payment' &&  <PaymentModal  onClick={(e) => handleClick(e)}  />}
+        {typeOfModal === 'payment' &&  <PaymentModal data={dataOfModal} onClick={(e) => handleClick(e)}  />}
       </div>
     </div>
   )

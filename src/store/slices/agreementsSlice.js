@@ -33,9 +33,7 @@ export const fetchAgreementsList = createAsyncThunk(
 export const fetchAgreementFile = createAsyncThunk(
   'agreementsSlice/fetchAgreementFile',
   async (_, { rejectWithValue }) => {
-    const id = _;
-    console.log(id, 'id');
-    
+    const id = _;    
     try {
       const token = localStorage.getItem('token') ?? sessionStorage.getItem('token');
       if (!token) {
@@ -50,7 +48,7 @@ export const fetchAgreementFile = createAsyncThunk(
       });
       if (!response.data.success) {
         throw new Error(`HTTP error! status: ${response.data.status}`);
-      }
+      }      
       return await response.data.data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -60,6 +58,10 @@ export const fetchAgreementFile = createAsyncThunk(
 const getObjects = (agreeList) => {
   const allObjects = agreeList.flatMap(agree => agree.objects || []);  
   return allObjects;
+}
+const getInvoices = (agreeList) => {
+  const allInvoices = agreeList.flatMap(agree => agree.invoices || []);  
+  return allInvoices;
 }
 
 const agreementsSlice = createSlice({
@@ -91,6 +93,7 @@ const agreementsSlice = createSlice({
     selectedAgreement: [],
     fileToDownload: null,
     allObjects: null,
+    allInvoices: null,
   },
   reducers: {
     showDetails: (state) => {      
@@ -120,6 +123,7 @@ const agreementsSlice = createSlice({
       .addCase(fetchAgreementsList.fulfilled, (state, action) => {
         state.agreementsList = action.payload; // Сохраняем загруженные данные в agreementsList
         state.allObjects = getObjects(action.payload)
+        state.allInvoices = getInvoices(action.payload)
         state.loading = false;
       })
       .addCase(fetchAgreementsList.pending, (state) => {
@@ -131,7 +135,7 @@ const agreementsSlice = createSlice({
         state.error = action.payload || 'Failed to fetch agreements';
       })
       .addCase(fetchAgreementFile.fulfilled, (state, action) => {
-        state.fileToDownload = action.payload;
+        state.fileToDownload = [action.payload];
       })
       .addCase(fetchAgreementFile.pending, (state) => {
         state.error = null;

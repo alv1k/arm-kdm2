@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleStatus, fetchNewRequest } from '@/store/slices/requestsSlice';
+import { toggleStatus, fetchNewRequest, fetchRequestsList } from '@/store/slices/requestsSlice';
 import useMediaQueries from '@/hooks/useMediaQueries';
 import CustomSelect from '@/components/CustomSelect/CustomSelect'
 
@@ -16,7 +16,8 @@ const NewRequestPage = () => {
   const [requestDescr, setRequestDescr] = useState("");  
   const [selectedType, setSelectedType] = useState("");
 
-  const handleDataSelectedObject = (data) => {    
+  const handleDataSelectedObject = (data) => {
+    data = data.split('-').join();
     setSelectedObject(data);
   };
   const handleDataSelectedType = (data) => {
@@ -28,26 +29,29 @@ const NewRequestPage = () => {
   }
   const handleCreateNewRequest = () => {
     const data = {
-      object: '9CAC4CEDFB681CFD11EECB0060E2F363',
+      object: selectedObject.split('-').join(''),
       type: selectedType,
       descr: requestDescr,
       status: 'В работе',
       token: localStorage.getItem('token') ?? sessionStorage.getItem('token')
-    }
+    }    
     dispatch(fetchNewRequest(data))
-    // const response = api.get(`/setApp?object=${testData.object}&type=${testData.type}&descr=${testData.descr}&status=${testData.status}&token=${testData.token}`);
-    // if (!response.data.success) {      
-    //   throw new Error(`HTTP error! status: ${response.data.status}`);
-    // }
   }
   const handleRequestDescrChange = (e) => {
     setRequestDescr(e.target.value);
   };
 
+  // id E8444884-CFD4-11EE-9CAC-4CEDFB681CFD
+  // г. Якутск, ул. Каландаришвили, д. 7 / г. Якутск, ул. Каландаришвили, д. 7, ТЦ "Ленские столбы" (276,10 кв.м.) / помещение №18 / часть 5 (10 кв.м.)
+  // 677027, Республика Саха (Якутия), г Якутск, ул Каландаришвили, д. 7
+
   useEffect(() => {
-    console.log(isNewRequestSaved, 'isNewRequestSaved');
-    
-  }, isNewRequestSaved)
+    if (isNewRequestSaved) {
+      alert('Заявка успешно внесена')
+      dispatch(toggleStatus());
+      dispatch(fetchRequestsList())
+    }
+  }, [isNewRequestSaved])
   return (
     <div className="lg:text-base md:text-base text-sm md:h-auto h-[110%]">
       <div className="flex md:justify-start justify-center">

@@ -51,7 +51,7 @@ const requestsSlice = createSlice({
   name: 'requests',
   initialState: {
     isNewRequest: false,
-    requestsList: null,
+    requestsList: [],
     loading: false,
     error: null,
     isNewRequestSaved: false
@@ -78,16 +78,16 @@ const requestsSlice = createSlice({
         .addCase(fetchRequestsList.rejected, (state, action) => {
           state.loading = false;
           state.error = action.payload || 'Failed to fetch agreements';
+          state.requestsList = [];
         })
-        .addCase(fetchNewRequest.fulfilled, (state, action) => {
-          state.isNewRequestSaved = action.payload;
+        .addCase(fetchNewRequest.fulfilled, (state) => {
+          state.isNewRequestSaved = true;
           state.loading = false;
         })
         .addCase(fetchNewRequest.pending, (state) => {
           state.loading = true;
           state.error = null;
         })
-        // Обработка ошибки
         .addCase(fetchNewRequest.rejected, (state, action) => {
           state.loading = false;
           state.error = action.payload || 'Failed to fetch agreements';

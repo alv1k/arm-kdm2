@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import CustomCheckbox from '@/components/CustomCheckbox/CustomCheckbox';
 
-const PaymentModal = () => {
+const PaymentModal = (props) => {
   const [selectedOption, setSelectedOption] = useState(null);
-
+  let data = props.data;
+  
   const paymentOptions = [
     { id: 'card', label: 'Банковская карта' },
     { id: 'invoice', label: 'Счет' },
@@ -23,7 +24,7 @@ const PaymentModal = () => {
         <div className="my-2 md:flex block font-semibold">№001. Счет за аренду</div>
         <div className="md:my-0 my-2 md:flex block">
           <p className="text-[#787C82]">Дата:&nbsp;</p> 
-          20.02.2025
+          {data.date}
         </div>
       </div>
       
