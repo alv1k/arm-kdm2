@@ -318,13 +318,13 @@ const TheDocsListComponent = () => {
                   <tr key={index}>
                     <td className={currentTab && currentTab.title_en == 'counters' ? 'align-top' : ''}>
                       <div className="ps-8">
-                        {currentTab && currentTab.title_en == 'counters' ? '01.01.2011' : index + 1}
+                        {currentTab && currentTab.title_en == 'counters' ? '01.01.2011' : item.number}
                       </div>
                     </td>
                     <td>
                       {
                         currentTab && currentTab.title_en == 'acts' ?
-                        'Акт об оплате аренды' : currentTab && currentTab.title_en == 'bills' ? 'Счет за аренду' 
+                        'Акт об оплате аренды' : currentTab && currentTab.title_en == 'bills' ? item.descr
                         : currentTab && currentTab.title_en == 'counters' ? 
                         <div>
                           <p className="text-[#787C82]">№000001</p>
