@@ -12,14 +12,13 @@ import useMediaQueries from '@/hooks/useMediaQueries';
 const UserPage = () => {
   const sprite_path = './src/assets/images/i.svg';
   const showNavbar = useSelector((state) => state.navbar.showNavbar);
-  const profileFetchedData = useSelector((state) => state.user_slice.profileData);
+  const profileFetchedData = useSelector((state) => state.user_slice.profileData);  
   const isNewRequest = useSelector(isNew);
   const isPasswordChange = useSelector(isPasswordModification);
   const userAuthData = useSelector(userData);  
 
-  // https://cloud.aokdm.ru/method/profile?token=065C8F4A-70A0-4802-A110-58C33255CE2D
+  // https://cloud.aokdm.ru/method/profile?token=
   // можно редактировать email, login, phone и password
-
   
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const [showPassword, setShowPassword] = useState(false);

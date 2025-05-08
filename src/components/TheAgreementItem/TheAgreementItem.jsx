@@ -83,7 +83,6 @@ const TheAgreementItem = ({ id, number, date, debt, objects, name, monthly }) =>
       const resultAction = await dispatch(fetchAgreementFile(id))
 
       const fileData = resultAction.payload;
-      console.log(fileData, 'resultAction');
       fileData.map(item => {
         if (item?.dataUrl) {
           downloadBase64PDF(item.dataUrl, item.type);

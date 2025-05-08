@@ -45,11 +45,13 @@ const LoginPage = () => {
     login: '',
     password: ''
   });
-  const handleInputChange = (e) => {
-    
+  const handleInputChange = (e) => {    
     e.preventDefault();
     const { name, value } = e.target;
-    setData(prev => ({ ...prev, [name]: value }));
+    const trimmedValue = (name === 'login' || name === 'password') 
+    ? value.trim() 
+    : value;
+    setData(prev => ({ ...prev, [name]: trimmedValue }));
   };
 
   const handleRestoreButton = () => {    
@@ -89,7 +91,7 @@ const LoginPage = () => {
           localStorage.setItem('login', credentials.login);
           localStorage.setItem('token', response.data.data.token);
           // Установка cookie с длительным сроком
-          document.cookie = `token=${token}; max-age=${30 * 24 * 60 * 60}; path=/; Secure`;
+          document.cookie = `token=${response.data.data.token}; max-age=${30 * 24 * 60 * 60}; path=/; Secure`;
         } else {
           sessionStorage.setItem('token', response.data.data.token);
         }

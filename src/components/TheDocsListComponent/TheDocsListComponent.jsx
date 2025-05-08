@@ -168,7 +168,7 @@ const TheDocsListComponent = () => {
     ))
     :
     <div className={`
-      flex bg-[#FAFBFD] rounded-lg my-5 p-5
+      flex bg-[#FAFBFD] rounded-lg my-5 lg:p-0 p-5
     `}>
       <div className="w-full">
         {
