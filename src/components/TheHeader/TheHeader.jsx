@@ -46,7 +46,7 @@ const TheHeader = () => {
 
 
   return (
-    <header className="xl:px-10 lg:px-10 md:px-6 px-0 text-[#203887] bg-white py-5 md:pb-0 pb-9 flex">
+    <header className="xl:px-10 lg:px-10 md:px-6 md:pb-5 px-0 text-[#203887] bg-white py-5 pb-10 flex">
       {
         ((isNewRequest || showAgreementDetails || isPasswordChange) && sm_breakpoint) ?
         <button 

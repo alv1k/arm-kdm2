@@ -76,8 +76,7 @@ const TheAgreementItem = ({ id, number, date, debt, objects, name, monthly }) =>
     }
   }
 
-  const handleDownloadAgree = async (e, id) => {   
-    console.log(fileToDownload, 'before fetch');
+  const handleDownloadAgree = async (e, id) => {
      
     e.stopPropagation();
     try {

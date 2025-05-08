@@ -7,7 +7,7 @@ const CustomCheckbox = (props) => {
         onChange={() => {}}/>
       {
          props && props.label ?
-        <label htmlFor={props.id} className={`${styles.checkbox_label} ${props.type == 'payment' ? 'ps-5' : 'md:ps-11 ps-8'} `}>{ props.label }</label>
+        <label htmlFor={props.id} className={`${styles.checkbox_label} ${props.type == 'payment' ? 'ps-5' : 'md:ps-11 ps-8'} text-nowrap text-left`}>{ props.label }</label>
         : ''
       }
     </div>

@@ -38,6 +38,15 @@
 body {
   background-color: #FAFBFD;
 }
+input {
+  outline: none;
+}
+input:hover {
+  outline: 1px #6374AD;
+}
+input:active {
+  outline: 2px #9DA8CA;
+}
 .bg-item-default {  
   background-color: #FAFBFD;
 }
