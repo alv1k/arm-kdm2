@@ -200,3 +200,13 @@ input:active {
   background-size: 200% 100%;
   animation: wave 1.5s linear infinite;
 }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(-5deg); }
+  50% { transform: translateY(-10px) rotate(5deg); }
+}
+
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}

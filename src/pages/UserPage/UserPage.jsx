@@ -53,9 +53,13 @@ const UserPage = () => {
       "newPassword" : newPassword
     }
     dispatch(fetchProfileData(credentials))
-    handlePasswordChangeBtn(false); // Закрываем форму
-    
+    handlePasswordChangeBtn(false); // Закрываем форму  
   }
+  
+  useEffect(() => {
+    dispatch(fetchProfileData());
+  }, [dispatch]);
+
   const formatPhoneSpecial = (phone) => {
     const cleaned = ('' + phone).replace(/\D/g, '');
     

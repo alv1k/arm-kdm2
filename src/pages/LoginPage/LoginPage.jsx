@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleTabs, selectedTab, setLoginSelectedTab } from '@/store/slices/tabsSlice';
@@ -29,8 +29,16 @@ const LoginPage = () => {
   const [isCodeVerification, setCodeVerification] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [inputRestorePassword, setInputRestorePassword] = useState();
+  const inputPasswordRef = useRef(null);
+  const caretPosRef = useRef(null);
 
-
+  const handleTogglePassword = () => {
+    caretPosRef.current = {
+      start: inputPasswordRef.current.selectionStart,
+      end: inputPasswordRef.current.selectionEnd
+    };
+    setShowPassword(!showPassword);
+  };
   // https://cloud.aokdm.ru/method/restore?email=atlasov.n.r@gmail.com
   // восстановление пароля
 
@@ -189,6 +197,19 @@ const LoginPage = () => {
     }));
   }, []);
 
+  useEffect(() => {
+    if (caretPosRef.current && inputPasswordRef.current) {
+      inputPasswordRef.current.setSelectionRange(
+        caretPosRef.current.start,
+        caretPosRef.current.end
+      );
+      caretPosRef.current = null;
+    }
+    inputPasswordRef.current.focus()
+    console.log('caret staff');
+    
+  }, [showPassword]);
+
   const RestorePassword = () => {
     return (
       <section>
@@ -259,13 +280,33 @@ const LoginPage = () => {
                   <form method="GET" onSubmit={handleSubmit}>
                     <div className="text-left  transition-all duration-2000 ease-in-out overflow-hidden max-h-[1000px]">
                       <p className="mb-2 mt-4 md:text-base text-sm">Логин</p>
-                      <input name="login" value={data.login} onChange={handleInputChange} className="p-4 bg-item-active w-full rounded-xl" type="text" placeholder="Введите логин" required />
+                      <input 
+                        name="login" 
+                        value={data.login} 
+                        onChange={handleInputChange} 
+                        className="p-4 bg-item-active w-full rounded-xl" 
+                        type="text" 
+                        placeholder="Введите логин" 
+                        required 
+                      />
                       <div className="relative">
                         <p className="mb-2 mt-4 md:text-base text-sm">Пароль</p>
-                        <input name="password" id="password" 
-                          className={`${!isCorrectLoginData ? 'danger_animation' : ''} p-4 bg-item-active w-full rounded-xl`} placeholder="Введите пароль" type={showPassword ? 'text' : 'password'} required minLength={6} 
+                        <input 
+                          ref={inputPasswordRef}
+                          name="password" id="password" 
+                          className={`${!isCorrectLoginData ? 'danger_animation' : ''} p-4 bg-item-active w-full rounded-xl`} 
+                          placeholder="Введите пароль" 
+                          type={showPassword ? 'text' : 'password'} 
+                          required minLength={6} 
                           value={data.password}
                           onChange={handleInputChange}
+                          onDoubleClick={(e) => e.target.select()}
+                          onSelect={(e) => {
+                            caretPosRef.current = {
+                              start: e.target.selectionStart,
+                              end: e.target.selectionEnd
+                            };
+                          }}
                         />
                         <button
                           type="button"
@@ -273,9 +314,8 @@ const LoginPage = () => {
                           aria-label={showPassword ? "Скрыть пароль" : "Показать пароль"}
                           onClick={(e) => {
                             e.preventDefault();
-                            setShowPassword(!showPassword); 
-                            setTimeout(() => document.getElementById('password').focus(), 100)
-                          }}
+                            setShowPassword(!showPassword);
+                          }}                          
                         >
                           {
                             showPassword ? 

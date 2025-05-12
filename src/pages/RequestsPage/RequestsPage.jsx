@@ -42,6 +42,12 @@ const RequestsPage = () => {
     dispatch(requestStatusFalse());    
   }, [location]);  
 
+
+  useEffect(() => {
+    console.log(page404, 'page404');
+      
+  }, [page404]);  
+  
   return (
     <section 
       className="

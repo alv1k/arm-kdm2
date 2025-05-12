@@ -54,7 +54,8 @@ const requestsSlice = createSlice({
     requestsList: [],
     loading: false,
     error: null,
-    isNewRequestSaved: false
+    isNewRequestSaved: false,
+    page404: false,
   },
   reducers: {
     toggleStatus(state) {      
@@ -67,7 +68,7 @@ const requestsSlice = createSlice({
     extraReducers: (builder) => {
       builder
         .addCase(fetchRequestsList.fulfilled, (state, action) => {
-          state.requestsList = action.payload; // Сохраняем загруженные данные в agreementsList
+          state.requestsList = action.payload; // Сохраняем загруженные данные
           state.loading = false;
           state.page404 = false;
         })
@@ -80,7 +81,7 @@ const requestsSlice = createSlice({
         .addCase(fetchRequestsList.rejected, (state, action) => {
           state.loading = false;
           state.page404 = true;
-          state.error = action.payload || 'Failed to fetch agreements';
+          state.error = action.payload || 'Failed to fetch';
           state.requestsList = [];
         })
         .addCase(fetchNewRequest.fulfilled, (state) => {
@@ -96,7 +97,7 @@ const requestsSlice = createSlice({
         .addCase(fetchNewRequest.rejected, (state, action) => {
           state.loading = false;
           state.page404 = true;
-          state.error = action.payload || 'Failed to fetch agreements';
+          state.error = action.payload || 'Failed to fetch';
         });
     }
 });

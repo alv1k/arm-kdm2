@@ -29,7 +29,6 @@ listenerMiddleware.startListening({
   effect: (action, listenerApi) => {
     try {
       listenerApi.dispatch(setLoadingStart());
-      console.log('Processing:', action.type);
     } catch (error) {
       console.error('Error in listener:', error);
     }
@@ -78,41 +77,41 @@ listenerMiddleware.startListening({
 });
 
 // Контроль длительных запросов
-listenerMiddleware.startListening({
-  predicate: (action) => [
-    fetchProfileData.pending,
-    fetchAgreementsList.pending,
-    fetchRequestsList.pending,
-    fetchAuth.pending
-  ].some(creator => creator.match(action)),
+// listenerMiddleware.startListening({
+//   predicate: (action) => [
+//     fetchProfileData.pending,
+//     fetchAgreementsList.pending,
+//     fetchRequestsList.pending,
+//     fetchAuth.pending
+//   ].some(creator => creator.match(action)),
   
-  effect: async (action, listenerApi) => {
-    const timeoutId = setTimeout(() => {
-      listenerApi.dispatch(showTimeoutWarning());
-    }, 10000);
+//   effect: async (action, listenerApi) => {
+//     const timeoutId = setTimeout(() => {
+//       listenerApi.dispatch(showTimeoutWarning());
+//     }, 10000);
 
-    try {
-      const completionActions = [
-        fetchProfileData.fulfilled,
-        fetchProfileData.rejected,
-        fetchAgreementsList.fulfilled,
-        fetchAgreementsList.rejected,
-        fetchRequestsList.fulfilled,
-        fetchRequestsList.rejected,
-        fetchAuth.fulfilled,
-        fetchAuth.rejected
-      ];
+//     try {
+//       const completionActions = [
+//         fetchProfileData.fulfilled,
+//         fetchProfileData.rejected,
+//         fetchAgreementsList.fulfilled,
+//         fetchAgreementsList.rejected,
+//         fetchRequestsList.fulfilled,
+//         fetchRequestsList.rejected,
+//         fetchAuth.fulfilled,
+//         fetchAuth.rejected
+//       ];
 
-      await listenerApi.condition((action) => 
-        completionActions.some(creator => creator.match(action))
-      );
+//       await listenerApi.condition((action) => 
+//         completionActions.some(creator => creator.match(action))
+//       );
 
-    } finally {
-      clearTimeout(timeoutId);
-      listenerApi.dispatch(setLoadingEnd());
-    }
-  },
-});
+//     } finally {
+//       clearTimeout(timeoutId);
+//       // listenerApi.dispatch(setLoadingEnd());
+//     }
+//   },
+// });
 
 const store = configureStore({
   reducer: {
