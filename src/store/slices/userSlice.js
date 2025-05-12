@@ -50,6 +50,7 @@ const userSlice = createSlice({
     userData: null,
     error: null,
     profileData: null,
+    page404: false,
   },
   reducers: {
     togglePasswordChange(state, action) {      
@@ -71,13 +72,16 @@ const userSlice = createSlice({
     builder
       .addCase(fetchProfileData.fulfilled, (state, action) => {
         state.profileData = action.payload;
+        state.page404 = false;       
       })
       .addCase(fetchProfileData.pending, (state) => {
         state.error = null;
+        state.page404 = false;       
       })
       // Обработка ошибки
       .addCase(fetchProfileData.rejected, (state, action) => {
         state.error = action.payload || 'Failed to fetch profileData';
+        state.page404 = true;
       });
   }
 });

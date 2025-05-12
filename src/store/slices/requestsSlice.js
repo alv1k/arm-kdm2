@@ -69,27 +69,33 @@ const requestsSlice = createSlice({
         .addCase(fetchRequestsList.fulfilled, (state, action) => {
           state.requestsList = action.payload; // Сохраняем загруженные данные в agreementsList
           state.loading = false;
+          state.page404 = false;
         })
         .addCase(fetchRequestsList.pending, (state) => {
           state.loading = true;
           state.error = null;
+          state.page404 = false;
         })
         // Обработка ошибки
         .addCase(fetchRequestsList.rejected, (state, action) => {
           state.loading = false;
+          state.page404 = true;
           state.error = action.payload || 'Failed to fetch agreements';
           state.requestsList = [];
         })
         .addCase(fetchNewRequest.fulfilled, (state) => {
           state.isNewRequestSaved = true;
           state.loading = false;
+          state.page404 = false;
         })
         .addCase(fetchNewRequest.pending, (state) => {
           state.loading = true;
           state.error = null;
+          state.page404 = false;
         })
         .addCase(fetchNewRequest.rejected, (state, action) => {
           state.loading = false;
+          state.page404 = true;
           state.error = action.payload || 'Failed to fetch agreements';
         });
     }

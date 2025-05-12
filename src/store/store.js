@@ -6,7 +6,7 @@ import tabsReducer from './slices/tabsSlice';
 import requestsReducer, { fetchRequestsList } from './slices/requestsSlice';
 import userReducer from './slices/userSlice';
 import modalReducer from './slices/modalSlice';
-import authReducer from './slices/authSlice';
+import authReducer, { fetchAuth } from './slices/authSlice';
 import agreementsReducer, { fetchAgreementsList } from './slices/agreementsSlice';
 import loadingSlice, { setLoadingStart, setLoadingEnd } from './slices/loadingSlice';
 import { fetchProfileData } from './slices/userSlice'; 
@@ -20,65 +20,97 @@ const loggingMiddleware = (store) => (next) => (action) => {
 const listenerMiddleware = createListenerMiddleware();
 
 listenerMiddleware.startListening({
-  actionCreator: 
-    fetchProfileData.pending || 
-    fetchAgreementsList.pending ||
-    fetchRequestsList.pending ||
+  predicate: (action) => [
+    fetchProfileData.pending,
+    fetchAgreementsList.pending,
+    fetchRequestsList.pending,
     fetchAuth.pending,
+  ].some(creator => creator.match(action)),
   effect: (action, listenerApi) => {
-    listenerApi.dispatch(setLoadingStart());
+    try {
+      listenerApi.dispatch(setLoadingStart());
+      console.log('Processing:', action.type);
+    } catch (error) {
+      console.error('Error in listener:', error);
+    }
   },
 });
 
 listenerMiddleware.startListening({
-  actionCreator: 
-    fetchProfileData.fulfilled || 
-    fetchAgreementsList.fulfilled ||
-    fetchRequestsList.fulfilled ||
-    fetchAuth.fulfilled,
+  predicate: (action) => [
+    fetchProfileData.fulfilled,
+    fetchAgreementsList.fulfilled,
+    fetchRequestsList.fulfilled,
+    fetchAuth.fulfilled
+  ].some(creator => creator.match(action)),
+  
   effect: (action, listenerApi) => {
-    console.log('Профиль загружен:', action.payload);
-    listenerApi.dispatch({ type: 'HIDE_LOADER' });
-    listenerApi.dispatch(setLoadingEnd());
+    try {
+      listenerApi.dispatch({ type: 'HIDE_LOADER' });
+      listenerApi.dispatch(setLoadingEnd());
+      console.log('Successfully processed:', action.type);
+    } catch (error) {
+      console.error('Error in fulfilled listener:', error);
+    }
   },
 });
 
 listenerMiddleware.startListening({
-  actionCreator: 
-    fetchProfileData.rejected || 
-    fetchAgreementsList.rejected ||
-    fetchRequestsList.rejected ||
-    fetchAuth.rejected,
+  predicate: (action) => [
+    fetchProfileData.rejected,
+    fetchAgreementsList.rejected,
+    fetchRequestsList.rejected,
+    fetchAuth.rejected
+  ].some(creator => creator.match(action)),
+  
   effect: (action, listenerApi) => {
-    console.error('Ошибка:', action.error);
-    listenerApi.dispatch({
-      type: 'SHOW_ERROR',
-      payload: action.error.message,
-    });
-    listenerApi.dispatch(setLoadingEnd());
+    try {
+      console.error('Request failed:', action.error);
+      listenerApi.dispatch({
+        type: 'SHOW_ERROR',
+        payload: action.error.message,
+      });
+      listenerApi.dispatch(setLoadingEnd());
+    } catch (error) {
+      console.error('Error in rejected listener:', error);
+    }
   },
 });
 
 // Контроль длительных запросов
 listenerMiddleware.startListening({
-  predicate: (action) => 
-    action.type === fetchProfileData.pending.type || 
-    action.type === fetchAgreementsList.pending.type,
+  predicate: (action) => [
+    fetchProfileData.pending,
+    fetchAgreementsList.pending,
+    fetchRequestsList.pending,
+    fetchAuth.pending
+  ].some(creator => creator.match(action)),
+  
   effect: async (action, listenerApi) => {
     const timeoutId = setTimeout(() => {
-      listenerApi.dispatch({
-        type: 'SHOW_TIMEOUT_WARNING',
-      });
+      listenerApi.dispatch(showTimeoutWarning());
     }, 10000);
 
-    // Ждем завершения (любого исхода)
-    await listenerApi.condition((action) => 
-      fetchProfileData.fulfilled.match(action) ||
-      fetchProfileData.rejected.match(action)
-    );
-    listenerApi.dispatch(setLoadingEnd());   
-    
-    clearTimeout(timeoutId);
+    try {
+      const completionActions = [
+        fetchProfileData.fulfilled,
+        fetchProfileData.rejected,
+        fetchAgreementsList.fulfilled,
+        fetchAgreementsList.rejected,
+        fetchRequestsList.fulfilled,
+        fetchRequestsList.rejected,
+        fetchAuth.fulfilled,
+        fetchAuth.rejected
+      ];
+
+      await listenerApi.condition((action) => 
+        completionActions.some(creator => creator.match(action))
+      );
+
+    } finally {
+      clearTimeout(timeoutId);
+      listenerApi.dispatch(setLoadingEnd());
+    }
   },
 });
 

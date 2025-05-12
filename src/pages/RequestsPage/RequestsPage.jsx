@@ -16,7 +16,7 @@ import TheSkeleton from '@/components/TheSkeleton/TheSkeleton';
 const RequestsPage = () => {
   const sprite_path = './src/assets/images/i.svg';
   const showNavbar = useSelector((state) => state.navbar.showNavbar);
-  const page404 = useSelector((state) => state.agreements_slice.page404);
+  const page404 = useSelector((state) => state.requests_slice.page404);
   const isLoading = useSelector((state) => state.loading_slice.isLoading);
   const isNewRequest = useSelector(isNew);
   

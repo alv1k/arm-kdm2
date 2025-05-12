@@ -15,11 +15,11 @@ const UserPage = () => {
   const sprite_path = './src/assets/images/i.svg';
   const showNavbar = useSelector((state) => state.navbar.showNavbar);
   const profileFetchedData = useSelector((state) => state.user_slice.profileData);
-  const page404 = useSelector((state) => state.agreements_slice.page404);
+  const page404 = useSelector((state) => state.user_slice.page404);
   const isLoading = useSelector((state) => state.loading_slice.isLoading);
   const isNewRequest = useSelector(isNew);
   const isPasswordChange = useSelector(isPasswordModification);
-  const userAuthData = useSelector(userData);  
+  const userAuthData = useSelector(userData);
 
   // https://cloud.aokdm.ru/method/profile?token=
   // можно редактировать email, login, phone и password
