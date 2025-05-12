@@ -10,10 +10,14 @@ import useMediaQueries from '@/hooks/useMediaQueries';
 import NewRequestPage from '@/pages/NewRequestPage/NewRequestPage';
 import TheTabsComponent from '@/components/TheTabsComponent/TheTabsComponent';
 import TheDocsListComponent from '@/components/TheDocsListComponent/TheDocsListComponent';
+import Page404 from '@/pages/Page404/Page404';
+import TheSkeleton from '@/components/TheSkeleton/TheSkeleton';
 
 const RequestsPage = () => {
   const sprite_path = './src/assets/images/i.svg';
   const showNavbar = useSelector((state) => state.navbar.showNavbar);
+  const page404 = useSelector((state) => state.agreements_slice.page404);
+  const isLoading = useSelector((state) => state.loading_slice.isLoading);
   const isNewRequest = useSelector(isNew);
   
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
@@ -49,41 +53,52 @@ const RequestsPage = () => {
       onClick={sideClick}
     >
       {
-        isNewRequest ? 
-          <NewRequestPage />
-          : 
-          <div className="lg:text-base md:text-base text-sm">
-            <div className="flex md:justify-start justify-center">
-              {
-                isNewRequest && sm_breakpoint ? '' :
-                <p className="
-                  xl:mt-0 
-                  lg:px-6 lg:text-[26px] lg:mt-4
-                  md:px-2 md:mt-9
-                  text-xl font-bold mt-5
-                ">
-                  Заявки
-                </p>
-              }
-              {
-                isNewRequest && !sm_breakpoint ? 
-                <button 
-                  className="btn-text ms-auto me-4 lg:mt-0 md:mt-9 flex"
-                >
-                  <svg
-                    className="icon"
-                  >
-                    <use href={`${sprite_path}#back-icon`} />
-                  </svg>
-                  
-                  Назад
-                </button>
-                : ''
-              }
+            page404 ?                    
+            <Page404 /> 
+            : isLoading ? 
+            <div className="md:pt-4 pt-5">
+              <TheSkeleton width="auto" height="80px" className="mb-6" />
+              <TheSkeleton width="90%" height="80px" className="mb-6" />
+              <TheSkeleton width="auto" height="80px" className="mb-6" />
+              <TheSkeleton width="90%" height="80px" className="mb-6" />
+              <TheSkeleton width="auto" height="80px" className="mb-6" />
             </div>
-            <TheTabsComponent titles='requests' breakpoint={sm_breakpoint ? 'sm-breakpoint' : ''}/>
-            <TheDocsListComponent />
-          </div>
+            :            
+            isNewRequest ? 
+              <NewRequestPage />
+              : 
+              <div className="lg:text-base md:text-base text-sm">
+                <div className="flex md:justify-start justify-center">
+                  {
+                    isNewRequest && sm_breakpoint ? '' :
+                    <p className="
+                      xl:mt-0 
+                      lg:px-6 lg:text-[26px] lg:mt-4
+                      md:px-2 md:mt-9
+                      text-xl font-bold mt-5
+                    ">
+                      Заявки
+                    </p>
+                  }
+                  {
+                    isNewRequest && !sm_breakpoint ? 
+                    <button 
+                      className="btn-text ms-auto me-4 lg:mt-0 md:mt-9 flex"
+                    >
+                      <svg
+                        className="icon"
+                      >
+                        <use href={`${sprite_path}#back-icon`} />
+                      </svg>
+                      
+                      Назад
+                    </button>
+                    : ''
+                  }
+                </div>
+                <TheTabsComponent titles='requests' breakpoint={sm_breakpoint ? 'sm-breakpoint' : ''}/>
+                <TheDocsListComponent />
+              </div>
       }
     </section>
   )

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
-import { isShowDetails, isShowCountersModal, setShowCountersModal, isShowPaymentModal, setShowPaymentModal, fetchAgreementFile } from '@/store/slices/agreementsSlice';
+import { isShowDetails, isShowCountersModal, setShowCountersModal, isShowPaymentModal, setShowPaymentModal, fetchDowloadFile } from '@/store/slices/agreementsSlice';
 import PriceFormatter from '../PriceFormatter/PriceFormatter'; 
 import DateFormatter from '../DateFormatter/DateFormatter';
 import CountersModal from '@/components/TheCountersModal/TheCountersModal'; 
@@ -80,7 +80,7 @@ const TheAgreementItem = ({ id, number, date, debt, objects, name, monthly }) =>
      
     e.stopPropagation();
     try {
-      const resultAction = await dispatch(fetchAgreementFile(id))
+      const resultAction = await dispatch(fetchDowloadFile(id))
 
       const fileData = resultAction.payload;
       fileData.map(item => {

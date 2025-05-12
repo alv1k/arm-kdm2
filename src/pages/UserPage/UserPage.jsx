@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import Page404 from '@/pages/Page404/Page404';
+import TheSkeleton from '@/components/TheSkeleton/TheSkeleton';
 import { hideNavbar } from '@/store/slices/navbarSlice';
 import { fetchAuth } from '@/store/slices/authSlice';
 import { toggleTabs  } from '@/store/slices/tabsSlice';
@@ -12,7 +14,9 @@ import useMediaQueries from '@/hooks/useMediaQueries';
 const UserPage = () => {
   const sprite_path = './src/assets/images/i.svg';
   const showNavbar = useSelector((state) => state.navbar.showNavbar);
-  const profileFetchedData = useSelector((state) => state.user_slice.profileData);  
+  const profileFetchedData = useSelector((state) => state.user_slice.profileData);
+  const page404 = useSelector((state) => state.agreements_slice.page404);
+  const isLoading = useSelector((state) => state.loading_slice.isLoading);
   const isNewRequest = useSelector(isNew);
   const isPasswordChange = useSelector(isPasswordModification);
   const userAuthData = useSelector(userData);  
@@ -29,10 +33,6 @@ const UserPage = () => {
       dispatch(hideNavbar());
     }
   };
-  useEffect(() => {
-    dispatch(fetchAuth())
-    dispatch(fetchProfileData())
-  }, [dispatch]);
   const handlePasswordChangeBtn = (status) => {
     dispatch(togglePasswordChange(status));
   }
@@ -187,44 +187,57 @@ const UserPage = () => {
       "
       onClick={sideClick}
     >
-      <div className={`lg:text-base md:text-base text-sm w-full h-[110%] ${isPasswordChange ? '' : ' xl:w-4/5'}`}>
-        <div className="flex items-center md:justify-start justify-center md:pt-6">
-          <p className="
-            xl:mt-0 
-            lg:px-6 lg:text-[26px] lg:mt-4
-            md:px-2 md:mt-0 md:text-left
-            text-xl font-bold mt-5 text-center
-          ">
+      {
+        page404 ? 
+        <Page404 /> 
+        : isLoading ? 
+        <div className="md:pt-4 pt-5">
+          <TheSkeleton width="auto" height="80px" className="mb-6" />
+          <TheSkeleton width="90%" height="80px" className="mb-6" />
+          <TheSkeleton width="auto" height="80px" className="mb-6" />
+          <TheSkeleton width="90%" height="80px" className="mb-6" />
+          <TheSkeleton width="auto" height="80px" className="mb-6" />
+        </div> 
+        :
+        <div className={`lg:text-base md:text-base text-sm w-full h-[110%] ${isPasswordChange ? '' : ' xl:w-4/5'}`}>
+          <div className="flex items-center md:justify-start justify-center md:pt-6">
+            <p className="
+              xl:mt-0 
+              lg:px-6 lg:text-[26px] lg:mt-4
+              md:px-2 md:mt-0 md:text-left
+              text-xl font-bold mt-5 text-center
+            ">
+              {
+                isPasswordChange ? 'Изменить пароль' : 'Профиль'
+              }
+            </p>
             {
-              isPasswordChange ? 'Изменить пароль' : 'Профиль'
-            }
-          </p>
-          {
-            isPasswordChange && !sm_breakpoint ? 
-            <button 
-              className="btn-text ms-auto me-4 lg:mt-0 md:mt-0 flex"
-              onClick={() => handlePasswordChangeBtn(false)}
-            >
-              <svg
-                className="icon"
+              isPasswordChange && !sm_breakpoint ? 
+              <button 
+                className="btn-text ms-auto me-4 lg:mt-0 md:mt-0 flex"
+                onClick={() => handlePasswordChangeBtn(false)}
               >
-                <use href={`${sprite_path}#back-icon`} />
-              </svg>              
-              Назад
-            </button> : ''
-          }
+                <svg
+                  className="icon"
+                >
+                  <use href={`${sprite_path}#back-icon`} />
+                </svg>              
+                Назад
+              </button> : ''
+            }
+          </div>
+          <div className="lg:mt-6 md:mt-2 mt-4">
+            {
+              isPasswordChange && xl_breakpoint ? 
+              profileData() : !isPasswordChange ? profileData() : ''
+            }
+            {
+              isPasswordChange ? 
+              profilePasswordChange() : profileLoginData()
+            }
+          </div>
         </div>
-        <div className="lg:mt-6 md:mt-2 mt-4">
-          {
-            isPasswordChange && xl_breakpoint ? 
-            profileData() : !isPasswordChange ? profileData() : ''
-          }
-          {
-            isPasswordChange ? 
-            profilePasswordChange() : profileLoginData()
-          }
-        </div>
-      </div>
+      }
     </section>
   )
 }

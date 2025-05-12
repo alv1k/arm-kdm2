@@ -30,8 +30,8 @@ export const fetchAgreementsList = createAsyncThunk(
   }
 );
 
-export const fetchAgreementFile = createAsyncThunk(
-  'agreementsSlice/fetchAgreementFile',
+export const fetchDowloadFile = createAsyncThunk(
+  'agreementsSlice/fetchDowloadFile',
   async (_, { rejectWithValue }) => {
     const id = _;    
     try {
@@ -70,20 +70,19 @@ const agreementsSlice = createSlice({
     showDetails: false,
     isShowCountersModal: false,
     isShowPaymentModal: false,
-    loading: false,
     error: null,
     type: { title_en: 'all', title_ru: 'Все' },
     tab: { title_en: 'bills', title_ru: 'Счета' },
     agreementsList: [
       {
-        name: 'agree1',
+        name: '',
         summ: 400000,
         date: new Date(2025, 5, 6).toLocaleDateString(), // Преобразуем дату в строку
         address: 'г. Якутск, ул. Ленина 123, 1 этаж, каб. №123',
         num: 'num123'
       },
       {
-        name: 'agree2',
+        name: '',
         summ: 250000,
         date: new Date(2025, 7, 15).toLocaleDateString(),
         address: 'г. Москва, ул. Пушкина 10',
@@ -94,6 +93,7 @@ const agreementsSlice = createSlice({
     fileToDownload: null,
     allObjects: null,
     allInvoices: null,
+    page404: false,
   },
   reducers: {
     showDetails: (state) => {      
@@ -123,33 +123,31 @@ const agreementsSlice = createSlice({
       .addCase(fetchAgreementsList.fulfilled, (state, action) => {
         state.agreementsList = action.payload; // Сохраняем загруженные данные в agreementsList
         state.allObjects = getObjects(action.payload)
-        state.allInvoices = getInvoices(action.payload)
-        state.loading = false;
+        state.allInvoices = getInvoices(action.payload) 
+        state.page404 = false;       
       })
       .addCase(fetchAgreementsList.pending, (state) => {
-        state.loading = true;
         state.error = null;
+        state.page404 = false;
       })
       .addCase(fetchAgreementsList.rejected, (state, action) => {
-        state.loading = false;
         state.error = action.payload || 'Failed to fetch agreements';
+        state.page404 = true;
       })
-      .addCase(fetchAgreementFile.fulfilled, (state, action) => {
+      .addCase(fetchDowloadFile.fulfilled, (state, action) => {
         state.fileToDownload = [action.payload];
       })
-      .addCase(fetchAgreementFile.pending, (state) => {
+      .addCase(fetchDowloadFile.pending, (state) => {
         state.error = null;
       })
       // Обработка ошибки
-      .addCase(fetchAgreementFile.rejected, (state, action) => {
+      .addCase(fetchDowloadFile.rejected, (state, action) => {
         state.error = action.payload || 'Failed to fetch file';
       })
       
   }
 });
 
-
-export const selectAgreementsLoading = (state) => state.agreements_slice.loading;
 export const selectAgreementsError = (state) => state.agreements_slice.error;
 
 export const isShowDetails = (state) => state.agreements_slice.showDetails;

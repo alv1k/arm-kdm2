@@ -34,7 +34,10 @@ export const fetchProfileData = createAsyncThunk(
       }
       return await response.data.data;
     } catch (error) {
-      console.log(error, 'error');   
+      console.log(error, 'error');
+      if (error.message == 'timeout of 5000ms exceeded') {
+        console.log('timeout of 5000ms exceeded');        
+      }
       return rejectWithValue(error.message);
     }
   }
@@ -45,7 +48,6 @@ const userSlice = createSlice({
   initialState: {
     isPasswordChange: false,
     userData: null,
-    loading: false,
     error: null,
     profileData: null,
   },
@@ -69,15 +71,12 @@ const userSlice = createSlice({
     builder
       .addCase(fetchProfileData.fulfilled, (state, action) => {
         state.profileData = action.payload;
-        state.loading = false;
       })
       .addCase(fetchProfileData.pending, (state) => {
-        state.loading = true;
         state.error = null;
       })
       // Обработка ошибки
-      .addCase(fetchProfileData.rejected, (state, action) => {        
-        state.loading = false;
+      .addCase(fetchProfileData.rejected, (state, action) => {
         state.error = action.payload || 'Failed to fetch profileData';
       });
   }

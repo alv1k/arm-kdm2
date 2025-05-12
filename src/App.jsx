@@ -6,8 +6,10 @@ import RequestsPage from './pages/RequestsPage/RequestsPage'
 import ContactsPage from './pages/ContactsPage/ContactsPage'
 import UserPage from './pages/UserPage/UserPage';
 import LoginPage from './pages/LoginPage/LoginPage';
+import Page404 from './pages/Page404/Page404';
 import Header from '@/components/TheHeader/TheHeader';
 import Navbar from '@/components/TheNavbar/TheNavbar';
+import LoadingPage from '@/pages/LoadingPage/LoadingPage';
 import TheModal from '@/components/TheModal/TheModal';
 import useMediaQueries from '@/hooks/useMediaQueries';
 import { showModal } from '@/store/slices/modalSlice';
@@ -46,6 +48,7 @@ const App = () => {
         location.pathname != '/login' ?
         <Header /> : ''
       }
+      <LoadingPage />
       <div className={`
         w-full md:py-5 flex h-fit min-h-[90vh]
         ${location.pathname == '/login' ? 'xl:p-0 lg:p-0' : 'xl:p-10 lg:p-5'}        
