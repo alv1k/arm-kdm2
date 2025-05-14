@@ -34,7 +34,7 @@ const RequestsPage = () => {
       type: isNewRequest ? 'newRequest' : 'requests', 
       breakpoint: sm_breakpoint ? 'sm-breakpoint' : ''
     } ));
-    // dispatch(fetchAgreementsList());
+    dispatch(fetchAgreementsList());
     dispatch(fetchRequestsList());
   }, [dispatch]);
   const location = useLocation();

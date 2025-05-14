@@ -70,19 +70,19 @@ const TheDocsListComponent = () => {
     }
   }
 
-  const handleBillFileDownload = async (e, id) => {     
+  const handleFileDownload = async (e, id) => {     
     e.stopPropagation();
     try {
       const resultAction = await dispatch(fetchDowloadFile(id))
 
       const fileData = resultAction.payload;
-      fileData.map(item => {
-        if (item?.dataUrl) {
-          downloadBase64PDF(item.dataUrl, item.type);
-        } else {
-          console.error(`Файл ${item.type} не загружен: отсутствует dataUrl`);
-        }
-      })
+        fileData.map(item => {
+          if (item?.dataUrl) {
+            downloadBase64PDF(item.dataUrl, item.type);
+          } else {
+            console.error(`Файл ${item.type} не загружен: отсутствует dataUrl`);
+          }
+        })
     } catch (error) {
       console.error("Ошибка загрузки файла:", error);
     }  
@@ -95,7 +95,7 @@ const TheDocsListComponent = () => {
     (sm_breakpoint || md_breakpoint) ?      
     getList()?.map((item, index) => (
       currentRoute != "/requests" ?
-      <div className="grid grid-cols-2 gap-3 p-6 bg-[#FAFBFD] rounded-lg my-5">        
+      <div className={`grid ${currentTab && currentTab.title_en == 'acts' ? '' : 'grid-cols-2'} gap-3 p-6 bg-[#FAFBFD] rounded-lg my-5`}>        
         <div className={`
           ${sm_breakpoint || md_breakpoint ? '' : 'flex'} 
           ${currentTab && currentTab.title_en == 'bills' ? 'text-left' : 'md:w-2/5'}
@@ -106,7 +106,7 @@ const TheDocsListComponent = () => {
               <div className="mb-1 text-nowrap">№001. Счет за аренду</div>
               <div><span className="text-[#787C82]">Дата:</span> <DateFormatter dateString={item.date} /></div>
               
-              <button className="btn-default px-6 py-2 flex mt-5 w-full justify-center" onClick={(e) => handleBillFileDownload(e, item.id)}>
+              <button className="btn-default px-6 py-2 flex mt-5 w-full justify-center" onClick={(e) => handleFileDownload(e, item.id)}>
                 <svg
                   className={`icon me-3`}
                 >
@@ -119,15 +119,20 @@ const TheDocsListComponent = () => {
           }
           {
             currentTab && currentTab.title_en == 'acts' ? 
-            <div className={`${currentTab && currentTab == 'counters' ? 'md:ps-3' : ''} `}>
-              {
-                currentTab && currentTab.title_en == 'counters' ? 
-                <p className="mb-2"><span className="text-[#787C82] text-nowrap">Дата: </span>02.02.2026</p> : ''
-              }
-              <div className="text-nowrap"><span className="text-[#787C82]">№ пр. учета:</span> 0000001</div>
-              <div className="text-nowrap my-1"><span className="text-[#787C82]">№ пр. учета:</span> 0000001</div>
-              <div className="text-nowrap"><span className="text-[#787C82]">№ пр. учета:</span> 0000001</div>
-            </div> : <div>test1</div>
+            <div className={``}>
+              <div className="text-nowrap"><span className="text-[#787C82]">№001:</span> Акт об оплате аренды</div>
+              <div className="text-nowrap my-1"><span className="text-[#787C82]">Дата:&nbsp;</span><DateFormatter dateString={item.date} /></div>
+              <button className="btn-default px-6 py-2 flex lg:mt-0 mt-5 md:w-fit w-full justify-center" disabled={!item.file}
+                onClick={(e) => handleFileDownload(e, item.id)}
+              >
+                <svg
+                  className="icon me-3"
+                >
+                  <use href={`${sprite_path}#doc-icon`} />
+                </svg>
+                Скачать
+              </button> 
+            </div> : ''
           }
           {
             currentTab && currentTab.title_en == 'counters' ? 
@@ -150,10 +155,10 @@ const TheDocsListComponent = () => {
           currentTab && currentTab.title_en == 'bills' ? 
           <div className="h-full justify-baseline flex flex-col">
             <div className="mb-1 text-[#787C82]">Сумма:</div>
-            <div className="text-red-600"><PriceFormatter amount={item.summ} /></div>
-            <button className="btn-success px-6 py-2 mt-auto w-full" disabled onClick={() => handleSetDataType('payment', item)}>Оплатить</button>
+            <div className={ item.status === 'payd' ? '' : 'text-red-600'}><PriceFormatter amount={item.summ} /></div>
+            <button className="btn-success px-6 py-2 mt-auto w-full" disabled onClick={() => handleSetDataType('payment', item)}>{item.status === 'payd' ? 'Оплачено' : 'Оплатить'}</button>
           </div>
-          :
+          : currentTab && currentTab.title_en == 'counters' ?
           <div className="ms-3">
             {
               currentTab && currentTab.title_en == 'counters' ? 
@@ -162,7 +167,8 @@ const TheDocsListComponent = () => {
             <div>ГВС: 123.45 м3</div>
             <div className="my-1">ХВС: 123.45 м3</div>
             <div>{sm_breakpoint ? 'ЭЭ' : 'Электроэнегрия'}: 123.45 м3</div>
-          </div>
+          </div> 
+          : ''
         }
         </div>
       </div>
@@ -176,7 +182,10 @@ const TheDocsListComponent = () => {
               <span className="text-[#787C82]">Дата:&nbsp;</span><DateFormatter dateString={item.date} /> 
             </p>
             <p>
-              <span className="text-[#787C82]">Статус:&nbsp;</span>{item.status}
+              <span className="text-[#787C82]">Статус:&nbsp;</span>
+              <span className={item.status.includes('В работе') ? '' : 'text-green-700'}>
+                {item.status}
+              </span>
             </p>
           </div>
         </div>
@@ -273,7 +282,7 @@ const TheDocsListComponent = () => {
           <tbody className="bg-item-default ">
             {
               getList()?.map((item, index) => (
-                <tr key={index}>
+                <tr key={index} className="cursor-pointer">
                   <td className={currentTab && currentTab.title_en == 'counters' ? 'align-top' : ''}>
                     <div className="ps-8">
                       {currentTab && currentTab.title_en == 'counters' ? '01.01.2011' : item.number}
@@ -326,7 +335,7 @@ const TheDocsListComponent = () => {
                     currentTab && currentTab.title_en == 'bills' ?
                     <td className="ms-auto">                
                       <button className="btn-default px-6 py-2 flex lg:mt-0 mt-5 md:w-full md:justify-center"
-                          onClick={(e) => handleBillFileDownload(e, item.id)}
+                          onClick={(e) => handleFileDownload(e, item.id)}
                       >
                         <svg
                           className="icon me-3"

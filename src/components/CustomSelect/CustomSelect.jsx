@@ -15,10 +15,10 @@ const CustomSelect = ({ options, defaultValue, onDataSend }) => {
     if (typeof option == 'string') {
       setSelectedType(option)
     } else {
-      setSelectedObject(option.address)
+      setSelectedObject(option.name)
     }
     onDataSend(typeof option == 'string' ? option : option.id);
-    setSelectedOption(typeof option == 'string' ? option : option.address)
+    setSelectedOption(typeof option == 'string' ? option : option.name)
     setIsOpen(false);
   };
 
@@ -36,7 +36,7 @@ const CustomSelect = ({ options, defaultValue, onDataSend }) => {
   }, []);  
 
   return (
-    <div className="relative inline-block text-left w-full" ref={selectRef}>
+    <div className="relative inline-block text-left w-full mt-2" ref={selectRef}>
       <div className="">
         <button
           onClick={toggleDropdown}
@@ -60,7 +60,7 @@ const CustomSelect = ({ options, defaultValue, onDataSend }) => {
                 onClick={() => handleOptionClick(option)}
                 className={`text-[#787C82] block px-4 py-4 text-sm hover:bg-item-active w-full text-left ${selectedObject || selectedType ? 'text-black bg-item-active' : ''}`}
               >
-                {typeof option == 'string' ? option : option.address}
+                {typeof option == 'string' ? option : option.name}
               </button>
             ))}
           </div>

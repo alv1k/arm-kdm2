@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { toggleNavbar } from '@/store/slices/navbarSlice';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
 import { isShowDetails, hideDetails, agreementsStoreList, isShowCountersModal, setHideCountersModal, isShowPaymentModal, setHidePaymentModal } from '@/store/slices/agreementsSlice';
-import { isNew, toggleStatus, requestStatusFalse } from '@/store/slices/requestsSlice';
+import { isNew, requestStatusTrue, requestStatusFalse } from '@/store/slices/requestsSlice';
 import { isPasswordModification, togglePasswordChange, fetchProfileData } from '@/store/slices/userSlice';
 import styles from './TheHeader.module.css'
 
@@ -34,7 +34,7 @@ const TheHeader = () => {
     } else if (isVisiblePaymentModal) {
       dispatch(setHidePaymentModal());
     } else if (isNewRequest) {
-      dispatch(toggleStatus());
+      dispatch(requestStatusFalse());
     } else if(isPasswordChange) {
       dispatch(togglePasswordChange());
     } else if (showAgreementDetails) {

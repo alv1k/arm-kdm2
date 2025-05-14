@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleStatus, fetchNewRequest, fetchRequestsList } from '@/store/slices/requestsSlice';
+import { requestStatusTrue, requestStatusFalse, fetchNewRequest, fetchRequestsList } from '@/store/slices/requestsSlice';
 import { getBase64 } from '@/utils/getBase64';
 import useMediaQueries from '@/hooks/useMediaQueries';
 import CustomSelect from '@/components/CustomSelect/CustomSelect';
@@ -17,6 +17,25 @@ const NewRequestPage = () => {
   const [requestDescr, setRequestDescr] = useState("");  
   const [selectedType, setSelectedType] = useState("");
   const [uploadedFiles, setUploadedFiles] = useState("");
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [error, setError] = useState(null);
+
+  function getUniqueById(options) {
+    if (!Array.isArray(options)) return [];
+    
+    const idMap = new Map();
+    
+    options.forEach(option => {
+      if (option?.id && !idMap.has(option.id)) {
+        idMap.set(option.id, option);
+      }
+    });
+    
+    return Array.from(idMap.values());
+  }
+  
+  // Использование
+  const cleanedObjects = getUniqueById(allObjects);
 
   const handleDataSelectedObject = (data) => {
     data = data.split('-').join();
@@ -27,11 +46,11 @@ const NewRequestPage = () => {
   };  
 
   const backToRequests = () => {
-      dispatch(toggleStatus());
+    dispatch(requestStatusTrue());
   }
   const handleCreateNewRequest = () => {
     const data = {
-      object: selectedObject.split('-').join(''),
+      object: selectedObject,
       type: selectedType,
       descr: requestDescr,
       status: 'В работе',
@@ -68,7 +87,8 @@ const NewRequestPage = () => {
           return getBase64(file);
         })
       );
-      setUploadedFiles(base64Results);      
+      setUploadedFiles(base64Results);   
+      setSelectedFiles(files);   
     } catch (error) {
       console.error('Ошибка загрузки:', error.message);
       // Показ пользователю: toast.error(error.message)
@@ -77,10 +97,16 @@ const NewRequestPage = () => {
   useEffect(() => {
     if (isNewRequestSaved) {
       alert('Заявка успешно внесена')
-      dispatch(toggleStatus());
+      dispatch(requestStatusFalse());
       dispatch(fetchRequestsList())
     }
   }, [isNewRequestSaved])
+  useEffect(() => {
+    if (selectedFiles.length > 2) {
+      alert('Количество файлов должно быть не более 5, пожалуйста, произведите выбор еще раз');
+      setSelectedFiles([]);
+    }
+  }, [selectedFiles])
   return (
     <div className="lg:text-base md:text-base text-sm md:h-auto h-[110%]">
       <div className="flex md:justify-start justify-center">
@@ -102,7 +128,7 @@ const NewRequestPage = () => {
         text-[#203887] text-center font-semibold mt-4 lg:text-base md:text-base text-sm
       ">
         <p className="text-xl">
-          Заявка №001
+          Новая заявка
         </p>
         {
           !sm_breakpoint ? 
@@ -126,20 +152,12 @@ const NewRequestPage = () => {
             {
               !sm_breakpoint ? <span className="text-[#787C82]">Объект аренды</span> : ''
             }
-            <CustomSelect onDataSend={setSelectedObject} options={allObjects} defaultValue='Выбрать' />
+            <CustomSelect onDataSend={setSelectedObject} options={cleanedObjects} defaultValue={sm_breakpoint ? 'Название помещения' : 'Выбрать'} />
           </div>
           <div className="lg:mt-0 mt-4 w-full lg:w-1/2">
             {
               !sm_breakpoint ? <span className="text-[#787C82] md:mt-2">Тема обращения</span> : ''
             }
-            {/* <select className="w-full rounded-lg px-4 py-5 bg-item-active text-[#787C82]" name="" id="">
-              <option   hidden disabled defaultValue selected>
-                {
-                  !sm_breakpoint ? 'Выбрать' : 'Тема обращения'
-                }
-              </option>
-              <option className="text-black max-w-[100px]" value="disaster">Авария</option>
-            </select> */}
             <CustomSelect onDataSend={setSelectedType} options={types} defaultValue={sm_breakpoint ? 'Тема обращения' : 'Выбрать'} />
           </div>
         </div>
@@ -147,20 +165,42 @@ const NewRequestPage = () => {
           !sm_breakpoint ? <span className="text-[#787C82] md:mt-2">Описание заявки</span> : ''
         }
         <textarea 
-          className="w-full rounded-lg px-5 py-4 bg-item-active md:min-h-43 min-h-50"
+          className="w-full rounded-lg px-5 py-4 bg-item-active md:min-h-43 min-h-50 outline-0"
           placeholder={`${!sm_breakpoint ? 'Введите текст' : 'Описание заявки'}`}
           value={requestDescr}
           onChange={(e) => handleRequestDescrChange(e)}
         ></textarea>
-        <p className="text-[#787C82] md:mt-2">Прикрепить файл</p>
+        <p className="text-[#787C82] md:mt-2">Прикрепить файлы. (*.jpeg, *.jpg, *.png, *.pdf) - каждый весом не более 3 MB</p>
         <div className="
-          md:w-fit md:flex md:p-5 md:flex-row-reverse 
+          md:w-fit md:flex md:p-5 md:flex-row-reverse md:items-start
           w-full rounded-lg px-5 py-3 mb-1 bg-item-active text-center items-center
         ">
-          <p className="text-[#787C82] md:pb-0 md:ps-10 pb-4 md:pe-6">{ uploadedFiles ? uploadedFiles : 'Файл не выбран'}</p>
-          {/* <button className="md:w-auto md:px-5 w-full rounded-lg p-2 btn-default" onClick={(e) => handleFilesUpload(e)}>
-            Выберите файл
-          </button> */}
+          {
+            selectedFiles.length > 0 ? (
+              <div className="mt-2 space-y-1 text-[#787C82] md:pb-0 md:ps-10 pb-4 md:pe-6">
+                <p className="text-sm font-medium">Выбранные файлы:</p>
+                <ul className="space-y-1">
+                  {selectedFiles.map((file, index) => (
+                    <li 
+                      key={index} 
+                      className="flex items-center justify-between text-sm"
+                    >
+                      <span className="truncate max-w-xs">{file.name}</span>
+                      <span className="ms-6 text-gray-500">
+                        {(file.size / 1024 / 1024).toFixed(2)}MB
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : <p className="text-[#787C82] md:pb-0 md:ps-10 pb-4 md:pe-6 align-center self-center-safe">{ uploadedFiles ? '' : 'Файлы не выбраны'}</p>
+}
+            {error && (
+              <div className="mt-2 text-sm text-red-600 bg-red-50 p-2 rounded">
+                {error}
+              </div>
+            )
+          }
           <button 
             className="
               w-full md:w-auto 
@@ -181,21 +221,10 @@ const NewRequestPage = () => {
               fileInput.click();
             }}
           >
-            <div className="flex items-center justify-center gap-2">
-              <span>Выберите файл</span>
+            <div className="flex items-center justify-center gap-2 text-nowrap">
+              <span>Выберите файлы</span>
             </div>
           </button>
-          {/* {selectedFile && (
-  <div className="mt-2 text-sm text-gray-600">
-    Выбран: {selectedFile.name} 
-    <button 
-      onClick={() => setSelectedFile(null)}
-      className="ml-2 text-red-500 hover:text-red-700"
-    >
-      ×
-    </button>
-  </div>
-)} */}
         </div>
       </div>
       <button className="btn-primary py-2 md:w-auto md:px-10 md:mt-8 w-full mt-11" type="submit" onClick={handleCreateNewRequest}>

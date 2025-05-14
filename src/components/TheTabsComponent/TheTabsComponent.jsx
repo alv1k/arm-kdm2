@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux'; 
 import useMediaQueries from '@/hooks/useMediaQueries'; 
 import { isShowDetails } from '@/store/slices/agreementsSlice';
-import { toggleStatus } from '@/store/slices/requestsSlice';
+import { requestStatusTrue } from '@/store/slices/requestsSlice';
 import { isRestorePass, toggleRestorePassword } from '@/store/slices/authSlice';
 import { requestsSelectedTab, setAgreementsSelectedTab, setAgreementSelectedTab, setRequestsSelectedTab, setLoginSelectedTab } from '@/store/slices/tabsSlice';
 
@@ -100,7 +100,7 @@ const TheTabsComponent = (props) => {
   
 
   const handleNewRequestBtn = () => {    
-    dispatch(toggleStatus())
+    dispatch(requestStatusTrue())
   }
   const handleNewRequestBitrix = () => {
     let a= document.createElement('a');

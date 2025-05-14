@@ -58,8 +58,8 @@ const requestsSlice = createSlice({
     page404: false,
   },
   reducers: {
-    toggleStatus(state) {      
-      state.isNewRequest = !state.isNewRequest
+    requestStatusTrue: (state) => {
+      state.isNewRequest = true;
     },
     requestStatusFalse: (state) => {
       state.isNewRequest = false;
@@ -105,5 +105,5 @@ const requestsSlice = createSlice({
 
 export const isNew = (state) => state.requests_slice.isNewRequest;
 export const requestsList = (state) => state.requests_slice.requestsList;
-export const { toggleStatus, requestStatusFalse } = requestsSlice.actions;
+export const { requestStatusTrue, requestStatusFalse } = requestsSlice.actions;
 export default requestsSlice.reducer;
