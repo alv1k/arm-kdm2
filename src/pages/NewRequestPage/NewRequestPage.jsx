@@ -47,6 +47,8 @@ const NewRequestPage = () => {
     setRequestDescr(e.target.value);
   };
   const handleFilesUpload = async (e) => {
+    console.log(e.target.value, 'targetttt');
+    
     try {
       const files = Array.from(e.target.files || []);      
       if (files.length === 0) {
@@ -59,10 +61,10 @@ const NewRequestPage = () => {
           if (!['application/pdf', 'image/jpeg', 'image/png'].includes(file.type)) {
             throw new Error(`Недопустимый формат: ${file.name}`);
           }    
-          const MAX_SIZE_MB = 5;
+          const MAX_SIZE_MB = 3;
           if (file.size > MAX_SIZE_MB * 1024 * 1024) {
             throw new Error(`Файл слишком большой. Максимум: ${MAX_SIZE_MB}MB`);
-          }      
+          }
           return getBase64(file);
         })
       );
@@ -155,7 +157,7 @@ const NewRequestPage = () => {
           md:w-fit md:flex md:p-5 md:flex-row-reverse 
           w-full rounded-lg px-5 py-3 mb-1 bg-item-active text-center items-center
         ">
-          <p className="text-[#787C82] md:pb-0 md:ps-10 pb-4 md:pe-6">Файл не выбран</p>
+          <p className="text-[#787C82] md:pb-0 md:ps-10 pb-4 md:pe-6">{ uploadedFiles ? uploadedFiles : 'Файл не выбран'}</p>
           {/* <button className="md:w-auto md:px-5 w-full rounded-lg p-2 btn-default" onClick={(e) => handleFilesUpload(e)}>
             Выберите файл
           </button> */}

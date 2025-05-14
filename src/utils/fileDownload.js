@@ -1,10 +1,24 @@
-export async function downloadBase64PDF(base64String, filename = 'document.pdf') {
-  if (!base64String?.startsWith('data:application/pdf;base64,')) {
-    throw new Error('Некорректный формат Base64 PDF');
+function splitBase64(base64String) {
+  if (typeof base64String !== 'string') {
+    throw new Error('Input must be a string');
   }
 
+  const [type, pureBase64] = base64String.split(',');
+
+  return {
+    mimeType: type?.match(/^data:(.*?);/)?.[1] || null,
+    pureBase64: pureBase64 || null
+  };
+}
+
+export async function downloadBase64PDF(base64String, filename = 'document') {
+  if (typeof base64String !== 'string') {
+    throw new Error('Input must be a string');
+  }  
+  
   try {
-    const pureBase64 = base64String.split(',')[1];
+    const {mimeType, pureBase64} = splitBase64(base64String);
+     
     const binaryString = atob(pureBase64);
     const bytes = new Uint8Array(binaryString.length);
     
@@ -12,7 +26,7 @@ export async function downloadBase64PDF(base64String, filename = 'document.pdf')
       bytes[i] = binaryString.charCodeAt(i);
     }
 
-    const blob = new Blob([bytes], { type: 'application/pdf' });
+    const blob = new Blob([bytes], { type: mimeType });
     const url = URL.createObjectURL(blob);
     
     const a = document.createElement('a');
@@ -26,7 +40,7 @@ export async function downloadBase64PDF(base64String, filename = 'document.pdf')
       URL.revokeObjectURL(url);
     }, 100);
   } catch (error) {
-    console.error('Ошибка при скачивании PDF:', error);
+    console.error('Ошибка при скачивании:', error);
     throw error;
   }
 }

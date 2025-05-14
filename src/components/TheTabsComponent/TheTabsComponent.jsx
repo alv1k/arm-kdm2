@@ -114,7 +114,7 @@ const TheTabsComponent = (props) => {
       xl:mt-9 
       lg:mt-10 lg:gap-4
       md:mt-7 md:rounded-t-xl md:justify-start
-      flex justify-between mt-11 b bg-[#FAFBFD] border-b-1 border-slate-300 rounded-t-md font-medium overflow-auto no-scrollbar
+      flex justify-between mt-11 bg-[#FAFBFD] border-b-1 border-slate-300 rounded-t-md font-medium overflow-auto no-scrollbar
     `}>
         {tabs.map((tab, index) => (
           <div 
@@ -138,7 +138,7 @@ const TheTabsComponent = (props) => {
           currentRoute == '/requests' ? 
           <div className="flex ms-auto">
             <div 
-              className="flex items-center cursor-pointer px-8 text-nowrap"
+              className="flex items-center cursor-pointer lg:px-8 px-4 text-nowrap"
               onClick={handleNewRequestBtn}
             >
               <svg
@@ -149,7 +149,7 @@ const TheTabsComponent = (props) => {
               Новая заявка
             </div>
             <div
-              className="flex items-center cursor-pointer px-8 text-nowrap"
+              className="flex items-center cursor-pointer lg:px-8  px-4 text-nowrap"
               onClick={handleNewRequestBitrix}
             >
               <svg

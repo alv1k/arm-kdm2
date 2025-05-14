@@ -87,6 +87,9 @@ const TheDocsListComponent = () => {
       console.error("Ошибка загрузки файла:", error);
     }  
   }
+  const handleGetFile = (file) => {    
+    downloadBase64PDF(file);    
+  }
 
   return (
     (sm_breakpoint || md_breakpoint) ?      
@@ -147,7 +150,7 @@ const TheDocsListComponent = () => {
           currentTab && currentTab.title_en == 'bills' ? 
           <div className="h-full justify-baseline flex flex-col">
             <div className="mb-1 text-[#787C82]">Сумма:</div>
-            <div className="text-red-600"><PriceFormatter amount="100000" /></div>
+            <div className="text-red-600"><PriceFormatter amount={item.summ} /></div>
             <button className="btn-success px-6 py-2 mt-auto w-full" disabled onClick={() => handleSetDataType('payment', item)}>Оплатить</button>
           </div>
           :
@@ -287,20 +290,20 @@ const TheDocsListComponent = () => {
                       </div> 
                       : item.object
                     }
-                  </td>              
-                    {
-                      currentTab && currentTab.title_en == 'acts' ?
-                      '' : currentTab && currentTab.title_en == 'bills' ? '' :
-                      currentTab && currentTab.title_en == 'counters' ? 
-                      <td>
-                        <div>
-                          <p className="text-[#787C82]">№000001</p>
-                          <p>123.45 м3</p>
-                        </div> 
-                      </td>
-                      :                
-                      <td>{item.type}</td>
-                    }              
+                  </td>            
+                  {
+                    currentTab && currentTab.title_en == 'acts' ?
+                    '' : currentTab && currentTab.title_en == 'bills' ? '' :
+                    currentTab && currentTab.title_en == 'counters' ? 
+                    <td>
+                      <div>
+                        <p className="text-[#787C82]">№000001</p>
+                        <p>123.45 м3</p>
+                      </div> 
+                    </td>
+                    :                
+                    <td>{item.type}</td>
+                  }
                   <td>
                     {
                       currentTab && currentTab.title_en == 'counters' ? 
@@ -311,7 +314,7 @@ const TheDocsListComponent = () => {
                     }
                     
                   </td>
-                  <td>
+                  <td align="right">
                     {
                       currentTab && (currentTab.title_en == 'acts' || currentTab.title_en == 'bills') ?
                       <PriceFormatter amount={item.summ} /> 
@@ -340,7 +343,7 @@ const TheDocsListComponent = () => {
                       : 
                       <button className="btn-success px-6 py-2 lg:mt-0 mt-5 w-full" disabled={currentTab && currentTab.title_en == 'bills'} onClick={() => currentTab && currentTab.title_en == 'bills' ? handleSetDataType('payment', item) : ''}>
                         {
-                          currentTab && currentTab.title_en == 'bills' ? 'Оплатить' : 'Скачать'
+                          currentTab && currentTab.title_en == 'bills' ? 'Оплатить' : 'Скачать2'
                         }
                       </button>
                     }

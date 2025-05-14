@@ -48,7 +48,7 @@ export const fetchDowloadFile = createAsyncThunk(
       });
       if (!response.data.success) {
         throw new Error(`HTTP error! status: ${response.data.status}`);
-      }      
+      }
       return await response.data.data;
     } catch (error) {
       return rejectWithValue(error.message);
