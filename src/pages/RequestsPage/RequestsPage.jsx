@@ -34,19 +34,13 @@ const RequestsPage = () => {
       type: isNewRequest ? 'newRequest' : 'requests', 
       breakpoint: sm_breakpoint ? 'sm-breakpoint' : ''
     } ));
-    dispatch(fetchAgreementsList());
+    // dispatch(fetchAgreementsList());
     dispatch(fetchRequestsList());
   }, [dispatch]);
   const location = useLocation();
   useEffect(() => {
     dispatch(requestStatusFalse());    
   }, [location]);  
-
-
-  useEffect(() => {
-    console.log(page404, 'page404');
-      
-  }, [page404]);  
   
   return (
     <section 

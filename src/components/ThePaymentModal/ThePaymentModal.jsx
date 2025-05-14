@@ -24,7 +24,7 @@ const PaymentModal = (props) => {
         <div className="my-2 md:flex block font-semibold">№001. Счет за аренду</div>
         <div className="md:my-0 my-2 md:flex block">
           <p className="text-[#787C82]">Дата:&nbsp;</p> 
-          {data.date}
+          {/* {data.date ?? 'none'} */}
         </div>
       </div>
       

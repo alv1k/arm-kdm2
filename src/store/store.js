@@ -47,7 +47,6 @@ listenerMiddleware.startListening({
     try {
       listenerApi.dispatch({ type: 'HIDE_LOADER' });
       listenerApi.dispatch(setLoadingEnd());
-      console.log('Successfully processed:', action.type);
     } catch (error) {
       console.error('Error in fulfilled listener:', error);
     }

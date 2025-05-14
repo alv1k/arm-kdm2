@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleStatus, fetchNewRequest, fetchRequestsList } from '@/store/slices/requestsSlice';
+import { getBase64 } from '@/utils/getBase64';
 import useMediaQueries from '@/hooks/useMediaQueries';
-import CustomSelect from '@/components/CustomSelect/CustomSelect'
+import CustomSelect from '@/components/CustomSelect/CustomSelect';
 
 const NewRequestPage = () => {
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
@@ -15,6 +16,7 @@ const NewRequestPage = () => {
   const [selectedObject, setSelectedObject] = useState("");
   const [requestDescr, setRequestDescr] = useState("");  
   const [selectedType, setSelectedType] = useState("");
+  const [uploadedFiles, setUploadedFiles] = useState("");
 
   const handleDataSelectedObject = (data) => {
     data = data.split('-').join();
@@ -33,18 +35,43 @@ const NewRequestPage = () => {
       type: selectedType,
       descr: requestDescr,
       status: 'В работе',
-      token: localStorage.getItem('token') ?? sessionStorage.getItem('token')
-    }    
+      token: localStorage.getItem('token') ?? sessionStorage.getItem('token'),
+      file: uploadedFiles[0],
+      // file:{ dataUrl, format } если добавлен файл
+      // !!! update file: dataUrl
+      // c заголовком data:application/pdf;base64
+    }
     dispatch(fetchNewRequest(data))
   }
   const handleRequestDescrChange = (e) => {
     setRequestDescr(e.target.value);
   };
-
-  // id E8444884-CFD4-11EE-9CAC-4CEDFB681CFD
-  // г. Якутск, ул. Каландаришвили, д. 7 / г. Якутск, ул. Каландаришвили, д. 7, ТЦ "Ленские столбы" (276,10 кв.м.) / помещение №18 / часть 5 (10 кв.м.)
-  // 677027, Республика Саха (Якутия), г Якутск, ул Каландаришвили, д. 7
-
+  const handleFilesUpload = async (e) => {
+    try {
+      const files = Array.from(e.target.files || []);      
+      if (files.length === 0) {
+        throw new Error('Файлы не выбраны');
+      }
+      
+      const base64Results = await Promise.all(
+        files.map(file => {
+          // Проверка типа и размера
+          if (!['application/pdf', 'image/jpeg', 'image/png'].includes(file.type)) {
+            throw new Error(`Недопустимый формат: ${file.name}`);
+          }    
+          const MAX_SIZE_MB = 5;
+          if (file.size > MAX_SIZE_MB * 1024 * 1024) {
+            throw new Error(`Файл слишком большой. Максимум: ${MAX_SIZE_MB}MB`);
+          }      
+          return getBase64(file);
+        })
+      );
+      setUploadedFiles(base64Results);      
+    } catch (error) {
+      console.error('Ошибка загрузки:', error.message);
+      // Показ пользователю: toast.error(error.message)
+    }
+  };
   useEffect(() => {
     if (isNewRequestSaved) {
       alert('Заявка успешно внесена')
@@ -129,9 +156,44 @@ const NewRequestPage = () => {
           w-full rounded-lg px-5 py-3 mb-1 bg-item-active text-center items-center
         ">
           <p className="text-[#787C82] md:pb-0 md:ps-10 pb-4 md:pe-6">Файл не выбран</p>
-          <button className="md:w-auto md:px-5 w-full rounded-lg p-2 btn-default">
+          {/* <button className="md:w-auto md:px-5 w-full rounded-lg p-2 btn-default" onClick={(e) => handleFilesUpload(e)}>
             Выберите файл
+          </button> */}
+          <button 
+            className="
+              w-full md:w-auto 
+              px-4 py-2.5 
+              rounded-lg
+              btn-default 
+              text-white font-medium
+              transition-colors duration-200
+              disabled:opacity-50 disabled:cursor-not-allowed
+            "
+            onClick={(e) => {
+              e.preventDefault();
+              const fileInput = document.createElement('input');
+              fileInput.type = 'file';
+              fileInput.multiple = 'true';
+              fileInput.accept = ".pdf,.doc,.docx,.jpg,.png"; // Укажите нужные форматы
+              fileInput.onchange = (e) => handleFilesUpload(e);
+              fileInput.click();
+            }}
+          >
+            <div className="flex items-center justify-center gap-2">
+              <span>Выберите файл</span>
+            </div>
           </button>
+          {/* {selectedFile && (
+  <div className="mt-2 text-sm text-gray-600">
+    Выбран: {selectedFile.name} 
+    <button 
+      onClick={() => setSelectedFile(null)}
+      className="ml-2 text-red-500 hover:text-red-700"
+    >
+      ×
+    </button>
+  </div>
+)} */}
         </div>
       </div>
       <button className="btn-primary py-2 md:w-auto md:px-10 md:mt-8 w-full mt-11" type="submit" onClick={handleCreateNewRequest}>

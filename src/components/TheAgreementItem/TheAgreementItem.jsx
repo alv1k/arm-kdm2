@@ -7,6 +7,7 @@ import DateFormatter from '../DateFormatter/DateFormatter';
 import CountersModal from '@/components/TheCountersModal/TheCountersModal'; 
 import PaymentModal from '@/components/ThePaymentModal/ThePaymentModal'; 
 import { setDataType, setShowModal } from '@/store/slices/modalSlice';
+import { downloadBase64PDF } from '@/utils/fileDownload';
 
 const TheAgreementItem = ({ id, number, date, debt, objects, name, monthly }) => {
   const sprite_path = './src/assets/images/i.svg';
@@ -40,41 +41,6 @@ const TheAgreementItem = ({ id, number, date, debt, objects, name, monthly }) =>
   //   service.ОбъектыАренды[0].АдресАренды
   // );
 
-  async function downloadBase64PDF(base64String, filename) {
-    // Проверяем валидность base64    
-    if (!base64String.startsWith('data:application/pdf;base64,')) {
-      throw new Error('Некорректный формат Base64 PDF');
-    }
-  
-    try {
-      // Извлекаем чистый base64 (удаляем префикс)
-      const pureBase64 = base64String.split(',')[1];
-      const binaryString = atob(pureBase64);
-      const bytes = new Uint8Array(binaryString.length);
-      
-      for (let i = 0; i < binaryString.length; i++) {
-        bytes[i] = binaryString.charCodeAt(i);
-      }
-  
-      const blob = new Blob([bytes], { type: 'application/pdf' });
-      const url = URL.createObjectURL(blob);
-      
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename || 'document.pdf';
-      document.body.appendChild(a);
-      a.click();
-      
-      // Очистка
-      setTimeout(() => {
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-      }, 100);
-    } catch (error) {
-      console.error('Ошибка при скачивании PDF:', error);
-      throw error;
-    }
-  }
 
   const handleDownloadAgree = async (e, id) => {
      

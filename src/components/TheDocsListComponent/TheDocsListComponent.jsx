@@ -7,8 +7,9 @@ import DateFormatter from '@/components/DateFormatter/DateFormatter';
 import styles from './TheDocsListComponent.module.css';
 import { setDataType, setShowModal, setDataOfModal } from '@/store/slices/modalSlice';
 import { selectedTab } from '@/store/slices/tabsSlice';
-import { setShowCountersModal, setShowPaymentModal } from '@/store/slices/agreementsSlice';
+import { setShowCountersModal, setShowPaymentModal, fetchDowloadFile } from '@/store/slices/agreementsSlice';
 import { isNew, requestStatusFalse, fetchRequestsList, requestsList } from '@/store/slices/requestsSlice';
+import { downloadBase64PDF } from '@/utils/fileDownload';
 
 const TheDocsListComponent = () => {
   const sprite_path = './src/assets/images/i.svg';
@@ -56,8 +57,6 @@ const TheDocsListComponent = () => {
           return []; // На случай, если `currentRoute` не совпадает ни с одним кейсом
     }
   }
-  
-  if (isLoading) return <div className="p-14">Загрузка...</div>;
 
   const handleSetDataType = (type, item) => {
     dispatch(setDataType(type));
@@ -69,6 +68,24 @@ const TheDocsListComponent = () => {
     } else if (type == 'payment') {
       dispatch(setShowPaymentModal())
     }
+  }
+
+  const handleBillFileDownload = async (e, id) => {     
+    e.stopPropagation();
+    try {
+      const resultAction = await dispatch(fetchDowloadFile(id))
+
+      const fileData = resultAction.payload;
+      fileData.map(item => {
+        if (item?.dataUrl) {
+          downloadBase64PDF(item.dataUrl, item.type);
+        } else {
+          console.error(`Файл ${item.type} не загружен: отсутствует dataUrl`);
+        }
+      })
+    } catch (error) {
+      console.error("Ошибка загрузки файла:", error);
+    }  
   }
 
   return (
@@ -83,9 +100,10 @@ const TheDocsListComponent = () => {
           {
             currentTab && currentTab.title_en == 'bills' ? 
             <div className="md:pe-3">
-              <div className="mb-1">№001. Счет за аренду</div>
-              <div><span className="text-[#787C82]">Дата:</span> 01.01.2025</div>
-              <button className="btn-default px-6 py-2 flex mt-5 w-full justify-center">
+              <div className="mb-1 text-nowrap">№001. Счет за аренду</div>
+              <div><span className="text-[#787C82]">Дата:</span> <DateFormatter dateString={item.date} /></div>
+              
+              <button className="btn-default px-6 py-2 flex mt-5 w-full justify-center" onClick={(e) => handleBillFileDownload(e, item.id)}>
                 <svg
                   className={`icon me-3`}
                 >
@@ -130,7 +148,7 @@ const TheDocsListComponent = () => {
           <div className="h-full justify-baseline flex flex-col">
             <div className="mb-1 text-[#787C82]">Сумма:</div>
             <div className="text-red-600"><PriceFormatter amount="100000" /></div>
-            <button className="btn-success px-6 py-2 mt-auto w-full" onClick={() => handleSetDataType('payment', item)}>Оплатить</button>
+            <button className="btn-success px-6 py-2 mt-auto w-full" disabled onClick={() => handleSetDataType('payment', item)}>Оплатить</button>
           </div>
           :
           <div className="ms-3">
@@ -152,7 +170,7 @@ const TheDocsListComponent = () => {
           <div className="text-nowrap"><span className="text-[#787C82]">Тема:&nbsp;</span>{item.type}</div>
           <div className="text-nowrap my-1 flex gap-5">
             <p>
-              <span className="text-[#787C82]">Дата:&nbsp;</span>{item.date} 
+              <span className="text-[#787C82]">Дата:&nbsp;</span><DateFormatter dateString={item.date} /> 
             </p>
             <p>
               <span className="text-[#787C82]">Статус:&nbsp;</span>{item.status}
@@ -367,7 +385,9 @@ const TheDocsListComponent = () => {
                     {
                       currentTab && currentTab.title_en == 'bills' ?
                       <td className="ms-auto">                
-                        <button className="btn-default px-6 py-2 flex lg:mt-0 mt-5 md:w-full md:justify-center">
+                        <button className="btn-default px-6 py-2 flex lg:mt-0 mt-5 md:w-full md:justify-center"
+                           onClick={(e) => handleBillFileDownload(e, item.id)}
+                        >
                           <svg
                             className="icon me-3"
                           >
@@ -381,7 +401,7 @@ const TheDocsListComponent = () => {
                       {
                         currentTab && currentTab.title_en == 'counters' ? '' 
                         : 
-                        <button className="btn-success px-6 py-2 lg:mt-0 mt-5 w-full" onClick={() => currentTab && currentTab.title_en == 'bills' ? handleSetDataType('payment', item) : ''}>
+                        <button className="btn-success px-6 py-2 lg:mt-0 mt-5 w-full" disabled={currentTab && currentTab.title_en == 'bills'} onClick={() => currentTab && currentTab.title_en == 'bills' ? handleSetDataType('payment', item) : ''}>
                           {
                             currentTab && currentTab.title_en == 'bills' ? 'Оплатить' : 'Скачать'
                           }

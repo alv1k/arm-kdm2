@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toggleNavbar } from '@/store/slices/navbarSlice';
@@ -19,6 +19,7 @@ const TheHeader = () => {
   const isNewRequest = useSelector(isNew);
   const isPasswordChange = useSelector(isPasswordModification);
   const profileFetchedData = useSelector((state) => state.user_slice.profileData);
+  const showNavbar = useSelector(state => state.navbar.showNavbar);
   const navigate = useNavigate();
 
   const handleClick = () => {    
@@ -44,7 +45,6 @@ const TheHeader = () => {
     dispatch(fetchProfileData())
   }, [dispatch])
 
-
   return (
     <header className="xl:px-10 lg:px-10 md:px-6 md:pb-5 px-0 text-[#203887] bg-white py-5 pb-10 flex">
       {
@@ -61,12 +61,23 @@ const TheHeader = () => {
           Назад
         </button>
         : (sm_breakpoint || md_breakpoint) ? 
-        <svg
-          className={`icon md:my-auto md:ms-0 ms-5 z-20 md:static absolute ${md_breakpoint ? styles.icon_md : ''}`}
-          onClick={handleClick}
+        // <svg
+        //   className={`icon md:my-auto md:ms-0 ms-5 z-20 md:static absolute ${md_breakpoint ? styles.icon_md : ''}`}
+        //   onClick={handleClick}
+        // >
+        //   <use href={`${sprite_path}#menu-icon`} />
+        // </svg>
+        <button 
+          className="relative w-8 h-8 focus:outline-none md:my-auto md:ms-0 ms-5 z-20"
+          onClick={() => handleClick()}
         >
-          <use href={`${sprite_path}#menu-icon`} />
-        </svg>
+          <span className={`absolute md:top-2/6 top-4/12 block h-0.5 w-6 bg-current transform transition duration-300 ease-in-out origin-right 
+            ${showNavbar ? 'rotate-45 md:translate-y-2.5 translate-y-2.5' : '-translate-y-1.5'}`} />
+          <span className={`absolute md:top-3/6 top-5/12 block h-0.5 w-5 bg-current transform transition duration-300 ease-in-out 
+            ${showNavbar ? 'opacity-0' : 'opacity-100'}`} />
+          <span className={`absolute md:top-4/6 top-6/12 block h-0.5 w-6 bg-current transform transition duration-300 ease-in-out origin-right
+            ${showNavbar ? '-rotate-45 md:-translate-y-4.5 -translate-y-3' : 'translate-y-1.5'}`} />
+        </button>
         : ''
       }
       <div className="xl:ms-0 lg:ms-0 md:justify-normal md:mt-1 items-center flex md:w-fit w-full md:static absolute">
