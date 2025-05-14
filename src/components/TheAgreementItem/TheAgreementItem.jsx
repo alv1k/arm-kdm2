@@ -254,7 +254,7 @@ const TheAgreementItem = ({ id, number, date, debt, objects, name, monthly }) =>
                   </p>
                   {
                     debt ? 
-                    <button className="btn-success lg:px-10 lg:mt-0 lg:w-auto py-2 md:w-2/9 w-full mt-2" onClick={() => handleSetDataType('payment')}>Оплатить</button> : ''
+                    <button className="btn-success lg:px-10 lg:mt-0 lg:w-auto py-2 md:w-2/9 w-full mt-2" disabled onClick={() => handleSetDataType('payment')}>Оплатить</button> : ''
                   }
                 </div> : ''
               }
