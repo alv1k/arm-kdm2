@@ -13,6 +13,7 @@ import LoadingPage from '@/pages/LoadingPage/LoadingPage';
 import TheModal from '@/components/TheModal/TheModal';
 import useMediaQueries from '@/hooks/useMediaQueries';
 import { showModal } from '@/store/slices/modalSlice';
+import 'react-toastify/dist/ReactToastify.css';
 
 const HTTPSRedirect = () => {
   const location = useLocation();

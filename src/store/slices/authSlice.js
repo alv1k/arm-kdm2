@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import api from '@/api/api';
 
 export const fetchAuth = createAsyncThunk(
   'authSlice/fetchAuth',
@@ -14,6 +15,29 @@ export const fetchAuth = createAsyncThunk(
     }
   }
 );
+
+export const fetchRestorePassword = createAsyncThunk(
+  'authSlice/fetchRestorePassword',
+  async(_, { rejectWithValue }) => {
+    let payload = null;
+    _ ? payload = _ : null;
+    try {
+      let params = {}
+      payload ? 
+      params = {
+        'email': payload.email
+      } : ''
+      const response = await api.post(`/restore`, params);
+      if (!response.data.success) {
+        throw new Error(`HTTP error! status: ${response.data.status}`);
+      }
+      return await response.data;
+    } catch (error) {
+      console.log(error, 'error');
+      return rejectWithValue(error.message);
+    }
+  }
+)
 
 const authSlice = createSlice({
   name: 'login',

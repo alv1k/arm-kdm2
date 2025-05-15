@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleTabs, selectedTab, setLoginSelectedTab } from '@/store/slices/tabsSlice';
 import { togglePasswordChange, setToken, setUserData } from '@/store/slices/userSlice';
-import { isRestorePass, toggleRestorePassword, rememberMe, setRememberMe } from '@/store/slices/authSlice';
+import { isRestorePass, toggleRestorePassword, rememberMe, setRememberMe, fetchRestorePassword } from '@/store/slices/authSlice';
 import axios from 'axios';
 import api from '@/api/api';
 import useMediaQueries from '@/hooks/useMediaQueries';
@@ -11,6 +11,7 @@ import styles from './LoginPage.module.css'
 
 import CustomCheckbox from '@/components/CustomCheckbox/CustomCheckbox';
 import TheTabsComponent from '@/components/TheTabsComponent/TheTabsComponent';
+import { ToastContainer, toast } from 'react-toastify';
 
 const LoginPage = () => {
   const sprite_path = '/src/assets/images/i.svg';
@@ -20,7 +21,6 @@ const LoginPage = () => {
   const pressedRememberMe = useSelector(rememberMe);
   
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
 
   const [error, setError] = useState('');
@@ -31,7 +31,16 @@ const LoginPage = () => {
   const [inputRestorePassword, setInputRestorePassword] = useState();
   const inputPasswordRef = useRef(null);
   const caretPosRef = useRef(null);
-
+  const notify = (type, message) => {
+    switch (type) {
+      case true: 
+        toast.success('Данные авторизации высланы вам на указанную почту');
+        break;
+      case false:
+        toast.error('Ошибка: ' + message)
+        break;
+    }
+  }
   const handleTogglePassword = () => {
     caretPosRef.current = {
       start: inputPasswordRef.current.selectionStart,
@@ -41,7 +50,6 @@ const LoginPage = () => {
   };
   // https://cloud.aokdm.ru/method/restore?email=atlasov.n.r@gmail.com
   // восстановление пароля
-
 
   // baydam
   // 123456
@@ -62,7 +70,7 @@ const LoginPage = () => {
     setData(prev => ({ ...prev, [name]: trimmedValue }));
   };
 
-  const handleRestoreButton = () => {    
+  const handleRestoreButton = () => {
     dispatch(toggleRestorePassword())
   }
 
@@ -129,14 +137,30 @@ const LoginPage = () => {
     }
   };
   
-  const handleSendPassword = (e) => {
+  const handleSendPassword = async (e) => {
     e.stopPropagation();
+    e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const credentials = {
-      login: formData.get('restorePassword')?.toString() || ''
+      email: formData.get('restorePassword')?.toString() || ''
     };
-    console.log(credentials, 'send me password');
-    setCodeVerification(true)
+    
+    const response = await dispatch(fetchRestorePassword(credentials));
+    
+    if (response.payload.success) {      
+      dispatch(toggleRestorePassword());
+      setIsCorrectLoginData(true);
+      notify(response.payload.success, response.payload.message)
+    } else {
+      if (response.payload.message == 'user not found') {
+        notify(response.payload.success, 'Пользователь не найден')
+      } else if (response.payload.message == 'email is not specified') {
+        notify(response.payload.success, 'Электронная почта не указана')
+      } else {
+        notify(response.payload.success, response.payload.message)
+      }
+    }
+    // setCodeVerification(true)
 
   }
 
@@ -218,7 +242,7 @@ const LoginPage = () => {
           <div>
             <p className="font-bold xl:mt-12 md:text-2xl md:mt-10 text-base mt-4">Восстановление пароля</p>
             <form method="GET" onSubmit={(e) => handleSendPassword(e)}>          
-              <TheTabsComponent titles='login' />           
+              <TheTabsComponent titles='login' />
               <div className="text-left">
                 <p className="mb-2 mt-4 md:text-base text-sm">
                   {
@@ -226,7 +250,10 @@ const LoginPage = () => {
                     'Эл.почта:'
                   }
                 </p>
-                <input id="restorePassword" name="restorePassword" className=" p-4 bg-item-active w-full rounded-xl" 
+                <input 
+                  id="restorePassword" 
+                  name="restorePassword" 
+                  className=" p-4 bg-item-active w-full rounded-xl" 
                   type={currentTab && currentTab.title_en == 'phone' ? 'tel' : 'text'} 
                   value={inputRestorePassword} 
                   onChange={(e) => {
@@ -234,9 +261,15 @@ const LoginPage = () => {
                       setTimeout(() => document.getElementById('restorePassword').focus(), 100)
                     }
                   } 
-                  placeholder={`Введите` + [currentTab && currentTab.title_en == 'phone' ?  ' номер телефона' : ' почту']} required
+                  placeholder={`Введите` + [currentTab && currentTab.title_en == 'phone' ?  ' номер телефона' : ' почту']} 
+                  required
+                  autoComplete={currentTab?.title_en === 'phone' ? 'tel' : 'email'}
                 />
-                <button className="mt-5 btn-primary w-full py-2" type="submit">
+                <button 
+                  className="mt-5 btn-primary w-full py-2" 
+                  type="submit"
+                  disabled={!inputRestorePassword} 
+                >
                   Отправить пароль
                 </button>
               </div>
@@ -263,7 +296,6 @@ const LoginPage = () => {
         <div className="lg:w-1/2 w-full h-screen bg-[#F6F8FF] flex flex-col justify-end">
           <img className="align-bottom justify-baseline justify-self-end lg:blur-none lg:mt-0 blur-xs h-fit mx-auto" src="/src/assets/images/bg-login.png" alt="" />
         </div>
-
         <div className="lg:w-1/2 lg:static w-full absolute md:top-16 top-10 left-0 right-0 bottom-0 flex align-middle items-center justify-center">
           <div className={`xl:w-3/5 lg:w-3/4 md:w-2/3 md:my-44 w-[90vw] bg-white md:p-10 px-5 py-10 lg:my-auto mx-auto  lg:rounded-none rounded-2xl text-center`}>
             <div className="flex flex-col justify-center">
@@ -346,7 +378,7 @@ const LoginPage = () => {
                         <CustomCheckbox label="Запомнить меня" id="remember_me"  />
                       </div>
                       <div>
-                        <p className="text-[#203887] cursor-pointer" onClick={handleRestoreButton}>Забыли пароль?</p>
+                        <p className="text-[#203887] cursor-pointer" onClick={() => handleRestoreButton()}>Забыли пароль?</p>
                       </div>
                     </div>
                     <button type="submit" className="mt-5 btn-primary w-full py-2" disabled={isLoading}>
@@ -355,6 +387,18 @@ const LoginPage = () => {
                   </form>
                 </section>
               }
+              
+            <ToastContainer position="top-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="colored"  
+            />
           </div>
         </div>
       </div>

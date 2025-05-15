@@ -18,7 +18,7 @@ const requestsList = [
   // { title_ru: 'Новая заявка', title_en: 'new_request' },
 ]
 const loginList = [
-  { title_ru: 'Телефон', title_en: 'phone' },
+  // { title_ru: 'Телефон', title_en: 'phone' },
   { title_ru: 'Почта', title_en: 'email' },
 ];
 
