@@ -39,7 +39,7 @@ const RequestsPage = () => {
   }, [dispatch]);
   const location = useLocation();
   useEffect(() => {
-    dispatch(requestStatusFalse());    
+    dispatch(requestStatusFalse());  
   }, [location]);  
   
   return (

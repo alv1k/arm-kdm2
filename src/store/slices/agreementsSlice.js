@@ -64,6 +64,36 @@ const getInvoices = (agreeList) => {
   return allInvoices;
 }
 
+export const fetchSendCountersIndice = createAsyncThunk(
+  'agreementsSlice/fetchSendCountersIndice',
+  async (item, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token') ?? sessionStorage.getItem('token');
+      if (!token) {
+        window.location.href = '/login';
+        throw new Error('Token not found');
+      }
+      let indice_num = Number(item.value);
+      if (indice_num != 0) {
+        const response = await api.get(`/setindice?token=${token}&counter=${item.id}&indice=${item.value}`,{
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        if (!response.data.success) {
+          throw new Error(`HTTP error! status: ${response.data.status}`);
+        }
+        return await response.data.data;
+      } else {
+        return 'empty indice';
+      }
+    } catch (error) {
+      console.log(error);      
+      return rejectWithValue(error.message);
+    }
+  }
+)
+
 const agreementsSlice = createSlice({
   name: 'agreementsSlice',
   initialState: { 

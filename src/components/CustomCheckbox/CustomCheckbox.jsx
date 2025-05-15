@@ -3,7 +3,7 @@ const CustomCheckbox = (props) => {
 
   return (
     <div className={styles.custom_checkbox}>
-      <input type="checkbox" checked={props.checked} id={props.id} className={styles.checkbox_input} 
+      <input tabIndex="0" type="checkbox" checked={props.checked} id={props.id} className={styles.checkbox_input} 
         onChange={() => {}}/>
       {
          props && props.label ?

@@ -62,7 +62,7 @@ const LoginPage = () => {
     password: ''
   });
   const handleInputChange = (e) => {    
-    e.preventDefault();
+    // e.preventDefault();
     const { name, value } = e.target;
     const trimmedValue = (name === 'login' || name === 'password') 
     ? value.trim() 
@@ -229,9 +229,9 @@ const LoginPage = () => {
       );
       caretPosRef.current = null;
     }
-    inputPasswordRef.current.focus()
-    console.log('caret staff');
-    
+    // inputPasswordRef.current.focus()
+    // console.log('caret staff');
+    12333
   }, [showPassword]);
 
   const RestorePassword = () => {
@@ -313,6 +313,7 @@ const LoginPage = () => {
                     <div className="text-left  transition-all duration-2000 ease-in-out overflow-hidden max-h-[1000px]">
                       <p className="mb-2 mt-4 md:text-base text-sm">Логин</p>
                       <input 
+                        key="login-input"
                         name="login" 
                         value={data.login} 
                         onChange={handleInputChange} 
@@ -320,10 +321,12 @@ const LoginPage = () => {
                         type="text" 
                         placeholder="Введите логин" 
                         required 
+                        autoFocus
                       />
                       <div className="relative">
                         <p className="mb-2 mt-4 md:text-base text-sm">Пароль</p>
                         <input 
+                          key="password-input"
                           ref={inputPasswordRef}
                           name="password" id="password" 
                           className={`${!isCorrectLoginData ? 'danger_animation' : ''} p-4 bg-item-active w-full rounded-xl`} 
@@ -378,7 +381,7 @@ const LoginPage = () => {
                         <CustomCheckbox label="Запомнить меня" id="remember_me"  />
                       </div>
                       <div>
-                        <p className="text-[#203887] cursor-pointer" onClick={() => handleRestoreButton()}>Забыли пароль?</p>
+                        <p tabIndex="0" className="text-[#203887] cursor-pointer" onClick={() => handleRestoreButton()}>Забыли пароль?</p>
                       </div>
                     </div>
                     <button type="submit" className="mt-5 btn-primary w-full py-2" disabled={isLoading}>
