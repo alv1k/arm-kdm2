@@ -200,8 +200,8 @@ const TheDocsListComponent = () => {
     <div className={`
       flex bg-[#FAFBFD] rounded-lg my-5 lg:p-0 p-5
     `}>
-      <div className="w-full">
-        <table className="rounded-lg border-separate border-spacing-0 overflow-hidden w-full">
+      <div className="w-full table-fixed">
+        <table className="rounded-lg border-separate border-spacing-0">
           <thead className="bg-item-active">              
             <tr align="center" className="text-center justify-center">
               <th width={currentTab && currentTab.title_en == 'counters' ? '200px' : ''}>

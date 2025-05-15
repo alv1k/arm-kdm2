@@ -231,8 +231,13 @@ const LoginPage = () => {
     }
     // inputPasswordRef.current.focus()
     // console.log('caret staff');
-    12333
   }, [showPassword]);
+
+  useEffect(() => {
+    if (isRestorePassword) { 
+      document.getElementById('restorePassword').focus();
+    }
+  }, [isRestorePassword])
 
   const RestorePassword = () => {
     return (
@@ -345,7 +350,7 @@ const LoginPage = () => {
                         />
                         <button
                           type="button"
-                          className="absolute right-4 top-15 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-transform active:scale-95"
+                          className="absolute right-4 top-15 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-transform active:scale-95 focus:text-blue-900 outline-0"
                           aria-label={showPassword ? "Скрыть пароль" : "Показать пароль"}
                           onClick={(e) => {
                             e.preventDefault();
@@ -381,7 +386,21 @@ const LoginPage = () => {
                         <CustomCheckbox label="Запомнить меня" id="remember_me"  />
                       </div>
                       <div>
-                        <p tabIndex="0" className="text-[#203887] cursor-pointer" onClick={() => handleRestoreButton()}>Забыли пароль?</p>
+                        <p 
+                          id="forgotPassword"
+                          tabIndex={0} 
+                          className="text-[#203887] cursor-pointer focus:bg-[#F6F8FF] outline-0" 
+                          onClick={() => handleRestoreButton()}
+                          onKeyDown={(e) => {
+                            // Добавляем обработку нажатия пробела/Enter
+                            if (e.key === ' ' || e.key === 'Enter') {
+                              e.preventDefault();
+                              document.getElementById('forgotPassword')?.click();
+                            }
+                          }}
+                        >
+                          Забыли пароль?
+                        </p>
                       </div>
                     </div>
                     <button type="submit" className="mt-5 btn-primary w-full py-2" disabled={isLoading}>

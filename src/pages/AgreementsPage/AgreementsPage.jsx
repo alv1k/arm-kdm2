@@ -35,6 +35,11 @@ const AgreementsPage = () => {
       breakpoint: sm_breakpoint ? 'sm-breakpoint' : ''
     } ));
   }, [dispatch]);
+  useEffect(() => {
+    if (isDetailsShown == true) {
+      window.scrollTo(0,0);
+    }
+  }, [isDetailsShown])
   
   const sideClick = (event) => {
     event.stopPropagation();
@@ -52,7 +57,7 @@ const AgreementsPage = () => {
   const location = useLocation();
   useEffect(() => {
     dispatch(hideDetails());
-  }, [location]);  
+  }, [location]);
 
   return (
     <section 
@@ -107,10 +112,10 @@ const AgreementsPage = () => {
               : ''
             }
           </div>
-          {
+          {/* {
             isDetailsShown ? '' :
             <TheTabsComponent titles='agreementsList' breakpoint={sm_breakpoint ? 'sm-breakpoint' : ''}/>
-          }
+          } */}
           
           <div className="md:pt-4 pt-5">
             {

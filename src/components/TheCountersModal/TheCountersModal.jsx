@@ -11,6 +11,7 @@ const CountersModal = () => {
   
   let address = '';
 
+  console.log(selectedAgreement, 'selectedAgreement');
   selectedAgreement.flatMap(contract => 
     contract.objects.flatMap(object => {
       address = object.address      
@@ -32,6 +33,7 @@ const CountersModal = () => {
   } 
   
   const counters = getCountersIds();  
+  
 
   useEffect(() => {
     inputRefs.current = counters.map((counter, i) => ({

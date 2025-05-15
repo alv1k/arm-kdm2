@@ -10,12 +10,15 @@
 .checkbox_label {
   position: relative;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
   user-select: none; /* Запретить выделение текста */
 }
 
 .checkbox_label::before {
   content: '';
   position: absolute;
+  display: inline-block;
   left: 0;
   top: 50%;
   transform: translateY(-50%);
@@ -25,12 +28,18 @@
   border-radius: 4px; /* Закругление углов */
   background-color: white; /* Цвет фона */
   box-sizing: border-box;
+  transition: all 0.1s ease;
 }
 .checkbox_label:hover::before {
   border-color: #203887;
 }
 .checkbox_label:active::before {
   outline: 2px solid #9DA8CA;
+}
+.checkbox_label:focus {
+  background-color: #F6F8FF;
+  border-radius: 4px; /* Опционально - скругление углов */
+  outline: none;
 }
 
 .checkbox_input:checked + .checkbox_label::before {
