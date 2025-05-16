@@ -40,21 +40,22 @@ const TheDocsListComponent = () => {
   }, [dispatch]);
 
   const getList = () => {
-    
-    switch(currentRoute) {
-      case '/requests':
-        return requests;
-      case '/agreements':
-        switch(currentTab.title_en) {
-          case 'bills':
-            return allInvoices;
-          case 'acts':
-            return [{"id": "1", "descr": "descr1", "date": "4025-04-08T11:56:31"}];
-          case 'counters':
-            return [{"id": "2", "descr": "descr2", "date": "4025-05-09T12:46:22"}];
-        }
-        default:
-          return []; // На случай, если `currentRoute` не совпадает ни с одним кейсом
+    if (currentTab) {
+      switch(currentRoute) {
+        case '/requests':
+          return requests;
+        case '/agreements':
+          switch(currentTab.title_en) {
+            case 'bills':
+              return allInvoices;
+            case 'acts':
+              return [{"id": "1", "descr": "descr1", "date": "4025-04-08T11:56:31"}];
+            case 'counters':
+              return [{"id": "2", "descr": "descr2", "date": "4025-05-09T12:46:22"}];
+          }
+          default:
+            return []; // На случай, если `currentRoute` не совпадает ни с одним кейсом
+      }
     }
   }
 

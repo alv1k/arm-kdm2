@@ -43,7 +43,7 @@ const TheAgreementItem = ({ id, number, date, debt, objects, name, monthly }) =>
 
 
   const handleDownloadAgree = async (e, id) => {
-     
+    e.preventDefault();
     e.stopPropagation();
     try {
       const resultAction = await dispatch(fetchDowloadFile(id))
