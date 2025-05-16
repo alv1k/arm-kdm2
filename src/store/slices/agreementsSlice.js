@@ -74,22 +74,36 @@ export const fetchSendCountersIndice = createAsyncThunk(
         throw new Error('Token not found');
       }
       let indice_num = Number(item.value);
-      if (indice_num != 0) {
+      
+      if (indice_num != 0 && indice_num != '') {        
         const response = await api.get(`/setindice?token=${token}&counter=${item.id}&indice=${item.value}`,{
           headers: {
             'Authorization': `Bearer ${token}`
           }
         });
-        if (!response.data.success) {
-          throw new Error(`HTTP error! status: ${response.data.status}`);
-        }
-        return await response.data.data;
-      } else {
-        return 'empty indice';
+
+        dispatch({
+          type: 'SEND_INDICE_SUCCESS',
+          payload: response.data
+        });
+        console.log(response, '0000000');
+        
+        return await response.data;
       }
     } catch (error) {
-      console.log(error);      
-      return rejectWithValue(error.message);
+      dispatch({
+        type: 'SEND_INDICE_FAILURE',
+        payload: error.response?.data || { 
+          success: false, 
+          message: error.message 
+        }
+      });
+      
+      // Возвращаем объект в том же формате, но с success: false
+      return error.response?.data || { 
+        success: false, 
+        message: error.message 
+      };
     }
   }
 )

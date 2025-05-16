@@ -65,14 +65,22 @@ const CountersModal = () => {
     let response = null;
     data.filter(item => item.value != '')
     data.map(item => {
-      response = dispatch(fetchSendCountersIndice(item))
-      if (response.success) {
-        console.log('fetchSendCountersIndice is done');
-        notify(true, 'Данные счетчиков успешно внесены')
-      } else {
-        console.log(response.message, 'error');    
-        notify(false, response.message)
+      if (item.value != '' && item.value != 0) {
+        dispatch(fetchSendCountersIndice(item))
       }
+      
+      
+      // if (response.success) {
+      //   console.log('fetchSendCountersIndice is done');
+      //   notify(true, 'Данные счетчиков успешно внесены')
+      //   toast.success(response.message);
+      //   return true;
+      // } else {        
+      //   console.log(response.message, 'error');    
+      //   notify(false, response.message)
+      //   toast.error(response.message || 'Ошибка при отправке показаний');
+      //   return false;
+      // }
     });
     dispatch(setShowModal(false))
   }
