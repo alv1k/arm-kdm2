@@ -2,12 +2,23 @@ import { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { dataType, setDataType, setShowModal } from '@/store/slices/modalSlice';
 import { fetchSendCountersIndice } from '@/store/slices/agreementsSlice';
+import { ToastContainer, toast } from 'react-toastify';
 
 const CountersModal = () => {
   const sprite_path = './src/assets/images/i.svg';
   const dispatch = useDispatch();  
   const selectedAgreement = useSelector((state) => state.agreements_slice.selectedAgreement);
   const inputRefs = useRef([]);
+  const notify = (type, message) => {
+    switch (type) {
+      case true: 
+        toast.success(message);
+        break;
+      case false:
+        toast.error('Ошибка: ' + message)
+        break;
+    }
+  }
   
   let address = '';
 
@@ -57,10 +68,13 @@ const CountersModal = () => {
       response = dispatch(fetchSendCountersIndice(item))
       if (response.success) {
         console.log('fetchSendCountersIndice is done');
+        notify(true, 'Данные счетчиков успешно внесены')
       } else {
-        console.log(response.message, 'error');        
+        console.log(response.message, 'error');    
+        notify(false, response.message)
       }
     });
+    dispatch(setShowModal(false))
   }
 
   return (
@@ -102,7 +116,18 @@ const CountersModal = () => {
               Сохранить
             </button>
           </div>
-        }
+        }        
+        <ToastContainer position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"  
+        />
       </div>
       
   )
