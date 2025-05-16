@@ -90,30 +90,30 @@ const CountersModal = () => {
           {/* <div className="md:order-none order-3 my-2 md:flex block"><p className="text-[#787C82]">Период:&nbsp;</p> 20.01.2025 - 20.02.2025</div> */}
           <div className="md:order-none my-2 order-1 block"><span className="text-[#787C82] md:inline block">Адрес:&nbsp;</span>{address}</div>
         </div>
+        {          
+          Array.isArray(counters) && counters.length > 0 && counters.map((item, index) => (
+          <div key={item.id} className="my-6">
+            <p>{item.name}</p>
+            <p><span className="text-[#787C82]">Номер прибора учета:</span>&nbsp; {item.number != '' ? item.number : 'номер не найден'}</p>
+            <input 
+              ref={el => {
+                if (inputRefs.current[index]) {
+                  inputRefs.current[index].ref = el;
+                }
+              }}
+              name={`counter-${index}`}
+              className="mt-4 p-5 bg-item-active w-full rounded-xl" 
+              type="number"
+            />
+          </div>
+          ))          
+        }
         {
-          [
-            Array.isArray(counters) && counters.length > 0 && counters.map((item, index) => (
-            <div key={item.id} className="my-6">
-              <p>{item.name}</p>
-              <p><span className="text-[#787C82]">Номер прибора учета:</span>&nbsp; {item.number != '' ? item.number : 'номер не найден'}</p>
-              <input 
-                ref={el => {
-                  if (inputRefs.current[index]) {
-                    inputRefs.current[index].ref = el;
-                  }
-                }}
-                name={`counter-${index}`}
-                className="mt-4 p-5 bg-item-active w-full rounded-xl" 
-                type="number"
-              />
-            </div>
-            )),
-            counters.length == 0 && 
-            <div>
-              Нет данных о счетчиках.
-            </div>
-          ]
-        }          
+          counters.length == 0 && 
+          <div>
+            Нет данных о счетчиках.
+          </div>
+        }  
         {
           counters.length != 0 && 
           <div className="my-2 text-center">

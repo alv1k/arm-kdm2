@@ -18,8 +18,6 @@ export async function downloadBase64PDF(base64String, filename = 'document') {
   
   try {
     const {mimeType, pureBase64} = splitBase64(base64String);
-
-
     const extensionMap = {
       'application/pdf': '.pdf',
       'image/jpeg': '.jpg',

@@ -75,13 +75,14 @@ const AgreementsPage = () => {
   }, [location]);
   useEffect(() => {
     if (isFetchedIndices) {
-      console.log('isFetchedIndicesisFetchedIndicesisFetchedIndicesisFetchedIndices');
       notify(true, 'Данные счетчиков успешно внесены');   
     }
   }, [isFetchedIndices])
   useEffect(() => {
-      console.log('isIndicesError');
+    if (isIndicesError !== null) {
+      console.log('Error occurred:', isIndicesError);
       notify(false, isIndicesError);
+    }
   }, [isIndicesError])
 
   return (

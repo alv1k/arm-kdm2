@@ -39,6 +39,11 @@ const TheDocsListComponent = () => {
     loadData();
   }, [dispatch]);
 
+  const getFileName = (fileName) => {
+    console.log('123');
+    return 'name.pdf'
+  }
+
   const getList = () => {
     if (currentTab) {
       switch(currentRoute) {
@@ -204,7 +209,7 @@ const TheDocsListComponent = () => {
       flex bg-[#FAFBFD] rounded-lg my-5 lg:p-0 p-5
     `}>
       <div className="w-full table-fixed">
-        <table className="rounded-lg border-separate border-spacing-0">
+        <table className="rounded-lg border-separate border-spacing-0 w-full">
           <thead className="bg-item-active">              
             <tr align="center" className="text-center justify-center">
               <th width={currentTab && currentTab.title_en == 'counters' ? '200px' : ''}>
@@ -300,7 +305,15 @@ const TheDocsListComponent = () => {
                         <p className="text-[#787C82]">№000001</p>
                         <p>123.45 м3</p>
                       </div> 
-                      : item.object
+                      : 
+                      <div class="group relative inline-block w-66">
+                        <p class="py-2 rounded cursor-default truncate">
+                          {item.object}
+                        </p>                        
+                        <div class="absolute z-10 hidden group-hover:block w-96 bg-white shadow-md text-base rounded-b-xl rounded-tr-xl p-5 top-full mt-2">
+                          {item.object}
+                        </div>
+                      </div>
                     }
                   </td>            
                   {
@@ -326,7 +339,7 @@ const TheDocsListComponent = () => {
                     }
                     
                   </td>
-                  <td align="right">
+                  <td>
                     {
                       currentTab && (currentTab.title_en == 'acts' || currentTab.title_en == 'bills') ?
                       <PriceFormatter amount={item.summ} /> 
@@ -353,15 +366,31 @@ const TheDocsListComponent = () => {
                   }                             
                   <td>
                     {
-                      currentTab && (currentTab.title_en == 'counters' || currentRoute == '/requests') ? '' 
-                      : 
+                      currentTab && currentTab.title_en == 'counters' ? 
+                      '' : currentRoute == '/requests' ? 
+                      <div>
+                        {
+                          item.file &&
+                          <div className="flex group relative">
+                            <svg
+                              className="icon me-3 fill-[#787C82] stroke-black"
+                            >
+                              <use href={`${sprite_path}#clip-icon`} />
+                            </svg>
+                            <span class="py-2 rounded cursor-default truncate">
+                              {getFileName(item.file)}
+                            </span>
+                          </div>                          
+                        }                     
+                      </div> 
+                      :
                       <button className="btn-success px-6 py-2 lg:mt-0 mt-5 w-full" disabled={currentTab && currentTab.title_en == 'bills'} onClick={() => currentTab && currentTab.title_en == 'bills' ? handleSetDataType('payment', item) : ''}>
                         {
                           currentTab && currentTab.title_en == 'bills' ? item.status == 'payd' ? 'Оплачено' : 'Оплатить' : ''
                         }
                       </button>
                     }
-                  </td>              
+                  </td>
                 </tr>
               ))
             }
