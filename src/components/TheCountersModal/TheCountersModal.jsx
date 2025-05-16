@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { dataType, setDataType, setShowModal } from '@/store/slices/modalSlice';
 import { fetchSendCountersIndice } from '@/store/slices/agreementsSlice';
+import { setFetchedIndices, setFetchIndicesError } from '@/store/slices/countersSlice';
 import { ToastContainer, toast } from 'react-toastify';
 
 const CountersModal = () => {
@@ -66,10 +67,12 @@ const CountersModal = () => {
         const response = await dispatch(fetchSendCountersIndice(item))
         if (response.payload.success) {
           console.log('fetchSendCountersIndice is done');
-          notify(true, 'Данные счетчиков успешно внесены');
+          // notify(true, 'Данные счетчиков успешно внесены');
+          dispatch(setFetchedIndices(true));
         } else {        
           console.log(response.message, 'error');
-          notify(false, response.payload.message);
+          // notify(false, response.payload.message);
+          dispatch(setFetchIndicesError(response.message))
         }
       }
             
@@ -118,7 +121,7 @@ const CountersModal = () => {
               Сохранить
             </button>
           </div>
-        }        
+        }
         <ToastContainer position="top-right"
           autoClose={5000}
           hideProgressBar={false}

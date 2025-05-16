@@ -71,15 +71,16 @@ const TheDocsListComponent = () => {
     }
   }
 
-  const handleFileDownload = async (e, id) => {     
+  const handleFileDownload = async (e, item) => {     
     e.stopPropagation();
     try {
-      const resultAction = await dispatch(fetchDowloadFile(id))
+      const resultAction = await dispatch(fetchDowloadFile(item.id))
+      const doc_name = item.descr + item.number;
 
       const fileData = resultAction.payload;
         fileData.map(item => {
           if (item?.dataUrl) {
-            downloadBase64PDF(item.dataUrl, item.type);
+            downloadBase64PDF(item.dataUrl, doc_name);
           } else {
             console.error(`Файл ${item.type} не загружен: отсутствует dataUrl`);
           }
@@ -106,7 +107,7 @@ const TheDocsListComponent = () => {
               
               <button 
                 className="btn-default px-6 py-2 flex mt-5 w-full justify-center" 
-                onClick={(e) => handleFileDownload(e, item.id)}
+                onClick={(e) => handleFileDownload(e, item)}
                 disabled={item.status == 'payd'}
               >
                 <svg
@@ -125,7 +126,7 @@ const TheDocsListComponent = () => {
               <div className="text-nowrap"><span className="text-[#787C82]">№001:</span> Акт об оплате аренды</div>
               <div className="text-nowrap my-1"><span className="text-[#787C82]">Дата:&nbsp;</span><DateFormatter dateString={item.date} /></div>
               <button className="btn-default px-6 py-2 flex lg:mt-0 mt-5 md:w-fit w-full justify-center" disabled={!item.file}
-                onClick={(e) => handleFileDownload(e, item.id)}
+                onClick={(e) => handleFileDownload(e, item)}
               >
                 <svg
                   className="icon me-3"
@@ -338,7 +339,7 @@ const TheDocsListComponent = () => {
                     <td className="ms-auto">                
                       <button 
                         className="btn-default px-6 py-2 flex lg:mt-0 mt-5 md:w-full md:justify-center"
-                        onClick={(e) => handleFileDownload(e, item.id)}
+                        onClick={(e) => handleFileDownload(e, item)}
                         disabled={item.status == 'payd'}
                       >
                         <svg

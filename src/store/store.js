@@ -9,6 +9,7 @@ import modalReducer from './slices/modalSlice';
 import authReducer, { fetchAuth } from './slices/authSlice';
 import agreementsReducer, { fetchAgreementsList } from './slices/agreementsSlice';
 import loadingSlice, { setLoadingStart, setLoadingEnd } from './slices/loadingSlice';
+import countersSlice from './slices/countersSlice';
 import { fetchProfileData } from './slices/userSlice'; 
 
 // Middleware для логирования действий
@@ -122,6 +123,7 @@ const store = configureStore({
     modal_slice: modalReducer,
     auth_slice: authReducer,
     loading_slice: loadingSlice,
+    counters_slice: countersSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()

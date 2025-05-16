@@ -3,12 +3,14 @@ import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { hideNavbar } from '@/store/slices/navbarSlice';
 import { toggleTabs  } from '@/store/slices/tabsSlice';
+import { setFetchedIndices } from '@/store/slices/countersSlice';
 import { isShowDetails, selectedAgreement, agreementsStoreList, showDetails, hideDetails, setAgreementsList, fetchAgreementsList, isShowCountersModal, isShowPaymentModal } from '@/store/slices/agreementsSlice';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
 import TheSkeleton from '@/components/TheSkeleton/TheSkeleton';
 import styles from './AgreementsPage.module.css';
 import LoadingPage from '@/pages/LoadingPage/LoadingPage';
 import Page404 from '@/pages/Page404/Page404';
+import { ToastContainer, toast } from 'react-toastify';
 
 import AgreementItem from '@/components/TheAgreementItem/TheAgreementItem';
 import TheTabsComponent from '@/components/TheTabsComponent/TheTabsComponent';
@@ -19,6 +21,8 @@ const AgreementsPage = () => {
   const showNavbar = useSelector((state) => state.navbar.showNavbar);
   const isLoading = useSelector((state) => state.loading_slice.isLoading);
   const page404 = useSelector((state) => state.agreements_slice.page404);
+  const isFetchedIndices = useSelector((state) => state.counters_slice.fetchedIndices);
+  const isIndicesError = useSelector((state) => state.counters_slice.error);
   const isDetailsShown = useSelector(isShowDetails);
   const showCountersModal = useSelector(isShowCountersModal);
   const showPaymentModal = useSelector(isShowPaymentModal);
@@ -26,6 +30,17 @@ const AgreementsPage = () => {
   const currentAgreement = useSelector(selectedAgreement);
 
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
+  const notify = (type, message) => {
+    switch (type) {
+      case true: 
+        toast.success(message);
+        break;
+      case false:
+        toast.error('Ошибка: ' + message)
+        break;
+    }
+  }
+  
   const dispatch = useDispatch();
   
   useEffect(() => {
@@ -58,6 +73,16 @@ const AgreementsPage = () => {
   useEffect(() => {
     dispatch(hideDetails());
   }, [location]);
+  useEffect(() => {
+    if (isFetchedIndices) {
+      console.log('isFetchedIndicesisFetchedIndicesisFetchedIndicesisFetchedIndices');
+      notify(true, 'Данные счетчиков успешно внесены');   
+    }
+  }, [isFetchedIndices])
+  useEffect(() => {
+      console.log('isIndicesError');
+      notify(false, isIndicesError);
+  }, [isIndicesError])
 
   return (
     <section 
@@ -70,6 +95,17 @@ const AgreementsPage = () => {
       `}
       onClick={sideClick}
     >
+      <ToastContainer position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"  
+      />
       {
         page404 ? 
         <Page404 /> 
