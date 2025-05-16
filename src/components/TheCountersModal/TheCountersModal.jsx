@@ -66,7 +66,7 @@ const CountersModal = () => {
         const response = await dispatch(fetchSendCountersIndice(item))
         if (response.payload.success) {
           console.log('fetchSendCountersIndice is done');
-          notify(true, 'Данные счетчиков успешно внесены')
+          notify(true, 'Данные счетчиков успешно внесены');
         } else {        
           console.log(response.message, 'error');
           notify(false, response.payload.message);

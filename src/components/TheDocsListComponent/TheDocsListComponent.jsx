@@ -107,7 +107,11 @@ const TheDocsListComponent = () => {
               <div className="mb-1 text-nowrap">№001. Счет за аренду</div>
               <div><span className="text-[#787C82]">Дата:</span> <DateFormatter dateString={item.date} /></div>
               
-              <button className="btn-default px-6 py-2 flex mt-5 w-full justify-center" onClick={(e) => handleFileDownload(e, item.id)}>
+              <button 
+                className="btn-default px-6 py-2 flex mt-5 w-full justify-center" 
+                onClick={(e) => handleFileDownload(e, item.id)}
+                disabled={item.status == 'payd'}
+              >
                 <svg
                   className={`icon me-3`}
                 >
@@ -335,8 +339,10 @@ const TheDocsListComponent = () => {
                   {
                     currentTab && currentTab.title_en == 'bills' ?
                     <td className="ms-auto">                
-                      <button className="btn-default px-6 py-2 flex lg:mt-0 mt-5 md:w-full md:justify-center"
-                          onClick={(e) => handleFileDownload(e, item.id)}
+                      <button 
+                        className="btn-default px-6 py-2 flex lg:mt-0 mt-5 md:w-full md:justify-center"
+                        onClick={(e) => handleFileDownload(e, item.id)}
+                        disabled={item.status == 'payd'}
                       >
                         <svg
                           className="icon me-3"
@@ -353,7 +359,7 @@ const TheDocsListComponent = () => {
                       : 
                       <button className="btn-success px-6 py-2 lg:mt-0 mt-5 w-full" disabled={currentTab && currentTab.title_en == 'bills'} onClick={() => currentTab && currentTab.title_en == 'bills' ? handleSetDataType('payment', item) : ''}>
                         {
-                          currentTab && currentTab.title_en == 'bills' ? 'Оплатить' : 'Скачать2'
+                          currentTab && currentTab.title_en == 'bills' ? item.status == 'payd' ? 'Оплачено' : 'Оплатить' : 'Скачать2'
                         }
                       </button>
                     }
