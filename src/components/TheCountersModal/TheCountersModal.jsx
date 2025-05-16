@@ -21,8 +21,6 @@ const CountersModal = () => {
   }
   
   let address = '';
-
-  console.log(selectedAgreement, 'selectedAgreement');
   selectedAgreement.flatMap(contract => 
     contract.objects.flatMap(object => {
       address = object.address      
@@ -62,27 +60,23 @@ const CountersModal = () => {
   
   const handleSetIndice = () => {
     const data = getAllValues();
-    let response = null;
     data.filter(item => item.value != '')
-    data.map(item => {
+    data.map(async item => {
       if (item.value != '' && item.value != 0) {
-        dispatch(fetchSendCountersIndice(item))
+        const response = await dispatch(fetchSendCountersIndice(item))
+        if (response.payload.success) {
+          console.log('fetchSendCountersIndice is done');
+          notify(true, 'Данные счетчиков успешно внесены')
+        } else {        
+          console.log(response.message, 'error');
+          notify(false, response.payload.message);
+        }
       }
-      
-      
-      // if (response.success) {
-      //   console.log('fetchSendCountersIndice is done');
-      //   notify(true, 'Данные счетчиков успешно внесены')
-      //   toast.success(response.message);
-      //   return true;
-      // } else {        
-      //   console.log(response.message, 'error');    
-      //   notify(false, response.message)
-      //   toast.error(response.message || 'Ошибка при отправке показаний');
-      //   return false;
-      // }
+            
     });
-    dispatch(setShowModal(false))
+    setTimeout(() => {
+      dispatch(setShowModal(false));
+    }, 3000);
   }
 
   return (

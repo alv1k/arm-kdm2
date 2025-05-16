@@ -28,12 +28,15 @@ const TheModal = () => {
   }, []);
   // Добавляем анимацию появления/исчезновения
   if (!typeOfModal) return null; // Не рендерим модалку, если typeOfModal не задан
-
   
   return (
-    <div className={`opacity-0 animate-fadeIn
-      md:fixed inset-0 bg-[#00000033] z-20 flex items-center justify-center overflow-auto
-    `} onClick={() => handleCloseModal()} >
+    <div 
+      id="modal"
+      className={`opacity-0 animate-fadeIn
+        md:fixed inset-0 bg-[#00000033] z-20 flex items-center justify-center overflow-auto
+      `} 
+      onClick={() => handleCloseModal()} 
+    >
       <div className="bg-white p-12 h-fit my-auto rounded-xl w-[645px]" onClick={(e) => handleClick(e)} >
         <svg
           className="icon ms-auto cursor-pointer"

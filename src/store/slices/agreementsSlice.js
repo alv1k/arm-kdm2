@@ -81,29 +81,14 @@ export const fetchSendCountersIndice = createAsyncThunk(
             'Authorization': `Bearer ${token}`
           }
         });
-
-        dispatch({
-          type: 'SEND_INDICE_SUCCESS',
-          payload: response.data
-        });
-        console.log(response, '0000000');
-        
+        if (!response.data.success) {
+          throw new Error(`HTTP error! status: ${response.data.status}`);
+        }
         return await response.data;
       }
-    } catch (error) {
-      dispatch({
-        type: 'SEND_INDICE_FAILURE',
-        payload: error.response?.data || { 
-          success: false, 
-          message: error.message 
-        }
-      });
-      
-      // Возвращаем объект в том же формате, но с success: false
-      return error.response?.data || { 
-        success: false, 
-        message: error.message 
-      };
+    } catch (error) {      
+      console.log(error);      
+      return rejectWithValue(error.message);
     }
   }
 )
