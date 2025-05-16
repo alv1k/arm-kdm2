@@ -77,7 +77,6 @@ const NewRequestPage = () => {
     setRequestDescr(e.target.value);
   };
   const handleFilesUpload = async (e) => {
-    console.log(e.target.value, 'targetttt');
     
     try {
       const files = Array.from(e.target.files || []);      

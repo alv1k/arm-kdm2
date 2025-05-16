@@ -18,6 +18,16 @@ export async function downloadBase64PDF(base64String, filename = 'document') {
   
   try {
     const {mimeType, pureBase64} = splitBase64(base64String);
+
+
+    const extensionMap = {
+      'application/pdf': '.pdf',
+      'image/jpeg': '.jpg',
+      'image/png': '.png',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': '.docx'
+      // Добавьте другие MIME-типы по необходимости
+    };
+    const type = extensionMap[mimeType] || '';
      
     const binaryString = atob(pureBase64);
     const bytes = new Uint8Array(binaryString.length);
@@ -31,7 +41,7 @@ export async function downloadBase64PDF(base64String, filename = 'document') {
     
     const a = document.createElement('a');
     a.href = url;
-    a.download = filename;
+    a.download = filename + type;
     document.body.appendChild(a);
     a.click();
     

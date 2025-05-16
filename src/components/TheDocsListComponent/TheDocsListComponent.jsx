@@ -88,9 +88,6 @@ const TheDocsListComponent = () => {
       console.error("Ошибка загрузки файла:", error);
     }  
   }
-  const handleGetFile = (file) => {    
-    downloadBase64PDF(file);    
-  }
 
   return (
     (sm_breakpoint || md_breakpoint) ?      
@@ -355,11 +352,11 @@ const TheDocsListComponent = () => {
                   }                             
                   <td>
                     {
-                      currentTab && currentTab.title_en == 'counters' ? '' 
+                      currentTab && (currentTab.title_en == 'counters' || currentRoute == '/requests') ? '' 
                       : 
                       <button className="btn-success px-6 py-2 lg:mt-0 mt-5 w-full" disabled={currentTab && currentTab.title_en == 'bills'} onClick={() => currentTab && currentTab.title_en == 'bills' ? handleSetDataType('payment', item) : ''}>
                         {
-                          currentTab && currentTab.title_en == 'bills' ? item.status == 'payd' ? 'Оплачено' : 'Оплатить' : 'Скачать2'
+                          currentTab && currentTab.title_en == 'bills' ? item.status == 'payd' ? 'Оплачено' : 'Оплатить' : ''
                         }
                       </button>
                     }

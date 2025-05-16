@@ -50,8 +50,9 @@ const TheAgreementItem = ({ id, number, date, debt, objects, name, monthly }) =>
 
       const fileData = resultAction.payload;
       fileData.map(item => {
+        
         if (item?.dataUrl) {
-          downloadBase64PDF(item.dataUrl, item.type);
+          downloadBase64PDF(item.dataUrl, name);
         } else {
           console.error(`Файл ${item.type} не загружен: отсутствует dataUrl`);
         }
