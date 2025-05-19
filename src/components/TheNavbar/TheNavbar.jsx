@@ -20,13 +20,14 @@ const TheNavbar = () => {
     <aside 
       className={`
         xl:p-10 xl:static xl:w-6/20
-        lg:w-7/23 lg:static lg:p-5 lg:py-9 lg:rounded-xl lg:shadow-none
-        md:w-1/7 md:absolute md:z-10 md:rounded-none md:rounded-e-xl md:shadow-md
-        py-3 px-5 w-full rounded-2xl absolute bg-white shadow-none flex flex-col lg:h-auto h-full z-10
+        lg:w-7/23 lg:h-auto lg:static lg:p-5 lg:py-9 lg:rounded-xl lg:shadow-none
+        md:w-1/7 md:z-10 md:rounded-none md:rounded-e-xl md:shadow-sm md:top-26
+        py-3 px-5 rounded-2xl fixed shadow-none flex flex-col z-10
+        left-0 top-15 w-full bottom-0 overflow-hidden bg-white        
         ${sm_breakpoint ? `${styles.navbar} h-[100vh]` : ''}
         ${md_breakpoint ? `${styles.navbar}` : ''}
         ${navbarRemote}
-        ${showNavbar ? 'shadow-xl' : ''}
+        ${showNavbar ? 'shadow-xl w-[400px]' : 'w-[120px]'}
       `}
     >
       
@@ -47,7 +48,7 @@ const TheNavbar = () => {
         </div>
         
         <div className={`
-          ${sm_breakpoint || md_breakpoint ? 'mt-0' : 'mt-auto '}
+          ${sm_breakpoint || md_breakpoint ? 'mt-auto mb-0' : 'mt-auto'}
         `}>
           <TheMenuItem icon="user-icon" text="Профиль" to="/user" />
           <TheMenuItem icon="logout-icon" text="Выйти" to="/login" />

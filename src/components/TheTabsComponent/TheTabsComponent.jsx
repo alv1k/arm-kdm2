@@ -114,8 +114,9 @@ const TheTabsComponent = (props) => {
       xl:mt-9 
       lg:mt-10 lg:gap-4
       md:mt-7 md:rounded-t-xl md:justify-start
-      flex justify-between mt-11 bg-[#FAFBFD] border-b-1 border-slate-300 rounded-t-md font-medium overflow-auto no-scrollbar
+      min-w-0 whitespace-nowrap w-full flex justify-between mt-11 bg-[#FAFBFD] border-b-1 border-slate-300 rounded-t-md font-medium overflow-auto no-scrollbar
     `}>
+      <div className="flex">
         {tabs.map((tab, index) => (
           <div 
             key={index} 
@@ -134,34 +135,35 @@ const TheTabsComponent = (props) => {
             { tab.title_ru }
           </div>
         ))}
-        {
-          currentRoute == '/requests' ? 
-          <div className="flex ms-auto">
-            <div 
-              className="flex items-center cursor-pointer lg:px-8 px-4 text-nowrap"
-              onClick={handleNewRequestBtn}
+      </div>
+      {
+        currentRoute == '/requests' &&
+        <div className="flex ms-auto">
+          <div 
+            className="flex items-center cursor-pointer lg:px-8 px-4 text-nowrap"
+            onClick={handleNewRequestBtn}
+          >
+            <svg
+              className="w-[10px] h-[10px] stroke-[#232323] me-2"
             >
-              <svg
-                className="w-[10px] h-[10px] stroke-[#232323] me-2"
-              >
-                <use href={`${sprite_path}#plus-icon`} />
-              </svg>
-              Новая заявка
-            </div>
-            <div
-              className="flex items-center cursor-pointer lg:px-8  px-4 text-nowrap"
-              onClick={handleNewRequestBitrix}
+              <use href={`${sprite_path}#plus-icon`} />
+            </svg>
+            Новая заявка
+          </div>
+          <div
+            className="flex items-center cursor-pointer lg:px-8  px-4 text-nowrap"
+            onClick={handleNewRequestBitrix}
+          >
+            <svg
+              className="icon stroke-[#232323] me-2"
             >
-              <svg
-                className="icon stroke-[#232323] me-2"
-              >
-                <use href={`${sprite_path}#bitrix-icon`} />
-              </svg>
-              Заявка в Битрикс24
-            </div>
+              <use href={`${sprite_path}#bitrix-icon`} />
+            </svg>
+            Заявка в Битрикс24
+          </div>
 
-          </div> : ''
-        }
+        </div>
+      }
     </div>
   )
 }

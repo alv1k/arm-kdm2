@@ -32,6 +32,7 @@ const App = () => {
   const location = useLocation();  
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const isShowModal = useSelector(showModal);
+  const showNavbar = useSelector((state) => state.navbar.showNavbar);
 
   document.querySelectorAll('*').forEach(el => {
     if (el.scrollWidth > el.clientWidth) {
@@ -55,10 +56,6 @@ const App = () => {
         w-full md:py-5 flex h-fit min-h-[90vh]
         ${location.pathname == '/login' ? 'xl:p-0 lg:p-0' : 'xl:p-10 lg:p-5'}        
       `}>
-        {
-          md_breakpoint && location.pathname != '/login' ? 
-            <div className="w-[100px]"></div> : ''
-        }
         {
           location.pathname != '/login' ?
           <Navbar /> : ''

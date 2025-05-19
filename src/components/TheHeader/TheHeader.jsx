@@ -46,7 +46,7 @@ const TheHeader = () => {
   }, [dispatch])
 
   return (
-    <header className="xl:px-10 lg:px-10 md:px-6 md:pb-5 px-0 text-[#203887] bg-white py-5 pb-10 flex">
+    <header className="xl:px-10 lg:px-10 md:px-6 md:pb-5 md:h-auto px-0 text-[#203887] bg-white py-5 flex sticky top-0 shadow-sm h-16">
       {
         ((isNewRequest || showAgreementDetails || isPasswordChange) && sm_breakpoint) ?
         <button 
@@ -82,13 +82,13 @@ const TheHeader = () => {
       }
       <div className="xl:ms-0 lg:ms-0 md:justify-normal md:mt-1 items-center flex md:w-fit w-full md:static absolute">
         <img 
-          className="lg:ms-2 lg:w-[240px] md:w-[220px] md:ms-15 w-[200px] mx-auto" src="/src/assets/images/logo-main.png" alt=""
+          className="lg:ms-2 md:w-[300px] md:ms-10 w-[200px] mx-auto" src="/src/assets/images/logo-main.png" alt=""
           onClick={handleLogoClick}
         />
         {/* <p className=" lg:text-2xl md:text-xl text-sm uppercase font-bold lg:ms-5 md:ms-5 ms-2 my-auto" style={{fontFamily: 'PT Sans'}}>комдрагметалл рс(я)</p> */}
       </div>
-      <div className="lg:flex md:flex lg:ms-auto  md:ms-auto  hidden" >
-        <span className="font-semibold text-xl mt-[0.35rem] text-nowrap">
+      <div className="lg:flex md:flex lg:ms-auto md:ms-auto hidden items-center" >
+        <span className="font-semibold text-xl mt-[0.35rem] truncate text-nowrap lg:max-w-2xl max-w-[350px]">
           {profileFetchedData?.kontragent?.name}
         </span>
         {/* <img src="./src/assets/images/Ellipse.png" alt=""  /> */}

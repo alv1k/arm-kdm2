@@ -47,7 +47,7 @@ const NewRequestPage = () => {
   };  
 
   const backToRequests = () => {
-    dispatch(requestStatusTrue());
+    dispatch(requestStatusFalse());
   }
   const handleCreateNewRequest = () => {
     const data = {
@@ -142,8 +142,7 @@ const NewRequestPage = () => {
               className="icon"
             >
               <use href={`${sprite_path}#back-icon`} />
-            </svg>
-            
+            </svg>            
             Назад
           </button> : ''
         }

@@ -55,12 +55,12 @@ export const fetchDowloadFile = createAsyncThunk(
     }
   }
 )
-const getObjects = (agreeList) => {
+const getObjects = (agreeList) => {  
   const allObjects = agreeList.flatMap(agree => agree.objects || []);  
   return allObjects;
 }
 const getInvoices = (agreeList) => {
-  const allInvoices = agreeList.flatMap(agree => agree.invoices || []);  
+  const allInvoices = agreeList.invoices.map(invoice => invoice || []);  
   return allInvoices;
 }
 
@@ -132,7 +132,8 @@ const agreementsSlice = createSlice({
       state.showDetails = false;
     },
     setAgreementsList: (state, action) => {
-      state.selectedAgreement = [action.payload]  
+      state.selectedAgreement = [action.payload]
+      state.allInvoices = getInvoices(action.payload) 
     },
     setShowCountersModal: (state) => {
       state.isShowCountersModal = true
@@ -152,7 +153,6 @@ const agreementsSlice = createSlice({
       .addCase(fetchAgreementsList.fulfilled, (state, action) => {
         state.agreementsList = action.payload; // Сохраняем загруженные данные в agreementsList
         state.allObjects = getObjects(action.payload)
-        state.allInvoices = getInvoices(action.payload) 
         state.page404 = false;       
       })
       .addCase(fetchAgreementsList.pending, (state) => {
