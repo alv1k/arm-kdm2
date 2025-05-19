@@ -3,14 +3,13 @@ import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { hideNavbar } from '@/store/slices/navbarSlice';
 import { toggleTabs  } from '@/store/slices/tabsSlice';
-import { setFetchedIndices } from '@/store/slices/countersSlice';
 import { isShowDetails, selectedAgreement, agreementsStoreList, showDetails, hideDetails, setAgreementsList, fetchAgreementsList, isShowCountersModal, isShowPaymentModal } from '@/store/slices/agreementsSlice';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
 import TheSkeleton from '@/components/TheSkeleton/TheSkeleton';
 import styles from './AgreementsPage.module.css';
 import LoadingPage from '@/pages/LoadingPage/LoadingPage';
 import Page404 from '@/pages/Page404/Page404';
-import { ToastContainer, toast } from 'react-toastify';
+import { showToast } from '@/utils/notify';
 
 import AgreementItem from '@/components/TheAgreementItem/TheAgreementItem';
 import TheTabsComponent from '@/components/TheTabsComponent/TheTabsComponent';
@@ -21,8 +20,6 @@ const AgreementsPage = () => {
   const showNavbar = useSelector((state) => state.navbar.showNavbar);
   const isLoading = useSelector((state) => state.loading_slice.isLoading);
   const page404 = useSelector((state) => state.agreements_slice.page404);
-  const isFetchedIndices = useSelector((state) => state.counters_slice.fetchedIndices);
-  const isIndicesError = useSelector((state) => state.counters_slice.error);
   const isDetailsShown = useSelector(isShowDetails);
   const showCountersModal = useSelector(isShowCountersModal);
   const showPaymentModal = useSelector(isShowPaymentModal);
@@ -30,16 +27,6 @@ const AgreementsPage = () => {
   const currentAgreement = useSelector(selectedAgreement);
 
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
-  const notify = (type, message) => {
-    switch (type) {
-      case true: 
-        toast.success(message);
-        break;
-      case false:
-        toast.error('Ошибка: ' + message)
-        break;
-    }
-  }
   
   const dispatch = useDispatch();
   
@@ -73,17 +60,12 @@ const AgreementsPage = () => {
   useEffect(() => {
     dispatch(hideDetails());
   }, [location]);
-  useEffect(() => {
-    if (isFetchedIndices) {
-      notify(true, 'Данные счетчиков успешно внесены');   
-    }
-  }, [isFetchedIndices])
-  useEffect(() => {
-    if (isIndicesError !== null) {
-      console.log('Error occurred:', isIndicesError);
-      notify(false, isIndicesError);
-    }
-  }, [isIndicesError])
+
+  const handleShowToast = () => {    
+    showToast('test!', 'success', {
+      autoClose: 5000,
+    });
+  }
 
   return (
     <section 
@@ -96,107 +78,99 @@ const AgreementsPage = () => {
       `}
       onClick={sideClick}
     >
-      <ToastContainer position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"  
-      />
-      {
-        page404 ? 
-        <Page404 /> 
-        : isLoading ? 
-        <div className="md:pt-4 pt-5">
-          <TheSkeleton width="auto" height="80px" className="mb-6" />
-          <TheSkeleton width="90%" height="80px" className="mb-6" />
-          <TheSkeleton width="auto" height="80px" className="mb-6" />
-          <TheSkeleton width="90%" height="80px" className="mb-6" />
-          <TheSkeleton width="auto" height="80px" className="mb-6" />
-        </div>
-        : 
-        <div className="lg:text-base md:text-base text-sm">
-          <div className="flex md:justify-start justify-center">
-            {
-              isDetailsShown && sm_breakpoint ? '' :
-              <p className="
-                xl:mt-0 
-                lg:px-6 lg:text-[26px] lg:mt-4
-                md:px-2 md:mt-9
-                text-xl font-bold mt-5
-              ">
-                Мои договоры
-              </p>
-            }
-            {
-              isDetailsShown && !sm_breakpoint ? 
-              <button 
-                className="btn-text ms-auto me-4 lg:mt-0 md:mt-9 flex"
-                onClick={backToAgreements}
-              >
-                <svg
-                  className="icon"
-                >
-                  <use href={`${sprite_path}#back-icon`} />
-                </svg>
-                
-                Назад
-              </button>
-              : ''
-            }
-          </div>
-          {/* {
-            isDetailsShown ? '' :
-            <TheTabsComponent titles='agreementsList' breakpoint={sm_breakpoint ? 'sm-breakpoint' : ''}/>
-          } */}
-          
-          <div className="md:pt-4 pt-5">
-            {
-              !isDetailsShown && !isLoading ?
-                agreementsList.map((agreement, index) => (
-                  <div key={index} onClick={() => handleAgreementClick(agreement)}>
-                    <AgreementItem
-                      id={agreement.id}
-                      number={agreement.number}
-                      date={agreement.date}
-                      debt={agreement.debts}
-                      objects={agreement.objects}
-                      name={agreement.name}
-                      monthly={agreement.monthly}
-                    />
-                  </div>
-                ))              
-                :
-                currentAgreement.map((agreement, index) => (
-                  <div key={index} >
-                    <AgreementItem
-                      id={agreement.id}
-                      number={agreement.number}
-                      date={agreement.date}
-                      debt={agreement.debts}
-                      objects={agreement.objects}
-                      name={agreement.name}
-                      monthly={agreement.monthly}
-                    />
-                  </div>
-                ))
-            }
-          </div>        
-          
+    {
+      page404 ? 
+      <Page404 /> 
+      : isLoading ? 
+      <div className="md:pt-4 pt-5">
+        <TheSkeleton width="auto" height="80px" className="mb-6" />
+        <TheSkeleton width="90%" height="80px" className="mb-6" />
+        <TheSkeleton width="auto" height="80px" className="mb-6" />
+        <TheSkeleton width="90%" height="80px" className="mb-6" />
+        <TheSkeleton width="auto" height="80px" className="mb-6" />
+      </div>
+      : 
+      <div className="lg:text-base md:text-base text-sm">
+        <div className="flex md:justify-start justify-center">
           {
-            isDetailsShown && !showCountersModal && !showPaymentModal ? 
-            <div>
-              <TheTabsComponent titles='singleAgreement' />
-              <TheDocsListComponent />
-            </div>
+            isDetailsShown && sm_breakpoint ? '' :
+            <p className="
+              xl:mt-0 
+              lg:px-6 lg:text-[26px] lg:mt-4
+              md:px-2 md:mt-9
+              text-xl font-bold mt-5
+            ">
+              Мои договоры
+              <button onClick={handleShowToast}>
+                show toast
+              </button>
+            </p>
+          }
+          {
+            isDetailsShown && !sm_breakpoint ? 
+            <button 
+              className="btn-text ms-auto me-4 lg:mt-0 md:mt-9 flex"
+              onClick={backToAgreements}
+            >
+              <svg
+                className="icon"
+              >
+                <use href={`${sprite_path}#back-icon`} />
+              </svg>
+              
+              Назад
+            </button>
             : ''
           }
         </div>
-      }
+        {/* {
+          isDetailsShown ? '' :
+          <TheTabsComponent titles='agreementsList' breakpoint={sm_breakpoint ? 'sm-breakpoint' : ''}/>
+        } */}
+        
+        <div className="md:pt-4 pt-5">
+          {
+            !isDetailsShown && !isLoading ?
+              agreementsList.map((agreement, index) => (
+                <div key={index} onClick={() => handleAgreementClick(agreement)}>
+                  <AgreementItem
+                    id={agreement.id}
+                    number={agreement.number}
+                    date={agreement.date}
+                    debt={agreement.debts}
+                    objects={agreement.objects}
+                    name={agreement.name}
+                    monthly={agreement.monthly}
+                  />
+                </div>
+              ))              
+              :
+              currentAgreement.map((agreement, index) => (
+                <div key={index} >
+                  <AgreementItem
+                    id={agreement.id}
+                    number={agreement.number}
+                    date={agreement.date}
+                    debt={agreement.debts}
+                    objects={agreement.objects}
+                    name={agreement.name}
+                    monthly={agreement.monthly}
+                  />
+                </div>
+              ))
+          }
+        </div>        
+        
+        {
+          isDetailsShown && !showCountersModal && !showPaymentModal ? 
+          <div>
+            <TheTabsComponent titles='singleAgreement' />
+            <TheDocsListComponent />
+          </div>
+          : ''
+        }
+      </div>
+    }
     </section>
   )
 }

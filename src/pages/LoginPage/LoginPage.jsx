@@ -8,10 +8,10 @@ import axios from 'axios';
 import api from '@/api/api';
 import useMediaQueries from '@/hooks/useMediaQueries';
 import styles from './LoginPage.module.css'
+import { showToast } from '@/utils/notify';
 
 import CustomCheckbox from '@/components/CustomCheckbox/CustomCheckbox';
 import TheTabsComponent from '@/components/TheTabsComponent/TheTabsComponent';
-import { ToastContainer, toast } from 'react-toastify';
 
 const LoginPage = () => {
   const sprite_path = '/src/assets/images/i.svg';
@@ -31,16 +31,7 @@ const LoginPage = () => {
   const [inputRestorePassword, setInputRestorePassword] = useState();
   const inputPasswordRef = useRef(null);
   const caretPosRef = useRef(null);
-  const notify = (type, message) => {
-    switch (type) {
-      case true: 
-        toast.success('Данные авторизации высланы вам на указанную почту');
-        break;
-      case false:
-        toast.error('Ошибка: ' + message)
-        break;
-    }
-  }
+  
   const handleTogglePassword = () => {
     caretPosRef.current = {
       start: inputPasswordRef.current.selectionStart,
@@ -150,18 +141,29 @@ const LoginPage = () => {
     if (response.payload.success) {      
       dispatch(toggleRestorePassword());
       setIsCorrectLoginData(true);
-      notify(response.payload.success, response.payload.message)
+      // notify(response.payload.success, response.payload.message)
+      showToast(response.payload.message, 'success', {
+        autoClose: 5000,
+      });
     } else {
       if (response.payload.message == 'user not found') {
-        notify(response.payload.success, 'Пользователь не найден')
+        // notify(response.payload.success, 'Пользователь не найден')
+        showToast('Пользователь не найден', 'error', {
+          autoClose: 5000,
+        });
       } else if (response.payload.message == 'email is not specified') {
-        notify(response.payload.success, 'Электронная почта не указана')
+        // notify(response.payload.success, 'Электронная почта не указана')
+        showToast('Электронная почта не указана', 'error', {
+          autoClose: 5000,
+        });
       } else {
-        notify(response.payload.success, response.payload.message)
+        // notify(response.payload.success, response.payload.message)
+        showToast(response.payload.message, 'error', {
+          autoClose: 5000,
+        });
       }
     }
     // setCodeVerification(true)
-
   }
 
   const handleInputRestorePassword = (e) => {
@@ -307,120 +309,108 @@ const LoginPage = () => {
               <img className="mx-auto" src="/src/assets/images/logo.png" alt="logo" />
               <img className="mx-auto mt-4 lg:text-2xl my-0 w-3/5" src="/src/assets/images/logo-text.png" alt="" />
             </div>
-              {
-                isRestorePassword && <RestorePassword />
-              }
-              {
-                !isRestorePassword && 
-                <section>
-                  <p className="font-bold xl:mt-12 md:text-2xl md:mt-10 text-base mt-4">Вход в личный кабинет</p>
-                  <form method="GET" onSubmit={handleSubmit}>
-                    <div className="text-left  transition-all duration-2000 ease-in-out overflow-hidden max-h-[1000px]">
-                      <p className="mb-2 mt-4 md:text-base text-sm">Логин</p>
+            {
+              isRestorePassword && <RestorePassword />
+            }
+            {
+              !isRestorePassword && 
+              <section>
+                <p className="font-bold xl:mt-12 md:text-2xl md:mt-10 text-base mt-4">Вход в личный кабинет</p>
+                <form method="GET" onSubmit={handleSubmit}>
+                  <div className="text-left  transition-all duration-2000 ease-in-out overflow-hidden max-h-[1000px]">
+                    <p className="mb-2 mt-4 md:text-base text-sm">Логин</p>
+                    <input 
+                      key="login-input"
+                      name="login" 
+                      value={data.login} 
+                      onChange={handleInputChange} 
+                      className="p-4 bg-item-active w-full rounded-xl" 
+                      type="text" 
+                      placeholder="Введите логин" 
+                      required 
+                      autoFocus
+                    />
+                    <div className="relative">
+                      <p className="mb-2 mt-4 md:text-base text-sm">Пароль</p>
                       <input 
-                        key="login-input"
-                        name="login" 
-                        value={data.login} 
-                        onChange={handleInputChange} 
-                        className="p-4 bg-item-active w-full rounded-xl" 
-                        type="text" 
-                        placeholder="Введите логин" 
-                        required 
-                        autoFocus
+                        key="password-input"
+                        ref={inputPasswordRef}
+                        name="password" id="password" 
+                        className={`${!isCorrectLoginData ? 'danger_animation' : ''} p-4 bg-item-active w-full rounded-xl`} 
+                        placeholder="Введите пароль" 
+                        type={showPassword ? 'text' : 'password'} 
+                        required minLength={6} 
+                        value={data.password}
+                        onChange={handleInputChange}
+                        onDoubleClick={(e) => e.target.select()}
+                        onSelect={(e) => {
+                          caretPosRef.current = {
+                            start: e.target.selectionStart,
+                            end: e.target.selectionEnd
+                          };
+                        }}
                       />
-                      <div className="relative">
-                        <p className="mb-2 mt-4 md:text-base text-sm">Пароль</p>
-                        <input 
-                          key="password-input"
-                          ref={inputPasswordRef}
-                          name="password" id="password" 
-                          className={`${!isCorrectLoginData ? 'danger_animation' : ''} p-4 bg-item-active w-full rounded-xl`} 
-                          placeholder="Введите пароль" 
-                          type={showPassword ? 'text' : 'password'} 
-                          required minLength={6} 
-                          value={data.password}
-                          onChange={handleInputChange}
-                          onDoubleClick={(e) => e.target.select()}
-                          onSelect={(e) => {
-                            caretPosRef.current = {
-                              start: e.target.selectionStart,
-                              end: e.target.selectionEnd
-                            };
-                          }}
-                        />
-                        <button
-                          type="button"
-                          className="absolute right-4 top-15 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-transform active:scale-95 focus:text-blue-900 outline-0"
-                          aria-label={showPassword ? "Скрыть пароль" : "Показать пароль"}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setShowPassword(!showPassword);
-                          }}                          
-                        >
-                          {
-                            showPassword ? 
-                              <svg
-                                className="icon me-2"
-                              >
-                                <use href={`${sprite_path}#eye-icon`} />
-                              </svg> : 
-                              <svg
-                                className="icon me-2"
-                              >
-                                <use href={`${sprite_path}#eyeoff-icon`} />
-                              </svg>
-                          }
-                        </button>
-                      </div>
-                      <div className={`
-                        text-left text-red-600 mt-4
-                      `}>
+                      <button
+                        type="button"
+                        className="absolute right-4 top-15 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-transform active:scale-95 focus:text-blue-900 outline-0"
+                        aria-label={showPassword ? "Скрыть пароль" : "Показать пароль"}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setShowPassword(!showPassword);
+                        }}                          
+                      >
                         {
-                          isCorrectLoginData ? '' :
-                            <p className="animate-fadeIn">Введен неверный логин или пароль</p>       
+                          showPassword ? 
+                            <svg
+                              className="icon me-2"
+                            >
+                              <use href={`${sprite_path}#eye-icon`} />
+                            </svg> : 
+                            <svg
+                              className="icon me-2"
+                            >
+                              <use href={`${sprite_path}#eyeoff-icon`} />
+                            </svg>
                         }
-                      </div>
+                      </button>
                     </div>
-                    <div className="flex justify-between py-5 mt-4">
-                      <div onClick={(e) => handleRememberMeChange(e)}>
-                        <CustomCheckbox label="Запомнить меня" id="remember_me"  />
-                      </div>
-                      <div>
-                        <p 
-                          id="forgotPassword"
-                          tabIndex={0} 
-                          className="text-[#203887] cursor-pointer focus:bg-[#F6F8FF] outline-0" 
-                          onClick={() => handleRestoreButton()}
-                          onKeyDown={(e) => {
-                            // Добавляем обработку нажатия пробела/Enter
-                            if (e.key === ' ' || e.key === 'Enter') {
-                              e.preventDefault();
-                              document.getElementById('forgotPassword')?.click();
-                            }
-                          }}
-                        >
-                          Забыли пароль?
-                        </p>
-                      </div>
+                    <div className={`
+                      text-left text-red-600 mt-4
+                    `}>
+                      {
+                        isCorrectLoginData ? '' :
+                          <p className="animate-fadeIn">Введен неверный логин или пароль</p>       
+                      }
                     </div>
-                    <button type="submit" className="mt-5 btn-primary w-full py-2" disabled={isLoading}>
-                      {isLoading ? 'Вход...' : 'Войти'}
-                    </button>
-                  </form>
-                </section>
-              }
-              
-            <ToastContainer position="top-right"
-              autoClose={5000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              theme="colored"  
-            />
+                  </div>
+                  <div className="flex justify-between py-5 mt-4">
+                    <div onClick={(e) => handleRememberMeChange(e)}>
+                      <CustomCheckbox label="Запомнить меня" id="remember_me"  />
+                    </div>
+                    <div>
+                      <p 
+                        id="forgotPassword"
+                        tabIndex={0} 
+                        className="text-[#203887] cursor-pointer focus:bg-[#F6F8FF] outline-0" 
+                        onClick={() => handleRestoreButton()}
+                        onKeyDown={(e) => {
+                          // Добавляем обработку нажатия пробела/Enter
+                          if (e.key === ' ' || e.key === 'Enter') {
+                            e.preventDefault();
+                            document.getElementById('forgotPassword')?.click();
+                          }
+                        }}
+                      >
+                        Забыли пароль?
+                      </p>
+                    </div>
+                  </div>
+                  <button type="submit" className="mt-5 btn-primary w-full py-2" disabled={isLoading}>
+                    {isLoading ? 'Вход...' : 'Войти'}
+                  </button>
+                </form>
+              </section>
+            }
           </div>
         </div>
       </div>

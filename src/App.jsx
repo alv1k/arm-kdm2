@@ -13,6 +13,7 @@ import LoadingPage from '@/pages/LoadingPage/LoadingPage';
 import TheModal from '@/components/TheModal/TheModal';
 import useMediaQueries from '@/hooks/useMediaQueries';
 import { showModal } from '@/store/slices/modalSlice';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const HTTPSRedirect = () => {
@@ -70,7 +71,8 @@ const App = () => {
           <Route path='/user' element={<UserPage/>} />
           <Route path='/login' element={<LoginPage/>} />
         </Routes>
-      </div>
+      </div>      
+      <ToastContainer />
     </div>
   )
 };

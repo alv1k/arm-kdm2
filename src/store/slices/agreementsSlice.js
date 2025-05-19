@@ -164,7 +164,14 @@ const agreementsSlice = createSlice({
         state.page404 = true;
       })
       .addCase(fetchDowloadFile.fulfilled, (state, action) => {
-        state.fileToDownload = [action.payload];
+        if (action.payload.data != []) {
+          state.fileToDownload = [action.payload];
+        } else {
+          state.fileToDownload = [{
+            message: 'no data',
+            success: false
+          }]
+        }
       })
       .addCase(fetchDowloadFile.pending, (state) => {
         state.error = null;

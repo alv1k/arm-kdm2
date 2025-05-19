@@ -2,24 +2,13 @@ import { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { dataType, setDataType, setShowModal } from '@/store/slices/modalSlice';
 import { fetchSendCountersIndice } from '@/store/slices/agreementsSlice';
-import { setFetchedIndices, setFetchIndicesError } from '@/store/slices/countersSlice';
-import { ToastContainer, toast } from 'react-toastify';
+import { showToast } from '@/utils/notify';
 
 const CountersModal = () => {
   const sprite_path = './src/assets/images/i.svg';
   const dispatch = useDispatch();  
   const selectedAgreement = useSelector((state) => state.agreements_slice.selectedAgreement);
   const inputRefs = useRef([]);
-  const notify = (type, message) => {
-    switch (type) {
-      case true: 
-        toast.success(message);
-        break;
-      case false:
-        toast.error('Ошибка: ' + message)
-        break;
-    }
-  }
   
   let address = '';
   selectedAgreement.flatMap(contract => 
@@ -66,13 +55,13 @@ const CountersModal = () => {
       if (item.value != '' && item.value != 0) {
         const response = await dispatch(fetchSendCountersIndice(item))
         if (response.payload.success) {
-          console.log('fetchSendCountersIndice is done');
-          // notify(true, 'Данные счетчиков успешно внесены');
-          dispatch(setFetchedIndices(true));
-        } else {        
-          console.log(response.message, 'error');
-          // notify(false, response.payload.message);
-          dispatch(setFetchIndicesError(response.message))
+          showToast('Показания счетчиков переданы!', 'success', {
+            autoClose: 5000,
+          });
+        } else {
+          showToast('Ошибка при передаче показаний счетчиков!' + response.message, 'error', {
+            autoClose: 5000,
+          });
         }
       }
             
@@ -122,17 +111,6 @@ const CountersModal = () => {
             </button>
           </div>
         }
-        <ToastContainer position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="colored"  
-        />
       </div>
       
   )

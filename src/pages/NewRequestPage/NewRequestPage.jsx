@@ -4,7 +4,7 @@ import { requestStatusTrue, requestStatusFalse, fetchNewRequest, fetchRequestsLi
 import { getBase64 } from '@/utils/getBase64';
 import useMediaQueries from '@/hooks/useMediaQueries';
 import CustomSelect from '@/components/CustomSelect/CustomSelect';
-import { ToastContainer, toast } from 'react-toastify';
+import { showToast } from '@/utils/notify';
 
 const NewRequestPage = () => {
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
@@ -20,16 +20,6 @@ const NewRequestPage = () => {
   const [uploadedFiles, setUploadedFiles] = useState("");
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [error, setError] = useState(null);
-  const notify = (type, message) => {
-    switch (type) {
-      case true: 
-        toast.success(message);
-        break;
-      case false:
-        toast.error('Ошибка: ' + message)
-        break;
-    }
-  }
 
   function getUniqueById(options) {
     if (!Array.isArray(options)) return [];
@@ -108,7 +98,9 @@ const NewRequestPage = () => {
     if (isNewRequestSaved) {
       dispatch(requestStatusFalse());
       dispatch(fetchRequestsList())
-      notify(true, 'Заявка успешно внесена')
+      showToast('Заявка успешно внесена!', 'success', {
+        autoClose: 2000,
+      });
     }
   }, [isNewRequestSaved])
   useEffect(() => {
@@ -240,17 +232,6 @@ const NewRequestPage = () => {
       <button className="btn-primary py-2 md:w-auto md:px-10 md:mt-8 w-full mt-11" type="submit" onClick={handleCreateNewRequest}>
         Отправить
       </button>
-      <ToastContainer position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"  
-      />
     </div>
   )
 }

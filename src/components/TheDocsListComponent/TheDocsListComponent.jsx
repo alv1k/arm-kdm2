@@ -10,6 +10,7 @@ import { selectedTab } from '@/store/slices/tabsSlice';
 import { setShowCountersModal, setShowPaymentModal, fetchDowloadFile } from '@/store/slices/agreementsSlice';
 import { isNew, requestStatusFalse, fetchRequestsList, requestsList } from '@/store/slices/requestsSlice';
 import { downloadBase64PDF } from '@/utils/fileDownload';
+import { showToast } from '@/utils/notify';
 
 const TheDocsListComponent = () => {
   const sprite_path = './src/assets/images/i.svg';
@@ -83,6 +84,11 @@ const TheDocsListComponent = () => {
       const doc_name = item.descr + item.number;
 
       const fileData = resultAction.payload;
+      if (fileData.length == 0) {
+        showToast('Файл не найден!', 'error', {
+          autoClose: 5000,
+        });
+      } else {        
         fileData.map(item => {
           if (item?.dataUrl) {
             downloadBase64PDF(item.dataUrl, doc_name);
@@ -90,6 +96,7 @@ const TheDocsListComponent = () => {
             console.error(`Файл ${item.type} не загружен: отсутствует dataUrl`);
           }
         })
+      }
     } catch (error) {
       console.error("Ошибка загрузки файла:", error);
     }  
@@ -181,26 +188,35 @@ const TheDocsListComponent = () => {
         </div>
       </div>
       :
-      <div className={`${currentTab && (currentTab == 'all_requests' || currentTab == 'my_requests')  ? 'md:ps-3' : ''}  mt-6 bg-item-default rounded-xl p-4 md:flex block justify-between`}>
+      <div className={`${currentTab && (currentTab == 'all_requests' || currentTab == 'my_requests')  ? 'md:ps-3' : ''}  mt-6 bg-item-default rounded-xl p-4 md:flex block`}>
         <div>
           <p className="mb-2"><span className="text-[#787C82] text-nowrap">№ 001.&nbsp;</span>{item.object}</p>              
           <div className="text-nowrap"><span className="text-[#787C82]">Тема:&nbsp;</span>{item.type}</div>
-          <div className="text-nowrap my-1 flex gap-5">
-            <p>
-              <span className="text-[#787C82]">Дата:&nbsp;</span><DateFormatter dateString={item.date} /> 
-            </p>
-            <p>
-              <span className="text-[#787C82]">Статус:&nbsp;</span>
-              <span className={item.status.includes('В работе') ? '' : 'text-green-700'}>
-                {item.status}
-              </span>
-            </p>
+          <div className="text-nowrap my-1 md:flex block gap-5">
+            <div className="flex gap-6">
+              <p>
+                <span className="text-[#787C82]">Дата:&nbsp;</span><DateFormatter dateString={item.date} /> 
+              </p>
+              <p>
+                <span className="text-[#787C82]">Статус:&nbsp;</span>
+                <span className={item.status.includes('В работе') ? '' : 'text-green-700'}>
+                  {item.status}
+                </span>
+              </p>
+            </div>
+            <div className={md_breakpoint ? 'inline ms-6' : 'block mt-4'}>
+              <p className="flex">              
+                <svg
+                  className="w-6 h-6 stroke-[#787C82] stroke-1 outline-0"
+                >
+                  <use href={`${sprite_path}#clip-icon`} />
+                </svg>
+                <p className="text-base text-[#787C82] ms-2">
+                  filename2.pdf ,
+                </p>
+              </p>
+            </div>
           </div>
-        </div>
-        <div>
-          <button className="btn-success px-6 py-2 md:w-auto w-full md:mt-0 mt-5">
-            Открыть
-          </button>
         </div>
       </div> 
     ))
@@ -363,7 +379,7 @@ const TheDocsListComponent = () => {
                         Скачать
                       </button> 
                     </td> : ''
-                  }                             
+                  }
                   <td>
                     {
                       currentTab && currentTab.title_en == 'counters' ? 
@@ -373,12 +389,12 @@ const TheDocsListComponent = () => {
                           item.file &&
                           <div className="flex group relative">
                             <svg
-                              className="icon me-3 fill-[#787C82] stroke-black"
+                              className="w-6 h-6 stroke-[#787C82] stroke-1 outline-0 me-3 self-center"
                             >
                               <use href={`${sprite_path}#clip-icon`} />
                             </svg>
-                            <span class="py-2 rounded cursor-default truncate">
-                              {getFileName(item.file)}
+                            <span class="py-2 rounded cursor-default truncate text-[#787C82] text-base">
+                              {getFileName(item.file)},
                             </span>
                           </div>                          
                         }                     
