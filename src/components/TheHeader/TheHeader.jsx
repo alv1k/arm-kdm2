@@ -46,7 +46,7 @@ const TheHeader = () => {
   }, [dispatch])
 
   return (
-    <header className="xl:px-10 lg:px-10 md:px-6 md:pb-5 md:h-auto px-0 text-[#203887] bg-white py-5 flex sticky top-0 shadow-sm h-16">
+    <header className="xl:px-10 lg:px-10 md:px-6 md:pb-5 md:h-auto px-0 text-[#203887] bg-white py-5 flex sticky top-0 shadow-sm h-16 z-50">
       {
         ((isNewRequest || showAgreementDetails || isPasswordChange) && sm_breakpoint) ?
         <button 
@@ -80,7 +80,7 @@ const TheHeader = () => {
         </button>
         : ''
       }
-      <div className="xl:ms-0 lg:ms-0 md:justify-normal md:mt-1 items-center flex md:w-fit w-full md:static absolute">
+      <div className="xl:ms-0 lg:ms-0 md:justify-normal md:mt-1 items-center flex md:w-fit w-full md:static absolute cursor-pointer">
         <img 
           className="lg:ms-2 md:w-[300px] md:ms-10 w-[200px] mx-auto" src="/src/assets/images/logo-main.png" alt=""
           onClick={handleLogoClick}

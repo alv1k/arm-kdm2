@@ -49,7 +49,14 @@ const TheDocsListComponent = () => {
     if (currentTab) {
       switch(currentRoute) {
         case '/requests':
-          return requests;
+          switch(currentTab.title_en) {
+            case 'my_requests', 'all_requests':
+              return requests;
+            case 'in_progress':
+              return requests.filter(request => request.status.includes('В работе'))
+            case 'completed':
+              return requests.filter(request => request.status.includes('заверш'))
+          }
         case '/agreements':
           switch(currentTab.title_en) {
             case 'bills':
@@ -100,6 +107,12 @@ const TheDocsListComponent = () => {
     } catch (error) {
       console.error("Ошибка загрузки файла:", error);
     }  
+  }
+
+  const handleSort = (target) => {
+    //ASC DESC
+    console.log(target, 'firstTd');
+    
   }
 
   return (
@@ -224,7 +237,7 @@ const TheDocsListComponent = () => {
     <div className={`
       flex bg-[#FAFBFD] rounded-lg my-5 lg:p-0 p-5
     `}>
-      <div className="w-full table-fixed">
+      <div className="w-full table-fixed overflow-auto no-scrollbar">
         <table className="rounded-lg border-separate border-spacing-0 w-full">
           <thead className="bg-item-active">              
             <tr align="center" className="text-center justify-center">
@@ -233,11 +246,12 @@ const TheDocsListComponent = () => {
                   <span className="inline">
                     {currentTab && currentTab.title_en == 'counters' ? 'Дата' : '№'}
                   </span>
-                  <svg
-                    className={`${styles.icon} ms-2`}
+                  {/* <svg
+                    className={`${styles.icon} ms-2 cursor-pointer`}
+                    onClick={() => handleSort('firstTd')}
                   >
                     <use href={`${sprite_path}#chevron-down`} />
-                  </svg>
+                  </svg> */}
                 </div>
               </th>
               <th width={currentTab && currentTab.title_en == 'counters' ? '100px' : ''}>
@@ -251,11 +265,11 @@ const TheDocsListComponent = () => {
                       ' ХВС' : ' помещения'
                     }
                   </span>
-                  <svg
+                  {/* <svg
                     className={`${styles.icon} ms-2`}
                     >
                     <use href={`${sprite_path}#chevron-down`} />
-                  </svg>
+                  </svg> */}
                 </div>
               </th>
               {
@@ -263,22 +277,22 @@ const TheDocsListComponent = () => {
                 <th>
                   <div className="flex items-center">
                     <span className="text-nowrap">Тема обращения</span>
-                    <svg
+                    {/* <svg
                       className={`${styles.icon} ms-2`}
                       >
                       <use href={`${sprite_path}#chevron-down`} />
-                    </svg>
+                    </svg> */}
                   </div>
                 </th> : ''
               }
               <th width={currentTab && currentTab.title_en == 'counters' ? '200px' : ''}>
                 <div className="flex items-center min-w-22">
                   <span>{currentTab && currentTab.title_en == 'counters' ? 'ГВС' : 'Дата'}</span>
-                  <svg
+                  {/* <svg
                     className={`${styles.icon} ms-2`}
                     >
                     <use href={`${sprite_path}#chevron-down`} />
-                  </svg>
+                  </svg> */}
                 </div>
               </th>
               <th width={currentTab && currentTab.title_en == 'counters' ? '200px' : ''} align="center">
@@ -289,11 +303,11 @@ const TheDocsListComponent = () => {
                       'Сумма' : currentTab && currentTab.title_en == 'counters' ? 'Электроэнергия' : 'Статус'
                     }
                   </span>
-                  <svg
+                  {/* <svg
                     className={`${styles.icon} ms-2`}
                     >
                     <use href={`${sprite_path}#chevron-down`} />
-                  </svg>
+                  </svg> */}
                 </div>
               </th>
               <th></th>
@@ -365,7 +379,7 @@ const TheDocsListComponent = () => {
                   </td>
                   {
                     currentTab && currentTab.title_en == 'bills' ?
-                    <td className="ms-auto">                
+                    <td className="ms-auto">
                       <button 
                         className="btn-default px-6 py-2 flex lg:mt-0 mt-5 md:w-full md:justify-center"
                         onClick={(e) => handleFileDownload(e, item)}
@@ -402,7 +416,7 @@ const TheDocsListComponent = () => {
                       :
                       <button className="btn-success px-6 py-2 lg:mt-0 mt-5 w-full" disabled={currentTab && currentTab.title_en == 'bills'} onClick={() => currentTab && currentTab.title_en == 'bills' ? handleSetDataType('payment', item) : ''}>
                         {
-                          currentTab && currentTab.title_en == 'bills' ? item.status == 'payd' ? 'Оплачено' : 'Оплатить' : ''
+                          currentTab && currentTab.title_en == 'bills' ? item.status == 'payd' ? 'Оплачено' : 'Оплатить' : 'Скачать'
                         }
                       </button>
                     }

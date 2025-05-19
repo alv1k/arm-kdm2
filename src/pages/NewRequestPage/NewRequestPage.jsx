@@ -104,7 +104,7 @@ const NewRequestPage = () => {
     }
   }, [isNewRequestSaved])
   useEffect(() => {
-    if (selectedFiles.length > 2) {
+    if (selectedFiles.length > 5) {
       alert('Количество файлов должно быть не более 5, пожалуйста, произведите выбор еще раз');
       setSelectedFiles([]);
     }
@@ -135,7 +135,7 @@ const NewRequestPage = () => {
         {
           !sm_breakpoint ? 
           <button 
-            className="btn-text ms-auto me-4 lg:mt-0 md:mt-0 flex"
+            className="btn-text ms-auto me-4 lg:mt-0 md:mt-0 flex cursor-pointer"
             onClick={backToRequests}
           >
             <svg

@@ -24,7 +24,7 @@ const TheNavbar = () => {
         md:w-1/7 md:z-10 md:rounded-none md:rounded-e-xl md:shadow-sm md:top-26
         py-3 px-5 rounded-2xl fixed shadow-none flex flex-col z-10
         left-0 top-15 w-full bottom-0 overflow-hidden bg-white        
-        ${sm_breakpoint ? `${styles.navbar} h-[100vh]` : ''}
+        ${sm_breakpoint ? `${styles.navbar} h-[93vh] overflow-hidden no-scrollbar` : ''}
         ${md_breakpoint ? `${styles.navbar}` : ''}
         ${navbarRemote}
         ${showNavbar ? 'shadow-xl w-[400px]' : 'w-[120px]'}
@@ -48,7 +48,7 @@ const TheNavbar = () => {
         </div>
         
         <div className={`
-          ${sm_breakpoint || md_breakpoint ? 'mt-auto mb-0' : 'mt-auto'}
+          ${sm_breakpoint ? 'mt-0' : 'mt-auto mb-0'}
         `}>
           <TheMenuItem icon="user-icon" text="Профиль" to="/user" />
           <TheMenuItem icon="logout-icon" text="Выйти" to="/login" />
