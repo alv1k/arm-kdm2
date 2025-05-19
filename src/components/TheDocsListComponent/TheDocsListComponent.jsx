@@ -237,7 +237,7 @@ const TheDocsListComponent = () => {
     <div className={`
       flex bg-[#FAFBFD] rounded-lg my-5 lg:p-0 p-5
     `}>
-      <div className="w-full table-fixed overflow-auto no-scrollbar">
+      <div className="w-full table-fixed">
         <table className="rounded-lg border-separate border-spacing-0 w-full">
           <thead className="bg-item-active">              
             <tr align="center" className="text-center justify-center">
@@ -427,8 +427,7 @@ const TheDocsListComponent = () => {
             
           </tbody>
         </table>
-      </div>
-      
+      </div>      
     </div> 
   )
 }
