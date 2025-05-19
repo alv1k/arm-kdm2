@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { dataType, setDataType, setShowModal } from '@/store/slices/modalSlice';
-import { fetchSendCountersIndice } from '@/store/slices/agreementsSlice';
+import { fetchSendCountersIndice, setHideCountersModal } from '@/store/slices/agreementsSlice';
 import { showToast } from '@/utils/notify';
 
 const CountersModal = () => {
@@ -54,15 +54,18 @@ const CountersModal = () => {
     data.map(async item => {
       if (item.value != '' && item.value != 0) {
         const response = await dispatch(fetchSendCountersIndice(item))
+        console.log(response, 'response here');        
         if (response.payload.success) {
           showToast('Показания счетчиков переданы!', 'success', {
             autoClose: 5000,
           });
         } else {
-          showToast('Ошибка при передаче показаний счетчиков!' + response.message, 'error', {
+          showToast('Ошибка при передаче показаний счетчиков! ' + response.message, 'error', {
             autoClose: 5000,
           });
         }
+        dispatch(setHideCountersModal())
+        window.scrollTo(0, 0);
       }
             
     });

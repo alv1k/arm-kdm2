@@ -61,12 +61,6 @@ const AgreementsPage = () => {
     dispatch(hideDetails());
   }, [location]);
 
-  const handleShowToast = () => {    
-    showToast('test!', 'success', {
-      autoClose: 5000,
-    });
-  }
-
   return (
     <section 
       className={`
@@ -101,9 +95,6 @@ const AgreementsPage = () => {
               text-xl font-bold mt-5
             ">
               Мои договоры
-              <button onClick={handleShowToast}>
-                show toast
-              </button>
             </p>
           }
           {
