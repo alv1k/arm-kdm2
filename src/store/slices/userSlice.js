@@ -56,7 +56,9 @@ const userSlice = createSlice({
     page404: false,
   },
   reducers: {
-    togglePasswordChange(state, action) {      
+    togglePasswordChange(state, action) {
+      console.log('togglePasswordChange here');
+      
       state.isPasswordChange = action.payload
     },
     setToken(state, action) {      

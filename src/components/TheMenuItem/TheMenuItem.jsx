@@ -4,12 +4,13 @@ import { NavLink } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
 import { hideNavbar, isNavbarShown } from '@/store/slices/navbarSlice';
-import { removeToken } from '@/store/slices/userSlice';
+import { removeToken, togglePasswordChange } from '@/store/slices/userSlice';
 import styles from './TheMenuItem.module.css';
 
 const TheMenuItem = ({ icon, text, to }) => {
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const showNavbar = useSelector(state => state.navbar.showNavbar);
+  let agreementsList = useSelector(state => state.agreements_slice.agreementsList);
   const dispatch = useDispatch();
   const sprite_path = './src/assets/images/i.svg';
     
@@ -27,8 +28,10 @@ const TheMenuItem = ({ icon, text, to }) => {
   const closeNavbar = () => {
     showNavbar ? dispatch(hideNavbar()) : '' 
   }
-  const logout = () => {
+  const logout = () => {    
     dispatch(removeToken());
+    dispatch(togglePasswordChange(false));
+    agreementsList = [];
     return true;
   }
   const handleClick = () => {    
