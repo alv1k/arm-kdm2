@@ -59,12 +59,12 @@ const CountersModal = () => {
           showToast('Показания счетчиков переданы!', 'success', {
             autoClose: 5000,
           });
+          dispatch(setHideCountersModal())
         } else {
           showToast('Ошибка при передаче показаний счетчиков! ' + response.message, 'error', {
             autoClose: 5000,
           });
         }
-        dispatch(setHideCountersModal())
         window.scrollTo(0, 0);
       }
             

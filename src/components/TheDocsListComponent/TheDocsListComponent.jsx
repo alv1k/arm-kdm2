@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom'; 
 import useMediaQueries from '@/hooks/useMediaQueries';
 import PriceFormatter from '@/components/PriceFormatter/PriceFormatter'; 
 import DateFormatter from '@/components/DateFormatter/DateFormatter'; 
@@ -241,7 +241,7 @@ const TheDocsListComponent = () => {
         <table className="rounded-lg border-separate border-spacing-0 w-full">
           <thead className="bg-item-active">              
             <tr align="center" className="text-center justify-center">
-              <th width={currentTab && currentTab.title_en == 'counters' ? '200px' : ''}>
+              <th className="px-5 py-2.5" width={currentTab && currentTab.title_en == 'counters' ? '200px' : ''}>
                 <div className="flex items-center ps-8">
                   <span className="inline">
                     {currentTab && currentTab.title_en == 'counters' ? 'Дата' : '№'}
@@ -254,7 +254,7 @@ const TheDocsListComponent = () => {
                   </svg> */}
                 </div>
               </th>
-              <th width={currentTab && currentTab.title_en == 'counters' ? '100px' : ''}>
+              <th className="px-5 py-2.5" width={currentTab && currentTab.title_en == 'counters' ? '100px' : ''}>
                 <div className="flex items-center min-w-22">
                   <span className="text-nowrap">
                     {currentTab && currentTab.title_en == 'counters' ? '' : 'Название'}                    
@@ -274,7 +274,7 @@ const TheDocsListComponent = () => {
               </th>
               {
                 currentRoute == '/requests' ?
-                <th>
+                <th className="px-5 py-2.5">
                   <div className="flex items-center">
                     <span className="text-nowrap">Тема обращения</span>
                     {/* <svg
@@ -285,7 +285,7 @@ const TheDocsListComponent = () => {
                   </div>
                 </th> : ''
               }
-              <th width={currentTab && currentTab.title_en == 'counters' ? '200px' : ''}>
+              <th className="px-5 py-2.5" width={currentTab && currentTab.title_en == 'counters' ? '200px' : ''}>
                 <div className="flex items-center min-w-22">
                   <span>{currentTab && currentTab.title_en == 'counters' ? 'ГВС' : 'Дата'}</span>
                   {/* <svg
@@ -295,7 +295,7 @@ const TheDocsListComponent = () => {
                   </svg> */}
                 </div>
               </th>
-              <th width={currentTab && currentTab.title_en == 'counters' ? '200px' : ''} align="center">
+              <th className="px-5 py-2.5" width={currentTab && currentTab.title_en == 'counters' ? '200px' : ''} align="center">
                 <div className="flex items-center">
                   <span>
                     {
@@ -310,10 +310,10 @@ const TheDocsListComponent = () => {
                   </svg> */}
                 </div>
               </th>
-              <th></th>
+              <th className="px-5 py-2.5"></th>
               {
                 currentRoute != '/requests' ? 
-                <th></th> : ''
+                <th className="px-5 py-2.5"></th> : ''
               }
             </tr>
           </thead>
@@ -321,12 +321,12 @@ const TheDocsListComponent = () => {
             {
               getList()?.map((item, index) => (
                 <tr key={index} className="cursor-pointer">
-                  <td className={currentTab && currentTab.title_en == 'counters' ? 'align-top' : ''}>
+                  <td className={`px-5 py-2.5` + [currentTab && currentTab.title_en == 'counters' ? 'align-top' : '']}>
                     <div className="ps-8">
                       {currentTab && currentTab.title_en == 'counters' ? '01.01.2011' : item.number}
                     </div>
                   </td>
-                  <td>
+                  <td className="px-5 py-2.5">
                     {
                       currentTab && currentTab.title_en == 'acts' ?
                       'Акт об оплате аренды' : currentTab && currentTab.title_en == 'bills' ? item.descr
@@ -350,26 +350,25 @@ const TheDocsListComponent = () => {
                     currentTab && currentTab.title_en == 'acts' ?
                     '' : currentTab && currentTab.title_en == 'bills' ? '' :
                     currentTab && currentTab.title_en == 'counters' ? 
-                    <td>
+                    <td className="px-5 py-2.5">
                       <div>
                         <p className="text-[#787C82]">№000001</p>
                         <p>123.45 м3</p>
                       </div> 
                     </td>
                     :                
-                    <td>{item.type}</td>
+                    <td className="px-5 py-2.5">{item.type}</td>
                   }
-                  <td>
+                  <td className="px-5 py-2.5">
                     {
                       currentTab && currentTab.title_en == 'counters' ? 
                       <div>
                         <p className="text-[#787C82]">№000001</p>
                         <p>123.45 кВтч</p>
                       </div> : <DateFormatter dateString={item.date} />
-                    }
-                    
+                    }                    
                   </td>
-                  <td>
+                  <td className="px-5 py-2.5">
                     {
                       currentTab && (currentTab.title_en == 'acts' || currentTab.title_en == 'bills') ?
                       <PriceFormatter amount={item.summ} /> 
@@ -379,7 +378,7 @@ const TheDocsListComponent = () => {
                   </td>
                   {
                     currentTab && currentTab.title_en == 'bills' ?
-                    <td className="ms-auto">
+                    <td className="px-5 py-2.5 ms-auto">
                       <button 
                         className="btn-default px-6 py-2 flex lg:mt-0 mt-5 md:w-full md:justify-center"
                         onClick={(e) => handleFileDownload(e, item)}
@@ -394,7 +393,7 @@ const TheDocsListComponent = () => {
                       </button> 
                     </td> : ''
                   }
-                  <td>
+                  <td className="px-5 py-2.5">
                     {
                       currentTab && currentTab.title_en == 'counters' ? 
                       '' : currentRoute == '/requests' ? 

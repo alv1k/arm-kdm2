@@ -10,6 +10,7 @@ import { isNew } from '@/store/slices/requestsSlice';
 import { userData } from '@/store/slices/userSlice';
 import { isPasswordModification, togglePasswordChange, fetchProfileData } from '@/store/slices/userSlice';
 import useMediaQueries from '@/hooks/useMediaQueries';
+import { showToast } from '@/utils/notify';
 
 const UserPage = () => {
   const sprite_path = './src/assets/images/i.svg';
@@ -25,7 +26,9 @@ const UserPage = () => {
   // можно редактировать email, login, phone и password
   
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
-  const [showPassword, setShowPassword] = useState(false);
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showDoubledPassword, setShowDoubledPassword] = useState(false);
   const dispatch = useDispatch();
   const sideClick = (event) => {
     event.stopPropagation();
@@ -38,22 +41,27 @@ const UserPage = () => {
   }
   const handleSendNewPassword = (e) => {
     e.stopPropagation();
+    e.preventDefault();
     
     let formData = new FormData(e.currentTarget)
     let oldPassword = formData.get('oldPassword');
     let newPassword = formData.get('newPassword');
     let newPasswordDoubled = formData.get('newPasswordDoubled');
     // Валидация паролей
-    if (newPassword !== newPasswordDoubled) {
-      alert('Пароли не совпадают!');
-      handlePasswordChangeBtn(true);
+    if (newPassword !== newPasswordDoubled) {      
+      showToast('Пароли не совпадают!', 'error', {
+        autoClose: 5000,
+      });
+      // handlePasswordChangeBtn(true);
+      return;
+    } else {
+      let credentials = {
+        "oldPassword" : oldPassword,
+        "newPassword" : newPassword
+      }
+      dispatch(fetchProfileData(credentials))
+      handlePasswordChangeBtn(false); // Закрываем форму  
     }
-    let credentials = {
-      "oldPassword" : oldPassword,
-      "newPassword" : newPassword
-    }
-    dispatch(fetchProfileData(credentials))
-    handlePasswordChangeBtn(false); // Закрываем форму  
   }
   
   useEffect(() => {
@@ -116,34 +124,11 @@ const UserPage = () => {
       <div className="xl:mt-8 lg:mt-10 lg:flex block gap-5 w-full md:mt-4 mt-3 text-sm">
         <div className="lg:w-1/2 w-full">
           <p className="text-[#787C82]">Логин</p>
-          <input className="mt-2 p-5 bg-item-active w-full rounded-xl" type="text" placeholder={profileFetchedData ? profileFetchedData.login : ''} />
+          <input className="mt-2 p-5 bg-item-active w-full rounded-xl" type="text" disabled placeholder={profileFetchedData ? profileFetchedData.login : ''} />
         </div>
-        <div className="lg:w-1/2 lg:mt-0 w-full mt-4 relative">
+        <div className="lg:w-1/2 lg:mt-0 w-full mt-4">
           <p className="text-[#787C82]">Пароль</p>
-          <input id="password" className="mt-2 p-5 bg-item-active w-full rounded-xl" type={showPassword ? "text" : "password"} placeholder='******'/>
-          <button
-            type="button"
-            className="absolute right-4 top-15 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-transform active:scale-95"
-            aria-label={showPassword ? "Скрыть пароль" : "Показать пароль"}
-            onClick={() => {
-              setShowPassword(!showPassword); 
-              setTimeout(() => document.getElementById('password').focus(), 100)
-            }}
-          >
-            {
-              showPassword ? 
-                <svg
-                  className="icon me-2"
-                >
-                  <use href={`${sprite_path}#eye-icon`} />
-                </svg> : 
-                <svg
-                  className="icon me-2"
-                >
-                  <use href={`${sprite_path}#eyeoff-icon`} />
-                </svg>
-            }
-          </button>
+          <input id="password" className="mt-2 p-5 bg-item-active w-full rounded-xl" disabled placeholder='******'/>
         </div>
       </div>
       <button className="btn-default py-2 flex md:mt-9 mt-9 md:w-auto md:px-6 w-full justify-center" onClick={() => handlePasswordChangeBtn(true)}>
@@ -158,17 +143,86 @@ const UserPage = () => {
   )
   const profilePasswordChange = () => (
     <form className="flex flex-col gap-5 mt-8" onSubmit={(e) => handleSendNewPassword(e)} method="POST">
-      <div className="lg:w-1/2 w-full">
+      <div className="lg:w-1/2 w-full relative">
         <p className="text-[#787C82]">Введите текущий пароль</p>
-        <input name="oldPassword" className="mt-2 p-5 bg-item-active w-full rounded-xl" type="text" placeholder='Текущий пароль' required minLength={6} />
+        <input name="oldPassword" className="mt-2 p-5 bg-item-active w-full rounded-xl" type={showOldPassword ? "text" : "password"} placeholder='Текущий пароль' required minLength={6} />
+          <button
+            type="button"
+            className="absolute right-4 top-15 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-transform active:scale-95"
+            aria-label={showOldPassword ? "Скрыть пароль" : "Показать пароль"}
+            onClick={() => {
+              setShowOldPassword(!showOldPassword); 
+              setTimeout(() => document.getElementById('password').focus(), 100)
+            }}
+          >
+            {
+              showOldPassword ? 
+                <svg
+                  className="icon me-2"
+                >
+                  <use href={`${sprite_path}#eye-icon`} />
+                </svg> : 
+                <svg
+                  className="icon me-2"
+                >
+                  <use href={`${sprite_path}#eyeoff-icon`} />
+                </svg>
+            }
+          </button>
       </div>
-      <div className="lg:w-1/2 w-full">
+      <div className="lg:w-1/2 w-full relative">
         <p className="text-[#787C82]">Укажите новый пароль</p>
-        <input name="newPassword" className="mt-2 p-5 bg-item-active w-full rounded-xl" type="text" placeholder='Новый пароль' required minLength={6} />
+        <input name="newPassword" className="mt-2 p-5 bg-item-active w-full rounded-xl" type={showNewPassword ? "text" : "password"}  placeholder='Новый пароль' required minLength={6} />
+        <button
+          type="button"
+          className="absolute right-4 top-15 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-transform active:scale-95"
+          aria-label={showNewPassword ? "Скрыть пароль" : "Показать пароль"}
+          onClick={() => {
+            setShowNewPassword(!showNewPassword); 
+            setTimeout(() => document.getElementById('password').focus(), 100)
+          }}
+        >
+          {
+            showNewPassword ? 
+              <svg
+                className="icon me-2"
+              >
+                <use href={`${sprite_path}#eye-icon`} />
+              </svg> : 
+              <svg
+                className="icon me-2"
+              >
+                <use href={`${sprite_path}#eyeoff-icon`} />
+              </svg>
+          }
+        </button>
       </div>
-      <div className="lg:w-1/2 w-full">
+      <div className="lg:w-1/2 w-full relative">
         <p className="text-[#787C82]">Повторите новый пароль</p>
-        <input name="newPasswordDoubled" className="mt-2 p-5 bg-item-active w-full rounded-xl" type="text" placeholder='Новый пароль' required minLength={6} />
+        <input name="newPasswordDoubled" className="mt-2 p-5 bg-item-active w-full rounded-xl" type={showDoubledPassword ? "text" : "password"} placeholder='Новый пароль' required minLength={6} />        
+        <button
+          type="button"
+          className="absolute right-4 top-15 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-transform active:scale-95"
+          aria-label={showDoubledPassword ? "Скрыть пароль" : "Показать пароль"}
+          onClick={() => {
+            setShowDoubledPassword(!showDoubledPassword); 
+            setTimeout(() => document.getElementById('password').focus(), 100)
+          }}
+        >
+          {
+            showDoubledPassword ? 
+              <svg
+                className="icon me-2"
+              >
+                <use href={`${sprite_path}#eye-icon`} />
+              </svg> : 
+              <svg
+                className="icon me-2"
+              >
+                <use href={`${sprite_path}#eyeoff-icon`} />
+              </svg>
+          }
+        </button>
       </div>
       <div className="md:flex block gap-5">
         <button className="btn-default py-2 md:mt-9 mt-3 md:w-auto md:px-6 w-full" type="button" onClick={() => handlePasswordChangeBtn(false)}>

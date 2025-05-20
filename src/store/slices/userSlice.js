@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '@/api/api';
+import { showToast } from '@/utils/notify';
 
 export const fetchProfileData = createAsyncThunk(
   'userSlice/fetchProfileData',
@@ -29,8 +30,10 @@ export const fetchProfileData = createAsyncThunk(
         window.location.href = '/login';
         throw new Error(`HTTP error! status: ${response.data.status}`);
       } 
-      if (payload && response.data.message == 'Пароль изменен') {
-        alert('Пароль изменен');
+      if (payload && response.data.message == 'Пароль изменен') {         
+        showToast('Пароль изменен', 'success', {
+          autoClose: 5000,
+        });
       }
       return await response.data.data;
     } catch (error) {

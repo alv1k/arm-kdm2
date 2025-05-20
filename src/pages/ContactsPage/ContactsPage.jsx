@@ -7,11 +7,6 @@ import { isNew } from '@/store/slices/requestsSlice';
 import { fetchAuth } from '@/store/slices/authSlice';
 import useMediaQueries from '@/hooks/useMediaQueries';
 
-import Header from '@/components/TheHeader/TheHeader';
-import TheNavbar from '@/components/TheNavbar/TheNavbar';
-import TheTabsComponent from '@/components/TheTabsComponent/TheTabsComponent';
-import TheDocsListComponent from '@/components/TheDocsListComponent/TheDocsListComponent'
-
 
 const ContactsPage = () => {
   const sprite_path = './src/assets/images/i.svg';
@@ -23,9 +18,6 @@ const ContactsPage = () => {
   // }, [dispatch]);  
   
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
-  const [height1, changeHeight1] = useState('600px')
-  const [testShow, changeTest] = useState(false);
-
   const dispatch = useDispatch();
   const sideClick = (event) => {
     event.stopPropagation();
@@ -37,20 +29,20 @@ const ContactsPage = () => {
     dispatch(fetchAuth())
   }, [dispatch]);
 
-    const locations = Array.from({ length: 4 }, (_, index) => (
+    const locations = Array.from({ length: 1 }, (_, index) => (
       <div key={index} className={`rounded-xl bg-item-active p-8 md:mb-0 mb-4 `}>
         <p className="text-2xl font-bold mb-8">Якутск</p>
         <p className="my-4">
-          <span className="text-[#787C82]">Телефон:</span> &nbsp;
-          +7 (4112) 482-504
+          <span className="text-[#787C82]">Телефон:</span> &nbsp;          
+          <a href="tel:+74112482504">+7 (4112) 482-504</a>
         </p>
         <p className="my-4">
           <span className="text-[#787C82]">Эл. почта:</span> &nbsp;
-          info@aokdm.ru
+          <a href="mailto:info@aokdm.ru">info@aokdm.ru</a>
         </p>
         <p className="my-4">
-          <span className="text-[#787C82]">Адрес:</span> &nbsp;
-          г. Якутск, ул. Кирова, 12
+          <span className="text-[#787C82]">Адрес:</span> &nbsp;          
+          <a href="https://yandex.ru/maps/-/CHvP6GYP" target="_blank">г. Якутск, ул. Кирова, 12</a>
         </p>
       </div>
     ));
