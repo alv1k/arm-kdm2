@@ -221,12 +221,12 @@ const TheDocsListComponent = () => {
             <div className={md_breakpoint ? 'inline ms-6' : 'block mt-4'}>
               <p className="flex">              
                 <svg
-                  className="w-6 h-6 stroke-[#787C82] stroke-1 outline-0"
+                  className="w-6 h-6 text-gray-300 stroke-1 outline-0"
                 >
                   <use href={`${sprite_path}#clip-icon`} />
                 </svg>
                 <p className="text-base text-[#787C82] ms-2">
-                  filename2.pdf ,
+                  {/* filename2.pdf ,22 */}
                 </p>
               </p>
             </div>
@@ -403,12 +403,12 @@ const TheDocsListComponent = () => {
                           item.file &&
                           <div className="flex group relative">
                             <svg
-                              className="w-6 h-6 stroke-[#787C82] stroke-1 outline-0 me-3 self-center"
+                              className="w-6 h-6 text-gray-300 stroke-1 outline-0 me-3 self-center"
                             >
                               <use href={`${sprite_path}#clip-icon`} />
                             </svg>
                             <span class="py-2 rounded cursor-default truncate text-[#787C82] text-base">
-                              {getFileName(item.file)},
+                              {/* {getFileName(item.file)}, */}
                             </span>
                           </div>                          
                         }                     
