@@ -218,7 +218,7 @@ const TheAgreementItem = ({ id, number, date, debt, objects, name, monthly }) =>
             }
             <div className="lg:ms-auto ms-0 lg:mt-0 md:mt-3 mt-3">
               {
-                isDetailsShown && (sm_breakpoint || lg_breakpoint || xl_breakpoint) ? 
+                isDetailsShown && !md_breakpoint ? 
                 <button className="lg:mt-4 mt-7 btn-default px-5 py-2 lg:w-auto w-full" onClick={() => handleSetDataType('counters')}>
                   Передать показания счетчиков
                 </button>
