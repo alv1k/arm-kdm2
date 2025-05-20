@@ -33,7 +33,7 @@ const TheModal = () => {
     <div 
       id="modal"
       className={`opacity-0 animate-fadeIn
-        md:fixed inset-0 bg-[#00000033] z-20 flex items-center justify-center overflow-auto
+        md:fixed md:py-20 inset-0 bg-[#00000033] z-40 flex items-center justify-center overflow-auto
       `} 
       onClick={() => handleCloseModal()} 
     >
