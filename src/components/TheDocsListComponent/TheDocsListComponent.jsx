@@ -50,7 +50,8 @@ const TheDocsListComponent = () => {
       switch(currentRoute) {
         case '/requests':
           switch(currentTab.title_en) {
-            case 'my_requests', 'all_requests':
+            case 'my_requests':
+            case 'all_requests':
               return requests;
             case 'in_progress':
               return requests.filter(request => request.status.includes('В работе'))
@@ -119,7 +120,7 @@ const TheDocsListComponent = () => {
     (sm_breakpoint || md_breakpoint) ?      
     getList()?.map((item, index) => (
       currentRoute != "/requests" ?
-      <div className={`grid ${currentTab && currentTab.title_en == 'acts' ? '' : 'grid-cols-2'} gap-3 p-6 bg-[#FAFBFD] rounded-lg my-5`}>        
+      <div key={index} className={`grid ${currentTab && currentTab.title_en == 'acts' ? '' : 'grid-cols-2'} gap-3 p-6 bg-[#FAFBFD] rounded-lg my-5`}>        
         <div className={`
           ${sm_breakpoint || md_breakpoint ? '' : 'flex'} 
           ${currentTab && currentTab.title_en == 'bills' ? 'text-left' : 'md:w-2/5'}
