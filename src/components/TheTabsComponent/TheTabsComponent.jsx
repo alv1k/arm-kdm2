@@ -124,7 +124,7 @@ const TheTabsComponent = (props) => {
               text-center
               lg:px-10 lg:block
               md:px-6 md:flex md:items-center
-              py-4 px-6 cursor-pointer bg-item-default rounded-t-xl text-nowrap
+              py-4 px-6 w-fit cursor-pointer bg-item-default rounded-t-xl text-nowrap
               ${currentRoute == '/login' ? 'w-full justify-center' : ''}
               ${sm_breakpoint ? 'w-1/2' : ''}
               ${currentTab && currentTab.title_en === tab.title_en ? 'text-[#203887] border-b border-b-[#6374AD]' : ''}

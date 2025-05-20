@@ -110,7 +110,7 @@ const NewRequestPage = () => {
     }
   }, [selectedFiles])
   return (
-    <div className="lg:text-base md:text-base text-sm md:h-auto h-[110%]">
+    <div className="lg:text-base md:text-base md:pb-0 text-sm md:h-auto h-fit pb-10">
       <div className="flex md:justify-start justify-center">
         {
           sm_breakpoint || md_breakpoint ? '' :

@@ -46,7 +46,6 @@ listenerMiddleware.startListening({
   
   effect: (action, listenerApi) => {
     try {
-      listenerApi.dispatch({ type: 'HIDE_LOADER' });
       listenerApi.dispatch(setLoadingEnd());
     } catch (error) {
       console.error('Error in fulfilled listener:', error);
@@ -127,7 +126,7 @@ const store = configureStore({
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
-      .concat(loggingMiddleware)
+      // .concat(loggingMiddleware)
       .concat(listenerMiddleware.middleware),
 });
 

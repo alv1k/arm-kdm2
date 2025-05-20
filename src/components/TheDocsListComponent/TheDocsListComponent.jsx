@@ -202,7 +202,7 @@ const TheDocsListComponent = () => {
         </div>
       </div>
       :
-      <div className={`${currentTab && (currentTab == 'all_requests' || currentTab == 'my_requests')  ? 'md:ps-3' : ''}  mt-6 bg-item-default rounded-xl p-4 md:flex block`}>
+      <div key={index} className={`${currentTab && (currentTab == 'all_requests' || currentTab == 'my_requests')  ? 'md:ps-3' : ''}  mt-6 bg-item-default rounded-xl p-4 md:flex block`}>
         <div>
           <p className="mb-2"><span className="text-[#787C82] text-nowrap">№ 001.&nbsp;</span>{item.object}</p>              
           <div className="text-nowrap"><span className="text-[#787C82]">Тема:&nbsp;</span>{item.type}</div>
@@ -213,13 +213,13 @@ const TheDocsListComponent = () => {
               </p>
               <p>
                 <span className="text-[#787C82]">Статус:&nbsp;</span>
-                <span className={item.status.includes('В работе') ? '' : 'text-green-700'}>
+                <span className={item.status.includes('работе') ? '' : 'text-green-700'}>
                   {item.status}
                 </span>
               </p>
             </div>
             <div className={md_breakpoint ? 'inline ms-6' : 'block mt-4'}>
-              <p className="flex">              
+              <div className="flex">              
                 <svg
                   className="w-6 h-6 text-gray-300 stroke-1 outline-0"
                 >
@@ -228,7 +228,7 @@ const TheDocsListComponent = () => {
                 <p className="text-base text-[#787C82] ms-2">
                   {/* filename2.pdf ,22 */}
                 </p>
-              </p>
+              </div>
             </div>
           </div>
         </div>
@@ -241,8 +241,8 @@ const TheDocsListComponent = () => {
       <div className="w-full table-fixed">
         <table className="rounded-lg border-separate border-spacing-0 w-full">
           <thead className="bg-item-active">              
-            <tr align="center" className="text-center justify-center">
-              <th className="px-5 py-2.5" width={currentTab && currentTab.title_en == 'counters' ? '200px' : ''}>
+            <tr align="center" className="text-center justify-center ">
+              <th className="px-5 py-2.5 rounded-tl-lg" width={currentTab && currentTab.title_en == 'counters' ? '200px' : ''}>
                 <div className="flex items-center ps-8">
                   <span className="inline">
                     {currentTab && currentTab.title_en == 'counters' ? 'Дата' : '№'}
@@ -311,7 +311,7 @@ const TheDocsListComponent = () => {
                   </svg> */}
                 </div>
               </th>
-              <th className="px-5 py-2.5"></th>
+              <th className="px-5 py-2.5 rounded-tr-lg"></th>
               {
                 currentRoute != '/requests' ? 
                 <th className="px-5 py-2.5"></th> : ''
@@ -340,10 +340,13 @@ const TheDocsListComponent = () => {
                       <div class="group relative inline-block w-66">
                         <p class="py-2 rounded cursor-default truncate">
                           {item.object}
-                        </p>                        
-                        <div class="absolute z-10 hidden group-hover:block w-96 bg-white shadow-md text-base rounded-b-xl rounded-tr-xl p-5 top-full mt-2">
-                          {item.object}
-                        </div>
+                        </p>
+                        {
+                          item.object && 
+                          <div class="absolute z-10 hidden group-hover:block w-96 bg-white shadow-md text-base rounded-b-xl rounded-tr-xl p-5 top-full mt-2">
+                            {item.object}
+                          </div>
+                        }
                       </div>
                     }
                   </td>            
@@ -374,7 +377,7 @@ const TheDocsListComponent = () => {
                       currentTab && (currentTab.title_en == 'acts' || currentTab.title_en == 'bills') ?
                       <PriceFormatter amount={item.summ} /> 
                       : currentTab && currentTab.title_en == 'counters' ? '' 
-                      : <span className="text-green-600">{item.status}</span>
+                      : <span className={item.status.includes('работе') ? '' : 'text-green-700'}>{item.status}</span>
                     }
                   </td>
                   {

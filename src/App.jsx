@@ -34,11 +34,11 @@ const App = () => {
   const isShowModal = useSelector(showModal);
   const showNavbar = useSelector((state) => state.navbar.showNavbar);
 
-  document.querySelectorAll('*').forEach(el => {
-    if (el.scrollWidth > el.clientWidth) {
-      console.log('Элемент с переполнением:', el);
-    }
-  });
+  // document.querySelectorAll('*').forEach(el => {
+  //   if (el.scrollWidth > el.clientWidth) {
+  //     console.log('Элемент с переполнением:', el);
+  //   }
+  // });
 
   return (
     <div className="min-h-screen flex flex-col w-full">
