@@ -5,6 +5,8 @@ import { getBase64 } from '@/utils/getBase64';
 import useMediaQueries from '@/hooks/useMediaQueries';
 import CustomSelect from '@/components/CustomSelect/CustomSelect';
 import { showToast } from '@/utils/notify';
+import Compressor from 'compressorjs';
+import { PDFDocument } from 'pdf-lib';
 
 const NewRequestPage = () => {
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
@@ -56,7 +58,7 @@ const NewRequestPage = () => {
       descr: requestDescr,
       status: 'В работе',
       token: localStorage.getItem('token') ?? sessionStorage.getItem('token'),
-      file: uploadedFiles,
+      file: uploadedFiles[0],
       // file:{ dataUrl, format } если добавлен файл
       // !!! update file: dataUrl
       // c заголовком data:application/pdf;base64
@@ -90,38 +92,145 @@ const NewRequestPage = () => {
   const handleRequestDescrChange = (e) => {
     setRequestDescr(e.target.value);
   };
-  const handleFilesUpload = async (e) => {
+
+  const base64ToFileObject = (base64String, filename = 'uploaded') => {
+    // 1. Извлекаем MIME-тип и данные
+    const matches = base64String.match(/^data:(.*?);base64,(.*)$/);
     
+    if (!matches || matches.length !== 3) {
+      throw new Error('Неверный формат Base64 строки');
+    }
+
+    const mimeType = matches[1];
+    const base64Data = matches[2];
+
+    // 2. Создаем объект File-подобной структуры
+    const byteCharacters = atob(base64Data);
+    const byteArrays = [];
+    
+    for (let offset = 0; offset < byteCharacters.length; offset += 1024) {
+      const slice = byteCharacters.slice(offset, offset + 1024);
+      const byteNumbers = new Array(slice.length);
+      
+      for (let i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+      
+      byteArrays.push(new Uint8Array(byteNumbers));
+    }
+    
+    // 3. Создаем Blob и преобразуем в File
+    const blob = new Blob(byteArrays, { type: mimeType });
+    const fileName = filename || `file.${mimeType.split('/')[1] || 'dat'}`;
+    
+    return new File([blob], fileName, { type: mimeType });
+  };
+  
+  const compressImage = async (file) => {    
+    return new Promise((resolve) => {
+      new Compressor(file, {
+        quality: 0.6,
+        maxWidth: 1024,
+        success(result) {
+          resolve(result);
+        },
+        error(err) {
+          console.error(err);
+          resolve(file); // Возвращаем оригинал при ошибке
+        },
+      });
+    });
+  };
+
+  const compressPDF = async (file) => {
+    const pdfBytes = await file.arrayBuffer();
+    const pdfDoc = await PDFDocument.load(pdfBytes);
+    
+    // Удаляем метаданные и сжимаем изображения внутри PDF
+    pdfDoc.setTitle('');
+    pdfDoc.setAuthor('');
+    
+    return new Blob([await pdfDoc.save()], { type: 'application/pdf' });
+  };
+  const handleFilesUpload = async (e) => {
     try {
       const files = Array.from(e.target.files || []);      
       if (files.length === 0) {
         throw new Error('Файлы не выбраны');
       }
-      
-      const base64Results = await Promise.all(
-        files.map(file => {
-          // Проверка типа и размера
+
+      // Обрабатываем файлы и сохраняем оригинальные имена
+      const filesWithNames = await Promise.all(
+        files.map(async (file) => {
           if (!['application/pdf', 'image/jpeg', 'image/png'].includes(file.type)) {
             throw new Error(`Недопустимый формат: ${file.name}`);
-          }    
-          const MAX_SIZE_MB = 3;
-          if (file.size > MAX_SIZE_MB * 1024 * 1024) {
-            throw new Error(`Файл слишком большой. Максимум: ${MAX_SIZE_MB}MB`);
           }
-          return getBase64(file);
+          
+          const base64 = await getBase64(file);
+          
+          return {
+            name: file.name,
+            type: file.type,
+            size: file.size,
+            base64: base64 // Полная строка с data:image/...;base64,...
+          };
         })
       );
-      console.log(base64Results, 'files here');
-      
-      setUploadedFiles(base64Results);   
-      setSelectedFiles(files);
+
+      // Сжимаем файлы (если нужно)
+      const processedFiles = await Promise.all(
+        filesWithNames.map(async (file) => {
+          try {
+            if (file.type.startsWith('image/')) {
+              const compressed = await compressImage(base64ToFileObject(file.base64, file.name));
+              return {
+                ...file,
+                base64: await fileToBase64(compressed) // Обновляем base64 после сжатия
+              };
+            } 
+            // else if (file.type === 'application/pdf') {
+            //   // Сжатие PDF
+            //   const compressed = await compressPDF(base64ToFileObject(file.base64, file.name));
+            //   return {
+            //     ...file,
+            //     base64: await fileToBase64(compressed)
+            //   };
+            // }
+            return file; // Для PDF возвращаем как есть
+          } catch (e) {
+            console.error(`Ошибка обработки ${file.name}:`, e);
+            return file; // Возвращаем исходный файл при ошибке сжатия
+          }
+        })
+      );
+
+      // Формируем данные для отправки
+      const filesToSend = processedFiles.map(file => ({
+        fileName: file.name,
+        fileSize: file.size,
+        fileData: file.base64 // Полная base64 строка
+      }));
+
+      console.log('Файлы для отправки:', filesToSend);
+      setSelectedFiles(filesToSend);
+      setUploadedFiles(filesToSend);
+
+      // Отправка на бэкенд (пример)
+      // await api.post('/upload', { files: filesToSend });
+
     } catch (error) {
       console.error('Ошибка загрузки:', error.message);
-      showToast('Ошибка загрузки:', error.message, 'error', {
-        autoClose: 2000,
-      });
+      showToast('Ошибка загрузки: ' + error.message, 'error', { autoClose: 2000 });
     }
   };
+  const fileToBase64 = (file) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.readAsDataURL(file);
+    });
+  };
+
   useEffect(() => {
     if (selectedFiles.length > 5) {
       showToast('Количество файлов должно быть не более 5, пожалуйста, произведите выбор еще раз', 'error', {
@@ -129,6 +238,16 @@ const NewRequestPage = () => {
       });
       setSelectedFiles([]);
     }
+    selectedFiles.map(file => {
+      const MAX_SIZE_MB = 3;
+      if (file.fileSize > MAX_SIZE_MB * 1024 * 1024) {
+        showToast('Файл слишком большой. Максимум: 3 MB', 'error', {
+          autoClose: 5000,
+        });
+        setSelectedFiles([]);
+      }
+    })
+    
   }, [selectedFiles])
   return (
     <div className="lg:text-base md:text-base md:pb-10 text-sm md:h-auto h-fit pb-10">
@@ -207,17 +326,20 @@ const NewRequestPage = () => {
                       key={index} 
                       className="flex items-center justify-between text-sm"
                     >
-                      <span className="truncate max-w-xs">{file.name}</span>
+                      <span className="truncate max-w-xs">{file.fileName}</span>
                       <span className="ms-6 text-gray-500">
-                        {(file.size / 1024 / 1024).toFixed(2)}MB
+                        {(file.fileSize / 1024 / 1024).toFixed(2)}MB
                       </span>
                     </li>
                   ))}
                 </ul>
               </div>
-            ) : <p className="text-[#787C82] md:pb-0 md:ps-10 pb-4 md:pe-6 align-center self-center-safe">{ uploadedFiles ? '' : 'Файлы не выбраны'}</p>
-}
-            {error && (
+            ) 
+            : 
+            <p className="text-[#787C82] md:pb-0 md:ps-10 pb-4 md:pe-6 align-center self-center-safe">{ uploadedFiles ? '' : 'Файлы не выбраны'}</p>
+          }
+          {
+            error && (
               <div className="mt-2 text-sm text-red-600 bg-red-50 p-2 rounded">
                 {error}
               </div>

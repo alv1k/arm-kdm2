@@ -100,7 +100,6 @@ const TheTabsComponent = (props) => {
   
 
   const handleNewRequestBtn = () => {
-    // dispatch(requestStatusFalse())
     dispatch(requestStatusTrue())
   }
   const handleNewRequestBitrix = () => {

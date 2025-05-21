@@ -12,6 +12,7 @@ import TheTabsComponent from '@/components/TheTabsComponent/TheTabsComponent';
 import TheDocsListComponent from '@/components/TheDocsListComponent/TheDocsListComponent';
 import Page404 from '@/pages/Page404/Page404';
 import TheSkeleton from '@/components/TheSkeleton/TheSkeleton';
+import { downloadBase64PDF } from '@/utils/fileDownload';
 
 const RequestsPage = () => {
   const sprite_path = './src/assets/images/i.svg';
@@ -28,7 +29,7 @@ const RequestsPage = () => {
       dispatch(hideNavbar());
     }
   };
-  
+    
   useEffect(() => {
     dispatch(toggleTabs({
       type: isNewRequest ? 'newRequest' : 'requests', 

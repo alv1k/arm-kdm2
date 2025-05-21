@@ -68,9 +68,9 @@ const TheDocsListComponent = () => {
             case 'all_requests':
               return requests;
             case 'in_progress':
-              return requests.filter(request => request.status.includes('работе'))
+              return requests.filter(request => request.status.includes('работе') || request.status.includes('рассмотрении') || request.status.includes('твержден') || request.status.includes('ыполняется'))
             case 'completed':
-              return requests.filter(request => request.status.includes('заверш'))
+              return requests.filter(request => request.status.includes('заверш') || request.status.includes('ыполнен') || request.status.includes('клонен'))
           }
         case '/agreements':
           switch(currentTab.title_en) {
