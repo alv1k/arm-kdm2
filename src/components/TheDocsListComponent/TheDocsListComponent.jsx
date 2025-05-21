@@ -25,6 +25,20 @@ const TheDocsListComponent = () => {
   const currentRoute = location.pathname;
   const [isLoading, setIsLoading] = useState(true);
 
+  const statusStyles = {
+    'Выполнено': 'text-green-700',
+    'Выполняется': 'text-blue-700',
+    'Отклонена': 'text-red-700',
+    'Утверждена': 'text-purple-700',
+    'На рассмотрении': 'text-yellow-700',
+    'default': 'text-gray-700'
+  };
+
+  const getStatusClass = (status) => {
+    const key = Object.keys(statusStyles).find(key => status.includes(key));
+    return statusStyles[key] || statusStyles.default;
+  };
+
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -54,7 +68,7 @@ const TheDocsListComponent = () => {
             case 'all_requests':
               return requests;
             case 'in_progress':
-              return requests.filter(request => request.status.includes('В работе'))
+              return requests.filter(request => request.status.includes('работе'))
             case 'completed':
               return requests.filter(request => request.status.includes('заверш'))
           }
@@ -184,8 +198,16 @@ const TheDocsListComponent = () => {
           currentTab && currentTab.title_en == 'bills' ? 
           <div className="h-full justify-baseline flex flex-col">
             <div className="mb-1 text-[#787C82]">Сумма:</div>
-            <div className={ item.status === 'payd' ? '' : 'text-red-600'}><PriceFormatter amount={item.summ} /></div>
-            <button className="btn-success px-6 py-2 mt-auto w-full" disabled onClick={() => handleSetDataType('payment', item)}>{item.status === 'payd' ? 'Оплачено' : 'Оплатить'}</button>
+            <div className={ item.status === 'payd' ? '' : 'text-red-600'}>
+              <PriceFormatter amount={item.summ} />
+            </div>
+            <button 
+              className={`${item.status === 'payd' ? 'btn-default' : 'rounded-lg bg-green-500 text-white'} px-6 py-2 mt-auto w-full`} 
+              disabled 
+              onClick={() => handleSetDataType('payment', item)}
+            >
+              {item.status === 'payd' ? 'Оплачено' : 'Оплатить'}
+            </button>
           </div>
           : currentTab && currentTab.title_en == 'counters' ?
           <div className="ms-3">
@@ -213,23 +235,26 @@ const TheDocsListComponent = () => {
               </p>
               <p>
                 <span className="text-[#787C82]">Статус:&nbsp;</span>
-                <span className={item.status.includes('работе') ? '' : 'text-green-700'}>
+                <span className={getStatusClass(item.status)}>
                   {item.status}
                 </span>
               </p>
             </div>
-            <div className={md_breakpoint ? 'inline ms-6' : 'block mt-4'}>
-              <div className="flex">              
-                <svg
-                  className="w-6 h-6 text-gray-300 stroke-1 outline-0"
-                >
-                  <use href={`${sprite_path}#clip-icon`} />
-                </svg>
-                <p className="text-base text-[#787C82] ms-2">
-                  {/* filename2.pdf ,22 */}
-                </p>
+            {
+              item.file && 
+              <div className={md_breakpoint ? 'inline ms-6' : 'block mt-4'}>
+                <div className="flex">              
+                  <svg
+                    className="w-6 h-6 text-gray-300 stroke-1 outline-0"
+                  >
+                    <use href={`${sprite_path}#clip-icon`} />
+                  </svg>
+                  <p className="text-base text-[#787C82] ms-2">
+                    {/* filename2.pdf ,22 */}
+                  </p>
+                </div>
               </div>
-            </div>
+            }
           </div>
         </div>
       </div> 
@@ -377,7 +402,7 @@ const TheDocsListComponent = () => {
                       currentTab && (currentTab.title_en == 'acts' || currentTab.title_en == 'bills') ?
                       <PriceFormatter amount={item.summ} /> 
                       : currentTab && currentTab.title_en == 'counters' ? '' 
-                      : <span className={item.status.includes('работе') ? '' : 'text-green-700'}>{item.status}</span>
+                      : <span className={getStatusClass(item.status)}>{item.status}</span>
                     }
                   </td>
                   {
@@ -410,14 +435,14 @@ const TheDocsListComponent = () => {
                             >
                               <use href={`${sprite_path}#clip-icon`} />
                             </svg>
-                            <span class="py-2 rounded cursor-default truncate text-[#787C82] text-base">
+                            <span className="py-2 rounded cursor-default truncate text-[#787C82] text-base">
                               {/* {getFileName(item.file)}, */}
                             </span>
                           </div>                          
                         }                     
                       </div> 
                       :
-                      <button className="btn-success px-6 py-2 lg:mt-0 mt-5 w-full" disabled={currentTab && currentTab.title_en == 'bills'} onClick={() => currentTab && currentTab.title_en == 'bills' ? handleSetDataType('payment', item) : ''}>
+                      <button className="btn-success px-6 py-2 lg:mt-0 mt-5 w-full" disabled={currentTab && currentTab.title_en == 'bills' && item.status === 'payd'} onClick={() => currentTab && currentTab.title_en == 'bills' ? handleSetDataType('payment', item) : ''}>
                         {
                           currentTab && currentTab.title_en == 'bills' ? item.status == 'payd' ? 'Оплачено' : 'Оплатить' : 'Скачать'
                         }

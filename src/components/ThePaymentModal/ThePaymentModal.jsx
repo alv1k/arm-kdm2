@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import CustomCheckbox from '@/components/CustomCheckbox/CustomCheckbox';
+import DateFormatter from '@/components/DateFormatter/DateFormatter'; 
 
 const PaymentModal = (props) => {
   const [selectedOption, setSelectedOption] = useState(null);
@@ -21,10 +22,10 @@ const PaymentModal = (props) => {
       <p className="text-center md:text-2xl text-xl font-bold text-[#203887]">Способ оплаты</p>
       
       <div className="my-8 flex flex-col">
-        <div className="my-2 md:flex block font-semibold">№001. Счет за аренду</div>
+        <div className="my-2 md:flex block font-semibold">№{data.number}. {data.descr}</div>
         <div className="md:my-0 my-2 md:flex block">
           <p className="text-[#787C82]">Дата:&nbsp;</p> 
-          {/* {data.date ?? 'none'} */}
+          <DateFormatter dateString={data.date} />
         </div>
       </div>
       
@@ -50,7 +51,7 @@ const PaymentModal = (props) => {
       </div>
       
       <div className="my-2 text-center">
-        <button className="btn-success py-2 px-10 md:w-auto w-full" selectedOption={selectedOption}>
+        <button disabled className="btn-success py-2 px-10 md:w-auto w-full" selectedOption={selectedOption}>
           Оплатить
         </button>
       </div>

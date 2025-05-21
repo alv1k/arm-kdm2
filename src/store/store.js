@@ -126,7 +126,7 @@ const store = configureStore({
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
-      // .concat(loggingMiddleware)
+      .concat(loggingMiddleware)
       .concat(listenerMiddleware.middleware),
 });
 

@@ -28,7 +28,7 @@ export const fetchRequestsList = createAsyncThunk(
 export const fetchNewRequest = createAsyncThunk(
   'requestsSlice/fetchNewRequest',
   async (_, { rejectWithValue }) => {
-    let payload = _;    
+    let payload = _;
     try {
       const token = localStorage.getItem('token') ?? sessionStorage.getItem('token');
       if (!token) {
@@ -39,8 +39,8 @@ export const fetchNewRequest = createAsyncThunk(
       const response = await api.post(`/setApp`, payload);
       if (!response.data.success) {
         throw new Error(`HTTP error! status: ${response.data.status}`);
-      }
-      return await response.data.data;
+      }      
+      return await response.data;
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -85,7 +85,6 @@ const requestsSlice = createSlice({
           state.requestsList = [];
         })
         .addCase(fetchNewRequest.fulfilled, (state) => {
-          state.isNewRequestSaved = true;
           state.loading = false;
           state.page404 = false;
         })

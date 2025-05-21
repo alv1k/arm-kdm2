@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { requestStatusTrue, requestStatusFalse, fetchNewRequest, fetchRequestsList } from '@/store/slices/requestsSlice';
+import { requestStatusFalse, fetchNewRequest, fetchRequestsList } from '@/store/slices/requestsSlice';
 import { getBase64 } from '@/utils/getBase64';
 import useMediaQueries from '@/hooks/useMediaQueries';
 import CustomSelect from '@/components/CustomSelect/CustomSelect';
@@ -17,7 +17,7 @@ const NewRequestPage = () => {
   const [selectedObject, setSelectedObject] = useState("");
   const [requestDescr, setRequestDescr] = useState("");  
   const [selectedType, setSelectedType] = useState("");
-  const [uploadedFiles, setUploadedFiles] = useState("");
+  const [uploadedFiles, setUploadedFiles] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [error, setError] = useState(null);
 
@@ -49,19 +49,43 @@ const NewRequestPage = () => {
   const backToRequests = () => {
     dispatch(requestStatusFalse());
   }
-  const handleCreateNewRequest = () => {
+  const handleCreateNewRequest = async () => {    
     const data = {
       object: selectedObject,
       type: selectedType,
       descr: requestDescr,
       status: 'В работе',
       token: localStorage.getItem('token') ?? sessionStorage.getItem('token'),
-      file: uploadedFiles[0],
+      file: uploadedFiles,
       // file:{ dataUrl, format } если добавлен файл
       // !!! update file: dataUrl
       // c заголовком data:application/pdf;base64
     }
-    dispatch(fetchNewRequest(data))
+     if (selectedObject == '') {
+      showToast('Выберите объект заявки', 'error', {
+        autoClose: 2000,
+      });
+      return;
+    } else if (selectedType == '') {   
+      showToast('Выберите тему обращения', 'error', {
+        autoClose: 2000,
+      });
+      return;
+    } else if (requestDescr == '') {
+      showToast('Введите описание заявки', 'error', {
+        autoClose: 2000,
+      });
+      return;
+    }
+    const response = await dispatch(fetchNewRequest(data));
+
+    if (response.payload.success) {      
+      showToast('Заявка успешно внесена!', 'success', {
+        autoClose: 2000,
+      });
+      dispatch(fetchRequestsList());
+      dispatch(requestStatusFalse());
+    }    
   }
   const handleRequestDescrChange = (e) => {
     setRequestDescr(e.target.value);
@@ -87,30 +111,27 @@ const NewRequestPage = () => {
           return getBase64(file);
         })
       );
+      console.log(base64Results, 'files here');
+      
       setUploadedFiles(base64Results);   
-      setSelectedFiles(files);   
+      setSelectedFiles(files);
     } catch (error) {
       console.error('Ошибка загрузки:', error.message);
-      // Показ пользователю: toast.error(error.message)
-    }
-  };
-  useEffect(() => {
-    if (isNewRequestSaved) {
-      dispatch(requestStatusFalse());
-      dispatch(fetchRequestsList())
-      showToast('Заявка успешно внесена!', 'success', {
+      showToast('Ошибка загрузки:', error.message, 'error', {
         autoClose: 2000,
       });
     }
-  }, [isNewRequestSaved])
+  };
   useEffect(() => {
     if (selectedFiles.length > 5) {
-      alert('Количество файлов должно быть не более 5, пожалуйста, произведите выбор еще раз');
+      showToast('Количество файлов должно быть не более 5, пожалуйста, произведите выбор еще раз', 'error', {
+        autoClose: 5000,
+      });
       setSelectedFiles([]);
     }
   }, [selectedFiles])
   return (
-    <div className="lg:text-base md:text-base md:pb-0 text-sm md:h-auto h-fit pb-10">
+    <div className="lg:text-base md:text-base md:pb-10 text-sm md:h-auto h-fit pb-10">
       <div className="flex md:justify-start justify-center">
         {
           sm_breakpoint || md_breakpoint ? '' :

@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux'; 
 import useMediaQueries from '@/hooks/useMediaQueries'; 
 import { isShowDetails } from '@/store/slices/agreementsSlice';
-import { requestStatusTrue } from '@/store/slices/requestsSlice';
+import { requestStatusTrue, requestStatusFalse } from '@/store/slices/requestsSlice';
 import { isRestorePass, toggleRestorePassword } from '@/store/slices/authSlice';
 import { requestsSelectedTab, setAgreementsSelectedTab, setAgreementSelectedTab, setRequestsSelectedTab, setLoginSelectedTab } from '@/store/slices/tabsSlice';
 
@@ -99,7 +99,8 @@ const TheTabsComponent = (props) => {
   }, [dispatch, currentRoute, showAgreementDetails, sm_breakpoint, xl_breakpoint, lg_breakpoint, md_breakpoint]);
   
 
-  const handleNewRequestBtn = () => {    
+  const handleNewRequestBtn = () => {
+    // dispatch(requestStatusFalse())
     dispatch(requestStatusTrue())
   }
   const handleNewRequestBitrix = () => {
@@ -150,7 +151,7 @@ const TheTabsComponent = (props) => {
             </svg>
             Новая заявка
           </div>
-          <div
+          {/* <div
             className="flex items-center cursor-pointer lg:px-8  px-4 text-nowrap"
             onClick={handleNewRequestBitrix}
           >
@@ -160,7 +161,7 @@ const TheTabsComponent = (props) => {
               <use href={`${sprite_path}#bitrix-icon`} />
             </svg>
             Заявка в Битрикс24
-          </div>
+          </div> */}
 
         </div>
       }

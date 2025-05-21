@@ -99,7 +99,7 @@ const TheAgreementItem = ({ id, number, date, debt, objects, name, monthly }) =>
               my-2
             `}>
               
-            {
+            {/* {
               isDetailsShown && sm_breakpoint ? 
               <button className="bg-white px-4 py-2 rounded-lg border border-[#6374AD] flex gap-3 text-[#203887] w-full text-base ms-auto mt-4">
                 <svg
@@ -112,7 +112,7 @@ const TheAgreementItem = ({ id, number, date, debt, objects, name, monthly }) =>
                 </span>
               </button>
               : ''
-            }
+            } */}
               
               {/* <div className={`
                 md:p-0 md:mt-0 
@@ -201,7 +201,7 @@ const TheAgreementItem = ({ id, number, date, debt, objects, name, monthly }) =>
             {
               isDetailsShown && md_breakpoint ? 
               <div>
-                <button className="bg-white px-4 py-2 rounded-lg border border-[#6374AD] flex gap-3 text-[#203887] md:w-auto w-full">
+                {/* <button className="bg-white px-4 py-2 rounded-lg border border-[#6374AD] flex gap-3 text-[#203887] md:w-auto w-full">
                   <svg
                     className="icon lg:ms-0 ms-auto"
                   >
@@ -210,7 +210,7 @@ const TheAgreementItem = ({ id, number, date, debt, objects, name, monthly }) =>
                   <span className="lg:me-0 me-auto text-nowrap" onClick={(e) => handleDownloadAgree(e, id)}>
                     Скачать договор
                   </span>
-                </button>
+                </button> */}
                 <button className="md:mt-4 mt-7 btn-default px-5 py-2" onClick={() => handleSetDataType('counters')}>
                   Передать показания счетчиков
                 </button>
@@ -228,7 +228,7 @@ const TheAgreementItem = ({ id, number, date, debt, objects, name, monthly }) =>
           </div>
           {
             <div className="lg:ms-auto">
-              {
+              {/* {
                 isDetailsShown && (md_breakpoint || sm_breakpoint) ? '' :
                 <button className="btn-default lg:w-auto lg:ms-auto lg:mt-0 md:w-auto md:ms-0 bg-white px-4 py-2 rounded-lg border flex gap-3 w-full text-base ms-auto mt-4">
                   <svg
@@ -240,7 +240,7 @@ const TheAgreementItem = ({ id, number, date, debt, objects, name, monthly }) =>
                     Скачать договор
                   </span>
                 </button>
-              }
+              } */}
               {
                 isDetailsShown ?
                 <div className="
@@ -249,14 +249,10 @@ const TheAgreementItem = ({ id, number, date, debt, objects, name, monthly }) =>
                   rounded-xl bg-white md:border mt-9 text-base text-center
                 ">
                   <p>Общая сумма долга на {today}:</p>
-                  <p className={`text-xl lg:my-4 my-2 ${debt ? 'text-red-600' : ''} font-semibold`}>
+                  <p className={`text-xl lg:mt-4 lg:mb-0 mt-2 ${debt ? 'text-red-600' : ''} font-semibold`}>
                     {debt ? '-' : ''} 
                     <PriceFormatter amount={debt ?? 0} /> 
                   </p>
-                  {
-                    debt ? 
-                    <button className="btn-success lg:px-10 lg:mt-0 lg:w-auto py-2 md:w-2/9 w-full mt-2" disabled onClick={() => handleSetDataType('payment')}>Оплатить</button> : ''
-                  }
                 </div> : ''
               }
             </div>
