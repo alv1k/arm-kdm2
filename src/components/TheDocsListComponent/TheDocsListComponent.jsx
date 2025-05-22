@@ -122,7 +122,7 @@ const TheDocsListComponent = () => {
         showToast('Файл не найден!', 'error', {
           autoClose: 5000,
         });
-      } else if (typeof fileData == 'array') {
+      } else if (typeof fileData == 'object') {        
         fileData.map(item => {
           if (item?.dataUrl) {
             downloadBase64PDF(item.dataUrl, doc_name);
