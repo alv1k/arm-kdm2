@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { invalidToken } from '@/store/slices/userSlice.js'
 import api from '@/api/api';
 
 export const fetchAgreementsList = createAsyncThunk(
@@ -47,7 +48,14 @@ export const fetchDowloadFile = createAsyncThunk(
         }
       });
       if (!response.data.success) {
-        throw new Error(`HTTP error! status: ${response.data.status}`);
+        if (response.data.message == 'Неверный токен') { 
+          console.log('hmmmmm');
+                
+          dispatch(invalidToken());
+          return rejectWithValue('Неверный токен');
+        }
+        // throw new Error(`HTTP error! status: ${response.data.message}`);
+        return rejectWithValue(response.data.message);
       }
       return await response.data.data;
     } catch (error) {
@@ -57,6 +65,18 @@ export const fetchDowloadFile = createAsyncThunk(
 )
 const getObjects = (agreeList) => {  
   const allObjects = agreeList.flatMap(agree => agree.objects || []);  
+  
+    if (!Array.isArray(allObjects)) return [];
+    
+    const idMap = new Map();
+    
+    allObjects.forEach(object => {
+      if (object?.id && !idMap.has(object.id)) {
+        idMap.set(object.id, object);
+      }
+    });
+    
+    return Array.from(idMap.values());
   return allObjects;
 }
 const getInvoices = (agreeList) => {

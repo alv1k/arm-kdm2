@@ -8,7 +8,8 @@ const agreementsList = [
 const singleAgreementsList = [
   { title_ru: 'Счета', title_en: 'bills' },
   { title_ru: 'Акты', title_en: 'acts' },
-  { title_ru: 'Показания', title_en: 'counters' }
+  { title_ru: 'Показания', title_en: 'counters' },
+  { title_ru: 'Объекты', title_en: 'objects' },
 ]
 const requestsList = [
   { title_ru: 'Мои заявки', title_en: 'my_requests' },

@@ -56,21 +56,26 @@ const userSlice = createSlice({
     page404: false,
   },
   reducers: {
-    togglePasswordChange(state, action) {
-      console.log('togglePasswordChange here');
-      
+    togglePasswordChange(state, action) {      
       state.isPasswordChange = action.payload
     },
     setToken(state, action) {      
       localStorage.setItem('token', action.payload)
+      state.error = null;
     },
     removeToken(state) {      
       localStorage.removeItem('token')
       sessionStorage.removeItem('token');
       document.cookie = 'token=; Max-Age=0; path=/;';
+      state.error = null;
     },
     setUserData(state, action) {
-      state.userData = action.payload  
+      state.userData = action.payload
+    },    
+    invalidToken(state) {
+      localStorage.removeItem('token')
+      sessionStorage.removeItem('token');
+      state.error = 'Неверный токен';
     },
   },
   extraReducers: (builder) => {
@@ -94,5 +99,5 @@ const userSlice = createSlice({
 
 export const isPasswordModification = (state) => state.user_slice.isPasswordChange;
 export const userData = (state) => state.user_slice.userData;
-export const { togglePasswordChange, setToken, removeToken, setUserData } = userSlice.actions;
+export const { togglePasswordChange, setToken, removeToken, setUserData, invalidToken } = userSlice.actions;
 export default userSlice.reducer;

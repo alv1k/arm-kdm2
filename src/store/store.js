@@ -10,7 +10,17 @@ import authReducer, { fetchAuth } from './slices/authSlice';
 import agreementsReducer, { fetchAgreementsList } from './slices/agreementsSlice';
 import loadingSlice, { setLoadingStart, setLoadingEnd } from './slices/loadingSlice';
 import countersSlice from './slices/countersSlice';
-import { fetchProfileData } from './slices/userSlice'; 
+import { fetchProfileData, invalidToken } from './slices/userSlice'; 
+import { showToast } from '@/utils/notify';
+
+//Middleware для обработки API ошибок
+const tokenErrorMiddleware = store => next => action => {
+  if (action.type.endsWith('rejected') && action.payload?.message === 'Неверный токен') {
+    store.dispatch(invalidToken());
+    showToast('Неверный токен! Пожалуйста, войдите снова', 'error', { autoClose: 5000 });
+  }
+  return next(action);
+};
 
 // Middleware для логирования действий
 const loggingMiddleware = (store) => (next) => (action) => {
@@ -127,7 +137,8 @@ const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
       .concat(loggingMiddleware)
-      .concat(listenerMiddleware.middleware),
+      .concat(listenerMiddleware.middleware)
+      .concat(tokenErrorMiddleware),
 });
 
 export default store;
