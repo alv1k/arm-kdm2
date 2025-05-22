@@ -63,20 +63,8 @@ export const fetchDowloadFile = createAsyncThunk(
     }
   }
 )
-const getObjects = (agreeList) => {  
-  const allObjects = agreeList.flatMap(agree => agree.objects || []);  
-  
-    if (!Array.isArray(allObjects)) return [];
-    
-    const idMap = new Map();
-    
-    allObjects.forEach(object => {
-      if (object?.id && !idMap.has(object.id)) {
-        idMap.set(object.id, object);
-      }
-    });
-    
-    return Array.from(idMap.values());
+const getObjects = (agreeList) => {
+  const allObjects = agreeList.flatMap(agree => agree.objects || []);   
   return allObjects;
 }
 const getInvoices = (agreeList) => {
@@ -141,6 +129,7 @@ const agreementsSlice = createSlice({
     selectedAgreement: [],
     fileToDownload: null,
     allObjects: null,
+    agreementObjects: null,
     allInvoices: null,
     page404: false,
   },
@@ -154,6 +143,11 @@ const agreementsSlice = createSlice({
     setAgreementsList: (state, action) => {
       state.selectedAgreement = [action.payload]
       state.allInvoices = getInvoices(action.payload) 
+      state.agreementObjects = action.payload.objects
+      .filter(object => object)
+      .filter((object, index, self) => 
+        index === self.findIndex(o => o.id === object.id)
+      );
     },
     setShowCountersModal: (state) => {
       state.isShowCountersModal = true

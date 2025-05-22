@@ -25,6 +25,7 @@ const TheDocsListComponent = () => {
   const allInvoices = useSelector((state) => state.agreements_slice.allInvoices)  
   const allObjects = useSelector((state) => state.agreements_slice.allObjects)
   const error = useSelector(state => state.user_slice.error);
+  const agreementObjects = useSelector((state) => state.agreements_slice.agreementObjects);
     
   const location = useLocation();
   const currentRoute = location.pathname;
@@ -91,7 +92,7 @@ const TheDocsListComponent = () => {
             case 'counters':
               return [{"id": "2", "descr": "descr2", "date": "4025-05-09T12:46:22"}];
             case 'objects':
-              return allObjects;
+              return agreementObjects;
           }
           default:
             return []; // На случай, если `currentRoute` не совпадает ни с одним кейсом
@@ -134,9 +135,7 @@ const TheDocsListComponent = () => {
     } catch (error) {
       console.error("Ошибка загрузки файла:", error);
     }  
-  }
-
-    
+  }    
 
   const handleSort = (target) => {
     //ASC DESC
@@ -341,7 +340,7 @@ const TheDocsListComponent = () => {
               }
               <th className="px-5 py-2.5" width={currentTab && currentTab.title_en == 'counters' ? '200px' : ''}>
                 <div className="flex items-center min-w-22">
-                  <span>{currentTab && currentTab.title_en == 'counters' ? 'ГВС' : currentTab.title_en == 'objects' ? '' : 'Дата'}</span>
+                  <span>{currentTab && currentTab.title_en == 'counters' ? 'ГВС' : currentTab && currentTab.title_en == 'objects' ? '' : 'Дата'}</span>
                   {/* <svg
                     className={`${styles.icon} ms-2`}
                     >

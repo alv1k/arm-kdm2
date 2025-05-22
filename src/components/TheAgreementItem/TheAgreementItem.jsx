@@ -17,8 +17,7 @@ const TheAgreementItem = ({ id, number, beginDate, endDate, debt, objects, name,
   const isDetailsShown = useSelector(isShowDetails);
   const showCountersModal = useSelector(isShowCountersModal);
   const showPaymentModal = useSelector(isShowPaymentModal);  
-  const fileToDownload = useSelector((state) => state.agreements_slice.fileToDownload);
-  
+  const fileToDownload = useSelector((state) => state.agreements_slice.fileToDownload);  
   
   const handleSetDataType = (type) => {
     dispatch(setDataType(type));
