@@ -163,7 +163,7 @@ const TheDocsListComponent = () => {
           {
             currentTab && currentTab.title_en == 'acts' ? 
             <div className={``}>
-              <div className="text-nowrap"><span className="text-[#787C82]">№001:</span> Акт об оплате аренды</div>
+              <div className="text-nowrap"><span className="text-[#787C82]">№001:</span> Акт об оказании услуг</div>
               <div className="text-nowrap my-1"><span className="text-[#787C82]">Дата:&nbsp;</span><DateFormatter dateString={item.date} /></div>
               <button className="btn-default px-6 py-2 flex lg:mt-0 mt-5 md:w-fit w-full justify-center" disabled={!item.file}
                 onClick={(e) => handleFileDownload(e, item)}

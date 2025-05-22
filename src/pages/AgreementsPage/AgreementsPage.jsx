@@ -128,7 +128,8 @@ const AgreementsPage = () => {
                   <AgreementItem
                     id={agreement.id}
                     number={agreement.number}
-                    date={agreement.date}
+                    beginDate={agreement.beginDate}
+                    endDate={agreement.endDate}
                     debt={agreement.debts}
                     objects={agreement.objects}
                     name={agreement.name}
@@ -142,7 +143,8 @@ const AgreementsPage = () => {
                   <AgreementItem
                     id={agreement.id}
                     number={agreement.number}
-                    date={agreement.date}
+                    beginDate={agreement.beginDate}
+                    endDate={agreement.endDate}
                     debt={agreement.debts}
                     objects={agreement.objects}
                     name={agreement.name}

@@ -9,7 +9,7 @@ import PaymentModal from '@/components/ThePaymentModal/ThePaymentModal';
 import { setDataType, setShowModal } from '@/store/slices/modalSlice';
 import { downloadBase64PDF } from '@/utils/fileDownload';
 
-const TheAgreementItem = ({ id, number, date, debt, objects, name, monthly }) => {
+const TheAgreementItem = ({ id, number, beginDate, endDate, debt, objects, name, monthly }) => {
   const sprite_path = './src/assets/images/i.svg';
   const today = new Date().toLocaleDateString();
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
@@ -156,7 +156,7 @@ const TheAgreementItem = ({ id, number, date, debt, objects, name, monthly }) =>
                     `}>
                     <span className={`text-[#787C82] lg:inline md:inline block lg:mt-0 ${isDetailsShown && sm_breakpoint ? 'mt-0' : ' mt-2'}`}>Дата начала:&nbsp;</span>
                     <span className={`lg:inline md:inline block ${isDetailsShown && sm_breakpoint ? 'mt-0' : ' mt-1'}`}>
-                      {<DateFormatter dateString="2020-20-20" />}
+                      {<DateFormatter dateString={beginDate} />}
                     </span>
                   </p>
                   <p 
@@ -166,7 +166,7 @@ const TheAgreementItem = ({ id, number, date, debt, objects, name, monthly }) =>
                     `}>
                     <span className={`text-[#787C82] lg:inline md:inline block lg:mt-0 ${isDetailsShown && sm_breakpoint ? 'mt-0' : ' mt-2'}`}>Дата окончания:&nbsp;</span>
                     <span className={`lg:inline md:inline block ${isDetailsShown && sm_breakpoint ? 'mt-0' : ' mt-1'}`}>
-                      {<DateFormatter dateString="2020-20-20" />}
+                      {<DateFormatter dateString={endDate} />}
                     </span>
                   </p>
                 </div>
@@ -211,18 +211,20 @@ const TheAgreementItem = ({ id, number, date, debt, objects, name, monthly }) =>
                     Скачать договор
                   </span>
                 </button> */}
-                <button className="md:mt-4 mt-7 btn-default px-5 py-2" onClick={() => handleSetDataType('counters')}>
-                  Передать показания счетчиков
-                </button>
+                {
+                  name.includes(' перем ') &&
+                  <button className="md:mt-4 mt-7 btn-default px-5 py-2" onClick={() => handleSetDataType('counters')}>
+                    Передать показания счетчиков
+                  </button>
+                }
               </div> : ''
             }
             <div className="lg:ms-auto ms-0 lg:mt-0 md:mt-3 mt-3">
               {
-                isDetailsShown && !md_breakpoint ? 
+                isDetailsShown && !md_breakpoint && name.includes(' перем ') &&
                 <button className="lg:mt-4 mt-7 btn-default px-5 py-2 lg:w-auto w-full" onClick={() => handleSetDataType('counters')}>
                   Передать показания счетчиков
                 </button>
-                : ''
               }
             </div>
           </div>
