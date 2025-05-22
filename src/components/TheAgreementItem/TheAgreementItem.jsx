@@ -128,21 +128,7 @@ const TheAgreementItem = ({ id, number, beginDate, endDate, debt, objects, name,
             {
               isDetailsShown ? 
               <div className="grid grid-cols-2 gap-2">
-                <div 
-                  className={`
-                    ${isDetailsShown ? 'md:text-base' : 'lg:text-xl'}
-                    ${isDetailsShown && sm_breakpoint ? 'rounded-md bg-item-active px-5 py-2 my-0' : 'bg-none my-2'}
-                    md:my-2 md:block md:order-1
-                    order-2
-                  `}>
-                  <span className={`
-                    text-[#787C82] lg:inline md:inline block lg:mt-0 
-                    ${isDetailsShown && sm_breakpoint ? 'my-0' : 'my-2'}
-                  `}>
-                      Площадь:&nbsp;
-                  </span>
-                  <span className="lg:inline md:inline block mt-1">000 м2</span>
-                </div>
+                
                 <div className={`
                     ${isDetailsShown ? 'md:text-base' : 'lg:text-xl'}
                     ${isDetailsShown && sm_breakpoint ? 'my-0 gap-2' : 'my-2 gap-0'}
@@ -212,7 +198,7 @@ const TheAgreementItem = ({ id, number, beginDate, endDate, debt, objects, name,
                   </span>
                 </button> */}
                 {
-                  name.includes(' перем ') &&
+                  name.includes(' перем') &&
                   <button className="md:mt-4 mt-7 btn-default px-5 py-2" onClick={() => handleSetDataType('counters')}>
                     Передать показания счетчиков
                   </button>
@@ -221,7 +207,7 @@ const TheAgreementItem = ({ id, number, beginDate, endDate, debt, objects, name,
             }
             <div className="lg:ms-auto ms-0 lg:mt-0 md:mt-3 mt-3">
               {
-                isDetailsShown && !md_breakpoint && name.includes(' перем ') &&
+                isDetailsShown && !md_breakpoint && name.includes(' перем') &&
                 <button className="lg:mt-4 mt-7 btn-default px-5 py-2 lg:w-auto w-full" onClick={() => handleSetDataType('counters')}>
                   Передать показания счетчиков
                 </button>
