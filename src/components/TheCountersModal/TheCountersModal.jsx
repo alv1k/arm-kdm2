@@ -96,6 +96,7 @@ const CountersModal = () => {
               name={`counter-${index}`}
               className="mt-4 p-5 bg-item-active w-full rounded-xl" 
               type="number"
+              min="0"
             />
           </div>
           ))          

@@ -273,7 +273,7 @@ const UserPage = () => {
             {
               isPasswordChange && !sm_breakpoint ? 
               <button 
-                className="btn-text ms-auto me-4 lg:mt-0 md:mt-0 flex"
+                className="bg-white btn-text ms-auto me-4 lg:mt-0 md:mt-0 flex"
                 onClick={() => handlePasswordChangeBtn(false)}
               >
                 <svg

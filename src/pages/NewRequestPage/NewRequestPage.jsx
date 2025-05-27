@@ -90,7 +90,13 @@ const NewRequestPage = () => {
     }    
   }
   const handleRequestDescrChange = (e) => {
-    setRequestDescr(e.target.value);
+    if (e.target.value.length < 1000) {
+      setRequestDescr(e.target.value);
+    } else {          
+      showToast('Текст слишкой длинный', 'error', {
+        autoClose: 2000,
+      });
+    }
   };
 
   const base64ToFileObject = (base64String, filename = 'uploaded') => {
@@ -275,7 +281,7 @@ const NewRequestPage = () => {
         {
           !sm_breakpoint ? 
           <button 
-            className="btn-text ms-auto me-4 lg:mt-0 md:mt-0 flex cursor-pointer"
+            className="bg-white btn-text ms-auto me-4 lg:mt-0 md:mt-0 flex cursor-pointer"
             onClick={backToRequests}
           >
             <svg

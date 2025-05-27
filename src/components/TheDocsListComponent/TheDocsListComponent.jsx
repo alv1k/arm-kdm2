@@ -239,8 +239,8 @@ const TheDocsListComponent = () => {
               <button 
                 className={`${item.status === 'payd' ? 'btn-default' : 'rounded-lg bg-green-500 text-white'} px-6 py-2 mt-auto w-full`} 
                 disabled 
-                onClick={() => handleSetDataType('payment', item)}
-              >
+                >
+                {/* onClick={() => handleSetDataType('payment', item)} */}
                 {item.status === 'payd' ? 'Оплачено' : 'Оплатить'}
               </button>
             </div>          
@@ -486,7 +486,11 @@ const TheDocsListComponent = () => {
                           }                     
                         </div> 
                         :
-                        <button className="btn-success px-6 py-2 lg:mt-0 mt-5 w-full" disabled={currentTab && ((currentTab.title_en == 'bills' && item.status === 'payd') || currentTab.title_en == 'acts')} onClick={() => currentTab && currentTab.title_en == 'bills' ? handleSetDataType('payment', item) : ''}>
+                        <button 
+                          className="btn-success px-6 py-2 lg:mt-0 mt-5 w-full" 
+                          disabled={currentTab && ((currentTab.title_en == 'bills' && item.status === 'payd') || currentTab.title_en == 'acts')} 
+                          >
+                          {/* onClick={() => currentTab && currentTab.title_en == 'bills' ? handleSetDataType('payment', item) : ''} */}
                           {
                             currentTab && currentTab.title_en == 'bills' ? item.status == 'payd' ? 'Оплачено' : 'Оплатить' : 'Скачать'
                           }
