@@ -281,7 +281,7 @@ const NewRequestPage = () => {
         {
           !sm_breakpoint ? 
           <button 
-            className="bg-white btn-text ms-auto me-4 lg:mt-0 md:mt-0 flex cursor-pointer"
+            className="btn-text ms-auto me-4 lg:mt-0 md:mt-0 flex cursor-pointer"
             onClick={backToRequests}
           >
             <svg

@@ -50,7 +50,7 @@ const TheHeader = () => {
       {
         ((isNewRequest || showAgreementDetails || isPasswordChange) && sm_breakpoint) ?
         <button 
-          className="bg-white md:text-base text-sm btn-text flex items-center ms-3 z-20 md:static absolute"
+          className="md:text-base text-sm btn-text flex items-center ms-3 z-20 md:static absolute"
           onClick={handleBackwards}
         >
           <svg

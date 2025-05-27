@@ -104,7 +104,7 @@ const AgreementsPage = () => {
           {
             isDetailsShown && !sm_breakpoint ? 
             <button 
-              className="bg-white btn-text ms-auto me-4 lg:mt-0 md:mt-9 flex cursor-pointer"
+              className="btn-text ms-auto me-4 lg:mt-0 md:mt-9 flex cursor-pointer"
               onClick={backToAgreements}
             >
               <svg
