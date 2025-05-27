@@ -39,14 +39,6 @@ const LoginPage = () => {
     };
     setShowPassword(!showPassword);
   };
-  // https://cloud.aokdm.ru/method/restore?email=atlasov.n.r@gmail.com
-  // восстановление пароля
-
-  // baydam
-  // 123456
-
-  // tomograf
-  // 123456
 
   const [data, setData] = useState({
     login: '',
@@ -204,10 +196,14 @@ const LoginPage = () => {
   }
   
   useEffect(() => {
-    dispatch(toggleTabs({
-      type: 'login',
-      breakpoint: sm_breakpoint ? 'sm-breakpoint' : ''
-    }));    
+    if (localStorage.token) {
+      navigate('/agreements');
+    } else {
+      dispatch(toggleTabs({
+        type: 'login',
+        breakpoint: sm_breakpoint ? 'sm-breakpoint' : ''
+      }));
+    }
   }, [dispatch]);
   
   useEffect(() => {
