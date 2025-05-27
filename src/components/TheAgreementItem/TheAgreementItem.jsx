@@ -7,6 +7,7 @@ import DateFormatter from '../DateFormatter/DateFormatter';
 import CountersModal from '@/components/TheCountersModal/TheCountersModal'; 
 import PaymentModal from '@/components/ThePaymentModal/ThePaymentModal'; 
 import { setDataType, setShowModal } from '@/store/slices/modalSlice';
+import { toggleTabs  } from '@/store/slices/tabsSlice';
 import { downloadBase64PDF } from '@/utils/fileDownload';
 
 const TheAgreementItem = ({ id, number, beginDate, endDate, debt, objects, name, monthly }) => {
@@ -60,6 +61,16 @@ const TheAgreementItem = ({ id, number, beginDate, endDate, debt, objects, name,
       console.error("Ошибка загрузки файла:", error);
     }   
   }  
+
+  // useEffect(() => {
+  //   dispatch(toggleTabs({
+  //     type: 'singleAgreement', 
+  //     breakpoint: sm_breakpoint ? 'sm-breakpoint' : '',
+  //     hasCounters: name.includes(' перем') ? true : false
+  //   } ));
+  //   console.log(name.includes(' перем') ? true : false);
+    
+  // }, [dispatch]);
 
   return (
     <div>

@@ -58,7 +58,7 @@ const NewRequestPage = () => {
       descr: requestDescr,
       status: 'В работе',
       token: localStorage.getItem('token') ?? sessionStorage.getItem('token'),
-      file: uploadedFiles,
+      file: uploadedFiles[0],
       // file:{ dataUrl, format } если добавлен файл
       // !!! update file: dataUrl
       // c заголовком data:application/pdf;base64

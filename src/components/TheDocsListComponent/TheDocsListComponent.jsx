@@ -376,10 +376,10 @@ const TheDocsListComponent = () => {
               }
             </tr>
           </thead>
-          <tbody className="bg-item-default ">
+          <tbody>
             {
               getList()?.map((item, index) => (
-                <tr key={index} className="cursor-pointer">
+                <tr key={index} className="cursor-pointer bg-item-default">
                   <td className={`px-5 py-2.5` + [currentTab && currentTab.title_en == 'counters' ? 'align-top' : '']}>
                     <div className="ps-8">
                       {currentTab && currentTab.title_en == 'counters' ? '01.01.2011' : currentTab.title_en == 'objects' ? index + 1 : item.number}
@@ -486,7 +486,7 @@ const TheDocsListComponent = () => {
                           }                     
                         </div> 
                         :
-                        <button className="btn-success px-6 py-2 lg:mt-0 mt-5 w-full" disabled={currentTab && currentTab.title_en == 'bills' && item.status === 'payd'} onClick={() => currentTab && currentTab.title_en == 'bills' ? handleSetDataType('payment', item) : ''}>
+                        <button className="btn-success px-6 py-2 lg:mt-0 mt-5 w-full" disabled={currentTab && ((currentTab.title_en == 'bills' && item.status === 'payd') || currentTab.title_en == 'acts')} onClick={() => currentTab && currentTab.title_en == 'bills' ? handleSetDataType('payment', item) : ''}>
                           {
                             currentTab && currentTab.title_en == 'bills' ? item.status == 'payd' ? 'Оплачено' : 'Оплатить' : 'Скачать'
                           }

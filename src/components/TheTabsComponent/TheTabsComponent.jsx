@@ -18,8 +18,7 @@ const TheTabsComponent = (props) => {
   const agreementTabs = useSelector((state) => state.tabs_slice.agreementTabs);
   const requestsTabs = useSelector((state) => state.tabs_slice.requestsTabs);
   const loginTabs = useSelector((state) => state.tabs_slice.loginTabs);
-  const isRestorePassword = useSelector(isRestorePass);
- 
+  const isRestorePassword = useSelector(isRestorePass); 
   
   let calculateTabs = () => {
     return props.titles == 'agreementsList' ? agreementsTabs : props.titles == 'singleAgreement' ? agreementTabs : props.titles == 'requests' ? requestsTabs : loginTabs
@@ -113,10 +112,10 @@ const TheTabsComponent = (props) => {
     <div className={`
       xl:mt-9 
       lg:mt-10 lg:gap-4
-      md:mt-7 md:rounded-t-xl md:justify-start
-      min-w-0 whitespace-nowrap w-full flex justify-between mt-11 bg-[#FAFBFD] border-b-1 border-slate-300 rounded-t-md font-medium overflow-auto no-scrollbar
+      md:mt-7 md:rounded-t-xl
+      min-w-0 w-full flex items-center mt-11 bg-[#FAFBFD] border-b-1 border-slate-300 rounded-t-md font-medium overflow-auto no-scrollbar
     `}>
-      <div className="flex">
+      <div className="flex flex-1 overflow-x-auto md:justify-start justify-between">
         {tabs.map((tab, index) => (
           <div 
             key={index} 
@@ -127,7 +126,6 @@ const TheTabsComponent = (props) => {
               py-4 px-6 w-fit cursor-pointer bg-item-default rounded-t-xl text-nowrap
               ${currentRoute == '/login' ? 'w-full justify-center' : ''}
               ${sm_breakpoint ? 'w-1/2' : ''}
-              ${currentTab && currentTab.title_en === tab.title_en ? 'text-[#203887] border-b border-b-[#6374AD]' : ''}
               ${currentTab && currentTab.title_en === tab.title_en ? 'text-[#203887] border-b border-b-[#6374AD]' : ''}
             `}
             onClick={() => {handleTabAction(tab)}}

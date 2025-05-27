@@ -49,13 +49,17 @@ const tabSlice = createSlice({
             state.agreementsTabs = [...agreementsList]; 
             break;
         }        
-      } else if (action.payload.type == 'singleAgreement') {
-        switch (action.payload.breakpoint) {
-          case 'sm-breakpoint':
+      } else if (action.payload.type == 'singleAgreement') {               
+        switch (action.payload.hasCounters) {
+          case true:
             state.agreementTabs = singleAgreementsList;
             break;
           default:
-            state.agreementTabs = [...singleAgreementsList]; 
+            state.agreementTabs = [
+              singleAgreementsList[0],
+              singleAgreementsList[1],
+              singleAgreementsList[3]
+            ].filter(Boolean);
             break;
         }
       } else if (action.payload.type == 'requests') {

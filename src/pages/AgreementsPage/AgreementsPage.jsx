@@ -32,11 +32,14 @@ const AgreementsPage = () => {
   
   useEffect(() => {
     dispatch(fetchAgreementsList());
+    console.log(currentAgreement, 'selectedAgreement???');
+    
     dispatch(toggleTabs({
-      type: isDetailsShown ? 'singleAgrement' : 'agreementsList', 
-      breakpoint: sm_breakpoint ? 'sm-breakpoint' : ''
+      type: isDetailsShown ? 'singleAgreement' : 'agreementsList', 
+      breakpoint: sm_breakpoint ? 'sm-breakpoint' : '',
+      hasCounters: currentAgreement[0] ? (currentAgreement[0].name.includes(' перем') ? true : false) : console.log('error. empty currentAgreement')
     } ));
-  }, [dispatch]);
+  }, [dispatch, isDetailsShown]);
   useEffect(() => {
     if (isDetailsShown == true) {
       window.scrollTo(0,0);
