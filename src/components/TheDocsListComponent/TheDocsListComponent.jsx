@@ -237,7 +237,7 @@ const TheDocsListComponent = () => {
                 <PriceFormatter amount={item.summ} />
               </div>
               <button 
-                className={`${item.status === 'payd' ? 'btn-default' : 'rounded-lg bg-green-500 text-white'} px-6 py-2 mt-auto w-full`} 
+                className={`${item.status === 'payd' ? 'btn-default' : 'rounded-lg bg-green-500 text-white'} px-6 py-2 mt-5 h-full w-full`} 
                 disabled 
                 >
                 {/* onClick={() => handleSetDataType('payment', item)} */}
