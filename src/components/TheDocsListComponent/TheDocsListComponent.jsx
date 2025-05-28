@@ -288,223 +288,192 @@ const TheDocsListComponent = () => {
     <div className={`
       flex bg-[#FAFBFD] rounded-lg my-5 lg:p-0 p-5
     `}>
-      <div className="w-full table-fixed">
-        <table className="rounded-lg border-separate border-spacing-0 w-full">
-          <thead className="bg-item-active">              
-            <tr align="center" className="text-center justify-center ">
-              <th className="px-5 py-2.5 rounded-tl-lg" width={currentTab && currentTab.title_en == 'counters' ? '200px' : ''}>
-                <div className="flex items-center ps-8">
-                  <span className="inline">
-                    {currentTab && currentTab.title_en == 'counters' ? 'Дата' : '№'}
-                  </span>
-                  {/* <svg
-                    className={`${styles.icon} ms-2 cursor-pointer`}
-                    onClick={() => handleSort('firstTd')}
-                  >
-                    <use href={`${sprite_path}#chevron-down`} />
-                  </svg> */}
+      <div className="w-full overflow-x-auto">
+        {/* Header */}
+        <div className="flex bg-item-active rounded-t-lg p-4 font-medium max-w-[600px]">
+          {/* Column 1 */}
+          <div className={`
+              flex items-center ps-2 flex-shrink-0              
+              ${currentTab && currentTab.title_en === 'bills' ? 'w-[150px]' : 'w-[50px]'}
+            `}
+          >
+            {currentTab && currentTab.title_en === 'counters' ? 'Дата' : '№'}
+          </div>
+          
+          {/* Column 2 */}
+          <div className={`
+              flex items-center flex-shrink-0
+              ${currentTab && currentTab.title_en === 'objects' ? 'w-[350px]' : 'w-[200px]'}
+            `}
+          >
+            <span className="whitespace-nowrap">
+              {currentTab && (currentTab.title_en === 'counters' || currentTab.title_en === 'objects') ? '' : 'Название'}
+              {currentTab && currentTab.title_en === 'acts' ? ' акта' : 
+              currentTab && currentTab.title_en === 'bills' ? ' счета' : 
+              currentTab && currentTab.title_en === 'counters' ? ' ХВС' : 
+              currentTab && currentTab.title_en === 'objects' ? 'Адрес' : ' помещения'}
+            </span>
+          </div>
+
+          {/* Dynamic Column */}
+          {currentRoute === '/requests' && (
+            <div className="flex items-center w-[180px] flex-shrink-0">
+              <span className="whitespace-nowrap">Тема обращения</span>
+            </div>
+          )}
+
+          {/* Column 3 */}
+          <div className={`flex items-center ${currentRoute === '/requests' ? 'w-[150px]' : 'w-[200px]'} flex-shrink-0`}>
+            <span>{currentTab && currentTab.title_en === 'counters' ? 'ГВС' : currentTab && currentTab.title_en === 'objects' ? '' : 'Дата'}</span>
+          </div>
+
+          {/* Column 4 */}
+          {currentTab && currentTab.title_en !== 'objects' && (
+            <div className="flex w-[150px] flex-shrink-0">
+              <span>
+                {currentTab && (currentTab.title_en === 'acts' || currentTab.title_en === 'bills') ? 
+                'Сумма' : currentTab && currentTab.title_en === 'counters' ? 
+                'Электроэнергия' : 'Статус'}
+              </span>
+            </div>
+          )}
+
+          {/* Action Column */}
+          {currentTab && currentTab.title_en !== 'objects' && (
+            <div className="flex justify-end w-[120px] flex-shrink-0">
+              {/* Empty for spacing */}
+            </div>
+          )}
+        </div>
+
+        {/* Body */}
+        <div className="flex flex-col max-w-[600px]">
+          {getList()?.map((item, index) => (
+            <div 
+              key={index} 
+              className="flex items-center p-4 bg-item-default rounded-lg hover:bg-item-hover transition-colors"
+            >
+              {/* Cell 1 */}
+              <div className={`
+                  flex-shrink-0
+                  ${currentTab && currentTab.title_en === 'bills' ? 'w-[150px]' : 'w-[50px]'}
+                `}
+              >
+                <div className="ps-2">
+                  {currentTab && currentTab.title_en === 'counters' ? '01.01.2011' : 
+                  currentTab.title_en === 'objects' ? index + 1 : item.number}
                 </div>
-              </th>
-              <th className="px-5 py-2.5" width={currentTab && currentTab.title_en == 'counters' ? '100px' : ''}>
-                <div className="flex items-center min-w-22">
-                  <span className="text-nowrap">
-                    {currentTab && (currentTab.title_en == 'counters' || currentTab.title_en == 'objects') ? '' : 'Название'}                    
-                    {
-                      currentTab && currentTab.title_en == 'acts' ?
-                      ' акта' : currentTab && currentTab.title_en == 'bills' ? 
-                      ' счета' : currentTab && currentTab.title_en == 'counters' ? 
-                      ' ХВС' : currentTab && currentTab.title_en == 'objects' ? 
-                      'Адрес' : ' помещения'
-                    }
-                  </span>
-                  {/* <svg
-                    className={`${styles.icon} ms-2`}
-                    >
-                    <use href={`${sprite_path}#chevron-down`} />
-                  </svg> */}
-                </div>
-              </th>
-              
-              {
-                currentRoute == '/requests' ?
-                <th className="px-5 py-2.5">
-                  <div className="flex items-center">
-                    <span className="text-nowrap">Тема обращения</span>
-                    {/* <svg
-                      className={`${styles.icon} ms-2`}
-                      >
-                      <use href={`${sprite_path}#chevron-down`} />
-                    </svg> */}
+              </div>
+
+              {/* Cell 2 */}
+              <div className={`
+                  flex-shrink-0                  
+                  ${currentTab && currentTab.title_en === 'objects' ? 'w-[350px]' : 'w-[200px]'}
+                `}
+              >
+                {currentTab && currentTab.title_en === 'acts' ? 'Акт об оказании услуг' : 
+                currentTab && currentTab.title_en === 'bills' ? item.descr :
+                currentTab && currentTab.title_en === 'counters' ? (
+                  <div>
+                    <p className="text-[#787C82]">№000001</p>
+                    <p>123.45 м3</p>
                   </div>
-                </th> : ''
-              }
-              <th className="px-5 py-2.5" width={currentTab && currentTab.title_en == 'counters' ? '200px' : ''}>
-                <div className="flex items-center min-w-22">
-                  <span>{currentTab && currentTab.title_en == 'counters' ? 'ГВС' : currentTab && currentTab.title_en == 'objects' ? '' : 'Дата'}</span>
-                  {/* <svg
-                    className={`${styles.icon} ms-2`}
-                    >
-                    <use href={`${sprite_path}#chevron-down`} />
-                  </svg> */}
-                </div>
-              </th>
-              {
-                currentTab && currentTab.title_en != 'objects' && 
-                <th className="px-5 py-2.5" width={currentTab && currentTab.title_en == 'counters' ? '200px' : ''} align="center">
-                  <div className="flex items-center">
-                    <span>
-                      {
-                        currentTab && (currentTab && currentTab.title_en == 'acts' || currentTab && currentTab.title_en == 'bills') ?
-                        'Сумма' : currentTab && currentTab.title_en == 'counters' ? 'Электроэнергия' : 'Статус'
-                      }
-                    </span>
-                    {/* <svg
-                      className={`${styles.icon} ms-2`}
-                      >
-                      <use href={`${sprite_path}#chevron-down`} />
-                    </svg> */}
+                ) : currentTab && currentTab.title_en === 'objects' ? (
+                  <div>{item.name}</div>
+                ) : (
+                  <div className="group relative">
+                    <p className="py-2 rounded cursor-default truncate">
+                      {item.object}
+                    </p>
+                    {item.object && (
+                      <div className="absolute z-10 hidden group-hover:block w-96 bg-white shadow-md text-base rounded-b-xl rounded-tr-xl p-5 top-full mt-2">
+                        {item.object}
+                      </div>
+                    )}
                   </div>
-                </th>
-              }
-              {
-                currentTab && currentTab.title_en != 'objects' && 
-                <th className="px-5 py-2.5 rounded-tr-lg"></th>
-              }                
-              {
-                currentTab && (currentTab.title_en != 'bills') ? 
-                '' : <th className="px-5 py-2.5"></th>
-              }
-            </tr>
-          </thead>
-          <tbody>
-            {
-              getList()?.map((item, index) => (
-                <tr key={index} className="cursor-pointer bg-item-default">
-                  <td className={`px-5 py-2.5` + [currentTab && currentTab.title_en == 'counters' ? 'align-top' : '']}>
-                    <div className="ps-8">
-                      {currentTab && currentTab.title_en == 'counters' ? '01.01.2011' : currentTab.title_en == 'objects' ? index + 1 : item.number}
+                )}
+              </div>
+
+              {/* Dynamic Cell */}
+              {currentTab && currentTab.title_en === 'acts' ? null : 
+              currentTab && currentTab.title_en === 'bills' ? null :
+              currentTab && currentTab.title_en === 'counters' ? (
+                <div className="w-[180px] flex-shrink-0">
+                  <div>
+                    <p className="text-[#787C82]">№000001</p>
+                    <p>123.45 м3</p>
+                  </div>
+                </div>
+              ) : (
+                <div className="w-[180px] flex-shrink-0">{item.type}</div>
+              )}
+
+              {/* Cell 3 */}
+              {currentTab && currentTab.title_en !== 'objects' && (
+                <div className={`${currentRoute === '/requests' ? 'w-[150px]' : 'w-[200px]'} flex-shrink-0`}>
+                  {currentTab && currentTab.title_en === 'counters' ? (
+                    <div>
+                      <p className="text-[#787C82]">№000001</p>
+                      <p>123.45 кВтч</p>
                     </div>
-                  </td>
-                  <td className="px-5 py-2.5">
-                    {
-                      currentTab && currentTab.title_en == 'acts' ?
-                      'Акт об оказании услуг' : currentTab && currentTab.title_en == 'bills' ? item.descr
-                      : currentTab && currentTab.title_en == 'counters' ? 
-                      <div>
-                        <p className="text-[#787C82]">№000001</p>
-                        <p>123.45 м3</p>
-                      </div> 
-                      : currentTab && currentTab.title_en == 'objects' ? 
-                      <div>
-                        {item.name}
-                      </div>
-                      : <div className="group relative inline-block w-66">
-                        <p className="py-2 rounded cursor-default truncate">
-                          {item.object}
-                        </p>
-                        {
-                          item.object && 
-                          <div className="absolute z-10 hidden group-hover:block w-96 bg-white shadow-md text-base rounded-b-xl rounded-tr-xl p-5 top-full mt-2">
-                            {item.object}
-                          </div>
-                        }
-                      </div>
-                    }
-                  </td>            
-                  {
-                    currentTab && currentTab.title_en == 'acts' ?
-                    '' : currentTab && currentTab.title_en == 'bills' ? '' :
-                    currentTab && currentTab.title_en == 'counters' ? 
-                    <td className="px-5 py-2.5">
-                      <div>
-                        <p className="text-[#787C82]">№000001</p>
-                        <p>123.45 м3</p>
-                      </div> 
-                    </td>
-                    :                
-                    <td className="px-5 py-2.5">{item.type}</td>
-                  }
-                  {
-                    currentTab && currentTab.title_en != 'objects' &&
-                    <td className="px-5 py-2.5">
-                      {
-                        currentTab && currentTab.title_en == 'counters' ? 
-                        <div>
-                          <p className="text-[#787C82]">№000001</p>
-                          <p>123.45 кВтч</p>
-                        </div> : item.date && <DateFormatter dateString={item.date} />
-                      }
-                    </td>
-                  }
-                  {
-                    currentTab && currentTab.title_en != 'objects' &&
-                    <td className="px-5 py-2.5">
-                      {
-                        currentTab && (currentTab.title_en == 'acts' || currentTab.title_en == 'bills') ?
-                        <PriceFormatter amount={item.summ} /> 
-                        : currentTab && currentTab.title_en == 'counters' ? '' 
-                        : <span className={item.status ? getStatusClass(item.status) : ''}>{item.status}</span>
-                      }
-                    </td>
-                  }
-                  {
-                    currentTab && currentTab.title_en == 'bills' &&
-                    <td className="px-5 py-2.5 ms-auto">
-                      <button 
-                        className="btn-default px-6 py-2 flex lg:mt-0 mt-5 md:w-full md:justify-center"
-                        onClick={(e) => handleFileDownload(e, item)}
-                        disabled={item.status == 'payd'}
-                      >
-                        <svg
-                          className="icon me-3"
-                        >
-                          <use href={`${sprite_path}#doc-icon`} />
+                  ) : item.date && <DateFormatter dateString={item.date} />}
+                </div>
+              )}
+
+              {/* Cell 4 */}
+              {currentTab && currentTab.title_en !== 'objects' && (
+                <div className="w-[150px] flex-shrink-0">
+                  {currentTab && (currentTab.title_en === 'acts' || currentTab.title_en === 'bills') ? (
+                    <PriceFormatter amount={item.summ} />
+                  ) : currentTab && currentTab.title_en === 'counters' ? null : (
+                    <span className={item.status ? getStatusClass(item.status) : ''}>
+                      {item.status}
+                    </span>
+                  )}
+                </div>
+              )}
+
+              {/* Action Cell */}
+              {currentTab && currentTab.title_en === 'bills' && (
+                <div className="w-[120px] flex-shrink-0 flex justify-end pe-5">
+                  <button 
+                    className="btn-default px-4 py-2 flex items-center text-sm"
+                    onClick={(e) => handleFileDownload(e, item)}
+                    disabled={item.status === 'payd'}
+                  >
+                    <svg className="icon me-2 w-4 h-4">
+                      <use href={`${sprite_path}#doc-icon`} />
+                    </svg>
+                    Скачать
+                  </button>
+                </div>
+              )}
+
+              {currentTab && currentTab.title_en !== 'objects' && (
+                <div className="w-[120px] flex-shrink-0 flex justify-end pe-5">
+                  {currentRoute === '/requests' ? (
+                    item.file && (
+                      <div className="flex group relative">
+                        <svg className="w-6 h-6 text-gray-300 stroke-1 outline-0 me-3 self-center">
+                          <use href={`${sprite_path}#clip-icon`} />
                         </svg>
-                        Скачать
-                      </button> 
-                    </td>
-                  }
-                  {
-                    currentTab && currentTab.title_en != 'objects' && 
-                    <td className="px-5 py-2.5">
-                      {
-                        currentTab && currentTab.title_en == 'counters' ? 
-                        '' : currentRoute == '/requests' ? 
-                        <div>
-                          {
-                            item.file &&
-                            <div className="flex group relative">
-                              <svg
-                                className="w-6 h-6 text-gray-300 stroke-1 outline-0 me-3 self-center"
-                              >
-                                <use href={`${sprite_path}#clip-icon`} />
-                              </svg>
-                              <span className="py-2 rounded cursor-default truncate text-[#787C82] text-base">
-                                {/* {getFileName(item.file)}, */}
-                              </span>
-                            </div>                          
-                          }                     
-                        </div> 
-                        :
-                        <button 
-                          className="btn-success px-6 py-2 lg:mt-0 mt-5 w-full" 
-                          disabled={currentTab && ((currentTab.title_en == 'bills' && item.status === 'payd') || currentTab.title_en == 'acts')} 
-                          >
-                          {/* onClick={() => currentTab && currentTab.title_en == 'bills' ? handleSetDataType('payment', item) : ''} */}
-                          {
-                            currentTab && currentTab.title_en == 'bills' ? item.status == 'payd' ? 'Оплачено' : 'Оплатить' : 'Скачать'
-                          }
-                        </button>
-                      }
-                    </td>
-                  }
-                </tr>
-              ))
-            }
-            
-          </tbody>
-        </table>
-      </div>      
+                      </div>
+                    )
+                  ) : (
+                    <button 
+                      className="btn-success px-4 py-2 text-sm"
+                      disabled={currentTab && ((currentTab.title_en === 'bills' && item.status === 'payd') || currentTab.title_en === 'acts')}
+                    >
+                      {currentTab && currentTab.title_en === 'bills' ? 
+                      (item.status === 'payd' ? 'Оплачено' : 'Оплатить') : 'Скачать'}
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
     </div> 
   )
 }

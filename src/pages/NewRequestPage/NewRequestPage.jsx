@@ -58,7 +58,7 @@ const NewRequestPage = () => {
       descr: requestDescr,
       status: 'В работе',
       token: localStorage.getItem('token') ?? sessionStorage.getItem('token'),
-      file: uploadedFiles[0],
+      file: uploadedFiles,
       // file:{ dataUrl, format } если добавлен файл
       // !!! update file: dataUrl
       // c заголовком data:application/pdf;base64
@@ -213,7 +213,6 @@ const NewRequestPage = () => {
       // Формируем данные для отправки
       const filesToSend = processedFiles.map(file => ({
         fileName: file.name,
-        fileSize: file.size,
         fileData: file.base64 // Полная base64 строка
       }));
 
