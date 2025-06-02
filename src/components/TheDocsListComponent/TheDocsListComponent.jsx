@@ -234,7 +234,7 @@ const TheDocsListComponent = () => {
             <div className="h-full justify-baseline flex flex-col">
               <div className="mb-1 text-[#787C82]">Сумма:</div>
               <div className={ item.status === 'payd' ? '' : 'text-red-600'}>
-                <PriceFormatter amount={item.summ} />
+                <PriceFormatter amount={item.summ} type="price" />
               </div>
               <button 
                 className={`${item.status === 'payd' ? 'btn-default' : 'rounded-lg bg-green-500 text-white'} px-6 py-2 mt-5 h-full w-full`} 
@@ -293,8 +293,8 @@ const TheDocsListComponent = () => {
         <div className="flex bg-item-active rounded-t-lg p-4 font-medium max-w-[600px]">
           {/* Column 1 */}
           <div className={`
-              flex items-center ps-2 flex-shrink-0              
-              ${currentTab && currentTab.title_en === 'bills' ? 'w-[150px]' : 'w-[50px]'}
+              flex items-center ps-2 flex-shrink-0
+              ${currentTab && currentTab.title_en === 'bills' ? 'w-[150px]' : 'w-[120px]'}
             `}
           >
             {currentTab && currentTab.title_en === 'counters' ? 'Дата' : '№'}
@@ -356,7 +356,7 @@ const TheDocsListComponent = () => {
               {/* Cell 1 */}
               <div className={`
                   flex-shrink-0
-                  ${currentTab && currentTab.title_en === 'bills' ? 'w-[150px]' : 'w-[50px]'}
+                  ${currentTab && currentTab.title_en === 'bills' ? 'w-[150px]' : 'w-[120px]'}
                 `}
               >
                 <div className="ps-2">
@@ -424,7 +424,7 @@ const TheDocsListComponent = () => {
               {currentTab && currentTab.title_en !== 'objects' && (
                 <div className="w-[150px] flex-shrink-0">
                   {currentTab && (currentTab.title_en === 'acts' || currentTab.title_en === 'bills') ? (
-                    <PriceFormatter amount={item.summ} />
+                    <PriceFormatter amount={item.summ} type="price" />
                   ) : currentTab && currentTab.title_en === 'counters' ? null : (
                     <span className={item.status ? getStatusClass(item.status) : ''}>
                       {item.status}

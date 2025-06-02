@@ -1,13 +1,21 @@
 import React from 'react';
 
-function Price({ amount }) {
+function Price({ amount, type }) {
+  let options = null;
+  if (type == 'price') {
+    options = {
+      style: 'currency',
+      currency: 'RUB',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }
+  } else {
+    options = {
+      useGrouping: true
+    }
+  }
   
-  const formatted = new Intl.NumberFormat('ru-RU', {
-    style: 'currency',
-    currency: 'RUB',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(amount);
+  const formatted = new Intl.NumberFormat('ru-RU', options).format(amount);
 
   return <span>{formatted}</span>;
 }

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { dataType, setDataType, setShowModal } from '@/store/slices/modalSlice';
 import { fetchSendCountersIndice, setHideCountersModal } from '@/store/slices/agreementsSlice';
+import PriceFormatter from '@/components/PriceFormatter/PriceFormatter'; 
 import { showToast } from '@/utils/notify';
 
 const CountersModal = () => {
@@ -31,20 +32,22 @@ const CountersModal = () => {
     return uniqueCounters
   } 
   
-  const counters = getCountersIds();  
-  
+  const counters = getCountersIds();    
 
   useEffect(() => {
     inputRefs.current = counters.map((counter, i) => ({
       id: counter.id,       // Сохраняем ID счетчика
-      ref: inputRefs.current[i]?.ref || null  // Сохраняем существующий ref или null
+      ref: inputRefs.current[i]?.ref || null,  // Сохраняем существующий ref или null      
+      end_indice: counter.end_indice
     }));
   }, [counters]);
 
   const getAllValues = () => {
     return inputRefs.current.map(item => ({
       id: item.id,
-      value: item.ref?.value
+      value: item.ref?.value,
+      refElement: item.ref,
+      minValue: item.end_indice
     }));
   };
   
@@ -53,25 +56,32 @@ const CountersModal = () => {
     data.filter(item => item.value != '')
     data.map(async item => {
       if (item.value != '' && item.value != 0) {
-        const response = await dispatch(fetchSendCountersIndice(item))
-        console.log(response, 'response here');        
-        if (response.payload.success) {
-          showToast('Показания счетчиков переданы!', 'success', {
+        if (Number(item.value) >= item.minValue && item.value != undefined) {
+          const response = await dispatch(fetchSendCountersIndice(item))
+    
+          if (response.payload.success) {
+            showToast('Показания счетчиков переданы!', 'success', {
+              autoClose: 5000,
+            });
+            dispatch(setHideCountersModal())
+            setTimeout(() => {
+              dispatch(setShowModal(false));
+            }, 3000);
+          } else {
+            showToast('Ошибка при передаче показаний счетчиков! ' + response.message, 'error', {
+              autoClose: 5000,
+            });
+          }
+          window.scrollTo(0, 0);
+        } else if(Number(item.value) <= item.minValue && item.value != undefined) {
+          showToast('Введите значение больше/равно предыдущему значению!', 'error', {
             autoClose: 5000,
           });
-          dispatch(setHideCountersModal())
-        } else {
-          showToast('Ошибка при передаче показаний счетчиков! ' + response.message, 'error', {
-            autoClose: 5000,
-          });
+          item.refElement.classList.add('danger_animation')
+          setTimeout(() => item.refElement.classList.remove('danger_animation'), 3000)
         }
-        window.scrollTo(0, 0);
-      }
-            
-    });
-    setTimeout(() => {
-      dispatch(setShowModal(false));
-    }, 3000);
+      }            
+    });    
   }
 
   return (
@@ -87,6 +97,9 @@ const CountersModal = () => {
           <div key={item.id} className="my-6">
             <p>{item.name}</p>
             <p><span className="text-[#787C82]">Номер прибора учета:</span>&nbsp; {item.number != '' ? item.number : 'номер не найден'}</p>
+            <p><span className="text-[#787C82]">Предыдущее значение:</span>&nbsp; 
+              {item.end_indice != '' ? <PriceFormatter amount={item.end_indice} /> : 'не найдено'}
+            </p>
             <input 
               ref={el => {
                 if (inputRefs.current[index]) {
@@ -96,7 +109,8 @@ const CountersModal = () => {
               name={`counter-${index}`}
               className="mt-4 p-5 bg-item-active w-full rounded-xl" 
               type="number"
-              min="0"
+              min={item.end_indice}
+              onWheel={(e) => e.currentTarget.blur()}
             />
           </div>
           ))          
