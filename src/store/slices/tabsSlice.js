@@ -7,7 +7,7 @@ const agreementsList = [
 ];
 const singleAgreementsList = [
   { title_ru: 'Счета', title_en: 'bills' },
-  { title_ru: 'Акты', title_en: 'acts' },
+  { title_ru: 'Закрывающие документы', title_en: 'closing_docs' },
   { title_ru: 'Показания', title_en: 'counters' },
   { title_ru: 'Объекты', title_en: 'objects' },
 ]

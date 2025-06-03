@@ -9,7 +9,7 @@ const CountersModal = () => {
   const sprite_path = './src/assets/images/i.svg';
   const dispatch = useDispatch();  
   const selectedAgreement = useSelector((state) => state.agreements_slice.selectedAgreement);
-  const inputRefs = useRef([]);
+  let inputRefs = useRef([]);
   
   let address = '';
   selectedAgreement.flatMap(contract => 
@@ -31,19 +31,22 @@ const CountersModal = () => {
     ).values());
     return uniqueCounters
   } 
-  
-  const counters = getCountersIds();    
-
+  let countersData = [];
+  const counters = getCountersIds();
   useEffect(() => {
-    inputRefs.current = counters.map((counter, i) => ({
-      id: counter.id,       // Сохраняем ID счетчика
-      ref: inputRefs.current[i]?.ref || null,  // Сохраняем существующий ref или null      
-      end_indice: counter.end_indice
-    }));
-  }, [counters]);
+    // Инициализируем refs только если массив counters изменился
+    if (counters.length !== inputRefs.length) {
+      countersData = counters.map((counter, i) => ({
+        id: counter.id,
+        ref: inputRefs[i], // Создаем новый ref для каждого элемента
+        end_indice: counter.end_indice
+      }));
+    }  
+}, [counters]); // Зависимость только от counters
 
   const getAllValues = () => {
-    return inputRefs.current.map(item => ({
+    
+    return countersData.map(item => ({
       id: item.id,
       value: item.ref?.value,
       refElement: item.ref,
@@ -51,37 +54,37 @@ const CountersModal = () => {
     }));
   };
   
-  const handleSetIndice = () => {
+  const handleSetIndice = async () => {
     const data = getAllValues();
-    data.filter(item => item.value != '')
-    data.map(async item => {
-      if (item.value != '' && item.value != 0) {
-        if (Number(item.value) >= item.minValue && item.value != undefined) {
-          const response = await dispatch(fetchSendCountersIndice(item))
+       
+    let filtered_data = data.filter(item => item.value)
     
-          if (response.payload.success) {
-            showToast('Показания счетчиков переданы!', 'success', {
-              autoClose: 5000,
-            });
-            dispatch(setHideCountersModal())
-            setTimeout(() => {
-              dispatch(setShowModal(false));
-            }, 3000);
-          } else {
-            showToast('Ошибка при передаче показаний счетчиков! ' + response.message, 'error', {
-              autoClose: 5000,
-            });
-          }
-          window.scrollTo(0, 0);
-        } else if(Number(item.value) <= item.minValue && item.value != undefined) {
-          showToast('Введите значение больше/равно предыдущему значению!', 'error', {
-            autoClose: 5000,
-          });
-          item.refElement.classList.add('danger_animation')
-          setTimeout(() => item.refElement.classList.remove('danger_animation'), 3000)
-        }
-      }            
+    filtered_data.map(item => {
+      if (Number(item.value) < item.minValue && item.value != undefined) {
+        showToast('Введите значение больше/равно предыдущему значению!', 'error', {
+          autoClose: 5000,
+        });
+        item.refElement.classList.add('danger_animation')
+        setTimeout(() => item.refElement.classList.remove('danger_animation'), 3000)
+        return;
+      }
     });    
+    const response = await dispatch(fetchSendCountersIndice(filtered_data))
+    
+    if (response.payload.success) {
+      showToast('Показания счетчиков переданы!', 'success', {
+        autoClose: 5000,
+      });
+      dispatch(setHideCountersModal())
+      setTimeout(() => {
+        dispatch(setShowModal(false));
+      }, 1000);
+    } else {
+      showToast('Ошибка при передаче показаний счетчиков! ' + response.message, 'error', {
+        autoClose: 5000,
+      });
+    }
+    window.scrollTo(0, 0);
   }
 
   return (
@@ -101,11 +104,13 @@ const CountersModal = () => {
               {item.end_indice != '' ? <PriceFormatter amount={item.end_indice} /> : 'не найдено'}
             </p>
             <input 
-              ref={el => {
-                if (inputRefs.current[index]) {
-                  inputRefs.current[index].ref = el;
-                }
-              }}
+              key={item.id}
+              ref={el => inputRefs[index] = el}
+              // ref={el => {
+              //   if (inputRefs.current[index]) {
+              //     inputRefs.current[index].ref = el;
+              //   }
+              // }}
               name={`counter-${index}`}
               className="mt-4 p-5 bg-item-active w-full rounded-xl" 
               type="number"

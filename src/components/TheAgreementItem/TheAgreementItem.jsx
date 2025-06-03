@@ -103,7 +103,8 @@ const TheAgreementItem = ({ id, number, beginDate, endDate, debt, objects, name,
                 lg:font-bold  md:text-left text-xl text-center
                 ${isDetailsShown ? 'lg:text-xl font-semibold' : 'lg:text-xl font-medium'}
               `}>
-                Договор: {name}</h3>
+                {name}
+              </h3>
               {/* <div className={`
                 ${isDetailsShown ? 'md:text-base md:mt-8' : 'lg:text-base md:mt-2'}
                 md:block
@@ -187,7 +188,7 @@ const TheAgreementItem = ({ id, number, beginDate, endDate, debt, objects, name,
                 <PriceFormatter amount={debt ?? 0} type="price" /> && (
                   <p className="xl:text-xl lg:text-base mt-2">Сумма долга: &nbsp;
                     <span className={`${debt ? 'text-red-600' : ''}`}>
-                      {debt ? '-' : ''}
+                      {debt ? '' : ''}
                       {
                         <PriceFormatter amount={debt ?? 0} type="price" />
                       }
@@ -251,7 +252,7 @@ const TheAgreementItem = ({ id, number, beginDate, endDate, debt, objects, name,
                   <div className="my-auto w-full">
                     <p className="text-nowrap">Общая сумма долга на {today}:</p>
                     <p className={`text-xl lg:mt-4 lg:mb-0 mt-2 ${debt ? 'text-red-600' : ''} font-semibold`}>
-                      {debt ? '-' : ''} 
+                      {debt ? '' : ''} 
                       <PriceFormatter amount={debt ?? 0} type="price" /> 
                     </p>
                   </div>

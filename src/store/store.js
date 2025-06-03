@@ -7,7 +7,7 @@ import requestsReducer, { fetchRequestsList } from './slices/requestsSlice';
 import userReducer from './slices/userSlice';
 import modalReducer from './slices/modalSlice';
 import authReducer, { fetchAuth } from './slices/authSlice';
-import agreementsReducer, { fetchAgreementsList } from './slices/agreementsSlice';
+import agreementsReducer, { fetchAgreementsList, fetchSendCountersIndice } from './slices/agreementsSlice';
 import loadingSlice, { setLoadingStart, setLoadingEnd } from './slices/loadingSlice';
 import countersSlice from './slices/countersSlice';
 import { fetchProfileData, invalidToken } from './slices/userSlice'; 
@@ -36,6 +36,7 @@ listenerMiddleware.startListening({
     fetchAgreementsList.pending,
     fetchRequestsList.pending,
     fetchAuth.pending,
+    fetchSendCountersIndice.pending
   ].some(creator => creator.match(action)),
   effect: (action, listenerApi) => {
     try {
@@ -51,7 +52,8 @@ listenerMiddleware.startListening({
     fetchProfileData.fulfilled,
     fetchAgreementsList.fulfilled,
     fetchRequestsList.fulfilled,
-    fetchAuth.fulfilled
+    fetchAuth.fulfilled,
+    fetchSendCountersIndice.fulfilled
   ].some(creator => creator.match(action)),
   
   effect: (action, listenerApi) => {
@@ -68,7 +70,8 @@ listenerMiddleware.startListening({
     fetchProfileData.rejected,
     fetchAgreementsList.rejected,
     fetchRequestsList.rejected,
-    fetchAuth.rejected
+    fetchAuth.rejected,
+    fetchSendCountersIndice.rejected
   ].some(creator => creator.match(action)),
   
   effect: (action, listenerApi) => {
@@ -84,43 +87,6 @@ listenerMiddleware.startListening({
     }
   },
 });
-
-// Контроль длительных запросов
-// listenerMiddleware.startListening({
-//   predicate: (action) => [
-//     fetchProfileData.pending,
-//     fetchAgreementsList.pending,
-//     fetchRequestsList.pending,
-//     fetchAuth.pending
-//   ].some(creator => creator.match(action)),
-  
-//   effect: async (action, listenerApi) => {
-//     const timeoutId = setTimeout(() => {
-//       listenerApi.dispatch(showTimeoutWarning());
-//     }, 10000);
-
-//     try {
-//       const completionActions = [
-//         fetchProfileData.fulfilled,
-//         fetchProfileData.rejected,
-//         fetchAgreementsList.fulfilled,
-//         fetchAgreementsList.rejected,
-//         fetchRequestsList.fulfilled,
-//         fetchRequestsList.rejected,
-//         fetchAuth.fulfilled,
-//         fetchAuth.rejected
-//       ];
-
-//       await listenerApi.condition((action) => 
-//         completionActions.some(creator => creator.match(action))
-//       );
-
-//     } finally {
-//       clearTimeout(timeoutId);
-//       // listenerApi.dispatch(setLoadingEnd());
-//     }
-//   },
-// });
 
 const store = configureStore({
   reducer: {

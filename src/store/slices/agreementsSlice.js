@@ -48,8 +48,7 @@ export const fetchDowloadFile = createAsyncThunk(
         }
       });
       if (!response.data.success) {
-        if (response.data.message == 'Неверный токен') { 
-          console.log('hmmmmm');
+        if (response.data.message == 'Неверный токен') {
                 
           dispatch(invalidToken());
           return rejectWithValue('Неверный токен');
@@ -74,26 +73,25 @@ const getInvoices = (agreeList) => {
 
 export const fetchSendCountersIndice = createAsyncThunk(
   'agreementsSlice/fetchSendCountersIndice',
-  async (item, { rejectWithValue }) => {
+  async (data, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token') ?? sessionStorage.getItem('token');
       if (!token) {
         window.location.href = '/login';
         throw new Error('Token not found');
       }
-      let indice_num = Number(item.value);
       
-      if (indice_num != 0 && indice_num != '') {        
-        const response = await api.get(`/setindice?token=${token}&counter=${item.id}&indice=${item.value}`,{
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-        if (!response.data.success) {
-          throw new Error(`HTTP error! status: ${response.data.status}`);
-        }
-        return await response.data;
+      let options = {
+        token: token,
+        indices: data.map(({ refElement, minValue, ...rest }) => rest)
       }
+      
+      const response = await api.post(`/setindice`, options);
+      if (!response.data.success) {
+        throw new Error(`HTTP error! status: ${response.data.status}`);
+      }
+      return await response.data;
+      
     } catch (error) {      
       console.log(error);      
       return rejectWithValue(error.message);

@@ -51,7 +51,7 @@ const TheDocsListComponent = () => {
         if (currentTab && currentTab.title_en == 'requests') {
           await dispatch(fetchRequestsList());
         }
-        // Акты
+        // Закрывающие документы
       } finally {
         setIsLoading(false);
       }
@@ -87,7 +87,7 @@ const TheDocsListComponent = () => {
           switch(currentTab.title_en) {
             case 'bills':
               return allInvoices;
-            case 'acts':
+            case 'closing_docs':
               return [{"id": "1", "descr": "descr1", "date": "4025-04-08T11:56:31"}];
             case 'counters':
               return [{"id": "2", "descr": "descr2", "date": "4025-05-09T12:46:22"}];
@@ -142,12 +142,13 @@ const TheDocsListComponent = () => {
     console.log(target, 'firstTd');
     
   }
+  
 
   return (
     (sm_breakpoint || md_breakpoint) ?      
     getList()?.map((item, index) => (
       currentRoute != "/requests" ?
-      <div key={index} className={`grid ${currentTab && currentTab.title_en == 'acts' ? '' : 'grid-cols-2'} gap-3 p-6 bg-[#FAFBFD] rounded-lg my-5`}>
+      <div key={index} className={`grid ${currentTab && currentTab.title_en == 'closing_docs' ? '' : 'grid-cols-2'} gap-3 p-6 bg-[#FAFBFD] rounded-lg my-5`}>
         <div className={`
           ${sm_breakpoint || md_breakpoint ? '' : 'flex'} 
           ${currentTab && (currentTab.title_en == 'bills' || currentTab.title_en == 'objects') ? 'text-left' : 'md:w-2/5'}
@@ -176,7 +177,7 @@ const TheDocsListComponent = () => {
             </div>                  
           }
           {
-            currentTab && currentTab.title_en == 'acts' &&
+            currentTab && currentTab.title_en == 'closing_docs' &&
             <div className={``}>
               <div className="text-nowrap"><span className="text-[#787C82]">№001:</span> Акт об оказании услуг</div>
               <div className="text-nowrap my-1">
@@ -290,7 +291,7 @@ const TheDocsListComponent = () => {
     `}>
       <div className="w-full overflow-x-auto">
         {/* Header */}
-        <div className="flex bg-item-active rounded-t-lg p-4 font-medium max-w-[600px]">
+        <div className={`flex bg-item-active rounded-t-lg p-4 font-medium ${window.innerWidth < 1280 ? 'max-w-[600px]' : ''} `}>
           {/* Column 1 */}
           <div className={`
               flex items-center ps-2 flex-shrink-0
@@ -308,7 +309,7 @@ const TheDocsListComponent = () => {
           >
             <span className="whitespace-nowrap">
               {currentTab && (currentTab.title_en === 'counters' || currentTab.title_en === 'objects') ? '' : 'Название'}
-              {currentTab && currentTab.title_en === 'acts' ? ' акта' : 
+              {currentTab && currentTab.title_en === 'closing_docs' ? ' акта' : 
               currentTab && currentTab.title_en === 'bills' ? ' счета' : 
               currentTab && currentTab.title_en === 'counters' ? ' ХВС' : 
               currentTab && currentTab.title_en === 'objects' ? 'Адрес' : ' помещения'}
@@ -331,7 +332,7 @@ const TheDocsListComponent = () => {
           {currentTab && currentTab.title_en !== 'objects' && (
             <div className="flex w-[150px] flex-shrink-0">
               <span>
-                {currentTab && (currentTab.title_en === 'acts' || currentTab.title_en === 'bills') ? 
+                {currentTab && (currentTab.title_en === 'closing_docs' || currentTab.title_en === 'bills') ? 
                 'Сумма' : currentTab && currentTab.title_en === 'counters' ? 
                 'Электроэнергия' : 'Статус'}
               </span>
@@ -339,7 +340,7 @@ const TheDocsListComponent = () => {
           )}
 
           {/* Action Column */}
-          {currentTab && currentTab.title_en !== 'objects' && (
+          {currentTab && (currentTab.title_en !== 'objects' || currentTab.title_en == 'counters') && (
             <div className="flex justify-end w-[120px] flex-shrink-0">
               {/* Empty for spacing */}
             </div>
@@ -347,7 +348,7 @@ const TheDocsListComponent = () => {
         </div>
 
         {/* Body */}
-        <div className="flex flex-col max-w-[600px]">
+        <div className={`flex flex-col  ${window.innerWidth < 1280 ? 'max-w-[600px]' : ''} `}>
           {getList()?.map((item, index) => (
             <div 
               key={index} 
@@ -371,7 +372,7 @@ const TheDocsListComponent = () => {
                   ${currentTab && currentTab.title_en === 'objects' ? 'w-[350px]' : 'w-[200px]'}
                 `}
               >
-                {currentTab && currentTab.title_en === 'acts' ? 'Акт об оказании услуг' : 
+                {currentTab && currentTab.title_en === 'closing_docs' ? 'Акт об оказании услуг' : 
                 currentTab && currentTab.title_en === 'bills' ? item.descr :
                 currentTab && currentTab.title_en === 'counters' ? (
                   <div>
@@ -395,10 +396,10 @@ const TheDocsListComponent = () => {
               </div>
 
               {/* Dynamic Cell */}
-              {currentTab && currentTab.title_en === 'acts' ? null : 
+              {currentTab && currentTab.title_en === 'closing_docs' ? null : 
               currentTab && currentTab.title_en === 'bills' ? null :
               currentTab && currentTab.title_en === 'counters' ? (
-                <div className="w-[180px] flex-shrink-0">
+                <div className="w-[200px] flex-shrink-0">
                   <div>
                     <p className="text-[#787C82]">№000001</p>
                     <p>123.45 м3</p>
@@ -423,7 +424,7 @@ const TheDocsListComponent = () => {
               {/* Cell 4 */}
               {currentTab && currentTab.title_en !== 'objects' && (
                 <div className="w-[150px] flex-shrink-0">
-                  {currentTab && (currentTab.title_en === 'acts' || currentTab.title_en === 'bills') ? (
+                  {currentTab && (currentTab.title_en === 'closing_docs' || currentTab.title_en === 'bills') ? (
                     <PriceFormatter amount={item.summ} type="price" />
                   ) : currentTab && currentTab.title_en === 'counters' ? null : (
                     <span className={item.status ? getStatusClass(item.status) : ''}>
@@ -451,7 +452,7 @@ const TheDocsListComponent = () => {
 
               {currentTab && currentTab.title_en !== 'objects' && (
                 <div className="w-[120px] flex-shrink-0 flex justify-end pe-5">
-                  {currentRoute === '/requests' ? (
+                  {currentRoute === '/requests' || (currentTab && currentTab.title_en == 'counters') ? (
                     item.file && (
                       <div className="flex group relative">
                         <svg className="w-6 h-6 text-gray-300 stroke-1 outline-0 me-3 self-center">
@@ -462,7 +463,7 @@ const TheDocsListComponent = () => {
                   ) : (
                     <button 
                       className="btn-success px-4 py-2 text-sm"
-                      disabled={currentTab && ((currentTab.title_en === 'bills' && item.status === 'payd') || currentTab.title_en === 'acts')}
+                      disabled={currentTab && ((currentTab.title_en === 'bills' && item.status === 'payd') || currentTab.title_en === 'closing_docs')}
                     >
                       {currentTab && currentTab.title_en === 'bills' ? 
                       (item.status === 'payd' ? 'Оплачено' : 'Оплатить') : 'Скачать'}
