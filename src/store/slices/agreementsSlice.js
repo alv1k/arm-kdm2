@@ -70,6 +70,17 @@ const getInvoices = (agreeList) => {
   const allInvoices = agreeList.invoices.map(invoice => invoice || []);  
   return allInvoices;
 }
+const getCounters = (agreeList) => {
+  const allCounters = [];
+  agreeList.objects.flatMap(object => {
+    object.services.map(service => {
+      service.counters.map(counter => {
+        allCounters.push(counter)        
+      })
+    })
+  });
+  return allCounters;
+}
 
 export const fetchSendCountersIndice = createAsyncThunk(
   'agreementsSlice/fetchSendCountersIndice',
@@ -129,6 +140,7 @@ const agreementsSlice = createSlice({
     allObjects: null,
     agreementObjects: null,
     allInvoices: null,
+    allCounters: null,
     page404: false,
   },
   reducers: {
@@ -140,7 +152,8 @@ const agreementsSlice = createSlice({
     },
     setAgreementsList: (state, action) => {
       state.selectedAgreement = [action.payload]
-      state.allInvoices = getInvoices(action.payload) 
+      state.allInvoices = getInvoices(action.payload)
+      state.allCounters = getCounters(action.payload)
       state.agreementObjects = action.payload.objects
       .filter(object => object)
       .filter((object, index, self) => 

@@ -23,9 +23,10 @@ const TheDocsListComponent = () => {
   const navigate = useNavigate();
   
   const allInvoices = useSelector((state) => state.agreements_slice.allInvoices)  
+  const allCounters = useSelector((state) => state.agreements_slice.allCounters)  
   const allObjects = useSelector((state) => state.agreements_slice.allObjects)
   const error = useSelector(state => state.user_slice.error);
-  const agreementObjects = useSelector((state) => state.agreements_slice.agreementObjects);
+  const agreementObjects = useSelector((state) => state.agreements_slice.agreementObjects);  
     
   const location = useLocation();
   const currentRoute = location.pathname;
@@ -66,7 +67,6 @@ const TheDocsListComponent = () => {
     }, [error, navigate]);
 
   const getFileName = (fileName) => {
-    console.log('123');
     return 'name.pdf'
   }
 
@@ -90,7 +90,17 @@ const TheDocsListComponent = () => {
             case 'closing_docs':
               return [{"id": "1", "descr": "descr1", "date": "4025-04-08T11:56:31"}];
             case 'counters':
-              return [{"id": "2", "descr": "descr2", "date": "4025-05-09T12:46:22"}];
+              let sorted = [[]]
+              allCounters.map((counter) => {
+                if (counter.name.includes('ХВС')) {
+                  sorted[0].push(counter);
+                } else if (counter.name.includes('ГВС')) {
+                  sorted[0].push(counter);
+                } else {
+                  sorted[0].push(counter);
+                }
+              })
+              return sorted;
             case 'objects':
               return agreementObjects;
           }
@@ -361,7 +371,7 @@ const TheDocsListComponent = () => {
                 `}
               >
                 <div className="ps-2">
-                  {currentTab && currentTab.title_en === 'counters' ? '01.01.2011' : 
+                  {currentTab && currentTab.title_en === 'counters' && item[0] ? item[0].end_date : 
                   currentTab.title_en === 'objects' ? index + 1 : item.number}
                 </div>
               </div>
@@ -372,12 +382,15 @@ const TheDocsListComponent = () => {
                   ${currentTab && currentTab.title_en === 'objects' ? 'w-[350px]' : 'w-[200px]'}
                 `}
               >
+                
                 {currentTab && currentTab.title_en === 'closing_docs' ? 'Акт об оказании услуг' : 
                 currentTab && currentTab.title_en === 'bills' ? item.descr :
                 currentTab && currentTab.title_en === 'counters' ? (
-                  <div>
-                    <p className="text-[#787C82]">№000001</p>
-                    <p>123.45 м3</p>
+                  
+                  
+                  <div key={item[0] ? item[0].id : ''}>
+                    <p className="text-[#787C82]">№{item[0] ? item[0].number : ''}</p>
+                    <p>{item[0] ? item[0].end_indice : ''} м3</p>
                   </div>
                 ) : currentTab && currentTab.title_en === 'objects' ? (
                   <div>{item.name}</div>
@@ -399,10 +412,10 @@ const TheDocsListComponent = () => {
               {currentTab && currentTab.title_en === 'closing_docs' ? null : 
               currentTab && currentTab.title_en === 'bills' ? null :
               currentTab && currentTab.title_en === 'counters' ? (
-                <div className="w-[200px] flex-shrink-0">
-                  <div>
-                    <p className="text-[#787C82]">№000001</p>
-                    <p>123.45 м3</p>
+                <div className="w-[200px] flex-shrink-0">                  
+                  <div key={item[1] ? item[1].id : ''}>
+                    <p className="text-[#787C82]">№{item[1] ? item[1].number : ''}</p>
+                    <p>{item[1] ? item[1].end_indice : ''} м3</p>
                   </div>
                 </div>
               ) : (
@@ -413,9 +426,9 @@ const TheDocsListComponent = () => {
               {currentTab && currentTab.title_en !== 'objects' && (
                 <div className={`${currentRoute === '/requests' ? 'w-[150px]' : 'w-[200px]'} flex-shrink-0`}>
                   {currentTab && currentTab.title_en === 'counters' ? (
-                    <div>
-                      <p className="text-[#787C82]">№000001</p>
-                      <p>123.45 кВтч</p>
+                    <div key={item[2] ? item[2].id : ''}>
+                      <p className="text-[#787C82]">№{item[2] ? item[2].number : ''}</p>
+                      <p>{item[2] ? item[2].end_indice : ''} м3</p>
                     </div>
                   ) : item.date && <DateFormatter dateString={item.date} />}
                 </div>

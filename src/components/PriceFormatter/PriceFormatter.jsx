@@ -6,8 +6,8 @@ function Price({ amount, type }) {
     options = {
       style: 'currency',
       currency: 'RUB',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
+      // minimumFractionDigits: 0,
+      // maximumFractionDigits: 0,
     }
   } else {
     options = {

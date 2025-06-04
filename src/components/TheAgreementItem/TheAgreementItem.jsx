@@ -181,7 +181,7 @@ const TheAgreementItem = ({ id, number, beginDate, endDate, debt, objects, name,
                     `}>
                       Ежемес{isDetailsShown && sm_breakpoint ? '.' : 'ячный'} платеж{isDetailsShown && sm_breakpoint ? '' : ' по договору'}:&nbsp;
                     </span>
-                    <span className="lg:inline mt-1"><PriceFormatter amount={monthly} /></span>
+                    <span className="lg:inline mt-1"><PriceFormatter amount={monthly} type="price" /></span>
                   </div>
                 </div>
                 : 
