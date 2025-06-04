@@ -15,7 +15,7 @@ import { showToast } from '@/utils/notify';
 
 //Middleware для обработки API ошибок
 const tokenErrorMiddleware = store => next => action => {
-  if (action.type.endsWith('rejected') && action.payload?.message === 'Неверный токен') {
+  if (action?.type?.endsWith('rejected') && action.payload?.message === 'Неверный токен') {
     store.dispatch(invalidToken());
     showToast('Неверный токен! Пожалуйста, войдите снова', 'error', { autoClose: 5000 });
   }
@@ -24,7 +24,7 @@ const tokenErrorMiddleware = store => next => action => {
 
 // Middleware для логирования действий
 const loggingMiddleware = (store) => (next) => (action) => {
-  console.log('Dispatching:', action.type);
+  console.log('Dispatching:', action.type);  
   return next(action);
 };
 

@@ -145,7 +145,18 @@ const TheDocsListComponent = () => {
     } catch (error) {
       console.error("Ошибка загрузки файла:", error);
     }  
-  }    
+  }
+
+  const requestFileDownloadHandler = async (e, file) => {  
+    try {
+      await downloadBase64PDF(file.dataUrl, file.name)
+    } catch {
+      dispatch({
+        type: 'DOWNLOAD_FILE_ERROR',
+        payload: error.message
+      });
+    }    
+  }
 
   const handleSort = (target) => {
     //ASC DESC
@@ -464,13 +475,27 @@ const TheDocsListComponent = () => {
               )}
 
               {currentTab && currentTab.title_en !== 'objects' && (
-                <div className="w-[120px] flex-shrink-0 flex justify-end pe-5">
+                <div className="w-[120px] flex-shrink-0 flex justify-start ">
                   {currentRoute === '/requests' || (currentTab && currentTab.title_en == 'counters') ? (
-                    item.file && (
-                      <div className="flex group relative">
-                        <svg className="w-6 h-6 text-gray-300 stroke-1 outline-0 me-3 self-center">
-                          <use href={`${sprite_path}#clip-icon`} />
-                        </svg>
+                    item.files && (
+                      <div className="flex group relative text-[#4c515a] ">
+                        <div className="overflow-hidden text-nowrap">
+                          {item.files.map((file, index) => (
+                            <div className="flex mt-1" key={index}>
+                              <svg className="w-6 h-6 text-gray-300 stroke-1 outline-0 me-3 self-center">
+                                <use href={`${sprite_path}#clip-icon`} />
+                              </svg>
+                              <span 
+                                key={index}
+                                className=" cursor-pointer hover:text-[#232427] block"
+                                title={file.name}
+                                onClick={(e) => requestFileDownloadHandler(e, {dataUrl: file.dataUrl, name: file.name})}
+                              >
+                                {index + 1}. {file.name}{index !== item.files.length - 1 && ","}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     )
                   ) : (

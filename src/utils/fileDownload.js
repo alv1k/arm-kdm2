@@ -12,6 +12,7 @@ function splitBase64(base64String) {
 }
 
 export async function downloadBase64PDF(base64String, filename = 'document') {
+  
   if (typeof base64String !== 'string') {
     throw new Error('Input must be a string');
   }  
@@ -39,7 +40,7 @@ export async function downloadBase64PDF(base64String, filename = 'document') {
     
     const a = document.createElement('a');
     a.href = url;
-    a.download = filename + type;
+    a.download = filename + (filename.includes(type) ? '' : type);
     document.body.appendChild(a);
     a.click();
     
