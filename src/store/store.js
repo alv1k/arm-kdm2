@@ -75,6 +75,8 @@ listenerMiddleware.startListening({
   ].some(creator => creator.match(action)),
   
   effect: (action, listenerApi) => {
+    console.log(action, listenerApi, 'listenerApilistenerApilistenerApi');
+    
     try {
       console.error('Request failed:', action.error);
       listenerApi.dispatch({

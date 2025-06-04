@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { dataType, setDataType, setShowModal } from '@/store/slices/modalSlice';
+import { dataType, setDataType } from '@/store/slices/modalSlice';
 import { fetchSendCountersIndice, setHideCountersModal } from '@/store/slices/agreementsSlice';
+import { invalidToken } from '@/store/slices/userSlice';
 import PriceFormatter from '@/components/PriceFormatter/PriceFormatter'; 
 import { showToast } from '@/utils/notify';
 
@@ -10,6 +11,7 @@ const CountersModal = () => {
   const dispatch = useDispatch();  
   const selectedAgreement = useSelector((state) => state.agreements_slice.selectedAgreement);
   let inputRefs = useRef([]);
+  const [validData, setValidData] = useState(false);
   
   let address = '';
   selectedAgreement.flatMap(contract => 
@@ -59,31 +61,39 @@ const CountersModal = () => {
        
     let filtered_data = data.filter(item => item.value)
     
-    filtered_data.map(item => {
+    for (const item of filtered_data) {
       if (Number(item.value) < item.minValue && item.value != undefined) {
         showToast('Введите значение больше/равно предыдущему значению!', 'error', {
           autoClose: 5000,
         });
-        item.refElement.classList.add('danger_animation')
-        setTimeout(() => item.refElement.classList.remove('danger_animation'), 3000)
-        return;
+        item.refElement.classList.add('danger_animation');
+        setTimeout(() => item.refElement.classList.remove('danger_animation'), 3000);
+        setValidData(false);
+      } else {
+        setValidData(true);
       }
-    });    
-    const response = await dispatch(fetchSendCountersIndice(filtered_data))
+    }
+    
+    const response = validData ? await dispatch(fetchSendCountersIndice(filtered_data)) : showToast('Данные не верны, проверьте данные!', 'error', {
+      autoClose: 5000,
+    });;
     
     if (response.payload.success) {
       showToast('Показания счетчиков переданы!', 'success', {
         autoClose: 5000,
       });
-      dispatch(setHideCountersModal())
       setTimeout(() => {
-        dispatch(setShowModal(false));
+        // dispatch(setHideCountersModal());          
+        dispatch(setShowModal());
       }, 1000);
     } else {
-      showToast('Ошибка при передаче показаний счетчиков! ' + response.message, 'error', {
+      dispatch(invalidToken());
+      window.location.href = '/login';
+      showToast('Ошибка при передаче показаний счетчиков! ' + response.payload, 'error', {
         autoClose: 5000,
       });
-    }
+    };    
+    
     window.scrollTo(0, 0);
   }
 
