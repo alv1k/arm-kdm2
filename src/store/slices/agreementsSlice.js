@@ -31,6 +31,34 @@ export const fetchAgreementsList = createAsyncThunk(
   }
 );
 
+export const fetchAgreementsAccruals = createAsyncThunk(
+  'agreementsSlice/fetchAgreementsAccruals',
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token') ?? sessionStorage.getItem('token');
+      if (!token) {
+        window.location.href = '/login';
+        throw new Error('Token not found');
+      }
+      
+      const response = await api.get(`/accruals?token=${token}`,{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (!response.data.success) {
+        localStorage.removeItem('token')
+        sessionStorage.removeItem('token');
+        document.cookie = 'token=; Max-Age=0; path=/;';
+        window.location.href = '/login';
+        throw new Error(`HTTP error! status: ${response.data.status}`);
+      }
+      return await response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 export const fetchDowloadFile = createAsyncThunk(
   'agreementsSlice/fetchDowloadFile',
   async (_, { rejectWithValue }) => {
@@ -135,6 +163,7 @@ const agreementsSlice = createSlice({
         num: 'num456'
       },
     ],
+    accruals: [],
     selectedAgreement: [],
     fileToDownload: null,
     allObjects: null,
@@ -186,6 +215,19 @@ const agreementsSlice = createSlice({
       })
       .addCase(fetchAgreementsList.rejected, (state, action) => {
         state.error = action.payload || 'Failed to fetch agreements';
+        state.page404 = true;
+      })
+      .addCase(fetchAgreementsAccruals.fulfilled, (state, action) => {
+        state.accruals = action.payload; // Сохраняем загруженные данные в accruals
+        state.allObjects = getObjects(action.payload)
+        state.page404 = false;       
+      })
+      .addCase(fetchAgreementsAccruals.pending, (state) => {
+        state.error = null;
+        state.page404 = false;
+      })
+      .addCase(fetchAgreementsAccruals.rejected, (state, action) => {
+        state.error = action.payload || 'Failed to fetch accruals';
         state.page404 = true;
       })
       .addCase(fetchDowloadFile.fulfilled, (state, action) => {

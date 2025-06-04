@@ -213,15 +213,14 @@ const NewRequestPage = () => {
       // Формируем данные для отправки
       const filesToSend = processedFiles.map(file => ({
         fileName: file.name,
-        fileData: file.base64 // Полная base64 строка
+        fileData: file.base64, // Полная base64 строка
+        fileSize: file.size,
       }));
 
       console.log('Файлы для отправки:', filesToSend);
       setSelectedFiles(filesToSend);
       setUploadedFiles(filesToSend);
 
-      // Отправка на бэкенд (пример)
-      // await api.post('/upload', { files: filesToSend });
 
     } catch (error) {
       console.error('Ошибка загрузки:', error.message);
@@ -316,7 +315,7 @@ const NewRequestPage = () => {
           value={requestDescr}
           onChange={(e) => handleRequestDescrChange(e)}
         ></textarea>
-        <p className="text-[#787C82] md:mt-2">Прикрепить файлы. (*.jpeg, *.jpg, *.png, *.pdf) - каждый весом не более 3 MB</p>
+        <p className="text-[#787C82] md:mt-2">Прикрепить файлы, максимум 5 (*.jpeg, *.jpg, *.png, *.pdf)<br /> Каждый весом не более 3 MB</p>
         <div className="
           md:w-fit md:flex md:p-5 md:flex-row-reverse md:items-start
           w-full rounded-lg px-5 py-3 mb-1 bg-item-active text-center items-center

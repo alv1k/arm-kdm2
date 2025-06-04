@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { hideNavbar } from '@/store/slices/navbarSlice';
 import { toggleTabs  } from '@/store/slices/tabsSlice';
-import { isShowDetails, selectedAgreement, agreementsStoreList, showDetails, hideDetails, setAgreementsList, fetchAgreementsList, isShowCountersModal, isShowPaymentModal } from '@/store/slices/agreementsSlice';
+import { isShowDetails, selectedAgreement, agreementsStoreList, showDetails, hideDetails, setAgreementsList, fetchAgreementsList, fetchAgreementsAccruals, isShowCountersModal, isShowPaymentModal } from '@/store/slices/agreementsSlice';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
 import TheSkeleton from '@/components/TheSkeleton/TheSkeleton';
 import styles from './AgreementsPage.module.css';
@@ -32,7 +32,7 @@ const AgreementsPage = () => {
   
   useEffect(() => {
     dispatch(fetchAgreementsList());
-    console.log(currentAgreement, 'selectedAgreement???');
+    dispatch(fetchAgreementsAccruals());
     
     dispatch(toggleTabs({
       type: isDetailsShown ? 'singleAgreement' : 'agreementsList', 

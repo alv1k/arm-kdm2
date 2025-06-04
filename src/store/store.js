@@ -7,7 +7,7 @@ import requestsReducer, { fetchRequestsList } from './slices/requestsSlice';
 import userReducer from './slices/userSlice';
 import modalReducer from './slices/modalSlice';
 import authReducer, { fetchAuth } from './slices/authSlice';
-import agreementsReducer, { fetchAgreementsList, fetchSendCountersIndice } from './slices/agreementsSlice';
+import agreementsReducer, { fetchAgreementsList, fetchAgreementsAccruals, fetchSendCountersIndice } from './slices/agreementsSlice';
 import loadingSlice, { setLoadingStart, setLoadingEnd } from './slices/loadingSlice';
 import countersSlice from './slices/countersSlice';
 import { fetchProfileData, invalidToken } from './slices/userSlice'; 
@@ -34,6 +34,7 @@ listenerMiddleware.startListening({
   predicate: (action) => [
     fetchProfileData.pending,
     fetchAgreementsList.pending,
+    fetchAgreementsAccruals.pending,
     fetchRequestsList.pending,
     fetchAuth.pending,
     fetchSendCountersIndice.pending
@@ -51,6 +52,7 @@ listenerMiddleware.startListening({
   predicate: (action) => [
     fetchProfileData.fulfilled,
     fetchAgreementsList.fulfilled,
+    fetchAgreementsAccruals.fulfilled,
     fetchRequestsList.fulfilled,
     fetchAuth.fulfilled,
     fetchSendCountersIndice.fulfilled
@@ -69,14 +71,13 @@ listenerMiddleware.startListening({
   predicate: (action) => [
     fetchProfileData.rejected,
     fetchAgreementsList.rejected,
+    fetchAgreementsAccruals.rejected,
     fetchRequestsList.rejected,
     fetchAuth.rejected,
     fetchSendCountersIndice.rejected
   ].some(creator => creator.match(action)),
   
-  effect: (action, listenerApi) => {
-    console.log(action, listenerApi, 'listenerApilistenerApilistenerApi');
-    
+  effect: (action, listenerApi) => {    
     try {
       console.error('Request failed:', action.error);
       listenerApi.dispatch({

@@ -303,12 +303,34 @@ const TheDocsListComponent = () => {
               </div>
             }
           </div>
+          {
+            item.files && (
+              <div className="flex relative text-[#4c515a] ">
+                <svg className="w-6 h-6 text-gray-300 stroke-1 outline-0 me-3 self-center">
+                  <use href={`${sprite_path}#clip-icon`} />
+                </svg>
+                <div className="flex gap-2 overflow-auto">
+                  {item.files.map((file, index) => (
+                    <div className="flex mt-1" key={index}>
+                      <span                                 
+                        className=" cursor-pointer hover:text-[#232427] block"
+                        title={file.name}
+                        onClick={(e) => requestFileDownloadHandler(e, {dataUrl: file.dataUrl, name: file.name})}
+                      >
+                        {index + 1}. {file.name}{index !== item.files.length - 1 && ","}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )
+          }
         </div>
       </div> 
     ))
     :
     <div className={`
-      flex bg-[#FAFBFD] rounded-lg my-5 lg:p-0 p-5
+      flex bg-[#FAFBFD] rounded-lg my-5 lg:p-0 p-5 min-h-[50vh]
     `}>
       <div className="w-full overflow-x-auto">
         {/* Header */}
@@ -369,7 +391,7 @@ const TheDocsListComponent = () => {
         </div>
 
         {/* Body */}
-        <div className={`flex flex-col  ${window.innerWidth < 1280 ? 'max-w-[600px]' : ''} `}>
+        <div className={`flex flex-col ${window.innerWidth < 1280 ? 'max-w-[600px]' : ''} `}>
           {getList()?.map((item, index) => (
             <div 
               key={index} 
@@ -479,14 +501,16 @@ const TheDocsListComponent = () => {
                   {currentRoute === '/requests' || (currentTab && currentTab.title_en == 'counters') ? (
                     item.files && (
                       <div className="flex group relative text-[#4c515a] ">
-                        <div className="overflow-hidden text-nowrap">
+                        <svg className="w-6 h-6 text-gray-300 stroke-1 outline-0 me-3 self-center">
+                          <use href={`${sprite_path}#clip-icon`} />
+                        </svg>
+                        <span>
+                          файлы
+                        </span>
+                        <div className="absolute z-10 hidden group-hover:block hover:block bg-white shadow-md text-base rounded-b-xl rounded-tl-xl p-5 top-full right-0 min-w-full text-nowrap">
                           {item.files.map((file, index) => (
                             <div className="flex mt-1" key={index}>
-                              <svg className="w-6 h-6 text-gray-300 stroke-1 outline-0 me-3 self-center">
-                                <use href={`${sprite_path}#clip-icon`} />
-                              </svg>
-                              <span 
-                                key={index}
+                              <span                                 
                                 className=" cursor-pointer hover:text-[#232427] block"
                                 title={file.name}
                                 onClick={(e) => requestFileDownloadHandler(e, {dataUrl: file.dataUrl, name: file.name})}
