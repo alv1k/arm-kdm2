@@ -271,7 +271,7 @@ const TheDocsListComponent = () => {
       </div>
       :
       <div key={index} className={`${currentTab && (currentTab == 'all_requests' || currentTab == 'my_requests')  ? 'md:ps-3' : ''}  mt-6 bg-item-default rounded-xl p-4 md:flex block`}>
-        <div>
+        <div className="w-full">
           <p className="mb-2"><span className="text-[#787C82] text-nowrap">№ 001.&nbsp;</span>{item.object}</p>
           <div className="text-nowrap"><span className="text-[#787C82]">Тема:&nbsp;</span>{item.type}</div>
           <div className="text-nowrap my-1 md:flex block gap-5">
@@ -305,15 +305,15 @@ const TheDocsListComponent = () => {
           </div>
           {
             item.files && (
-              <div className="flex relative text-[#4c515a] ">
-                <svg className="w-6 h-6 text-gray-300 stroke-1 outline-0 me-3 self-center">
+              <div className="flex relative text-[#4c515a]">
+                <svg className="w-6 h-6 flex-shrink-0 text-gray-300 stroke-1 outline-0 me-3 mt-2 self-top">
                   <use href={`${sprite_path}#clip-icon`} />
                 </svg>
-                <div className="flex gap-2 overflow-auto">
+                <div className="gap-2 overflow-hidden">
                   {item.files.map((file, index) => (
-                    <div className="flex mt-1" key={index}>
-                      <span                                 
-                        className=" cursor-pointer hover:text-[#232427] block"
+                    <div className="mt-1" key={index}>
+                      <span
+                        className="w-[280px] block cursor-pointer hover:text-[#232427] truncate"
                         title={file.name}
                         onClick={(e) => requestFileDownloadHandler(e, {dataUrl: file.dataUrl, name: file.name})}
                       >
