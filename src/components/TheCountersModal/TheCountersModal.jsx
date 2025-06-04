@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { dataType, setDataType } from '@/store/slices/modalSlice';
+import { setDataType, setShowModal } from '@/store/slices/modalSlice';
 import { fetchSendCountersIndice, setHideCountersModal } from '@/store/slices/agreementsSlice';
 import { invalidToken } from '@/store/slices/userSlice';
 import PriceFormatter from '@/components/PriceFormatter/PriceFormatter'; 
@@ -74,25 +74,27 @@ const CountersModal = () => {
       }
     }
     
-    const response = validData ? await dispatch(fetchSendCountersIndice(filtered_data)) : showToast('Данные не верны, проверьте данные!', 'error', {
-      autoClose: 5000,
-    });;
-    
-    if (response.payload.success) {
-      showToast('Показания счетчиков переданы!', 'success', {
-        autoClose: 5000,
-      });
-      setTimeout(() => {
-        // dispatch(setHideCountersModal());          
-        dispatch(setShowModal());
-      }, 1000);
-    } else {
-      dispatch(invalidToken());
-      window.location.href = '/login';
-      showToast('Ошибка при передаче показаний счетчиков! ' + response.payload, 'error', {
-        autoClose: 5000,
-      });
-    };    
+    if (validData) {
+      const response = await dispatch(fetchSendCountersIndice(filtered_data));
+
+      if (response && response.payload.success) {
+        showToast('Показания счетчиков переданы!', 'success', {
+          autoClose: 5000,
+        });
+        setTimeout(() => {
+          // dispatch(setHideCountersModal());          
+          dispatch(setShowModal());
+        }, 1000);
+      } else {
+        console.log('check error');
+
+        dispatch(invalidToken());
+        window.location.href = '/login';
+        showToast('Ошибка при передаче показаний счетчиков! ' + response.payload, 'error', {
+          autoClose: 5000,
+        });
+      };    
+    }
     
     window.scrollTo(0, 0);
   }
