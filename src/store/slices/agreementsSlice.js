@@ -170,6 +170,7 @@ const agreementsSlice = createSlice({
     agreementObjects: null,
     allInvoices: null,
     allCounters: null,
+    allClosingDocs: null,
     page404: false,
   },
   reducers: {
@@ -184,10 +185,10 @@ const agreementsSlice = createSlice({
       state.allInvoices = getInvoices(action.payload)
       state.allCounters = getCounters(action.payload)
       state.agreementObjects = action.payload.objects
-      .filter(object => object)
-      .filter((object, index, self) => 
-        index === self.findIndex(o => o.id === object.id)
-      );
+        .filter(object => object)
+          .filter((object, index, self) => 
+            index === self.findIndex(o => o.id === object.id)
+          );
     },
     setShowCountersModal: (state) => {
       state.isShowCountersModal = true
@@ -219,8 +220,8 @@ const agreementsSlice = createSlice({
       })
       .addCase(fetchAgreementsAccruals.fulfilled, (state, action) => {
         state.accruals = action.payload; // Сохраняем загруженные данные в accruals
-        state.allObjects = getObjects(action.payload)
-        state.page404 = false;       
+        state.allClosingDocs = action.payload
+        state.page404 = false;
       })
       .addCase(fetchAgreementsAccruals.pending, (state) => {
         state.error = null;

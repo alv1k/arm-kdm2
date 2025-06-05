@@ -25,6 +25,9 @@ const TheDocsListComponent = () => {
   const allInvoices = useSelector((state) => state.agreements_slice.allInvoices)  
   const allCounters = useSelector((state) => state.agreements_slice.allCounters)  
   const allObjects = useSelector((state) => state.agreements_slice.allObjects)
+  const allClosingDocs = useSelector((state) => state.agreements_slice.allClosingDocs)
+  const selectedAgreement = useSelector((state) => state.agreements_slice.selectedAgreement);
+  
   const error = useSelector(state => state.user_slice.error);
   const agreementObjects = useSelector((state) => state.agreements_slice.agreementObjects);  
     
@@ -87,8 +90,14 @@ const TheDocsListComponent = () => {
           switch(currentTab.title_en) {
             case 'bills':
               return allInvoices;
-            case 'closing_docs':
-              return [{"id": "1", "descr": "descr1", "date": "4025-04-08T11:56:31"}];
+            case 'closing_docs':              
+              let sortedDocs = []
+              allClosingDocs.map((doc) => {                
+                if (doc?.agree == selectedAgreement[0].id) {
+                  sortedDocs.push(doc);
+                }
+              })
+              return sortedDocs;
             case 'counters':
               let sorted = [[]]
               allCounters.map((counter) => {
@@ -314,7 +323,6 @@ const TheDocsListComponent = () => {
                     <div className="mt-1" key={index}>
                       <span
                         className="w-[280px] block cursor-pointer hover:text-[#232427] truncate"
-                        title={file.name}
                         onClick={(e) => requestFileDownloadHandler(e, {dataUrl: file.dataUrl, name: file.name})}
                       >
                         {index + 1}. {file.name}{index !== item.files.length - 1 && ","}
@@ -416,11 +424,8 @@ const TheDocsListComponent = () => {
                 `}
               >
                 
-                {currentTab && currentTab.title_en === 'closing_docs' ? 'Акт об оказании услуг' : 
-                currentTab && currentTab.title_en === 'bills' ? item.descr :
-                currentTab && currentTab.title_en === 'counters' ? (
-                  
-                  
+                {currentTab && (currentTab.title_en === 'closing_docs' || currentTab.title_en === 'bills') ? item.descr : currentTab && currentTab.title_en === 'counters' ? (
+                
                   <div key={item[0] ? item[0].id : ''}>
                     <p className="text-[#787C82]">№{item[0] ? item[0].number : ''}</p>
                     <p>{item[0] ? item[0].end_indice : ''} м3</p>
@@ -470,7 +475,8 @@ const TheDocsListComponent = () => {
               {/* Cell 4 */}
               {currentTab && currentTab.title_en !== 'objects' && (
                 <div className="w-[150px] flex-shrink-0">
-                  {currentTab && (currentTab.title_en === 'closing_docs' || currentTab.title_en === 'bills') ? (
+                  {currentTab && currentTab.title_en === 'closing_docs' ? null :
+                  currentTab && currentTab.title_en === 'bills' ? (
                     <PriceFormatter amount={item.summ} type="price" />
                   ) : currentTab && currentTab.title_en === 'counters' ? null : (
                     <span className={item.status ? getStatusClass(item.status) : ''}>
@@ -496,9 +502,9 @@ const TheDocsListComponent = () => {
                 </div>
               )}
 
-              {currentTab && currentTab.title_en !== 'objects' && (
+              {currentTab && (currentTab.title_en !== 'objects' || currentTab.title_en == 'closing_docs') && (
                 <div className="w-[120px] flex-shrink-0 flex justify-start ">
-                  {currentRoute === '/requests' || (currentTab && currentTab.title_en == 'counters') ? (
+                  {currentRoute === '/requests' || (currentTab && currentTab.title_en == 'counters' || currentTab.title_en == 'closing_docs') ? (
                     item.files && (
                       <div className="flex group relative text-[#4c515a] ">
                         <svg className="w-6 h-6 text-gray-300 stroke-1 outline-0 me-3 self-center">
@@ -507,15 +513,14 @@ const TheDocsListComponent = () => {
                         <span>
                           файлы
                         </span>
-                        <div className="absolute z-10 hidden group-hover:block hover:block bg-white shadow-md text-base rounded-b-xl rounded-tl-xl p-5 top-full right-0 min-w-full text-nowrap">
+                        <div className="absolute z-10 hidden group-hover:block hover:block bg-white shadow-md text-base rounded-b-xl rounded-tl-xl p-5 top-full right-0 min-w-full">
                           {item.files.map((file, index) => (
                             <div className="flex mt-1" key={index}>
                               <span                                 
-                                className=" cursor-pointer hover:text-[#232427] block"
-                                title={file.name}
+                                className="w-full cursor-pointer hover:text-[#232427] block truncate"
                                 onClick={(e) => requestFileDownloadHandler(e, {dataUrl: file.dataUrl, name: file.name})}
                               >
-                                {index + 1}. {file.name}{index !== item.files.length - 1 && ","}
+                                {index + 1}. {file.name ?? file.type}{index !== item.files.length - 1 && ","}
                               </span>
                             </div>
                           ))}
