@@ -99,16 +99,34 @@ const TheDocsListComponent = () => {
               })
               return sortedDocs;
             case 'counters':
-              let sorted = [[]]
-              allCounters.map((counter) => {
-                if (counter.name.includes('ХВС')) {
-                  sorted[0].push(counter);
-                } else if (counter.name.includes('ГВС')) {
-                  sorted[0].push(counter);
+              // Получаем все уникальные даты
+              const uniqueDates = [...new Set(allCounters.map(counter => counter.end_date))];
+
+              // Инициализируем sorted массив
+              const sorted = uniqueDates.map(() => []);
+
+              allCounters.forEach(counter => {
+                if (md_breakpoint || sm_breakpoint) {
+                  // Мобильная версия - все в первом подмассиве
+                  if (sorted[0]) {
+                    sorted[0].push(counter);
+                  }
                 } else {
-                  sorted[0].push(counter);
+                  // Десктопная версия - группировка по дате и категории
+                  const dateIndex = uniqueDates.indexOf(counter.end_date);
+                  if (dateIndex !== -1) {
+                    const category = counter.name.includes('ХВС') ? 0 :
+                                  counter.name.includes('ГВС') ? 1 : 2;
+                    
+                    if (!sorted[dateIndex][category]) {
+                      sorted[dateIndex][category] = [];
+                    }
+                    sorted[dateIndex][category].push(counter);
+                  }
                 }
-              })
+              });
+              console.log(sorted, 'sorted');
+              
               return sorted;
             case 'objects':
               return agreementObjects;
@@ -172,6 +190,16 @@ const TheDocsListComponent = () => {
     console.log(target, 'firstTd');
     
   }
+
+  const getCounterName = (name) => {
+    if (name.includes('ГВС')) {
+      return 'ГВС';
+    } else if (name.includes('ХВС')) {
+      return 'ХВС';
+    } else if (name.includes('Э/Э')) {
+      return 'Э/Э';
+    }
+  }
   
 
   return (
@@ -181,15 +209,15 @@ const TheDocsListComponent = () => {
       <div key={index} className={`grid ${currentTab && currentTab.title_en == 'closing_docs' ? '' : 'grid-cols-2'} gap-3 p-6 bg-[#FAFBFD] rounded-lg my-5`}>
         <div className={`
           ${sm_breakpoint || md_breakpoint ? '' : 'flex'} 
-          ${currentTab && (currentTab.title_en == 'bills' || currentTab.title_en == 'objects') ? 'text-left' : 'md:w-2/5'}
+          ${currentTab && (currentTab.title_en == 'bills' || currentTab.title_en == 'objects') ? 'text-left' : ''}
           ${currentTab && currentTab.title_en == 'objects' ? 'col-span-2 md:mb-4' : ''}
         `}>
           {
             currentTab && currentTab.title_en == 'bills' &&
             <div className="md:pe-3">
-              <div className="mb-1 text-nowrap">№001. Счет за аренду</div>
+              <div className="mb-1 text-nowrap truncate">№{item.number}. {item.descr}</div>
               <div>
-                <span className="text-[#787C82]">Дата:</span> 
+                <span className="text-[#787C82]">Дата: </span> 
                 {item.date &&  <DateFormatter dateString={item.date} /> }
               </div>
               <button 
@@ -209,21 +237,42 @@ const TheDocsListComponent = () => {
           {
             currentTab && currentTab.title_en == 'closing_docs' &&
             <div className={``}>
-              <div className="text-nowrap"><span className="text-[#787C82]">№001:</span> Акт об оказании услуг</div>
+              <div className=""><span className="text-[#787C82]">№{item.number}:</span> {item.descr}</div>
               <div className="text-nowrap my-1">
                 <span className="text-[#787C82]">Дата:&nbsp;</span>
                 {item.date && <DateFormatter dateString={item.date} />}
               </div>
-              <button className="btn-default px-6 py-2 flex lg:mt-0 mt-5 md:w-fit w-full justify-center" disabled={!item.file}
-                onClick={(e) => handleFileDownload(e, item)}
-              >
-                <svg
-                  className="icon me-3"
+              {
+                item.files.length > 0 ? (
+                  <div className="flex gap-5">
+                    {                      
+                      item.files.map((file) => (
+                        <button 
+                          className="text-xs btn-default px-3 py-2 flex lg:mt-0 mt-5 md:w-fit w-full justify-center"
+                          onClick={(e) => handleFileDownload(e, item)}
+                        >
+                          <svg
+                            className="icon me-3"
+                          >
+                            <use href={`${sprite_path}#doc-icon`} />
+                          </svg>
+                          {file.type}
+                        </button>
+                      ))
+                    }
+                  </div>
+                ) : 
+                <button className="btn-default px-6 py-2 flex lg:mt-0 mt-5 md:w-fit w-full justify-center" disabled={!item.files}
+                  onClick={(e) => handleFileDownload(e, item)}
                 >
-                  <use href={`${sprite_path}#doc-icon`} />
-                </svg>
-                Скачать
-              </button> 
+                  <svg
+                    className="icon me-3"
+                  >
+                    <use href={`${sprite_path}#doc-icon`} />
+                  </svg>
+                  Скачать
+                </button> 
+              }
             </div>
           }
           {
@@ -231,11 +280,13 @@ const TheDocsListComponent = () => {
             <div className={`${currentTab && currentTab == 'counters' ? 'md:ps-3' : ''} `}>
               {
                 currentTab && currentTab.title_en == 'counters' ? 
-                <p className="mb-2"><span className="text-[#787C82] text-nowrap">Дата: </span>02.02.2026</p> : ''
+                <p className="mb-2"><span className="text-[#787C82] text-nowrap">Дата: </span> <DateFormatter dateString={item[0] ? item[0].end_date : ''} /></p> : ''
               }
-              <div className="text-nowrap"><span className="text-[#787C82]">№ пр. учета:</span> 0000001</div>
-              <div className="text-nowrap my-1"><span className="text-[#787C82]">№ пр. учета:</span> 0000001</div>
-              <div className="text-nowrap"><span className="text-[#787C82]">№ пр. учета:</span> 0000001</div>
+              {
+                item.length > 0 && item.map((counter, index) => (
+                  <div key={index} className="text-nowrap"><span className="text-[#787C82]">№ пр. учета:</span> {counter.number ? counter.number : 'не найден'}</div>
+                ))
+              }
             </div>
           }
           {
@@ -256,6 +307,28 @@ const TheDocsListComponent = () => {
             </div>
           }
         </div>
+
+        {
+          currentTab && currentTab.title_en == 'bills' ? '' :
+          <div className={`
+            ${sm_breakpoint || md_breakpoint ? '' : 'flex'}           
+          `}>
+            {
+              currentTab && currentTab.title_en == 'counters' &&
+              <div className={`${currentTab && currentTab == 'counters' ? 'md:ps-3' : ''} `}>
+                {
+                  currentTab && currentTab.title_en == 'counters' ? 
+                  <p className="mb-2">&nbsp;</p> : ''
+                }
+                {
+                  item.length > 0 && item.map((counter, index) => (
+                    <div key={index} className="text-nowrap"><span className="text-[#787C82]">{ getCounterName(counter.name) }:</span> { counter.end_indice }</div>
+                  ))
+                }
+              </div>
+            }
+          </div>
+        }
         {
           currentTab && currentTab.title_en == 'bills' &&
           <div className={`
@@ -360,7 +433,7 @@ const TheDocsListComponent = () => {
           >
             <span className="whitespace-nowrap">
               {currentTab && (currentTab.title_en === 'counters' || currentTab.title_en === 'objects') ? '' : 'Название'}
-              {currentTab && currentTab.title_en === 'closing_docs' ? ' акта' : 
+              {currentTab && currentTab.title_en === 'closing_docs' ? null : 
               currentTab && currentTab.title_en === 'bills' ? ' счета' : 
               currentTab && currentTab.title_en === 'counters' ? ' ХВС' : 
               currentTab && currentTab.title_en === 'objects' ? 'Адрес' : ' помещения'}
@@ -412,7 +485,7 @@ const TheDocsListComponent = () => {
                 `}
               >
                 <div className="ps-2">
-                  {currentTab && currentTab.title_en === 'counters' && item[0] ? item[0].end_date : 
+                  {currentTab && currentTab.title_en === 'counters' && item[index] ? item[index][0].end_date : 
                   currentTab.title_en === 'objects' ? index + 1 : item.number}
                 </div>
               </div>
@@ -423,12 +496,9 @@ const TheDocsListComponent = () => {
                   ${currentTab && currentTab.title_en === 'objects' ? 'w-[350px]' : 'w-[200px]'}
                 `}
               >
-                
-                {currentTab && (currentTab.title_en === 'closing_docs' || currentTab.title_en === 'bills') ? item.descr : currentTab && currentTab.title_en === 'counters' ? (
-                
-                  <div key={item[0] ? item[0].id : ''}>
-                    <p className="text-[#787C82]">№{item[0] ? item[0].number : ''}</p>
-                    <p>{item[0] ? item[0].end_indice : ''} м3</p>
+                {currentTab && (currentTab.title_en === 'closing_docs' || currentTab.title_en === 'bills') ? item.descr : currentTab && currentTab.title_en === 'counters' ? (                
+                  <div key={index}>
+                    {/* <p>{JSON.stringify(item)}</p> */}
                   </div>
                 ) : currentTab && currentTab.title_en === 'objects' ? (
                   <div>{item.name}</div>
@@ -450,10 +520,10 @@ const TheDocsListComponent = () => {
               {currentTab && currentTab.title_en === 'closing_docs' ? null : 
               currentTab && currentTab.title_en === 'bills' ? null :
               currentTab && currentTab.title_en === 'counters' ? (
-                <div className="w-[200px] flex-shrink-0">                  
+                <div className="w-[200px] flex-shrink-0">
                   <div key={item[1] ? item[1].id : ''}>
-                    <p className="text-[#787C82]">№{item[1] ? item[1].number : ''}</p>
-                    <p>{item[1] ? item[1].end_indice : ''} м3</p>
+                    <p className="text-[#787C82]">{item[1] ? '№' : ''}{item[1] ? item[1].number : ''}</p>
+                    <p>{item[1] ? item[1].end_indice : ''} {item[1] ? 'м3' : ''}</p>
                   </div>
                 </div>
               ) : (
@@ -464,9 +534,19 @@ const TheDocsListComponent = () => {
               {currentTab && currentTab.title_en !== 'objects' && (
                 <div className={`${currentRoute === '/requests' ? 'w-[150px]' : 'w-[200px]'} flex-shrink-0`}>
                   {currentTab && currentTab.title_en === 'counters' ? (
-                    <div key={item[2] ? item[2].id : ''}>
-                      <p className="text-[#787C82]">№{item[2] ? item[2].number : ''}</p>
-                      <p>{item[2] ? item[2].end_indice : ''} м3</p>
+                    <div key={index}>
+
+                      {
+                        item[2] && item[2].map((counter, counter_index) => (
+                          <div key={counter_index}>
+                            {/* {counter_index} */}
+                      {/* <p>{JSON.stringify(counter[counter_index])}</p> */}
+                            {/* <p>{JSON.stringify(counter[counter_index])}</p> */}
+                            <p className="text-[#787C82]">{counter[counter_index] ? '№' : ''}{counter[counter_index] ? counter[counter_index].number : ''}</p>
+                            <p>{counter[counter_index] ? counter[counter_index].end_indice : ''} {counter[counter_index] ? 'м3' : ''} </p>
+                          </div>
+                        ))
+                      }
                     </div>
                   ) : item.date && <DateFormatter dateString={item.date} />}
                 </div>
