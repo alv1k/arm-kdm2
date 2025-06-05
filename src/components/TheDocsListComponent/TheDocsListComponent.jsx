@@ -124,9 +124,7 @@ const TheDocsListComponent = () => {
                     sorted[dateIndex][category].push(counter);
                   }
                 }
-              });
-              console.log(sorted, 'sorted');
-              
+              });              
               return sorted;
             case 'objects':
               return agreementObjects;
@@ -201,6 +199,9 @@ const TheDocsListComponent = () => {
     }
   }
   
+  const getEndDate = (item) => {
+    return item.find(i => i?.[0]?.end_date)?.[0]?.end_date || '';
+  }
 
   return (
     (sm_breakpoint || md_breakpoint) ?      
@@ -485,8 +486,22 @@ const TheDocsListComponent = () => {
                 `}
               >
                 <div className="ps-2">
-                  {currentTab && currentTab.title_en === 'counters' && item[index] ? item[index][0].end_date : 
-                  currentTab.title_en === 'objects' ? index + 1 : item.number}
+                  {
+                    currentTab && currentTab.title_en === 'counters' && item ? 
+                    (
+                      <div>
+                        <p>{getEndDate(item)}</p>
+                      </div>
+                      // item.map((counter, counter_index) => {
+                      //   <p>123</p>
+                        // counter.end_date
+                      // })
+                      // <div>
+                      //   123
+                      // </div>
+                    ) : 
+                    currentTab.title_en === 'objects' ? index + 1 : item.number
+                  }
                 </div>
               </div>
 
@@ -496,13 +511,30 @@ const TheDocsListComponent = () => {
                   ${currentTab && currentTab.title_en === 'objects' ? 'w-[350px]' : 'w-[200px]'}
                 `}
               >
-                {currentTab && (currentTab.title_en === 'closing_docs' || currentTab.title_en === 'bills') ? item.descr : currentTab && currentTab.title_en === 'counters' ? (                
+                {currentTab && (currentTab.title_en === 'closing_docs' || currentTab.title_en === 'bills') ? item.descr :
+                currentTab && currentTab.title_en === 'counters' ? (
                   <div key={index}>
-                    {/* <p>{JSON.stringify(item)}</p> */}
+                    {
+                      item[0] && item[0].map((counter, counter_index) => 
+                        (
+                          <div key={counter_index} className="mb-2">                              
+                            <p className="text-[#787C82]">{counter ? '№' : ''}{counter.number ? counter.number : ''}</p>
+                            <p>{counter ? counter.end_indice : ''} {counter ? 'м3' : ''} </p>
+                          </div>
+                        )
+                      )
+                    }
                   </div>
-                ) : currentTab && currentTab.title_en === 'objects' ? (
+                ) : 
+                currentTab && currentTab.title_en === 'counters' ? 
+                (
+                  <div data={index} key={index}>
+                  </div>
+                ) : 
+                currentTab && currentTab.title_en === 'objects' ? (
                   <div>{item.name}</div>
-                ) : (
+                ) : 
+                (
                   <div className="group relative">
                     <p className="py-2 rounded cursor-default truncate">
                       {item.object}
@@ -533,22 +565,22 @@ const TheDocsListComponent = () => {
               {/* Cell 3 */}
               {currentTab && currentTab.title_en !== 'objects' && (
                 <div className={`${currentRoute === '/requests' ? 'w-[150px]' : 'w-[200px]'} flex-shrink-0`}>
-                  {currentTab && currentTab.title_en === 'counters' ? (
-                    <div key={index}>
-
-                      {
-                        item[2] && item[2].map((counter, counter_index) => (
-                          <div key={counter_index}>
-                            {/* {counter_index} */}
-                      {/* <p>{JSON.stringify(counter[counter_index])}</p> */}
-                            {/* <p>{JSON.stringify(counter[counter_index])}</p> */}
-                            <p className="text-[#787C82]">{counter[counter_index] ? '№' : ''}{counter[counter_index] ? counter[counter_index].number : ''}</p>
-                            <p>{counter[counter_index] ? counter[counter_index].end_indice : ''} {counter[counter_index] ? 'м3' : ''} </p>
-                          </div>
-                        ))
-                      }
-                    </div>
-                  ) : item.date && <DateFormatter dateString={item.date} />}
+                  {
+                    currentTab && currentTab.title_en === 'counters' ? (
+                      <div key={index}>
+                        {
+                          item[2] && item[2].map((counter, counter_index) => 
+                            (
+                              <div key={counter_index} className="mb-2">                              
+                                <p className="text-[#787C82]">{counter ? '№' : ''}{counter.number ? counter.number : ''}</p>
+                                <p>{counter ? counter.end_indice : ''} {counter ? 'м3' : ''} </p>
+                              </div>
+                            )
+                          )
+                        }
+                      </div>
+                    ) : item.date && <DateFormatter dateString={item.date} />
+                  }
                 </div>
               )}
 
