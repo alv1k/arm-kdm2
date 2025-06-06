@@ -39,29 +39,39 @@ const PaymentModal = (props) => {
       });
       setShouldAnimate(true); // Активируем анимацию
       
-    }
-    let payload = {
-      amount: data.status === 'not payd' ? data.summ : data.notpaydsum,
-      description: data.descr,
-      userId: profileFetchedData.id,
-      contractId: selectedAgreement[0].id
-    }
-
-    const response = await dispatch(fetchPayment(payload))
-
-    if (response && response.payload.success) {  
-      window.location.href = response.payload.paymentUrl;
-      localStorage.setItem('lastPaymentId', response.payload.paymentId);
-      setTimeout(() => {        
-        dispatch(setShowModal());
-      }, 1000);
     } else {
-      dispatch(invalidToken());
-      window.location.href = '/login';
-      showToast('Ошибка при передаче показаний счетчиков! ' + response.payload, 'error', {
-        autoClose: 5000,
-      });
-    };  
+
+      let payload = {
+        amount: data.status === 'not payd' ? data.summ : data.notpaydsum,
+        description: data.descr,
+        userId: profileFetchedData.id,
+        contractId: selectedAgreement[0].id
+      }
+  
+         
+      // {
+      //   "success": true,
+      //   "paymentId": "2fd48b62-000f-5000-8000-159f2acc49de",
+      //   "paymentUrl": "https://yoomoney.ru/checkout/payments/v2/contract?orderId=2fd48b62-000f-5000-8000-159f2acc49de",
+      //   "message": "Платеж создан успешно"
+      // }
+  
+      const response = await dispatch(fetchPayment(payload))
+  
+      if (response && response.payload.success) {  
+        window.location.href = response.payload.paymentUrl;
+        localStorage.setItem('lastPaymentId', response.payload.paymentId);
+        setTimeout(() => {        
+          dispatch(setShowModal());
+        }, 1000);
+      } else {
+        dispatch(invalidToken());
+        window.location.href = '/login';
+        showToast('Ошибка при передаче показаний счетчиков! ' + response.payload, 'error', {
+          autoClose: 5000,
+        });
+      };  
+    }
   }
   
   return (
