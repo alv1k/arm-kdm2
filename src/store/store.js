@@ -11,6 +11,7 @@ import agreementsReducer, { fetchAgreementsList, fetchAgreementsAccruals, fetchS
 import loadingSlice, { setLoadingStart, setLoadingEnd } from './slices/loadingSlice';
 import countersSlice from './slices/countersSlice';
 import paymentSlice from './slices/paymentSlice';
+import contactsSlice from './slices/contactsSlice';
 import { fetchProfileData, invalidToken } from './slices/userSlice'; 
 import { showToast } from '@/utils/notify';
 
@@ -103,7 +104,8 @@ const store = configureStore({
     auth_slice: authReducer,
     loading_slice: loadingSlice,
     counters_slice: countersSlice,
-    payment_slice: paymentSlice
+    payment_slice: paymentSlice,
+    contacts_slice: contactsSlice
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()

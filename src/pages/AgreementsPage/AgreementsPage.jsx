@@ -37,8 +37,7 @@ const AgreementsPage = () => {
     dispatch(toggleTabs({
       type: isDetailsShown ? 'singleAgreement' : 'agreementsList', 
       breakpoint: sm_breakpoint ? 'sm-breakpoint' : '',
-      hasCounters: currentAgreement[0] ? (currentAgreement[0].name.includes(' перем') ? true : false) : console.log('error. empty currentAgreement')
-    } ));
+      hasCounters: currentAgreement[0] ? (currentAgreement[0].name.includes(' перем') ? true : false) : '' } ));
   }, [dispatch, isDetailsShown]);
   useEffect(() => {
     if (isDetailsShown == true) {

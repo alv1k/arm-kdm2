@@ -5,6 +5,7 @@ import { hideNavbar } from '@/store/slices/navbarSlice';
 import { toggleTabs  } from '@/store/slices/tabsSlice';
 import { isNew } from '@/store/slices/requestsSlice';
 import { fetchAuth } from '@/store/slices/authSlice';
+import { fetchContactsList } from '@/store/slices/contactsSlice';
 import useMediaQueries from '@/hooks/useMediaQueries';
 
 const ContactsPage = () => {
@@ -26,6 +27,7 @@ const ContactsPage = () => {
   };
   useEffect(() => {
     dispatch(fetchAuth())
+    dispatch(fetchContactsList())
   }, [dispatch]);
 
   const locations = Array.from({ length: 1 }, (_, index) => (

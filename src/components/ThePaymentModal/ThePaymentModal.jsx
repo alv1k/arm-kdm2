@@ -41,11 +41,38 @@ const PaymentModal = (props) => {
       
     } else {
 
+      // {
+      //   "amount": 1500.50,
+      //   "description": "Оплата за аренду",
+      //   "createReceipt": true,
+      //   "email": "client@example.com",
+      //   "phone": "+7900123456",
+      //   "items": [
+      //     {
+      //       "description": "Аренда помещения за январь 2025",
+      //       "quantity": 1,
+      //       "amount": 1500.50,
+      //       "vatCode": 1
+      //     }
+      //   ]
+      // }
+
       let payload = {
         amount: data.status === 'not payd' ? data.summ : data.notpaydsum,
         description: data.descr,
+        createReceipt: true,
+        email: profileFetchedData.email,
+        phone: profileFetchedData.phone,
         userId: profileFetchedData.id,
-        contractId: selectedAgreement[0].id
+        contractId: selectedAgreement[0].id,
+        items: [
+          {
+            description: data.descr,
+            quantity: 1,
+            amount: data.status === 'not payd' ? data.summ : data.notpaydsum,
+            vatCode: 1
+          }
+        ]
       }
   
          
@@ -54,9 +81,10 @@ const PaymentModal = (props) => {
       //   "paymentId": "2fd48b62-000f-5000-8000-159f2acc49de",
       //   "paymentUrl": "https://yoomoney.ru/checkout/payments/v2/contract?orderId=2fd48b62-000f-5000-8000-159f2acc49de",
       //   "message": "Платеж создан успешно"
-      // }
+      // } 
+      // 2fd49bbe-000f-5001-9000-1c9e0c15df22
   
-      const response = await dispatch(fetchPayment(payload))
+      const response = payload.userId && payload.contractId && payload.amount ? await dispatch(fetchPayment(payload)) : null;
   
       if (response && response.payload.success) {  
         window.location.href = response.payload.paymentUrl;
@@ -67,7 +95,7 @@ const PaymentModal = (props) => {
       } else {
         dispatch(invalidToken());
         window.location.href = '/login';
-        showToast('Ошибка при передаче показаний счетчиков! ' + response.payload, 'error', {
+        showToast('Ошибка при передаче данных! ' + response.payload, 'error', {
           autoClose: 5000,
         });
       };  
@@ -76,16 +104,14 @@ const PaymentModal = (props) => {
   
   return (
     <div className="mb-8">
-      <p className="text-center md:text-2xl text-xl font-bold text-[#203887]">Способ оплаты</p>
-      
+      <p className="text-center md:text-2xl text-xl font-bold text-[#203887]">Способ оплаты</p>      
       <div className="my-8 flex flex-col">
         <div className="my-2 md:flex block font-semibold">№{data.number}. {data.descr}</div>
         <div className="md:my-0 my-2 md:flex block">
           <p className="text-[#787C82]">Дата:&nbsp;</p> 
           <DateFormatter dateString={data.date} />
         </div>
-      </div>
-      
+      </div>      
       <div className="my-6">
         {paymentOptions.map((option) => (
           <div 
@@ -106,8 +132,7 @@ const PaymentModal = (props) => {
             />
           </div>
         ))}
-      </div>
-      
+      </div>      
       <div className="my-2 text-center">
         <button 
           className="btn-success py-2 px-10 md:w-auto w-full" 

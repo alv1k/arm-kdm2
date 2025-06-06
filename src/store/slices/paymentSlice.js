@@ -52,6 +52,10 @@ export const fetchCheckPayment = createAsyncThunk(
       //   throw new Error(`HTTP error! status: ${response.data.status}`);
       // } 
       // return await response.data.data;
+
+      localStorage.removeItem('lastPaymentId');
+
+
     } catch (error) {
       console.log(error, 'error');
       if (error.message == 'timeout of 5000ms exceeded') {
