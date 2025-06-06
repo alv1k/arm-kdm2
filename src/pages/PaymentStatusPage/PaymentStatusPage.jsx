@@ -16,15 +16,38 @@ const PaymentStatusPage = () => {
       dispatch(hideNavbar());
     }
   };
-  useEffect(async () => {
-    let lastPaymentId = localStorage.getItem('lastPaymentId') ?? null;
-    let response = null;
-    lastPaymentId ? setTimeout(response = await dispatch(fetchCheckPayment(lastPaymentId)), 5000) : null;
-    if (response) {
-      console.log(response, 'response');
-    } else {
-      console.log('no response');
-    }
+  useEffect(() => {
+    let timer;
+    
+    const checkPayment = async () => {
+      const lastPaymentId = localStorage.getItem('lastPaymentId');
+      if (!lastPaymentId) return;
+
+      try {
+        const resultAction = await dispatch(fetchCheckPayment(lastPaymentId));
+        if (fetchCheckPayment.fulfilled.match(resultAction)) {
+          const { success } = resultAction.payload;
+          
+          if (success) {
+            // Успешный платеж
+            dispatch(paymentSuccess(resultAction.payload));
+            localStorage.removeItem('lastPaymentId');
+          } else {
+            // Продолжаем проверку
+            timer = setTimeout(checkPayment, 5000);
+          }
+        }
+      } catch (error) {
+        console.error('Payment check failed:', error);
+        timer = setTimeout(checkPayment, 5000);
+      }
+    };
+
+    checkPayment();
+    
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
   }, [dispatch]);
 
 
@@ -40,8 +63,34 @@ const PaymentStatusPage = () => {
       onClick={sideClick}
     >
       <div className="lg:text-base md:text-base text-sm">
-        <div className="flex md:justify-start justify-center">
-          success
+        <div className="md:justify-start justify-center">
+          <div className="text-center p-10 w-full text-[#787C82]">            
+            <svg
+              className="w-10 h-10 mx-auto"
+            >
+              <use href={`${sprite_path}#stop-icon`} />
+            </svg>
+            
+            <svg
+              className="w-10 h-10 mx-auto"
+            >
+              <use href={`${sprite_path}#time-icon`} />
+            </svg>
+            <svg
+              className="w-10 h-10 mx-auto"
+            >
+              <use href={`${sprite_path}#checked-icon`} />
+            </svg>
+            <p className="text-2xl font-semibold mt-4">
+              Ваш платеж не прошел
+            </p>
+            <p className="mt-2">
+              Попробуйте оплатить снова
+            </p>
+          </div>
+          <div className="bg-item-active rounded-xl p-10 w-full ">
+
+          </div>
         </div>
       </div>
     </section>

@@ -39,7 +39,6 @@ export const fetchCheckPayment = createAsyncThunk(
         window.location.href = '/login';
         throw new Error('Token not found');
       }
-      console.log(paymentId, 'paymentId');
       
       const response = await api.get(`/check-payment?paymentId=${paymentId}`);
       if (!response.data.success) {
@@ -49,11 +48,8 @@ export const fetchCheckPayment = createAsyncThunk(
         window.location.href = '/login';
         throw new Error(`HTTP error! status: ${response.data.status}`);
       } 
-      return await response.data.data;
-
       localStorage.removeItem('lastPaymentId');
-
-
+      return await response.data.data.payload;
     } catch (error) {
       console.log(error, 'error');
       if (error.message == 'timeout of 5000ms exceeded') {
