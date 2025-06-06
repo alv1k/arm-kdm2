@@ -1,11 +1,27 @@
-import { useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import CustomCheckbox from '@/components/CustomCheckbox/CustomCheckbox';
 import DateFormatter from '@/components/DateFormatter/DateFormatter'; 
+import { fetchPayment } from '@/store/slices/paymentSlice';
+import { showToast } from '@/utils/notify';
 
 const PaymentModal = (props) => {
+
+  const dispatch = useDispatch();  
   const [selectedOption, setSelectedOption] = useState(null);
+  const [shouldAnimate, setShouldAnimate] = useState(false);
+  const profileFetchedData = useSelector((state) => state.user_slice.profileData);
+  const selectedAgreement = useSelector((state) => state.agreements_slice.selectedAgreement);   
+
   let data = props.data;
   
+  useEffect(() => {
+    if (shouldAnimate) {
+      const timer = setTimeout(() => setShouldAnimate(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [shouldAnimate]);
+
   const paymentOptions = [
     { id: 'card', label: 'Банковская карта' },
     { id: 'invoice', label: 'Счет' },
@@ -16,6 +32,37 @@ const PaymentModal = (props) => {
   const handleOptionClick = (optionId) => {
     setSelectedOption(optionId);
   };
+  const handleCreatePayment = async () => {
+    if (!selectedOption) {      
+      showToast('Выберите один из вариантов!', 'error', {
+        autoClose: 5000,
+      });
+      setShouldAnimate(true); // Активируем анимацию
+      
+    }
+    let payload = {
+      amount: data.status === 'not payd' ? data.summ : data.notpaydsum,
+      description: data.descr,
+      userId: profileFetchedData.id,
+      contractId: selectedAgreement[0].id
+    }
+
+    const response = await dispatch(fetchPayment(payload))
+
+    if (response && response.payload.success) {  
+      window.location.href = response.payload.paymentUrl;
+      localStorage.setItem('lastPaymentId', response.payload.paymentId);
+      setTimeout(() => {        
+        dispatch(setShowModal());
+      }, 1000);
+    } else {
+      dispatch(invalidToken());
+      window.location.href = '/login';
+      showToast('Ошибка при передаче показаний счетчиков! ' + response.payload, 'error', {
+        autoClose: 5000,
+      });
+    };  
+  }
   
   return (
     <div className="mb-8">
@@ -45,13 +92,18 @@ const PaymentModal = (props) => {
               checked={selectedOption === option.id} 
               onChange={() => handleOptionClick(option.id)}
               type="payment"
+              animate={shouldAnimate}
             />
           </div>
         ))}
       </div>
       
       <div className="my-2 text-center">
-        <button disabled className="btn-success py-2 px-10 md:w-auto w-full" selectedOption={selectedOption}>
+        <button 
+          className="btn-success py-2 px-10 md:w-auto w-full" 
+          selectedOption={selectedOption ?? ''}
+          onClick={handleCreatePayment}
+        >
           Оплатить
         </button>
       </div>

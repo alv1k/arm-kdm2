@@ -3,14 +3,26 @@ const CustomCheckbox = (props) => {
 
   return (
     <div className={styles.custom_checkbox}>
-      <input type="checkbox" checked={props.checked} id={props.id} className={styles.checkbox_input} 
-        onChange={() => {}}/>
+      <input 
+        type="checkbox" 
+        checked={props.checked} 
+        id={props.id} 
+        className={`
+          ${styles.checkbox_input}
+        
+        `}
+        onChange={() => {}}
+      />
       {
         props && props.label ?
         <label 
           tabIndex={0} 
           htmlFor={props.id} 
-          className={`${styles.checkbox_label} ${props.type == 'payment' ? 'ps-5' : 'md:ps-11 ps-8'} text-nowrap text-left`}
+          className={`
+            ${styles.checkbox_label} 
+            ${props.type == 'payment' ? 'ps-5' : 'md:ps-11 ps-8'}
+            ${props.animate ? 'before:bg-red-100' : ''}            
+          `}
           onKeyDown={(e) => {
             // Добавляем обработку нажатия пробела/Enter
             if (e.key === ' ' || e.key === 'Enter') {

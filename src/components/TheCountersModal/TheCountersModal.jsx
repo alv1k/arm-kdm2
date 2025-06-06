@@ -81,13 +81,10 @@ const CountersModal = () => {
         showToast('Показания счетчиков переданы!', 'success', {
           autoClose: 5000,
         });
-        setTimeout(() => {
-          // dispatch(setHideCountersModal());          
+        setTimeout(() => {      
           dispatch(setShowModal());
         }, 1000);
       } else {
-        console.log('check error');
-
         dispatch(invalidToken());
         window.location.href = '/login';
         showToast('Ошибка при передаче показаний счетчиков! ' + response.payload, 'error', {
