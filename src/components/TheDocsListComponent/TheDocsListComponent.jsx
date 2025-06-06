@@ -336,7 +336,7 @@ const TheDocsListComponent = () => {
               <div className={`${currentTab && currentTab == 'counters' ? 'md:ps-3' : ''} `}>
                 {
                   currentTab && currentTab.title_en == 'counters' ? 
-                  <p className="mb-2">&nbsp;</p> : ''
+                  <p className="mb-2">&nbsp;1</p> : ''
                 }
                 {
                   item.length > 0 && item.map((counter, index) => (
@@ -354,9 +354,9 @@ const TheDocsListComponent = () => {
             text-center
           `}>
             <div className="h-full justify-baseline flex flex-col">
-              <div className="mb-1 text-[#787C82]">Сумма:</div>
+              <div className="mb-1 text-[#787C82]"> {item.status === 'particulary payd' ? 'Остаток долга' : 'Сумма'}:</div>
               <div className={ item.status === 'payd' ? '' : 'text-red-600'}>
-                <PriceFormatter amount={item.summ} type="price" />
+                <PriceFormatter amount={ item.status === 'particulary payd' ? item.summ - item.notpaydsum : item.summ } type="price" />               
               </div>
               <button 
                 className={`${item.status === 'payd' ? 'btn-default' : 'rounded-lg bg-green-500 text-white'} px-6 py-2 mt-5 h-full w-full`} 
@@ -475,7 +475,7 @@ const TheDocsListComponent = () => {
             <div className="flex w-[150px] flex-shrink-0">
               <span>
                 {currentTab && (currentTab.title_en === 'closing_docs' || currentTab.title_en === 'bills') ? 
-                'Сумма' : currentTab && currentTab.title_en === 'counters' ? 
+                'Сумма к оплате' : currentTab && currentTab.title_en === 'counters' ? 
                 'Электроэнергия' : 'Статус'}
               </span>
             </div>
@@ -599,7 +599,7 @@ const TheDocsListComponent = () => {
                 <div className="w-[150px] flex-shrink-0">
                   {currentTab && currentTab.title_en === 'closing_docs' ? <PriceFormatter amount={item.summ} type="price" /> :
                   currentTab && currentTab.title_en === 'bills' ? (
-                    <PriceFormatter amount={item.summ} type="price" />
+                    <PriceFormatter amount={item.status === 'particulary payd' ? item.summ - item.notpaydsum : item.summ} type="price" />
                   ) : currentTab && currentTab.title_en === 'counters' ? null : (
                     <span className={item.status ? getStatusClass(item.status) : ''}>
                       {item.status}
