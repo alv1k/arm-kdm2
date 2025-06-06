@@ -103,14 +103,18 @@ const TheDocsListComponent = () => {
               const uniqueDates = [...new Set(allCounters.map(counter => counter.end_date))];
 
               // Инициализируем sorted массив
-              const sorted = uniqueDates.map(() => []);
+              const sorted_small_screen = [[]];
+              const sorted_lg_screen = uniqueDates.map(() => []);
+              let return_value = null;
 
               allCounters.forEach(counter => {
                 if (md_breakpoint || sm_breakpoint) {
+                  // sorted.push([]);
                   // Мобильная версия - все в первом подмассиве
-                  if (sorted[0]) {
-                    sorted[0].push(counter);
+                  if (sorted_small_screen[0]) {
+                    sorted_small_screen[0].push(counter);
                   }
+                  return_value = sorted_small_screen;
                 } else {
                   // Десктопная версия - группировка по дате и категории
                   const dateIndex = uniqueDates.indexOf(counter.end_date);
@@ -118,14 +122,15 @@ const TheDocsListComponent = () => {
                     const category = counter.name.includes('ХВС') ? 0 :
                                   counter.name.includes('ГВС') ? 1 : 2;
                     
-                    if (!sorted[dateIndex][category]) {
-                      sorted[dateIndex][category] = [];
+                    if (!sorted_lg_screen[dateIndex][category]) {
+                      sorted_lg_screen[dateIndex][category] = [];
                     }
-                    sorted[dateIndex][category].push(counter);
+                    sorted_lg_screen[dateIndex][category].push(counter);
                   }
+                  return_value = sorted_lg_screen
                 }
               });              
-              return sorted;
+              return return_value;
             case 'objects':
               return agreementObjects;
           }
@@ -285,11 +290,19 @@ const TheDocsListComponent = () => {
             <div className={`${currentTab && currentTab == 'counters' ? 'md:ps-3' : ''} `}>
               {
                 currentTab && currentTab.title_en == 'counters' ? 
-                <p className="mb-2"><span className="text-[#787C82] text-nowrap">Дата: </span> <DateFormatter dateString={item[0] ? item[0].end_date : ''} /></p> : ''
+                <p className="mb-2">
+                  <span className="text-[#787C82] text-nowrap">
+                    Дата: 
+                  </span> 
+                  <DateFormatter dateString={item[0] ? item[0].end_date : ''} />
+                </p> : ''
               }
               {
                 item.length > 0 && item.map((counter, index) => (
-                  <div key={index} className="text-nowrap"><span className="text-[#787C82]">№ пр. учета:</span> {counter.number ? counter.number : 'не найден'}</div>
+                  <div key={index} className="text-nowrap">
+                    <span className="text-[#787C82]">№ пр. учета:</span> 
+                    {counter.number ? counter.number : 'не найден'}
+                  </div>
                 ))
               }
             </div>
