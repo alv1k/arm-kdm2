@@ -243,6 +243,10 @@ const TheDocsListComponent = () => {
                 <span className="text-[#787C82]">Дата:&nbsp;</span>
                 {item.date && <DateFormatter dateString={item.date} />}
               </div>
+              <div className="text-nowrap my-1">
+                <span className="text-[#787C82]">Сумма:&nbsp;</span>
+                {item.date && <PriceFormatter amount={item.summ} type="price" />}
+              </div>
               {
                 item.files.length > 0 ? (
                   <div className="flex gap-5">
@@ -492,13 +496,6 @@ const TheDocsListComponent = () => {
                       <div>
                         <p>{getEndDate(item)}</p>
                       </div>
-                      // item.map((counter, counter_index) => {
-                      //   <p>123</p>
-                        // counter.end_date
-                      // })
-                      // <div>
-                      //   123
-                      // </div>
                     ) : 
                     currentTab.title_en === 'objects' ? index + 1 : item.number
                   }
@@ -587,7 +584,7 @@ const TheDocsListComponent = () => {
               {/* Cell 4 */}
               {currentTab && currentTab.title_en !== 'objects' && (
                 <div className="w-[150px] flex-shrink-0">
-                  {currentTab && currentTab.title_en === 'closing_docs' ? null :
+                  {currentTab && currentTab.title_en === 'closing_docs' ? <PriceFormatter amount={item.summ} type="price" /> :
                   currentTab && currentTab.title_en === 'bills' ? (
                     <PriceFormatter amount={item.summ} type="price" />
                   ) : currentTab && currentTab.title_en === 'counters' ? null : (
