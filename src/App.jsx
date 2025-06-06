@@ -10,6 +10,7 @@ import Page404 from './pages/Page404/Page404';
 import Header from '@/components/TheHeader/TheHeader';
 import Navbar from '@/components/TheNavbar/TheNavbar';
 import LoadingPage from '@/pages/LoadingPage/LoadingPage';
+import PaymentStatusPage from '@/pages/PaymentStatusPage/PaymentStatusPage';
 import TheModal from '@/components/TheModal/TheModal';
 import useMediaQueries from '@/hooks/useMediaQueries';
 import { showModal } from '@/store/slices/modalSlice';
@@ -67,6 +68,7 @@ const App = () => {
           <Route path='/contacts' element={<ContactsPage/>} />
           <Route path='/user' element={<UserPage/>} />
           <Route path='/login' element={<LoginPage/>} />
+          <Route path='/payment-success' element={<PaymentStatusPage/>} />
         </Routes>
       </div>      
       <ToastContainer />

@@ -83,6 +83,9 @@ const PaymentModal = (props) => {
       //   "message": "Платеж создан успешно"
       // } 
       // 2fd49bbe-000f-5001-9000-1c9e0c15df22
+      // /payment-success
+
+      // console.log(payload, 'payload check here');
   
       const response = payload.userId && payload.contractId && payload.amount ? await dispatch(fetchPayment(payload)) : null;
   

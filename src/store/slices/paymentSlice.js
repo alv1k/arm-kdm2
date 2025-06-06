@@ -10,9 +10,7 @@ export const fetchPayment = createAsyncThunk(
       if (!token) {
         window.location.href = '/login';
         throw new Error('Token not found');
-      }
-      console.log(options, ';00000');
-      
+      }      
       const response = await api.post(`/create-payment`, options);
       if (!response.data.success) {
         localStorage.removeItem('token')
@@ -43,15 +41,15 @@ export const fetchCheckPayment = createAsyncThunk(
       }
       console.log(paymentId, 'paymentId');
       
-      // const response = await api.get(`/check-payment?paymentId=${paymentId}`);
-      // if (!response.data.success) {
-      //   localStorage.removeItem('token')
-      //   sessionStorage.removeItem('token');
-      //   document.cookie = 'token=; Max-Age=0; path=/;';
-      //   window.location.href = '/login';
-      //   throw new Error(`HTTP error! status: ${response.data.status}`);
-      // } 
-      // return await response.data.data;
+      const response = await api.get(`/check-payment?paymentId=${paymentId}`);
+      if (!response.data.success) {
+        localStorage.removeItem('token')
+        sessionStorage.removeItem('token');
+        document.cookie = 'token=; Max-Age=0; path=/;';
+        window.location.href = '/login';
+        throw new Error(`HTTP error! status: ${response.data.status}`);
+      } 
+      return await response.data.data;
 
       localStorage.removeItem('lastPaymentId');
 
