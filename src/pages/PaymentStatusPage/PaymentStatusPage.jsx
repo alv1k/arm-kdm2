@@ -22,6 +22,12 @@ const PaymentStatusPage = () => {
       // succeeded
       // 2fd49bbe-000f-5001-9000-1c9e0c15df22
 
+      // ???
+      // 2fd86edc-000f-5000-8000-15d38f7c346a
+
+      // pending
+      // 2fd86bab-000f-5000-b000-11fe05401855
+
 
   const dispatch = useDispatch();
   
@@ -99,7 +105,7 @@ const PaymentStatusPage = () => {
               <svg
                 className="w-10 h-10 mx-auto"
               >
-                <use href={`${sprite_path}#${paymentStatus === 'error' ? 'stop-icon' : ''}${paymentStatus === 'pending' ? 'time-icon' : ''}${paymentStatus === 'succeeded' && 'checked-icon'}
+                <use href={`${sprite_path}#${paymentStatus === 'error' ? 'stop-icon' : ''}${paymentStatus === 'pending' ? 'time-icon' : ''}${paymentStatus === 'succeeded' ? 'checked-icon' : ''}
               `} />
               </svg>
               

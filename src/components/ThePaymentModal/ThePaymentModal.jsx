@@ -10,6 +10,8 @@ const PaymentModal = (props) => {
   const dispatch = useDispatch();  
   const [selectedOption, setSelectedOption] = useState(null);
   const [shouldAnimate, setShouldAnimate] = useState(false);
+  const [paymentSum, setPaymentSum] = useState();  
+  
   const profileFetchedData = useSelector((state) => state.user_slice.profileData);
   const selectedAgreement = useSelector((state) => state.agreements_slice.selectedAgreement);   
 
@@ -21,6 +23,9 @@ const PaymentModal = (props) => {
       return () => clearTimeout(timer);
     }
   }, [shouldAnimate]);
+  useEffect(() => {
+    setPaymentSum(data.status === 'not payd' ? data.summ : data.notpaydsum);
+  }, [data])
 
   const paymentOptions = [
     { id: 'card', label: 'Банковская карта' },
@@ -32,6 +37,28 @@ const PaymentModal = (props) => {
   const handleOptionClick = (optionId) => {
     setSelectedOption(optionId);
   };
+
+  let payload = {
+    
+    amount: paymentSum,
+    description: data.number + '. ' + data.descr,
+    createReceipt: true,
+    email: profileFetchedData.email,
+    phone: profileFetchedData.phone,
+    userId: profileFetchedData.id,
+    contractId: selectedAgreement[0].id,
+    items: [
+      {
+        description: data.descr,
+        quantity: 1,
+        amount: paymentSum,
+        vatCode: 1
+      }
+    ]
+  }
+
+  let response = null;
+
   const handleCreatePayment = async () => {
     if (!selectedOption) {      
       showToast('Выберите один из вариантов!', 'error', {
@@ -39,8 +66,42 @@ const PaymentModal = (props) => {
       });
       setShouldAnimate(true); // Активируем анимацию
       
-    } else {
+    }
+    response = payload.userId && payload.contractId && payload.amount ? await dispatch(fetchPayment(payload)) : null;
+    if (response && response.payload.success && selectedOption === 'card') {  
+      window.location.href = response.payload.paymentUrl;
+      localStorage.setItem('lastPaymentId', response.payload.paymentId);
+      setTimeout(() => {        
+        dispatch(setShowModal());
+      }, 1000);
+    } else if (response && response.payload.success && selectedOption === 'invoice') {
+      alert('invoice. what to do?')
+      setTimeout(() => {        
+        dispatch(setShowModal());
+      }, 1000);
+    } else if (response && response.payload.success && selectedOption === 'qr') {
+      // show qr code
 
+      localStorage.setItem('lastPaymentId', response.payload.paymentId);
+      
+      setTimeout(() => {        
+        dispatch(setShowModal());
+      }, 1000);
+    } else {
+      dispatch(invalidToken());
+      window.location.href = '/login';
+      showToast('Ошибка при передаче данных! ' + response.payload, 'error', {
+        autoClose: 5000,
+      });
+    };  
+  }
+  
+  const changePaymentSumHandler = (e) => {
+    const newSum = Math.max(0, e.target.value)
+    setPaymentSum(Number(newSum) || 0);
+  }
+
+  
       // {
       //   "amount": 1500.50,
       //   "description": "Оплата за аренду",
@@ -57,42 +118,7 @@ const PaymentModal = (props) => {
       //   ]
       // }
 
-      let payload = {
-        amount: data.status === 'not payd' ? data.summ : data.notpaydsum,
-        description: data.descr,
-        createReceipt: true,
-        email: profileFetchedData.email,
-        phone: profileFetchedData.phone,
-        userId: profileFetchedData.id,
-        contractId: selectedAgreement[0].id,
-        items: [
-          {
-            description: data.descr,
-            quantity: 1,
-            amount: data.status === 'not payd' ? data.summ : data.notpaydsum,
-            vatCode: 1
-          }
-        ]
-      }
-  
-      const response = payload.userId && payload.contractId && payload.amount ? await dispatch(fetchPayment(payload)) : null;
-  
-      if (response && response.payload.success) {  
-        window.location.href = response.payload.paymentUrl;
-        localStorage.setItem('lastPaymentId', response.payload.paymentId);
-        setTimeout(() => {        
-          dispatch(setShowModal());
-        }, 1000);
-      } else {
-        dispatch(invalidToken());
-        window.location.href = '/login';
-        showToast('Ошибка при передаче данных! ' + response.payload, 'error', {
-          autoClose: 5000,
-        });
-      };  
-    }
-  }
-  
+
   return (
     <div className="mb-8">
       <p className="text-center md:text-2xl text-xl font-bold text-[#203887]">Способ оплаты</p>      
@@ -102,6 +128,16 @@ const PaymentModal = (props) => {
           <p className="text-[#787C82]">Дата:&nbsp;</p> 
           <DateFormatter dateString={data.date} />
         </div>
+        <div className="my-2">
+          <p className="text-[#787C82]">Сумма:&nbsp;</p> 
+          <input 
+            className="bg-item-default roundedd-4 p-3 w-full" 
+            type="number" 
+            value={paymentSum || ''}
+            onChange={(e) => changePaymentSumHandler(e)}
+          />
+        </div>
+
       </div>      
       <div className="my-6">
         {paymentOptions.map((option) => (
@@ -117,7 +153,6 @@ const PaymentModal = (props) => {
               id={option.id} 
               label="&nbsp;"
               checked={selectedOption === option.id} 
-              onChange={() => handleOptionClick(option.id)}
               type="payment"
               animate={shouldAnimate}
             />
