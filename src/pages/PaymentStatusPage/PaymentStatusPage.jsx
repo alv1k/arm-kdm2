@@ -14,16 +14,13 @@ const PaymentStatusPage = () => {
   const agreementsList = useSelector(state => state.agreements_slice.agreementsList);  
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const [paymentStatus, setPaymentStatus] = useState(null);
-  const [paymentData, setPaymentData] = useState(null);
-
-
-  
+  const [paymentData, setPaymentData] = useState(null);  
 
       // succeeded
       // 2fd49bbe-000f-5001-9000-1c9e0c15df22
 
       // ???
-      // 2fd86edc-000f-5000-8000-15d38f7c346a
+      // 2fd8908b-000f-5001-9000-12777e1e8082
 
       // pending
       // 2fd86bab-000f-5000-b000-11fe05401855
@@ -53,10 +50,10 @@ const PaymentStatusPage = () => {
           
           if (paymentStatus === 'pending') {
             // Продолжаем проверку
-            // timer = setTimeout(checkPayment, 5000);
+            timer = setTimeout(checkPayment, 10000);
           } else if (paymentStatus === 'succeeded') {
             // Успешный платеж
-            // localStorage.removeItem('lastPaymentId');
+            localStorage.removeItem('lastPaymentId');
           } else if (paymentStatus === 'canceled') {
 
           }
@@ -105,7 +102,7 @@ const PaymentStatusPage = () => {
               <svg
                 className="w-10 h-10 mx-auto"
               >
-                <use href={`${sprite_path}#${paymentStatus === 'error' ? 'stop-icon' : ''}${paymentStatus === 'pending' ? 'time-icon' : ''}${paymentStatus === 'succeeded' ? 'checked-icon' : ''}
+                <use href={`${sprite_path}#${paymentStatus === 'canceled' ? 'stop-icon' : ''}${paymentStatus === 'pending' ? 'time-icon' : ''}${paymentStatus === 'succeeded' ? 'checked-icon' : ''}
               `} />
               </svg>
               

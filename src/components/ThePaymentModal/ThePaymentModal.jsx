@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import {QRCodeSVG} from 'qrcode.react';
+import { QRCodeSVG } from 'qrcode.react';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomCheckbox from '@/components/CustomCheckbox/CustomCheckbox';
 import DateFormatter from '@/components/DateFormatter/DateFormatter';
@@ -9,14 +9,15 @@ import { showToast } from '@/utils/notify';
 
 const PaymentModal = (props) => {
 
-  const dispatch = useDispatch();  
+  const dispatch = useDispatch();
+
   const [selectedOption, setSelectedOption] = useState(null);
   const [shouldAnimate, setShouldAnimate] = useState(false);
   const [paymentSum, setPaymentSum] = useState();
-  const [qrUrl, setQrUrl] = useState(null);
-  
+  const [qrUrl, setQrUrl] = useState(null);  
   const profileFetchedData = useSelector((state) => state.user_slice.profileData);
   const selectedAgreement = useSelector((state) => state.agreements_slice.selectedAgreement);   
+  const [userEmail, setUserEmail] = useState(null);
 
   let data = props.data;
   
@@ -30,9 +31,8 @@ const PaymentModal = (props) => {
     setPaymentSum(data.status === 'not payd' ? data.summ : data.notpaydsum);
   }, [data]);
   useEffect(() => {
-    console.log(qrUrl, 'qrUrlttt');
-    
-  }, [qrUrl])
+    setUserEmail(profileFetchedData.email);
+  }, [profileFetchedData]);
 
   const paymentOptions = [
     { id: 'card', label: 'Банковская карта' },
@@ -50,7 +50,7 @@ const PaymentModal = (props) => {
     amount: paymentSum,
     description: data.number + '. ' + data.descr,
     createReceipt: true,
-    email: profileFetchedData.email,
+    email: userEmail,
     phone: profileFetchedData.phone,
     userId: profileFetchedData.id,
     contractId: selectedAgreement[0].id,
@@ -72,7 +72,13 @@ const PaymentModal = (props) => {
         autoClose: 5000,
       });
       setShouldAnimate(true); // Активируем анимацию
-      
+      return;
+    }    
+    if (userEmail && (!userEmail.includes('@') || !userEmail.includes('.'))) {   
+      showToast('Введите корректный адрес электронной почты', 'error', {
+        autoClose: 5000,
+      });
+      return;
     }
     response = payload.userId && payload.contractId && payload.amount ? await dispatch(fetchPayment(payload)) : null;
     if (response && response.payload.success && selectedOption === 'card') {  
@@ -102,6 +108,10 @@ const PaymentModal = (props) => {
   const changePaymentSumHandler = (e) => {
     const newSum = Math.max(0, e.target.value)
     setPaymentSum(Number(newSum) || 0);
+  }
+  const changeUserEmailHandler = (e) => {
+    const newEmail = e.target.value;
+    setUserEmail(newEmail);
   }
 
   
@@ -138,6 +148,16 @@ const PaymentModal = (props) => {
             type="number" 
             value={paymentSum || ''}
             onChange={(e) => changePaymentSumHandler(e)}
+            onWheel={(e) => e.currentTarget.blur()}
+          />
+        </div>
+        <div className="my-2">
+          <p className="text-[#787C82]">Эл.почта:&nbsp;</p> 
+          <input 
+            className="bg-item-default roundedd-4 p-3 w-full" 
+            type="email" 
+            value={userEmail || ''}
+            onChange={(e) => changeUserEmailHandler(e)}
           />
         </div>
 
