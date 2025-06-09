@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { dataType, setDataType, setShowModal } from '@/store/slices/modalSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import CountersModal from '@/components/TheCountersModal/TheCountersModal';
-import PaymentModal from '@/components/ThePaymentModal/ThePaymentModal'
+import PaymentModal from '@/components/ThePaymentModal/ThePaymentModal';
 
 const TheModal = () => {
   const sprite_path = './src/assets/images/i.svg';

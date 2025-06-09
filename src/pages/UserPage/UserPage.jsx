@@ -122,10 +122,10 @@ const UserPage = () => {
   const profileLoginData = () => (
     <div>
       <div className="xl:mt-8 lg:mt-10 lg:flex block gap-5 w-full md:mt-4 mt-3 text-sm">
-        <div className="lg:w-1/2 w-full">
+        {/* <div className="lg:w-1/2 w-full">
           <p className="text-[#787C82]">Логин</p>
           <input className="mt-2 p-5 bg-item-active w-full rounded-xl" type="text" disabled placeholder={profileFetchedData ? profileFetchedData.login : ''} />
-        </div>
+        </div> */}
         <div className="lg:w-1/2 lg:mt-0 w-full mt-4">
           <p className="text-[#787C82]">Пароль</p>
           <input id="password" className="mt-2 p-5 bg-item-active w-full rounded-xl" disabled placeholder='******'/>

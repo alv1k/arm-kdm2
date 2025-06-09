@@ -1,8 +1,10 @@
 import { useEffect, useState, useRef } from 'react';
+import {QRCodeSVG} from 'qrcode.react';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomCheckbox from '@/components/CustomCheckbox/CustomCheckbox';
-import DateFormatter from '@/components/DateFormatter/DateFormatter'; 
+import DateFormatter from '@/components/DateFormatter/DateFormatter';
 import { fetchPayment } from '@/store/slices/paymentSlice';
+import { setDataType, setShowModal } from '@/store/slices/modalSlice';
 import { showToast } from '@/utils/notify';
 
 const PaymentModal = (props) => {
@@ -10,7 +12,8 @@ const PaymentModal = (props) => {
   const dispatch = useDispatch();  
   const [selectedOption, setSelectedOption] = useState(null);
   const [shouldAnimate, setShouldAnimate] = useState(false);
-  const [paymentSum, setPaymentSum] = useState();  
+  const [paymentSum, setPaymentSum] = useState();
+  const [qrUrl, setQrUrl] = useState(null);
   
   const profileFetchedData = useSelector((state) => state.user_slice.profileData);
   const selectedAgreement = useSelector((state) => state.agreements_slice.selectedAgreement);   
@@ -25,7 +28,11 @@ const PaymentModal = (props) => {
   }, [shouldAnimate]);
   useEffect(() => {
     setPaymentSum(data.status === 'not payd' ? data.summ : data.notpaydsum);
-  }, [data])
+  }, [data]);
+  useEffect(() => {
+    console.log(qrUrl, 'qrUrlttt');
+    
+  }, [qrUrl])
 
   const paymentOptions = [
     { id: 'card', label: 'Банковская карта' },
@@ -81,12 +88,8 @@ const PaymentModal = (props) => {
       }, 1000);
     } else if (response && response.payload.success && selectedOption === 'qr') {
       // show qr code
-
-      localStorage.setItem('lastPaymentId', response.payload.paymentId);
-      
-      setTimeout(() => {        
-        dispatch(setShowModal());
-      }, 1000);
+      setQrUrl(response.payload.paymentUrl);
+      localStorage.setItem('lastPaymentId', response.payload.paymentId);      
     } else {
       dispatch(invalidToken());
       window.location.href = '/login';
@@ -138,36 +141,47 @@ const PaymentModal = (props) => {
           />
         </div>
 
-      </div>      
-      <div className="my-6">
-        {paymentOptions.map((option) => (
-          <div 
-            key={option.id}
-            className="my-3 flex p-5 bg-item-default rounded-lg justify-between cursor-pointer"
-            onClick={() => handleOptionClick(option.id)}
-          >
-            <label className="cursor-pointer">
-              {option.label}
-            </label>
-            <CustomCheckbox 
-              id={option.id} 
-              label="&nbsp;"
-              checked={selectedOption === option.id} 
-              type="payment"
-              animate={shouldAnimate}
-            />
-          </div>
-        ))}
-      </div>      
-      <div className="my-2 text-center">
-        <button 
-          className="btn-success py-2 px-10 md:w-auto w-full" 
-          selectedOption={selectedOption ?? ''}
-          onClick={handleCreatePayment}
-        >
-          Оплатить
-        </button>
       </div>
+      
+      {
+        qrUrl ? 
+        <QRCodeSVG className="mx-auto" value={qrUrl} size={200} />
+        : 
+        <div>
+          <div className="my-6">
+            {              
+              paymentOptions.map((option) => (
+                <div 
+                  key={option.id}
+                  className="my-3 flex p-5 bg-item-default rounded-lg justify-between cursor-pointer"
+                  onClick={() => handleOptionClick(option.id)}
+                >
+                  <label className="cursor-pointer">
+                    {option.label}
+                  </label>
+                  <CustomCheckbox 
+                    id={option.id} 
+                    label="&nbsp;"
+                    checked={selectedOption === option.id} 
+                    type="payment"
+                    animate={shouldAnimate}
+                  />
+                </div>
+              ))
+            }
+          </div>      
+          <div className="my-2 text-center">
+            <button 
+              className="btn-success py-2 px-10 md:w-auto w-full" 
+              selectedOption={selectedOption}
+              onClick={handleCreatePayment}
+            >
+              Оплатить
+            </button>
+          </div>
+
+        </div>
+      }
     </div>
   );
 };
