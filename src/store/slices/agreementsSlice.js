@@ -30,7 +30,6 @@ export const fetchAgreementsList = createAsyncThunk(
     }
   }
 );
-
 export const fetchAgreementsAccruals = createAsyncThunk(
   'agreementsSlice/fetchAgreementsAccruals',
   async (_, { rejectWithValue }) => {

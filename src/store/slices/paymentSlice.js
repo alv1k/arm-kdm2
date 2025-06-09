@@ -5,6 +5,16 @@ import { showToast } from '@/utils/notify';
 export const fetchPayment = createAsyncThunk(
   'paymentSlice/fetchPayment',
   async (options, { rejectWithValue }) => {
+
+    const codes = [
+      400,
+      401,
+      403,
+      404,
+      429,
+      500
+    ];
+
     try {
       const token = localStorage.getItem('token') ?? sessionStorage.getItem('token');
       if (!token) {
@@ -13,10 +23,6 @@ export const fetchPayment = createAsyncThunk(
       }      
       const response = await api.post(`/create-payment`, options);
       if (!response.data.success) {
-        localStorage.removeItem('token')
-        sessionStorage.removeItem('token');
-        document.cookie = 'token=; Max-Age=0; path=/;';
-        window.location.href = '/login';
         throw new Error(`HTTP error! status: ${response.data.status}`);
       }
       return await response.data;
@@ -42,14 +48,9 @@ export const fetchCheckPayment = createAsyncThunk(
       
       const response = await api.get(`/check-payment?paymentId=${paymentId}`);
       if (!response.data.success) {
-        localStorage.removeItem('token')
-        sessionStorage.removeItem('token');
-        document.cookie = 'token=; Max-Age=0; path=/;';
-        window.location.href = '/login';
         throw new Error(`HTTP error! status: ${response.data.status}`);
-      } 
-      localStorage.removeItem('lastPaymentId');
-      return await response.data.data.payload;
+      }      
+      return await response.data;
     } catch (error) {
       console.log(error, 'error');
       if (error.message == 'timeout of 5000ms exceeded') {

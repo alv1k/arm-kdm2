@@ -75,18 +75,6 @@ const PaymentModal = (props) => {
         ]
       }
   
-         
-      // {
-      //   "success": true,
-      //   "paymentId": "2fd48b62-000f-5000-8000-159f2acc49de",
-      //   "paymentUrl": "https://yoomoney.ru/checkout/payments/v2/contract?orderId=2fd48b62-000f-5000-8000-159f2acc49de",
-      //   "message": "Платеж создан успешно"
-      // } 
-      // 2fd49bbe-000f-5001-9000-1c9e0c15df22
-      // /payment-success
-
-      // console.log(payload, 'payload check here');
-  
       const response = payload.userId && payload.contractId && payload.amount ? await dispatch(fetchPayment(payload)) : null;
   
       if (response && response.payload.success) {  
