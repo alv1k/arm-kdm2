@@ -3,8 +3,10 @@ import { QRCodeSVG } from 'qrcode.react';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomCheckbox from '@/components/CustomCheckbox/CustomCheckbox';
 import DateFormatter from '@/components/DateFormatter/DateFormatter';
+import { fetchDowloadFile } from '@/store/slices/agreementsSlice';
 import { fetchPayment } from '@/store/slices/paymentSlice';
-import { setDataType, setShowModal } from '@/store/slices/modalSlice';
+import { setShowModal } from '@/store/slices/modalSlice';
+import { downloadAndPrintPDF } from '@/utils/fileDownload';
 import { showToast } from '@/utils/notify';
 
 const PaymentModal = (props) => {
@@ -88,7 +90,7 @@ const PaymentModal = (props) => {
         dispatch(setShowModal());
       }, 1000);
     } else if (response && response.payload.success && selectedOption === 'invoice') {
-      alert('invoice. what to do?')
+      handleFileDownload(data);
       setTimeout(() => {        
         dispatch(setShowModal());
       }, 1000);
@@ -103,6 +105,31 @@ const PaymentModal = (props) => {
         autoClose: 5000,
       });
     };  
+  }
+
+  const handleFileDownload = async (item) => {
+    try {
+      const resultAction = await dispatch(fetchDowloadFile(item.id))
+      const doc_name = item.descr + item.number;
+
+      const fileData = resultAction.payload;
+      if (fileData.length == 0) {
+        showToast('Файл не найден!', 'error', {
+          autoClose: 5000,
+        });
+      } else if (typeof fileData == 'object') {        
+        fileData.map(item => {
+          if (item?.dataUrl) {
+            downloadAndPrintPDF(item.dataUrl, doc_name);
+          } else {
+            console.error(`Файл ${item.type} не загружен: отсутствует dataUrl`);
+          }
+        })
+      }
+      
+    } catch (error) {
+      console.error("Ошибка загрузки файла:", error);
+    }  
   }
   
   const changePaymentSumHandler = (e) => {

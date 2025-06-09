@@ -140,7 +140,7 @@ const TheDocsListComponent = () => {
     }
   }
 
-  const handleSetDataType = (type, item) => {
+  const handleSetDataType = (type, item) => {    
     dispatch(setDataType(type));
     if (!sm_breakpoint) {
       dispatch(setShowModal())      

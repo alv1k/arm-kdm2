@@ -53,3 +53,44 @@ export async function downloadBase64PDF(base64String, filename = 'document') {
     throw error;
   }
 }
+
+export const downloadAndPrintPDF = (base64String, filename) => {
+  const printWindow = window.open('', '_blank');
+  
+  printWindow.document.writeln(`
+    <html>
+      <head>
+        <title>${filename}</title>
+        <script>
+          window.onload = function() {
+            setTimeout(function() {
+              window.print();
+              window.close();
+            }, 500);
+          };
+        </script>
+      </head>
+      <body>
+        <embed 
+          src="data:application/pdf;base64,${base64String.split(',')[1]}" 
+          type="application/pdf" 
+          width="100%" 
+          height="100%" />
+      </body>
+    </html>
+  `);
+  // id="print"
+  // printWindow.document.close();
+  // printWindow.document.writeln(`
+  //   <button onclick="window.print()" 
+  //           style="position: fixed; top: 10px; left: 10px; z-index: 9999">
+  //     Нажмите для печати
+  //   </button>
+  // `);
+  printWindow.onload = function() {
+    setTimeout(() => {
+      window.print();
+      // printWindow.close(); // Осторожно - может закрыться до печати
+    }, 1000);
+  };
+};
