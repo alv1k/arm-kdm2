@@ -383,7 +383,7 @@ const TheDocsListComponent = () => {
         onClick={(e) => handleRequestTap(item)}
       >
         <div className="w-full">
-          <p className="mb-2"><span className="text-[#787C82] text-nowrap">№ 001.&nbsp;</span>{item.object}</p>
+          <p className="mb-2"><span className="text-[#787C82] text-nowrap">№ {item.number}.&nbsp;</span>{item.object}</p>
           <div className="text-nowrap"><span className="text-[#787C82]">Тема:&nbsp;</span>{item.type}</div>
           <div className="text-nowrap my-1 md:flex block gap-5">
             <div className="flex gap-6">
@@ -396,6 +396,14 @@ const TheDocsListComponent = () => {
                 <span className={item.status ? getStatusClass(item.status) : ''}>
                   {item.status}
                 </span>
+              </p>
+            </div>
+            <div className="flex gap-2 w-full my-1">
+              <p className="text-[#787C82]">
+                Описание: 
+              </p>
+              <p className=" truncate w-full">
+                {item.descr}
               </p>
             </div>
             {
@@ -491,6 +499,12 @@ const TheDocsListComponent = () => {
               </span>
             </div>
           )}
+          {
+            currentRoute === "/requests" && 
+            <div className="flex w-[120px] flex-shrink-0">
+              Описание
+            </div>
+          }
 
           {/* Action Column */}
           {currentTab && (currentTab.title_en !== 'objects' || currentTab.title_en == 'counters') && (
@@ -621,18 +635,27 @@ const TheDocsListComponent = () => {
               )}
 
               {/* Action Cell */}
-              {currentTab && currentTab.title_en === 'bills' && (
+              {currentTab && (currentTab.title_en === 'bills' || currentRoute === '/requests') && (
                 <div className="w-[120px] flex-shrink-0 flex justify-end pe-5">
-                  <button 
-                    className="btn-default px-4 py-2 flex items-center text-sm"
-                    onClick={(e) => handleFileDownload(e, item)}
-                    disabled={item.status === 'payd'}
-                  >
-                    <svg className="icon me-2 w-4 h-4">
-                      <use href={`${sprite_path}#doc-icon`} />
-                    </svg>
-                    Скачать
-                  </button>
+                  {
+                    currentTab.title_en === 'bills' &&
+                    <button 
+                      className="btn-default px-4 py-2 flex items-center text-sm"
+                      onClick={(e) => handleFileDownload(e, item)}
+                      disabled={item.status === 'payd'}
+                    >
+                      <svg className="icon me-2 w-4 h-4">
+                        <use href={`${sprite_path}#doc-icon`} />
+                      </svg>
+                      Скачать
+                    </button>
+                  }
+                  {
+                    currentRoute === '/requests' && 
+                    <p className="truncate">
+                      {item.descr}
+                    </p>
+                  }
                 </div>
               )}
 
