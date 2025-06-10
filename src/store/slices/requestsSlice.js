@@ -46,30 +46,6 @@ export const fetchNewRequest = createAsyncThunk(
     }
   }
 );
-export const deleteRequest = createAsyncThunk(
-  'requestsSlice/deleteRequest', 
-  async (id, { rejectWithValue }) => {
-    try {
-      const token = localStorage.getItem('token') ?? sessionStorage.getItem('token');
-      if (!token) {
-        window.location.href = '/login';
-        throw new Error('Token not found');
-      }
-      
-      let payload = {
-        token: localStorage.getItem('token') ?? sessionStorage.getItem('token'),
-        id: id
-      };
-      const response = await api.post(`/deleteApp`, payload);
-      if (!response.data.success) {
-        throw new Error(`HTTP error! status: ${response.data.status}`);
-      }      
-      return await response.data;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-)
 
 const requestsSlice = createSlice({
   name: 'requests',

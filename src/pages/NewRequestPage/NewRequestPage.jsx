@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { requestStatusFalse, fetchNewRequest, fetchRequestsList, requestEditFalse, deleteRequest } from '@/store/slices/requestsSlice';
+import { requestStatusFalse, fetchNewRequest, fetchRequestsList, requestEditFalse } from '@/store/slices/requestsSlice';
 import { downloadBase64PDF } from '@/utils/fileDownload';
 import { getBase64 } from '@/utils/getBase64';
 import useMediaQueries from '@/hooks/useMediaQueries';
@@ -27,6 +27,7 @@ const NewRequestPage = () => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [requestId, setRequestId] = useState(null);
   const [error, setError] = useState(null);
+  const [isRejectedRequest, setRejectedRequest] = useState(false);
 
   function getUniqueById(options) {
     if (!Array.isArray(options)) return [];
@@ -63,7 +64,8 @@ const NewRequestPage = () => {
       object: selectedObject,
       type: selectedType,
       descr: requestDescr,
-      status: isEditRequest ? editData.status : 'В работе',
+      // status: isEditRequest ? editData.status : 'В работе',
+      status: isEditRequest ? getCurrentStatus() : 'В работе',
       token: localStorage.getItem('token') ?? sessionStorage.getItem('token'),
       file: uploadedFiles,
     } : 
@@ -71,13 +73,10 @@ const NewRequestPage = () => {
       object: selectedObject,
       type: selectedType,
       descr: requestDescr,
-      status: isEditRequest ? editData.status : 'В работе',
+      status: isEditRequest ? getCurrentStatus() : 'В работе',
       token: localStorage.getItem('token') ?? sessionStorage.getItem('token'),
       file: uploadedFiles,
-    }
-
-    console.log(data, 'hhh');
-    
+    }    
     
      if (selectedObject == '') {
       showToast('Выберите помещение!', 'error', {
@@ -98,7 +97,7 @@ const NewRequestPage = () => {
     const response = await dispatch(fetchNewRequest(data));
 
     if (response.payload.success) {      
-      showToast(`Заявка №${editData.number} успешно ${isEditRequest ? 'изменена' : 'внесена'} !`, 'success', {
+      showToast(`Заявка №${editData.number} успешно ${isRejectedRequest ? 'отклонена' : isEditRequest ? 'изменена' : 'внесена'} !`, 'success', {
         autoClose: 2000,
       });
       dispatch(fetchRequestsList());
@@ -106,20 +105,22 @@ const NewRequestPage = () => {
       dispatch(requestStatusFalse());
     }
   }
-  const handleDeleteRequest = async () => {
-    const response = await dispatch(deleteRequest(editData.id));
-    
-    if (response.payload.success) {
-      showToast(`Заявка успешно удалена!`, 'success', {
-        autoClose: 2000,
-      });
-      backToRequests();
-    } else {
-      showToast(`Заявку не удалось удалить`, 'error', {
-        autoClose: 2000,
-      });
+
+  const getCurrentStatus = () => {
+    let status = null;
+    if (isEditRequest && isRejectedRequest) {
+      status = 'Отклонена';
+    } else if (isEditRequest) {
+      status = editData.status;
     }
+    
+    return status;
   }
+
+  const handleRejectRequest = () => {
+    setRejectedRequest(true); // Запускает useEffect
+  };
+
   const handleRequestDescrChange = (e) => {    
     if (e.target.value.length < 1000) {
       const input = e.target;
@@ -304,6 +305,12 @@ const NewRequestPage = () => {
     setRequestId(editData.id);
   }, [editData]);
 
+  useEffect(() => {
+    if (isRejectedRequest) {
+      handleSubmit(); 
+    }
+  }, [isRejectedRequest]);
+
 
 
   return (
@@ -469,14 +476,14 @@ const NewRequestPage = () => {
             <button 
               className="md:ms-5 flex gap-3 btn-default py-2 md:w-auto md:px-5 md:mt-8 w-full mt-4 justify-center" 
               type="submit" 
-              onClick={handleDeleteRequest}
+              onClick={() => handleRejectRequest()}
             >
               <svg
                 className="icon"
               >
                 <use href={`${sprite_path}#trash-icon`} />
               </svg>
-              Удалить заявку
+              Отклонить заявку
             </button>
           }
         </div>
