@@ -290,53 +290,41 @@ const NewRequestPage = () => {
     <div className="lg:text-base md:text-base md:pb-10 text-sm md:h-auto h-fit pb-10">
       <div className="flex md:justify-start justify-center items-center mb-4">
         {
-          sm_breakpoint || md_breakpoint ? '' :
-          <p className="
-            xl:mt-0 
-            lg:px-6 lg:text-[26px] lg:mt-4
-            md:px-2 md:mt-9
-            text-xl font-semibold mt-5
-          ">
-            { isEditRequest? `Заявка №${editData.number}` : 'Новая заявка' }
-          </p>
-        }
-        {
-          !sm_breakpoint ? 
-          <button 
-            className="btn-text ms-auto me-4 lg:mt-0 md:mt-0 flex cursor-pointer"
-            onClick={backToRequests}
-          >
-            <svg
-              className="icon"
-            >
-              <use href={`${sprite_path}#back-icon`} />
-            </svg>            
-            Назад
-          </button> : ''
-        }
-      </div>
-      <div className="
-        lg:mt-9 lg:ms-1 
+          sm_breakpoint || md_breakpoint ? 
+          <div className="lg:mt-9 lg:ms-1 
         md:text-left md:ms-2 md:flex
-        text-[#203887] text-center font-semibold mt-4 lg:text-base md:text-base text-sm
-      ">
-        <p className="text-xl">
-          { isEditRequest? `Заявка №${editData.number}` : 'Новая заявка' }
-        </p>
-        {
-          !sm_breakpoint ? 
-          <button 
-            className="btn-text ms-auto me-4 lg:mt-0 md:mt-0 flex cursor-pointer"
-            onClick={backToRequests}
+        text-[#203887] text-center font-semibold mt-4 lg:text-base md:text-base text-sm">
+            <p className="
+              xl:mt-0 
+              lg:px-6 lg:text-[26px] lg:mt-4
+              md:px-2 md:mt-9
+              text-xl font-semibold mt-5
+            ">
+              { isEditRequest? `Заявка №${editData.number}` : 'Новая заявка' }
+            </p>
+          </div> 
+          : 
+          <div className="
+            lg:mt-9 lg:ms-1 
+            md:text-left md:ms-2 md:flex
+            text-[#203887] text-center font-semibold mt-4 lg:text-base md:text-base text-sm w-full"
           >
-            <svg
-              className="icon"
+            <p className="text-3xl">
+              { isEditRequest? `Заявка №${editData.number}` : 'Новая заявка' }
+            </p>
+            <button 
+              className="btn-text ms-auto me-4 lg:mt-0 md:mt-0 flex cursor-pointer"
+              onClick={backToRequests}
             >
-              <use href={`${sprite_path}#back-icon`} />
-            </svg>            
-            Назад
-          </button> : ''
-        }
+              <svg
+                className="icon"
+              >
+                <use href={`${sprite_path}#back-icon`} />
+              </svg>            
+              Назад
+            </button> 
+          </div>
+        }        
       </div>
       <div className="lg:w-4/5 w-full pt-5 flex flex-col md:gap-2 gap-5">
         <div className='lg:flex lg:gap-5 block'>
