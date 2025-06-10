@@ -365,10 +365,11 @@ const NewRequestPage = () => {
           !sm_breakpoint ? <span className="text-[#787C82] md:mt-2">Описание заявки</span> : ''
         }
         <textarea 
-          className="w-full rounded-lg px-5 py-4 bg-item-active md:min-h-43 min-h-50 outline-0"
+          className={`w-full rounded-lg px-5 py-4 bg-item-active md:min-h-43 min-h-50 outline-0 ${editData.status === 'Выполнено' || editData.status === 'Отклонена' ? 'text-[#787C82] ' : ''}`}
           placeholder={`${!sm_breakpoint ? 'Введите текст' : 'Описание заявки'}`}
           value={requestDescr}
           onChange={(e) => handleRequestDescrChange(e)}
+          disabled={editData.status === 'Выполнено' || editData.status === 'Отклонена'}
         ></textarea>
         
         {
@@ -451,31 +452,35 @@ const NewRequestPage = () => {
           </div>
         }
       </div>
-      <div className={sm_breakpoint ? '' : 'flex'}>
+      {
+        editData.status === 'Выполнено' || editData.status === 'Отклонена' ?
+        '' : 
+        <div className={sm_breakpoint ? '' : 'flex'}>
 
-        <button 
-          className="btn-primary py-2 md:w-auto md:px-10 md:mt-8 w-full mt-11" 
-          type="submit" 
-          onClick={handleSubmit}
-        >
-          { isEditRequest ? 'Сохранить изменения' : 'Отправить' }
-        </button>
-        {
-          isEditRequest &&
           <button 
-            className="md:ms-5 flex gap-3 btn-default py-2 md:w-auto md:px-5 md:mt-8 w-full mt-4 justify-center" 
+            className="btn-primary py-2 md:w-auto md:px-10 md:mt-8 w-full mt-11" 
             type="submit" 
-            onClick={handleDeleteRequest}
+            onClick={handleSubmit}
           >
-            <svg
-              className="icon"
-            >
-              <use href={`${sprite_path}#trash-icon`} />
-            </svg>
-            Удалить заявку
+            { isEditRequest ? 'Сохранить изменения' : 'Отправить' }
           </button>
-        }
-      </div>
+          {
+            isEditRequest &&
+            <button 
+              className="md:ms-5 flex gap-3 btn-default py-2 md:w-auto md:px-5 md:mt-8 w-full mt-4 justify-center" 
+              type="submit" 
+              onClick={handleDeleteRequest}
+            >
+              <svg
+                className="icon"
+              >
+                <use href={`${sprite_path}#trash-icon`} />
+              </svg>
+              Удалить заявку
+            </button>
+          }
+        </div>
+      }
     </div>
   )
 }
