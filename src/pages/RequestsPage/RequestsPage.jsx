@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { hideNavbar } from '@/store/slices/navbarSlice';
 import { useLocation } from 'react-router-dom';
 import { toggleTabs, setRequestsSelectedTab } from '@/store/slices/tabsSlice';
-import { isNew, requestStatusFalse, fetchRequestsList } from '@/store/slices/requestsSlice';
+import { isNew, requestStatusFalse, fetchRequestsList, requestEditFalse } from '@/store/slices/requestsSlice';
 import { fetchAgreementsList } from '@/store/slices/agreementsSlice';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
 
@@ -41,6 +41,7 @@ const RequestsPage = () => {
   }, [dispatch]);
   const location = useLocation();
   useEffect(() => {
+    dispatch(requestEditFalse());    
     dispatch(requestStatusFalse());  
   }, [location]);  
   

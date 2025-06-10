@@ -58,7 +58,7 @@ const NewRequestPage = () => {
     dispatch(requestStatusFalse());
   }
   const handleSubmit = async () => {    
-    const data = {
+    const data = isEditRequest ? {
       id: requestId ?? null,
       object: selectedObject,
       type: selectedType,
@@ -66,7 +66,18 @@ const NewRequestPage = () => {
       status: isEditRequest ? editData.status : 'В работе',
       token: localStorage.getItem('token') ?? sessionStorage.getItem('token'),
       file: uploadedFiles,
+    } : 
+    {
+      object: selectedObject,
+      type: selectedType,
+      descr: requestDescr,
+      status: isEditRequest ? editData.status : 'В работе',
+      token: localStorage.getItem('token') ?? sessionStorage.getItem('token'),
+      file: uploadedFiles,
     }
+
+    console.log(data, 'hhh');
+    
     
      if (selectedObject == '') {
       showToast('Выберите помещение!', 'error', {
@@ -84,15 +95,16 @@ const NewRequestPage = () => {
       });
       return;
     }
-    // const response = await dispatch(fetchNewRequest(data));
+    const response = await dispatch(fetchNewRequest(data));
 
-    // if (response.payload.success) {      
-    //   showToast(`Заявка успешно ${isEditRequest ? 'изменена' : 'внесена'} !`, 'success', {
-    //     autoClose: 2000,
-    //   });
-    //   dispatch(fetchRequestsList());
-    //   dispatch(requestStatusFalse());
-    // }    
+    if (response.payload.success) {      
+      showToast(`Заявка №${editData.number} успешно ${isEditRequest ? 'изменена' : 'внесена'} !`, 'success', {
+        autoClose: 2000,
+      });
+      dispatch(fetchRequestsList());
+      dispatch(requestEditFalse());
+      dispatch(requestStatusFalse());
+    }
   }
   const handleDeleteRequest = async () => {
     const response = await dispatch(deleteRequest(editData.id));
@@ -110,6 +122,14 @@ const NewRequestPage = () => {
   }
   const handleRequestDescrChange = (e) => {    
     if (e.target.value.length < 1000) {
+      const input = e.target;
+      if (input.value.includes('/') || input.value.includes('\\')) {
+        input.value = input.value.replace(/[/\\]/g, ''); // Удаляет все / и \
+        console.log('Недопустимые символы удалены');        
+        showToast(`Недопустимые символы удалены`, 'error', {
+          autoClose: 500,
+        });
+      }
       setRequestDescr(e.target.value);
     } else {          
       showToast('Текст слишкой длинный', 'error', {
