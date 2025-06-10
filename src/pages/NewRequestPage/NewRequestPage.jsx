@@ -310,7 +310,7 @@ const NewRequestPage = () => {
     <div className="lg:text-base md:text-base md:pb-10 text-sm md:h-auto h-fit pb-10">
       <div className="flex md:justify-start justify-center items-center mb-4">
         {
-          sm_breakpoint || md_breakpoint ? 
+          sm_breakpoint ? 
           <div className="lg:mt-9 lg:ms-1 
         md:text-left md:ms-2 md:flex
         text-[#203887] text-center font-semibold mt-4 lg:text-base md:text-base text-sm">

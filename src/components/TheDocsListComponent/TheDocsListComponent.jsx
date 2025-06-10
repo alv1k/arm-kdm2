@@ -385,7 +385,7 @@ const TheDocsListComponent = () => {
         <div className="w-full">
           <p className="mb-2"><span className="text-[#787C82] text-nowrap">№ {item.number}.&nbsp;</span>{item.object}</p>
           <div className="text-nowrap"><span className="text-[#787C82]">Тема:&nbsp;</span>{item.type}</div>
-          <div className="text-nowrap my-1 md:flex block gap-5">
+          <div className="text-nowrap my-1 gap-5">
             <div className="flex gap-6">
               <p>
                 <span className="text-[#787C82]">Дата:&nbsp;</span>
