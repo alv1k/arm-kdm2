@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { toggleNavbar } from '@/store/slices/navbarSlice';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
 import { isShowDetails, hideDetails, agreementsStoreList, isShowCountersModal, setHideCountersModal, isShowPaymentModal, setHidePaymentModal } from '@/store/slices/agreementsSlice';
-import { isNew, requestStatusTrue, requestStatusFalse } from '@/store/slices/requestsSlice';
+import { isNew, requestStatusTrue, requestStatusFalse, requestEditFalse } from '@/store/slices/requestsSlice';
 import { isPasswordModification, togglePasswordChange, fetchProfileData } from '@/store/slices/userSlice';
 import styles from './TheHeader.module.css'
 
@@ -19,6 +19,7 @@ const TheHeader = () => {
   const isNewRequest = useSelector(isNew);
   const isPasswordChange = useSelector(isPasswordModification);
   const profileFetchedData = useSelector((state) => state.user_slice.profileData);
+  const isEditRequest = useSelector((state) => state.requests_slice.isEditRequest);
   const showNavbar = useSelector(state => state.navbar.showNavbar);
   const navigate = useNavigate();
 
@@ -33,8 +34,9 @@ const TheHeader = () => {
       dispatch(setHideCountersModal())
     } else if (isVisiblePaymentModal) {
       dispatch(setHidePaymentModal());
-    } else if (isNewRequest) {
+    } else if (isNewRequest || isEditRequest) {
       dispatch(requestStatusFalse());
+      dispatch(requestEditFalse());
     } else if(isPasswordChange) {
       dispatch(togglePasswordChange());
     } else if (showAgreementDetails) {
@@ -48,7 +50,7 @@ const TheHeader = () => {
   return (
     <header className="xl:px-10 lg:px-10 md:px-6 md:pb-5 md:h-auto px-0 text-[#203887] bg-white py-5 flex sticky top-0 shadow-sm h-16 z-30">
       {
-        ((isNewRequest || showAgreementDetails || isPasswordChange) && sm_breakpoint) ?
+        ((isNewRequest || isEditRequest || showAgreementDetails || isPasswordChange) && sm_breakpoint) ?
         <button 
           className="md:text-base text-sm btn-text flex items-center ms-3 z-20 md:static absolute"
           onClick={handleBackwards}

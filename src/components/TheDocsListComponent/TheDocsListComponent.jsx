@@ -9,7 +9,7 @@ import styles from './TheDocsListComponent.module.css';
 import { setDataType, setShowModal, setDataOfModal } from '@/store/slices/modalSlice';
 import { selectedTab } from '@/store/slices/tabsSlice';
 import { setShowCountersModal, setShowPaymentModal, fetchDowloadFile } from '@/store/slices/agreementsSlice';
-import { isNew, requestStatusFalse, fetchRequestsList, requestsList } from '@/store/slices/requestsSlice';
+import { isNew, requestStatusFalse, fetchRequestsList, requestsList, requestEditTrue, setEditData } from '@/store/slices/requestsSlice';
 import { removeToken } from '@/store/slices/userSlice';
 import { downloadBase64PDF } from '@/utils/fileDownload';
 import { showToast } from '@/utils/notify';
@@ -208,6 +208,12 @@ const TheDocsListComponent = () => {
     return item.find(i => i?.[0]?.end_date)?.[0]?.end_date || '';
   }
 
+  const handleRequestTap = (item) => {
+    console.log('handleRequestTap');
+    dispatch(setEditData(item));
+    dispatch(requestEditTrue());    
+  }
+
   return (
     (sm_breakpoint || md_breakpoint) ?      
     getList()?.map((item, index) => (
@@ -370,7 +376,12 @@ const TheDocsListComponent = () => {
         }
       </div>
       :
-      <div key={index} className={`${currentTab && (currentTab == 'all_requests' || currentTab == 'my_requests')  ? 'md:ps-3' : ''}  mt-6 bg-item-default rounded-xl p-4 md:flex block`}>
+      <div 
+        key={index} 
+        className={`${currentTab && (currentTab == 'all_requests' || currentTab == 'my_requests')  ? 'md:ps-3' : ''}
+        mt-6 bg-item-default rounded-xl p-4 md:flex block`}
+        onClick={(e) => handleRequestTap(item)}
+      >
         <div className="w-full">
           <p className="mb-2"><span className="text-[#787C82] text-nowrap">№ 001.&nbsp;</span>{item.object}</p>
           <div className="text-nowrap"><span className="text-[#787C82]">Тема:&nbsp;</span>{item.type}</div>
@@ -495,6 +506,7 @@ const TheDocsListComponent = () => {
             <div 
               key={index} 
               className="flex items-center p-4 bg-item-default rounded-lg hover:bg-item-hover transition-colors"
+              onClick={(e) => currentRoute === '/requests' ? handleRequestTap(item) : ''}
             >
               {/* Cell 1 */}
               <div className={`

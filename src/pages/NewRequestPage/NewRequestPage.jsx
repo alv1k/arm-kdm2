@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { requestStatusFalse, fetchNewRequest, fetchRequestsList } from '@/store/slices/requestsSlice';
+import { requestStatusFalse, fetchNewRequest, fetchRequestsList, requestEditFalse, deleteRequest } from '@/store/slices/requestsSlice';
+import { downloadBase64PDF } from '@/utils/fileDownload';
 import { getBase64 } from '@/utils/getBase64';
 import useMediaQueries from '@/hooks/useMediaQueries';
 import CustomSelect from '@/components/CustomSelect/CustomSelect';
@@ -13,14 +14,18 @@ const NewRequestPage = () => {
   const types = ['Авария', 'Проблема', 'Запрос'];
   const sprite_path = './src/assets/images/i.svg';
   const showNavbar = useSelector((state) => state.navbar.showNavbar);
-  const allObjects = useSelector((state) => state.agreements_slice.allObjects)
-  const isNewRequestSaved = useSelector((state) => state.requests_slice.isNewRequestSaved)
+  const allObjects = useSelector((state) => state.agreements_slice.allObjects);
+  const isNewRequestSaved = useSelector((state) => state.requests_slice.isNewRequestSaved);
+  const isEditRequest = useSelector((state) => state.requests_slice.isEditRequest);
+  const editData = useSelector((state) => state.requests_slice.editData);
+  
   const dispatch = useDispatch();
   const [selectedObject, setSelectedObject] = useState("");
   const [requestDescr, setRequestDescr] = useState("");  
   const [selectedType, setSelectedType] = useState("");
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [requestId, setRequestId] = useState(null);
   const [error, setError] = useState(null);
 
   function getUniqueById(options) {
@@ -49,47 +54,61 @@ const NewRequestPage = () => {
   };  
 
   const backToRequests = () => {
+    dispatch(requestEditFalse());
     dispatch(requestStatusFalse());
   }
-  const handleCreateNewRequest = async () => {    
+  const handleSubmit = async () => {    
     const data = {
+      id: requestId ?? null,
       object: selectedObject,
       type: selectedType,
       descr: requestDescr,
-      status: 'В работе',
+      status: isEditRequest ? editData.status : 'В работе',
       token: localStorage.getItem('token') ?? sessionStorage.getItem('token'),
       file: uploadedFiles,
-      // file:{ dataUrl, format } если добавлен файл
-      // !!! update file: dataUrl
-      // c заголовком data:application/pdf;base64
     }
+    
      if (selectedObject == '') {
-      showToast('Выберите объект заявки', 'error', {
+      showToast('Выберите помещение!', 'error', {
         autoClose: 2000,
       });
       return;
     } else if (selectedType == '') {   
-      showToast('Выберите тему обращения', 'error', {
+      showToast('Выберите тему обращения!', 'error', {
         autoClose: 2000,
       });
       return;
     } else if (requestDescr == '') {
-      showToast('Введите описание заявки', 'error', {
+      showToast('Введите описание заявки!', 'error', {
         autoClose: 2000,
       });
       return;
     }
-    const response = await dispatch(fetchNewRequest(data));
+    // const response = await dispatch(fetchNewRequest(data));
 
-    if (response.payload.success) {      
-      showToast('Заявка успешно внесена!', 'success', {
+    // if (response.payload.success) {      
+    //   showToast(`Заявка успешно ${isEditRequest ? 'изменена' : 'внесена'} !`, 'success', {
+    //     autoClose: 2000,
+    //   });
+    //   dispatch(fetchRequestsList());
+    //   dispatch(requestStatusFalse());
+    // }    
+  }
+  const handleDeleteRequest = async () => {
+    const response = await dispatch(deleteRequest(editData.id));
+    
+    if (response.payload.success) {
+      showToast(`Заявка успешно удалена!`, 'success', {
         autoClose: 2000,
       });
-      dispatch(fetchRequestsList());
-      dispatch(requestStatusFalse());
-    }    
+      backToRequests();
+    } else {
+      showToast(`Заявку не удалось удалить`, 'error', {
+        autoClose: 2000,
+      });
+    }
   }
-  const handleRequestDescrChange = (e) => {
+  const handleRequestDescrChange = (e) => {    
     if (e.target.value.length < 1000) {
       setRequestDescr(e.target.value);
     } else {          
@@ -235,6 +254,10 @@ const NewRequestPage = () => {
     });
   };
 
+  const handleFileDownload = (file) => {
+    downloadBase64PDF(file.dataUrl, file.name);
+  }
+
   useEffect(() => {
     if (selectedFiles.length > 5) {
       showToast('Количество файлов должно быть не более 5, пожалуйста, произведите выбор еще раз', 'error', {
@@ -252,10 +275,20 @@ const NewRequestPage = () => {
       }
     })
     
-  }, [selectedFiles])
+  }, [selectedFiles]);
+
+  useEffect(() => {
+    setRequestDescr(editData.descr);
+    setSelectedObject(editData.object_id);
+    setSelectedType(editData.type);
+    setRequestId(editData.id);
+  }, [editData]);
+
+
+
   return (
     <div className="lg:text-base md:text-base md:pb-10 text-sm md:h-auto h-fit pb-10">
-      <div className="flex md:justify-start justify-center">
+      <div className="flex md:justify-start justify-center items-center mb-4">
         {
           sm_breakpoint || md_breakpoint ? '' :
           <p className="
@@ -264,8 +297,22 @@ const NewRequestPage = () => {
             md:px-2 md:mt-9
             text-xl font-semibold mt-5
           ">
-            Новая заявка
+            { isEditRequest? `Заявка №${editData.number}` : 'Новая заявка' }
           </p>
+        }
+        {
+          !sm_breakpoint ? 
+          <button 
+            className="btn-text ms-auto me-4 lg:mt-0 md:mt-0 flex cursor-pointer"
+            onClick={backToRequests}
+          >
+            <svg
+              className="icon"
+            >
+              <use href={`${sprite_path}#back-icon`} />
+            </svg>            
+            Назад
+          </button> : ''
         }
       </div>
       <div className="
@@ -274,7 +321,7 @@ const NewRequestPage = () => {
         text-[#203887] text-center font-semibold mt-4 lg:text-base md:text-base text-sm
       ">
         <p className="text-xl">
-          Новая заявка
+          { isEditRequest? `Заявка №${editData.number}` : 'Новая заявка' }
         </p>
         {
           !sm_breakpoint ? 
@@ -295,15 +342,15 @@ const NewRequestPage = () => {
         <div className='lg:flex lg:gap-5 block'>
           <div className="lg:mt-0 mt-4 w-full lg:w-1/2">
             {
-              !sm_breakpoint ? <span className="text-[#787C82]">Объект аренды</span> : ''
+              !sm_breakpoint ? <span className="text-[#787C82]">Название помещения</span> : ''
             }
-            <CustomSelect onDataSend={setSelectedObject} options={cleanedObjects} defaultValue={sm_breakpoint ? 'Название помещения' : 'Выбрать'} />
+            <CustomSelect onDataSend={setSelectedObject} options={cleanedObjects} defaultValue={isEditRequest ? editData.object : sm_breakpoint ? 'Название помещения' : 'Выбрать'} />
           </div>
           <div className="lg:mt-0 mt-4 w-full lg:w-1/2">
             {
               !sm_breakpoint ? <span className="text-[#787C82] md:mt-2">Тема обращения</span> : ''
             }
-            <CustomSelect onDataSend={setSelectedType} options={types} defaultValue={sm_breakpoint ? 'Тема обращения' : 'Выбрать'} />
+            <CustomSelect onDataSend={setSelectedType} options={isEditRequest ? [] : types} defaultValue={isEditRequest ? editData.type : sm_breakpoint ? 'Тема обращения' : 'Выбрать'} />
           </div>
         </div>
         {
@@ -315,69 +362,112 @@ const NewRequestPage = () => {
           value={requestDescr}
           onChange={(e) => handleRequestDescrChange(e)}
         ></textarea>
-        <p className="text-[#787C82] md:mt-2">Прикрепить файлы, максимум 5 (*.jpeg, *.jpg, *.png, *.pdf)<br /> Каждый весом не более 3 MB</p>
-        <div className="
-          md:w-fit md:flex md:p-5 md:flex-row-reverse md:items-start
-          w-full rounded-lg px-5 py-3 mb-1 bg-item-active text-center items-center
-        ">
-          {
-            selectedFiles.length > 0 ? (
-              <div className="mt-2 space-y-1 text-[#787C82] md:pb-0 md:ps-10 pb-4 md:pe-6">
-                <p className="text-sm font-medium">Выбранные файлы:</p>
-                <ul className="space-y-1">
-                  {selectedFiles.map((file, index) => (
-                    <li 
-                      key={index} 
-                      className="flex items-center justify-between text-sm"
-                    >
-                      <span className="truncate max-w-xs">{file.fileName}</span>
-                      <span className="ms-6 text-gray-500">
-                        {(file.fileSize / 1024 / 1024).toFixed(2)}MB
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ) 
-            : 
-            <p className="text-[#787C82] md:pb-0 md:ps-10 pb-4 md:pe-6 align-center self-center-safe">{ uploadedFiles ? '' : 'Файлы не выбраны'}</p>
-          }
-          {
-            error && (
-              <div className="mt-2 text-sm text-red-600 bg-red-50 p-2 rounded">
-                {error}
-              </div>
-            )
-          }
-          <button 
-            className="
-              w-full md:w-auto 
-              px-4 py-2.5 
-              rounded-lg
-              btn-default 
-              text-white font-medium
-              transition-colors duration-200
-              disabled:opacity-50 disabled:cursor-not-allowed
-            "
-            onClick={(e) => {
-              e.preventDefault();
-              const fileInput = document.createElement('input');
-              fileInput.type = 'file';
-              fileInput.multiple = 'true';
-              fileInput.accept = ".pdf,.doc,.docx,.jpg,.png"; // Укажите нужные форматы
-              fileInput.onchange = (e) => handleFilesUpload(e);
-              fileInput.click();
-            }}
-          >
-            <div className="flex items-center justify-center gap-2 text-nowrap">
-              <span>Выберите файлы</span>
+        
+        {
+          isEditRequest ? 
+          <div>
+            {
+              editData.files && 
+              <p className="text-[#787C82] md:mt-2">Прикрепленные файлы</p>
+            }
+            <div className="flex gap-5 mt-4">
+              { 
+                editData.files && editData.files.map((file, index) => (
+                  <div key={index} className="w-20 cursor-pointer" onClick={() => handleFileDownload(file)}>
+                    <div className="w-20 h-20 rounded-xl bg-[#F4F4F4] hover:bg-[#F1F1F1]"></div>
+                    <p className="truncate" title={file.name}>{file.name}</p>
+                  </div>
+                ))
+              }
             </div>
-          </button>
-        </div>
+          </div>
+          :
+          <div className="
+            md:w-fit md:flex md:p-5 md:flex-row-reverse md:items-start
+            w-full rounded-lg px-5 py-3 mb-1 bg-item-active text-center items-center
+          ">
+            <p className="text-[#787C82] md:mt-2">Прикрепить файлы, максимум 5 (*.jpeg, *.jpg, *.png, *.pdf)<br /> Каждый весом не более 3 MB</p>
+            {
+              selectedFiles.length > 0 ? (
+                <div className="mt-2 space-y-1 text-[#787C82] md:pb-0 md:ps-10 pb-4 md:pe-6">
+                  <p className="text-sm font-medium">Выбранные файлы:</p>
+                  <ul className="space-y-1">
+                    {selectedFiles.map((file, index) => (
+                      <li 
+                        key={index} 
+                        className="flex items-center justify-between text-sm"
+                      >
+                        <span className="truncate max-w-xs">{file.fileName}</span>
+                        <span className="ms-6 text-gray-500">
+                          {(file.fileSize / 1024 / 1024).toFixed(2)}MB
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) 
+              : 
+              <p className="text-[#787C82] md:pb-0 md:ps-10 pb-4 md:pe-6 align-center self-center-safe">{ uploadedFiles ? '' : 'Файлы не выбраны'}</p>
+            }
+            {
+              error && (
+                <div className="mt-2 text-sm text-red-600 bg-red-50 p-2 rounded">
+                  {error}
+                </div>
+              )
+            }
+            <button 
+              className="
+                w-full md:w-auto 
+                px-4 py-2.5 
+                rounded-lg
+                btn-default 
+                text-white font-medium
+                transition-colors duration-200
+                disabled:opacity-50 disabled:cursor-not-allowed
+              "
+              onClick={(e) => {
+                e.preventDefault();
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.multiple = 'true';
+                fileInput.accept = ".pdf,.doc,.docx,.jpg,.png"; // Укажите нужные форматы
+                fileInput.onchange = (e) => handleFilesUpload(e);
+                fileInput.click();
+              }}
+            >
+              <div className="flex items-center justify-center gap-2 text-nowrap">
+                <span>Выберите файлы</span>
+              </div>
+            </button>
+          </div>
+        }
       </div>
-      <button className="btn-primary py-2 md:w-auto md:px-10 md:mt-8 w-full mt-11" type="submit" onClick={handleCreateNewRequest}>
-        Отправить
-      </button>
+      <div className={sm_breakpoint ? '' : 'flex'}>
+
+        <button 
+          className="btn-primary py-2 md:w-auto md:px-10 md:mt-8 w-full mt-11" 
+          type="submit" 
+          onClick={handleSubmit}
+        >
+          { isEditRequest ? 'Сохранить изменения' : 'Отправить' }
+        </button>
+        {
+          isEditRequest &&
+          <button 
+            className="md:ms-5 flex gap-3 btn-default py-2 md:w-auto md:px-5 md:mt-8 w-full mt-4 justify-center" 
+            type="submit" 
+            onClick={handleDeleteRequest}
+          >
+            <svg
+              className="icon"
+            >
+              <use href={`${sprite_path}#trash-icon`} />
+            </svg>
+            Удалить заявку
+          </button>
+        }
+      </div>
     </div>
   )
 }

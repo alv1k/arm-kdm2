@@ -56,41 +56,51 @@ export async function downloadBase64PDF(base64String, filename = 'document') {
 
 export const downloadAndPrintPDF = (base64String, filename) => {
   const printWindow = window.open('', '_blank');
+  if (!printWindow) return;
+
+  // Создаем структуру документа правильно
+  const doc = printWindow.document;
+  doc.open();
   
-  printWindow.document.writeln(`
-    <html>
-      <head>
-        <title>${filename}</title>
-        <script>
-          window.onload = function() {
-            setTimeout(function() {
-              window.print();
-              window.close();
-            }, 500);
-          };
-        </script>
-      </head>
-      <body>
-        <embed 
-          src="data:application/pdf;base64,${base64String.split(',')[1]}" 
-          type="application/pdf" 
-          width="100%" 
-          height="100%" />
-      </body>
-    </html>
-  `);
-  // id="print"
-  // printWindow.document.close();
-  // printWindow.document.writeln(`
-  //   <button onclick="window.print()" 
-  //           style="position: fixed; top: 10px; left: 10px; z-index: 9999">
-  //     Нажмите для печати
-  //   </button>
-  // `);
-  printWindow.onload = function() {
-    setTimeout(() => {
-      window.print();
-      // printWindow.close(); // Осторожно - может закрыться до печати
-    }, 1000);
+  // Создаем элементы через DOM API
+  const html = doc.createElement('html');
+  const head = doc.createElement('head');
+  const title = doc.createElement('title');
+  title.textContent = filename;
+  head.appendChild(title);
+
+  const style = doc.createElement('style');
+  style.textContent = `
+    body { margin: 0; padding: 0; }
+    embed { width: 100%; height: 100vh; }
+  `;
+  head.appendChild(style);
+
+  const body = doc.createElement('body');
+  const embed = doc.createElement('embed');
+  embed.setAttribute('src', `data:application/pdf;base64,${base64String.split(',')[1]}`);
+  embed.setAttribute('type', 'application/pdf');
+  embed.setAttribute('width', '100%');
+  embed.setAttribute('height', '100%');
+
+  const script = doc.createElement('script');
+  script.textContent = `
+    document.querySelector('embed').addEventListener('load', function() {
+      setTimeout(function() {
+        window.print();
+      }, 500);
+    });
+  `;
+
+  body.appendChild(embed);
+  body.appendChild(script);
+  html.appendChild(head);
+  html.appendChild(body);
+  doc.appendChild(html);
+  doc.close();
+
+  // Обработка закрытия окна
+  printWindow.onbeforeunload = () => {
+    URL.revokeObjectURL(embed.src);
   };
 };

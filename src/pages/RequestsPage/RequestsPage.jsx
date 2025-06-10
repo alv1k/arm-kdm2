@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { hideNavbar } from '@/store/slices/navbarSlice';
 import { useLocation } from 'react-router-dom';
@@ -18,6 +18,7 @@ const RequestsPage = () => {
   const sprite_path = './src/assets/images/i.svg';
   const showNavbar = useSelector((state) => state.navbar.showNavbar);
   const page404 = useSelector((state) => state.requests_slice.page404);
+  const isEditRequest = useSelector((state) => state.requests_slice.isEditRequest);
   const isLoading = useSelector((state) => state.loading_slice.isLoading);
   const isNewRequest = useSelector(isNew);
   
@@ -66,7 +67,7 @@ const RequestsPage = () => {
           <TheSkeleton width="auto" height="80px" className="mb-6" />
         </div>
         :            
-        isNewRequest ? 
+        isNewRequest || isEditRequest  ? 
           <NewRequestPage />
           : 
           <div className="lg:text-base md:text-base text-sm">

@@ -46,11 +46,37 @@ export const fetchNewRequest = createAsyncThunk(
     }
   }
 );
+export const deleteRequest = createAsyncThunk(
+  'requestsSlice/deleteRequest', 
+  async (id, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token') ?? sessionStorage.getItem('token');
+      if (!token) {
+        window.location.href = '/login';
+        throw new Error('Token not found');
+      }
+      
+      let payload = {
+        token: localStorage.getItem('token') ?? sessionStorage.getItem('token'),
+        id: id
+      };
+      const response = await api.post(`/deleteApp`, payload);
+      if (!response.data.success) {
+        throw new Error(`HTTP error! status: ${response.data.status}`);
+      }      
+      return await response.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+)
 
 const requestsSlice = createSlice({
   name: 'requests',
   initialState: {
     isNewRequest: false,
+    isEditRequest: false,
+    editData: null,
     requestsList: [],
     loading: false,
     error: null,
@@ -64,6 +90,18 @@ const requestsSlice = createSlice({
     requestStatusFalse: (state) => {
       state.isNewRequest = false;
     },
+    requestEditTrue: (state) => {
+      state.isEditRequest = true;
+    },
+    requestEditFalse: (state) => {
+      state.isEditRequest = false;
+    },
+    setEditData: (state, action) => {
+      state.editData = action.payload;
+    },
+    clearEditData: (state) => {
+      state.editData = null;
+    }
   },
     extraReducers: (builder) => {
       builder
@@ -104,5 +142,5 @@ const requestsSlice = createSlice({
 
 export const isNew = (state) => state.requests_slice.isNewRequest;
 export const requestsList = (state) => state.requests_slice.requestsList;
-export const { requestStatusTrue, requestStatusFalse } = requestsSlice.actions;
+export const { requestStatusTrue, requestStatusFalse, requestEditTrue, requestEditFalse, setEditData, clearEditData } = requestsSlice.actions;
 export default requestsSlice.reducer;
