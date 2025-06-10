@@ -299,10 +299,12 @@ const NewRequestPage = () => {
   }, [selectedFiles]);
 
   useEffect(() => {
-    setRequestDescr(editData.descr);
-    setSelectedObject(editData.object_id);
-    setSelectedType(editData.type);
-    setRequestId(editData.id);
+    if (editData) {
+      setRequestDescr(editData.descr);
+      setSelectedObject(editData.object_id);
+      setSelectedType(editData.type);
+      setRequestId(editData.id);
+    }
   }, [editData]);
 
   useEffect(() => {
@@ -372,11 +374,11 @@ const NewRequestPage = () => {
           !sm_breakpoint ? <span className="text-[#787C82] md:mt-2">Описание заявки</span> : ''
         }
         <textarea 
-          className={`w-full rounded-lg px-5 py-4 bg-item-active md:min-h-43 min-h-50 outline-0 ${editData.status === 'Выполнено' || editData.status === 'Отклонена' ? 'text-[#787C82] ' : ''}`}
+          className={`w-full rounded-lg px-5 py-4 bg-item-active md:min-h-43 min-h-50 outline-0 ${editData && (editData.status === 'Выполнено' || editData.status === 'Отклонена') ? 'text-[#787C82] ' : ''}`}
           placeholder={`${!sm_breakpoint ? 'Введите текст' : 'Описание заявки'}`}
           value={requestDescr}
           onChange={(e) => handleRequestDescrChange(e)}
-          disabled={editData.status === 'Выполнено' || editData.status === 'Отклонена'}
+          disabled={editData && (editData.status === 'Выполнено' || editData.status === 'Отклонена')}
         ></textarea>
         
         {
@@ -460,7 +462,7 @@ const NewRequestPage = () => {
         }
       </div>
       {
-        editData.status === 'Выполнено' || editData.status === 'Отклонена' ?
+        editData && (editData.status === 'Выполнено' || editData.status === 'Отклонена') ?
         '' : 
         <div className={sm_breakpoint ? '' : 'flex'}>
 
