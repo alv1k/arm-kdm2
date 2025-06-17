@@ -6,7 +6,7 @@ import DateFormatter from '@/components/DateFormatter/DateFormatter';
 import { fetchDowloadFile } from '@/store/slices/agreementsSlice';
 import { fetchPayment } from '@/store/slices/paymentSlice';
 import { setShowModal } from '@/store/slices/modalSlice';
-import { downloadAndPrintPDF } from '@/utils/fileDownload';
+import { downloadAndPrintPDF, downloadBase64PDF } from '@/utils/fileDownload';
 import { showToast } from '@/utils/notify';
 
 const PaymentModal = (props) => {
@@ -120,7 +120,8 @@ const PaymentModal = (props) => {
       } else if (typeof fileData == 'object') {        
         fileData.map(item => {
           if (item?.dataUrl) {
-            downloadAndPrintPDF(item.dataUrl, doc_name);
+            // downloadAndPrintPDF(item.dataUrl, doc_name);
+            downloadBase64PDF(item.dataUrl, doc_name);
           } else {
             console.error(`Файл ${item.type} не загружен: отсутствует dataUrl`);
           }

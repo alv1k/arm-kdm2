@@ -660,7 +660,7 @@ const TheDocsListComponent = () => {
               )}
 
               {currentTab && (currentTab.title_en !== 'objects' || currentTab.title_en == 'closing_docs') && (
-                <div className="w-[120px] flex-shrink-0 flex justify-start ">
+                <div className="w-[120px] flex-shrink-0 flex justify-end ">
                   {currentRoute === '/requests' || (currentTab && currentTab.title_en == 'counters' || currentTab.title_en == 'closing_docs') ? (
                     item.files && (
                       <div className="flex group relative text-[#4c515a] ">
