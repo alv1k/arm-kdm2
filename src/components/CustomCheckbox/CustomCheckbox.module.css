@@ -13,6 +13,7 @@
   display: inline-flex;
   align-items: center;
   user-select: none; /* Запретить выделение текста */
+  white-space: nowrap;
 }
 
 .checkbox_label::before {

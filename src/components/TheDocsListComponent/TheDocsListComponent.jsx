@@ -218,7 +218,7 @@ const TheDocsListComponent = () => {
     (sm_breakpoint || md_breakpoint) ?      
     getList()?.map((item, index) => (
       currentRoute != "/requests" ?
-      <div key={index} className={`grid ${currentTab && currentTab.title_en == 'closing_docs' ? '' : 'grid-cols-2'} gap-3 p-6 bg-[#FAFBFD] rounded-lg my-5`}>
+      <div key={index} className={`grid ${currentTab && currentTab.title_en == 'closing_docs' ? '' : currentTab.title_en == 'counters' ? 'grid-cols-[200px_minmax(100px,_1fr)_100px]' : 'grid-cols-2'} gap-3 p-6 bg-[#FAFBFD] rounded-lg my-5`}>
         <div className={`
           ${sm_breakpoint || md_breakpoint ? '' : 'flex'} 
           ${currentTab && (currentTab.title_en == 'bills' || currentTab.title_en == 'objects') ? 'text-left' : ''}
@@ -293,7 +293,7 @@ const TheDocsListComponent = () => {
           }
           {
             currentTab && currentTab.title_en == 'counters' &&
-            <div className={`${currentTab && currentTab == 'counters' ? 'md:ps-3' : ''} `}>
+            <div className={`${currentTab && currentTab == 'counters' ? 'md:ps-3' : 'col-auto'} `}>
               {
                 currentTab && currentTab.title_en == 'counters' ? 
                 <p className="mb-2">
@@ -342,7 +342,7 @@ const TheDocsListComponent = () => {
               <div className={`${currentTab && currentTab == 'counters' ? 'md:ps-3' : ''} `}>
                 {
                   currentTab && currentTab.title_en == 'counters' ? 
-                  <p className="mb-2">&nbsp;1</p> : ''
+                  <p className="mb-2">&nbsp;</p> : ''
                 }
                 {
                   item.length > 0 && item.map((counter, index) => (
@@ -636,7 +636,7 @@ const TheDocsListComponent = () => {
 
               {/* Action Cell */}
               {currentTab && (currentTab.title_en === 'bills' || currentRoute === '/requests') && (
-                <div className="w-[120px] flex-shrink-0 flex justify-end pe-5">
+                <div className="w-[120px] flex-shrink-0 flex pe-5">
                   {
                     currentTab.title_en === 'bills' &&
                     <button 

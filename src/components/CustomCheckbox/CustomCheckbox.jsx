@@ -8,8 +8,7 @@ const CustomCheckbox = (props) => {
         checked={props.checked} 
         id={props.id} 
         className={`
-          ${styles.checkbox_input}
-        
+          ${styles.checkbox_input}        
         `}
         onChange={() => {}}
       />

@@ -106,7 +106,7 @@ const PaymentStatusPage = () => {
               `} />
               </svg>
               
-              <p className={`text-2xl font-semibold mt-4 text-nowrap
+              <p className={`text-2xl font-semibold mt-4
                 ${paymentStatus === 'pending' && 'text-[#787C82]'}
                 ${paymentStatus === 'succeeded' && 'text-[#008A21]'}
               `}>
