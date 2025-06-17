@@ -58,9 +58,9 @@ const CountersModal = () => {
   
   const handleSetIndice = async () => {
     const data = getAllValues();
-       
-    let filtered_data = data.filter(item => item.value)
-    
+    let filtered_data = data.filter(item => item.value);
+    let isValid = true; // Локальная переменная для проверки валидности
+  
     for (const item of filtered_data) {
       if (Number(item.value) < item.minValue && item.value != undefined) {
         showToast('Введите значение больше/равно предыдущему значению!', 'error', {
@@ -68,29 +68,35 @@ const CountersModal = () => {
         });
         item.refElement.classList.add('danger_animation');
         setTimeout(() => item.refElement.classList.remove('danger_animation'), 3000);
-        setValidData(false);
-      } else {
-        setValidData(true);
+        isValid = false;
       }
     }
-    
-    if (validData) {
-      const response = await dispatch(fetchSendCountersIndice(filtered_data));
-
-      if (response && response.payload.success) {
-        showToast('Показания счетчиков переданы!', 'success', {
+  
+    setValidData(isValid); // Обновляем состояние, но оно нам уже не нужно для логики
+  
+    if (isValid) { // Используем локальную переменную
+      try {
+        const response = await dispatch(fetchSendCountersIndice(filtered_data));
+  
+        if (response?.payload?.success) {
+          showToast('Показания счетчиков переданы!', 'success', {
+            autoClose: 5000,
+          });
+          setTimeout(() => {      
+            dispatch(setShowModal());
+          }, 1000);
+        } else {
+          dispatch(invalidToken());
+          window.location.href = '/login';
+          showToast('Ошибка при передаче показаний счетчиков! ' + response?.payload, 'error', {
+            autoClose: 5000,
+          });
+        }
+      } catch (error) {
+        showToast('Произошла ошибка при отправке данных', 'error', {
           autoClose: 5000,
         });
-        setTimeout(() => {      
-          dispatch(setShowModal());
-        }, 1000);
-      } else {
-        dispatch(invalidToken());
-        window.location.href = '/login';
-        showToast('Ошибка при передаче показаний счетчиков! ' + response.payload, 'error', {
-          autoClose: 5000,
-        });
-      };    
+      }
     }
     
     window.scrollTo(0, 0);

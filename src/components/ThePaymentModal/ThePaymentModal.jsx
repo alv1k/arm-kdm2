@@ -66,6 +66,22 @@ const PaymentModal = (props) => {
     ]
   }
 
+  const handlePaymentPermission = async () => {
+    if (!selectedOption) {      
+      showToast('Выберите один из вариантов!', 'error', {
+        autoClose: 5000,
+      });
+      setShouldAnimate(true); // Активируем анимацию
+      return;
+    }    
+    if (userEmail && (!userEmail.includes('@') || !userEmail.includes('.'))) {   
+      showToast('Введите корректный адрес электронной почты', 'error', {
+        autoClose: 5000,
+      });
+      return;
+    }
+    response = payload.userId && payload.contractId && payload.amount ? await dispatch(fetchPayment(payload)) : null;
+  }
   let response = null;
 
   const handleCreatePayment = async () => {
@@ -82,29 +98,30 @@ const PaymentModal = (props) => {
       });
       return;
     }
-    response = payload.userId && payload.contractId && payload.amount ? await dispatch(fetchPayment(payload)) : null;
-    if (response && response.payload.success && selectedOption === 'card') {  
-      window.location.href = response.payload.paymentUrl;
-      localStorage.setItem('lastPaymentId', response.payload.paymentId);
-      setTimeout(() => {        
-        dispatch(setShowModal());
-      }, 1000);
-    } else if (response && response.payload.success && selectedOption === 'invoice') {
+    if (selectedOption === 'card' || selectedOption === 'qr') {
+      if (payload.userId && payload.contractId && payload.amount) {
+        response = await dispatch(fetchPayment(payload));
+        
+        if (response?.payload?.success) {
+          if (selectedOption === 'qr') {
+            setQrUrl(response.payload.paymentUrl);
+          } else {
+            window.location.href = response.payload.paymentUrl;
+          }
+          localStorage.setItem('lastPaymentId', response.payload.paymentId);
+          setTimeout(() => dispatch(setShowModal()), 1000);
+        } else {
+          dispatch(invalidToken());
+          window.location.href = '/login';
+          showToast('Ошибка при передаче данных! ' + response?.payload, 'error', {
+            autoClose: 5000,
+          });
+        }
+      }
+    } else if (selectedOption === 'invoice') {
       handleFileDownload(data);
-      setTimeout(() => {        
-        dispatch(setShowModal());
-      }, 1000);
-    } else if (response && response.payload.success && selectedOption === 'qr') {
-      // show qr code
-      setQrUrl(response.payload.paymentUrl);
-      localStorage.setItem('lastPaymentId', response.payload.paymentId);      
-    } else {
-      dispatch(invalidToken());
-      window.location.href = '/login';
-      showToast('Ошибка при передаче данных! ' + response.payload, 'error', {
-        autoClose: 5000,
-      });
-    };  
+      setTimeout(() => dispatch(setShowModal()), 1000);
+    }
   }
 
   const handleFileDownload = async (item) => {
