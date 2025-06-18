@@ -11,7 +11,7 @@ import { PDFDocument } from 'pdf-lib';
 
 const NewRequestPage = () => {
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
-  const types = ['Авария', 'Проблема', 'Запрос'];
+  const types = ['Взаиморасчеты', 'Технические и ремонтные работы', 'Отдел аренды'];
   const sprite_path = './src/assets/images/i.svg';
   const showNavbar = useSelector((state) => state.navbar.showNavbar);
   const allObjects = useSelector((state) => state.agreements_slice.allObjects);
