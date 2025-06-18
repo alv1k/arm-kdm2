@@ -140,6 +140,8 @@ const TheDocsListComponent = () => {
     }
   }
 
+  console.log(getList(), 'kkkk');
+
   const handleSetDataType = (type, item) => {    
     dispatch(setDataType(type));
     if (!sm_breakpoint) {
@@ -452,7 +454,7 @@ const TheDocsListComponent = () => {
     `}>
       <div className="w-full overflow-x-auto">
         {/* Header */}
-        <div className={`flex bg-item-active rounded-t-lg p-4 font-medium ${window.innerWidth < 1280 ? 'max-w-[600px]' : ''} `}>
+        <div className={`flex bg-item-active rounded-t-lg p-4 font-medium justify-between ${window.innerWidth < 1280 ? 'max-w-[600px]' : ''} `}>
           {/* Column 1 */}
           <div className={`
               flex items-center ps-2 flex-shrink-0
@@ -465,7 +467,7 @@ const TheDocsListComponent = () => {
           {/* Column 2 */}
           <div className={`
               flex items-center flex-shrink-0
-              ${currentTab && currentTab.title_en === 'objects' ? 'w-[450px]' : 'w-[200px]'}
+              ${currentTab && currentTab.title_en === 'objects' ? 'w-full' : currentTab.title_en === 'bills' ? 'w-[300px]' : currentTab.title_en == 'counters' ? 'w-[200px]' : 'w-[400px]'}
             `}
           >
             <span className="whitespace-nowrap">
@@ -485,7 +487,7 @@ const TheDocsListComponent = () => {
           )}
 
           {/* Column 3 */}
-          <div className={`flex items-center ${currentRoute === '/requests' ? 'w-[150px]' : 'w-[200px]'} flex-shrink-0`}>
+          <div className={`flex items-center ${currentRoute === '/requests' ? 'w-[150px]' : currentTab.title_en == 'bills' ? 'w-[100px]' : 'w-[200px]'} flex-shrink-0`}>
             <span>{currentTab && currentTab.title_en === 'counters' ? 'ГВС' : currentTab && currentTab.title_en === 'objects' ? '' : 'Дата'}</span>
           </div>
 
@@ -507,7 +509,13 @@ const TheDocsListComponent = () => {
           }
 
           {/* Action Column */}
-          {currentTab && (currentTab.title_en !== 'objects' || currentTab.title_en == 'counters') && (
+          {currentTab && (currentTab.title_en === 'objects' || currentTab.title_en === 'counters') ? '' : (
+            <div className="flex justify-end w-[120px] flex-shrink-0">
+              {/* Empty for spacing */}
+            </div>
+          )}
+          {/* Action Column */}
+          {currentTab && (currentTab.title_en === 'objects' || currentTab.title_en === 'counters' || currentTab.title_en === 'closing_docs') ? '' : (
             <div className="flex justify-end w-[120px] flex-shrink-0">
               {/* Empty for spacing */}
             </div>
@@ -519,7 +527,7 @@ const TheDocsListComponent = () => {
           {getList()?.map((item, index) => (
             <div 
               key={index} 
-              className="flex items-center p-4 bg-item-default rounded-lg hover:bg-item-hover transition-colors"
+              className="flex items-center p-4 bg-item-default rounded-lg hover:bg-item-hover transition-colors justify-between"
               onClick={(e) => currentRoute === '/requests' ? handleRequestTap(item) : ''}
             >
               {/* Cell 1 */}
@@ -544,7 +552,7 @@ const TheDocsListComponent = () => {
               {/* Cell 2 */}
               <div className={`
                   flex-shrink-0                  
-                  ${currentTab && currentTab.title_en === 'objects' ? 'w-[450px]' : 'w-[200px]'}
+                  ${currentTab && currentTab.title_en === 'objects' ? 'w-full' : currentTab.title_en === 'bills' ? 'w-[300px]' : currentTab.title_en == 'counters' ? 'w-[200px]' : 'w-[400px]'}
                 `}
               >
                 {currentTab && (currentTab.title_en === 'closing_docs' || currentTab.title_en === 'bills') ? item.descr :
@@ -600,7 +608,7 @@ const TheDocsListComponent = () => {
 
               {/* Cell 3 */}
               {currentTab && currentTab.title_en !== 'objects' && (
-                <div className={`${currentRoute === '/requests' ? 'w-[150px]' : 'w-[200px]'} flex-shrink-0`}>
+                <div className={`${currentRoute === '/requests' ? 'w-[150px]' : currentTab.title_en == 'bills' ? 'w-[100px]' : 'w-[200px]'} flex-shrink-0`}>
                   {
                     currentTab && currentTab.title_en === 'counters' ? (
                       <div key={index}>
