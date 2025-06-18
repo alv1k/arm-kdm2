@@ -467,7 +467,7 @@ const TheDocsListComponent = () => {
           {/* Column 2 */}
           <div className={`
               flex items-center flex-shrink-0
-              ${currentTab && currentTab.title_en === 'objects' ? 'w-full' : currentTab.title_en === 'bills' ? 'w-[300px]' : currentTab.title_en == 'counters' ? 'w-[200px]' : 'w-[400px]'}
+              ${currentTab && currentTab.title_en === 'objects' ? 'w-full' : currentTab && currentTab.title_en === 'bills' ? 'w-[300px]' : currentTab && currentTab.title_en == 'counters' ? 'w-[200px]' : 'w-[400px]'}
             `}
           >
             <span className="whitespace-nowrap">
