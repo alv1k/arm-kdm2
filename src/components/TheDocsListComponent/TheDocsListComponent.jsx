@@ -261,7 +261,7 @@ const TheDocsListComponent = () => {
                 {item.date && <PriceFormatter amount={item.summ} type="price" />}
               </div>
               {
-                item.files.length > 0 ? (
+                item.files && item.files.length > 0 ? (
                   <div className="flex gap-5">
                     {                      
                       item.files.map((file) => (
@@ -306,7 +306,7 @@ const TheDocsListComponent = () => {
                 </p> : ''
               }
               {
-                item.length > 0 && item.map((counter, index) => (
+                item && item.length > 0 && item.map((counter, index) => (
                   <div key={index} className="text-nowrap">
                     <span className="text-[#787C82]">№ пр. учета:</span> 
                     {counter.number ? counter.number : 'не найден'}
@@ -347,7 +347,7 @@ const TheDocsListComponent = () => {
                   <p className="mb-2">&nbsp;</p> : ''
                 }
                 {
-                  item.length > 0 && item.map((counter, index) => (
+                  item && item.length > 0 && item.map((counter, index) => (
                     <div key={index} className="text-nowrap"><span className="text-[#787C82]">{ getCounterName(counter.name) }:</span> { counter.end_indice }</div>
                   ))
                 }
