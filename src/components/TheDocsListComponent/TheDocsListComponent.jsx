@@ -140,9 +140,8 @@ const TheDocsListComponent = () => {
     }
   }
 
-  console.log(getList(), 'kkkk');
-
   const handleSetDataType = (type, item) => {    
+    console.log(item, 'itemmmm');
     dispatch(setDataType(type));
     if (!sm_breakpoint) {
       dispatch(setShowModal())      
@@ -150,7 +149,8 @@ const TheDocsListComponent = () => {
     } else if (type == 'counters') {
       dispatch(setShowCountersModal())
     } else if (type == 'payment') {
-      dispatch(setShowPaymentModal())
+      console.log(item, 'item kkk');
+      dispatch(setShowPaymentModal(item))
     }
   }
 
@@ -487,7 +487,7 @@ const TheDocsListComponent = () => {
           )}
 
           {/* Column 3 */}
-          <div className={`flex items-center ${currentRoute === '/requests' ? 'w-[150px]' : currentTab.title_en == 'bills' ? 'w-[100px]' : 'w-[200px]'} flex-shrink-0`}>
+          <div className={`flex items-center ${currentRoute === '/requests' ? 'w-[150px]' : currentTab && currentTab.title_en == 'bills' ? 'w-[100px]' : 'w-[200px]'} flex-shrink-0`}>
             <span>{currentTab && currentTab.title_en === 'counters' ? 'ГВС' : currentTab && currentTab.title_en === 'objects' ? '' : 'Дата'}</span>
           </div>
 

@@ -19,6 +19,7 @@ const PaymentModal = (props) => {
   const [qrUrl, setQrUrl] = useState(null);  
   const profileFetchedData = useSelector((state) => state.user_slice.profileData);
   const selectedAgreement = useSelector((state) => state.agreements_slice.selectedAgreement);   
+  const paymentData = useSelector((state) => state.agreements_slice.paymentData);   
   const [userEmail, setUserEmail] = useState(null);
 
   let data = props.data;
@@ -50,7 +51,7 @@ const PaymentModal = (props) => {
   let payload = {
     
     amount: paymentSum,
-    description: data.number + '. ' + data.descr,
+    description: data?.number + '. ' + data?.descr,
     createReceipt: true,
     email: userEmail,
     phone: profileFetchedData.phone,
@@ -58,7 +59,7 @@ const PaymentModal = (props) => {
     contractId: selectedAgreement[0].id,
     items: [
       {
-        description: data.descr,
+        description: data?.descr,
         quantity: 1,
         amount: paymentSum,
         vatCode: 1
@@ -181,10 +182,10 @@ const PaymentModal = (props) => {
     <div className="mb-8">
       <p className="text-center md:text-2xl text-xl font-bold text-[#203887]">Способ оплаты</p>      
       <div className="my-8 flex flex-col">
-        <div className="my-2 md:flex block font-semibold">№{data.number}. {data.descr}</div>
+        <div className="my-2 md:flex block font-semibold">№{data?.number}. {data?.descr}</div>
         <div className="md:my-0 my-2 md:flex block">
           <p className="text-[#787C82]">Дата:&nbsp;</p> 
-          <DateFormatter dateString={data.date} />
+          <DateFormatter dateString={data?.date} />
         </div>
         <div className="my-2">
           <p className="text-[#787C82]">Сумма:&nbsp;</p> 

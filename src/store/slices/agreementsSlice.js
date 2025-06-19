@@ -171,6 +171,7 @@ const agreementsSlice = createSlice({
     allCounters: null,
     allClosingDocs: null,
     page404: false,
+    paymentData: null,
   },
   reducers: {
     showDetails: (state) => {      
@@ -195,11 +196,14 @@ const agreementsSlice = createSlice({
     setHideCountersModal: (state) => {
       state.isShowCountersModal = false
     },
-    setShowPaymentModal: (state) => {
+    setShowPaymentModal: (state, action) => {
+      console.log(action.payload, 'ppppppp');
       state.isShowPaymentModal = true
+      state.paymentData = action.payload
     },
     setHidePaymentModal: (state) => {
       state.isShowPaymentModal = false
+      state.paymentData = null
     }
   },  
   extraReducers: (builder) => {
