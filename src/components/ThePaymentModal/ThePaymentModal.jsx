@@ -110,7 +110,7 @@ const PaymentModal = (props) => {
             window.location.href = response.payload.paymentUrl;
           }
           localStorage.setItem('lastPaymentId', response.payload.paymentId);
-          setTimeout(() => dispatch(setShowModal()), 1000);
+          // setTimeout(() => dispatch(setShowModal()), 1000);
         } else {
           dispatch(invalidToken());
           window.location.href = '/login';
