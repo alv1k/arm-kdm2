@@ -40,7 +40,7 @@ const PaymentModal = (props) => {
     { id: 'card', label: 'Банковская карта' },
     { id: 'invoice', label: 'Счет' },
     { id: 'qr', label: 'QR код' },
-    { id: 'receipt', label: 'Квитанция' }
+    // { id: 'receipt', label: 'Квитанция' }
   ];
 
   const handleOptionClick = (optionId) => {

@@ -57,26 +57,15 @@ const CountersModal = () => {
   };
   
   const handleSetIndice = async () => {
+    
     const data = getAllValues();
        
     let filtered_data = data.filter(item => item.value)
     
-    for (const item of filtered_data) {
-      if (Number(item.value) < item.minValue && item.value != undefined) {
-        showToast('Введите значение больше/равно предыдущему значению!', 'error', {
-          autoClose: 5000,
-        });
-        item.refElement.classList.add('danger_animation');
-        setTimeout(() => item.refElement.classList.remove('danger_animation'), 3000);
-        setValidData(false);
-      } else {
-        setValidData(true);
-      }
-    }
-    
-    if (validData) {
-      const response = await dispatch(fetchSendCountersIndice(filtered_data));
+    const sendCountersIndice = async () => {
 
+      const response = await dispatch(fetchSendCountersIndice(filtered_data));
+  
       if (response && response.payload.success) {
         showToast('Показания счетчиков переданы!', 'success', {
           autoClose: 5000,
@@ -91,6 +80,24 @@ const CountersModal = () => {
           autoClose: 5000,
         });
       };    
+    }
+    
+    for (const item of filtered_data) {
+      if (Number(item.value) < item.minValue && item.value != undefined) {
+        showToast('Введите значение больше/равно предыдущему значению!', 'error', {
+          autoClose: 5000,
+        });
+        item.refElement.classList.add('danger_animation');
+        setTimeout(() => item.refElement.classList.remove('danger_animation'), 3000);
+        // setValidData(false);
+      } else {
+        // setValidData(true);
+        sendCountersIndice();      
+      }
+    }
+
+    
+    if (validData) {
     }
     
     window.scrollTo(0, 0);

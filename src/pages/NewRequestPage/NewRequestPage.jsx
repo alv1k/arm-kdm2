@@ -97,7 +97,10 @@ const NewRequestPage = () => {
     const response = await dispatch(fetchNewRequest(data));
 
     if (response.payload.success) {      
-      showToast(`Заявка №${editData.number} успешно ${isRejectedRequest ? 'отклонена' : isEditRequest ? 'изменена' : 'внесена'} !`, 'success', {
+      showToast(
+        `Заявка №${editData.number} успешно 
+            ${isRejectedRequest ? 'отклонена' : isEditRequest ? 'изменена' : 'внесена'}!`, 
+        `${isRejectedRequest ? 'отклонена' : isEditRequest ? 'warning' : 'success'}`, {
         autoClose: 2000,
       });
       dispatch(fetchRequestsList());
