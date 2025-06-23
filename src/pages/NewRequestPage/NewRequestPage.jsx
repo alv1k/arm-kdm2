@@ -99,7 +99,7 @@ const NewRequestPage = () => {
 
     if (response.payload.success) {      
       showToast(
-        `Заявка №${editData.number} успешно 
+        `Заявка ${isEditRequest ? '' : '№'}${isEditRequest ? editData.number : ''} успешно 
             ${isRejectedRequest ? 'отклонена' : isEditRequest ? 'изменена' : 'внесена'}!`, 
         `${isRejectedRequest ? 'отклонена' : isEditRequest ? 'warning' : 'success'}`, {
         autoClose: 2000,
@@ -415,10 +415,11 @@ const NewRequestPage = () => {
             md:w-fit md:flex md:p-5 md:flex-row-reverse md:items-start
             w-full rounded-lg px-5 py-3 mb-1 bg-item-active text-center items-center
           ">
-            <p className="text-[#787C82] md:mt-2">Прикрепить файлы, максимум 5 (*.jpeg, *.jpg, *.png, *.pdf)<br /> Каждый весом не более 3 MB</p>
-            {
-              selectedFiles.length > 0 ? (
-                <div className="mt-2 space-y-1 text-[#787C82] md:pb-0 md:ps-10 pb-4 md:pe-6">
+            <div className="mt-2 space-y-1 text-[#787C82] md:pb-0 md:ps-10 pb-4 md:pe-6">
+              <p className="text-[#787C82] mb-5">Прикрепить файлы, максимум 5 (*.jpeg, *.jpg, *.png, *.pdf)<br /> Каждый весом не более 3 MB</p>
+              {
+                selectedFiles.length > 0 ? 
+                <div>
                   <p className="text-sm font-medium">Выбранные файлы:</p>
                   <ul className="space-y-1">
                     {selectedFiles.map((file, index) => (
@@ -433,11 +434,11 @@ const NewRequestPage = () => {
                       </li>
                     ))}
                   </ul>
-                </div>
-              ) 
-              : 
-              <p className="text-[#787C82] md:pb-0 md:ps-10 pb-4 md:pe-6 align-center self-center-safe">{ uploadedFiles ? '' : 'Файлы не выбраны'}</p>
-            }
+                </div> : 
+                <p className="text-[#787C82] md:pb-0 md:ps-10 pb-4 md:pe-6 align-center self-center-safe">{ uploadedFiles ? '' : 'Файлы не выбраны'}</p>
+              }
+            </div>
+            
             {
               error && (
                 <div className="mt-2 text-sm text-red-600 bg-red-50 p-2 rounded">
