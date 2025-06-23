@@ -11,7 +11,6 @@ const CountersModal = () => {
   const dispatch = useDispatch();  
   const selectedAgreement = useSelector((state) => state.agreements_slice.selectedAgreement);
   let inputRefs = useRef([]);
-  const [validData, setValidData] = useState(false);
   
   let address = '';
   selectedAgreement.flatMap(contract => 
@@ -71,6 +70,7 @@ const CountersModal = () => {
           autoClose: 5000,
         });
       }
+      dispatch(setShowModal(false))
     }
     
     for (const item of filtered_data) {
@@ -80,15 +80,9 @@ const CountersModal = () => {
         });
         item.refElement.classList.add('danger_animation');
         setTimeout(() => item.refElement.classList.remove('danger_animation'), 3000);
-        // setValidData(false);
       } else {
-        // setValidData(true);
         sendCountersIndice();      
       }
-    }
-
-    
-    if (validData) {
     }
     
     window.scrollTo(0, 0);
