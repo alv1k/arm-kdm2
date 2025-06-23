@@ -62,6 +62,7 @@ const requestsSlice = createSlice({
   reducers: {
     requestStatusTrue: (state) => {
       state.isNewRequest = true;
+      state.isEditRequest = false;
     },
     requestStatusFalse: (state) => {
       state.isNewRequest = false;

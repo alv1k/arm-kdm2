@@ -6,7 +6,7 @@ import DateFormatter from '@/components/DateFormatter/DateFormatter';
 import { fetchDowloadFile } from '@/store/slices/agreementsSlice';
 import { fetchPayment } from '@/store/slices/paymentSlice';
 import { setShowModal } from '@/store/slices/modalSlice';
-import { downloadAndPrintPDF } from '@/utils/fileDownload';
+import { downloadAndPrintPDF, downloadBase64PDF } from '@/utils/fileDownload';
 import { showToast } from '@/utils/notify';
 
 const PaymentModal = (props) => {
@@ -19,6 +19,7 @@ const PaymentModal = (props) => {
   const [qrUrl, setQrUrl] = useState(null);  
   const profileFetchedData = useSelector((state) => state.user_slice.profileData);
   const selectedAgreement = useSelector((state) => state.agreements_slice.selectedAgreement);   
+  const paymentData = useSelector((state) => state.agreements_slice.paymentData);   
   const [userEmail, setUserEmail] = useState(null);
 
   let data = props.data;
@@ -50,7 +51,7 @@ const PaymentModal = (props) => {
   let payload = {
     
     amount: paymentSum,
-    description: data.number + '. ' + data.descr,
+    description: data?.number + '. ' + data?.descr,
     createReceipt: true,
     email: userEmail,
     phone: profileFetchedData.phone,
@@ -58,7 +59,7 @@ const PaymentModal = (props) => {
     contractId: selectedAgreement[0].id,
     items: [
       {
-        description: data.descr,
+        description: data?.descr,
         quantity: 1,
         amount: paymentSum,
         vatCode: 1
@@ -66,6 +67,22 @@ const PaymentModal = (props) => {
     ]
   }
 
+  const handlePaymentPermission = async () => {
+    if (!selectedOption) {      
+      showToast('Выберите один из вариантов!', 'error', {
+        autoClose: 5000,
+      });
+      setShouldAnimate(true); // Активируем анимацию
+      return;
+    }    
+    if (userEmail && (!userEmail.includes('@') || !userEmail.includes('.'))) {   
+      showToast('Введите корректный адрес электронной почты', 'error', {
+        autoClose: 5000,
+      });
+      return;
+    }
+    response = payload.userId && payload.contractId && payload.amount ? await dispatch(fetchPayment(payload)) : null;
+  }
   let response = null;
 
   const handleCreatePayment = async () => {
@@ -82,29 +99,30 @@ const PaymentModal = (props) => {
       });
       return;
     }
-    response = payload.userId && payload.contractId && payload.amount ? await dispatch(fetchPayment(payload)) : null;
-    if (response && response.payload.success && selectedOption === 'card') {  
-      window.location.href = response.payload.paymentUrl;
-      localStorage.setItem('lastPaymentId', response.payload.paymentId);
-      setTimeout(() => {        
-        dispatch(setShowModal());
-      }, 1000);
-    } else if (response && response.payload.success && selectedOption === 'invoice') {
+    if (selectedOption === 'card' || selectedOption === 'qr') {
+      if (payload.userId && payload.contractId && payload.amount) {
+        response = await dispatch(fetchPayment(payload));
+        
+        if (response?.payload?.success) {
+          if (selectedOption === 'qr') {
+            setQrUrl(response.payload.paymentUrl);
+          } else {
+            window.location.href = response.payload.paymentUrl;
+          }
+          localStorage.setItem('lastPaymentId', response.payload.paymentId);
+          setTimeout(() => dispatch(setShowModal()), 1000);
+        } else {
+          dispatch(invalidToken());
+          window.location.href = '/login';
+          showToast('Ошибка при передаче данных! ' + response?.payload, 'error', {
+            autoClose: 5000,
+          });
+        }
+      }
+    } else if (selectedOption === 'invoice') {
       handleFileDownload(data);
-      setTimeout(() => {        
-        dispatch(setShowModal());
-      }, 1000);
-    } else if (response && response.payload.success && selectedOption === 'qr') {
-      // show qr code
-      setQrUrl(response.payload.paymentUrl);
-      localStorage.setItem('lastPaymentId', response.payload.paymentId);      
-    } else {
-      dispatch(invalidToken());
-      window.location.href = '/login';
-      showToast('Ошибка при передаче данных! ' + response.payload, 'error', {
-        autoClose: 5000,
-      });
-    };  
+      setTimeout(() => dispatch(setShowModal()), 1000);
+    }
   }
 
   const handleFileDownload = async (item) => {
@@ -120,7 +138,8 @@ const PaymentModal = (props) => {
       } else if (typeof fileData == 'object') {        
         fileData.map(item => {
           if (item?.dataUrl) {
-            downloadAndPrintPDF(item.dataUrl, doc_name);
+            // downloadAndPrintPDF(item.dataUrl, doc_name);
+            downloadBase64PDF(item.dataUrl, doc_name);
           } else {
             console.error(`Файл ${item.type} не загружен: отсутствует dataUrl`);
           }
@@ -163,10 +182,10 @@ const PaymentModal = (props) => {
     <div className="mb-8">
       <p className="text-center md:text-2xl text-xl font-bold text-[#203887]">Способ оплаты</p>      
       <div className="my-8 flex flex-col">
-        <div className="my-2 md:flex block font-semibold">№{data.number}. {data.descr}</div>
+        <div className="my-2 md:flex block font-semibold">№{data?.number}. {data?.descr}</div>
         <div className="md:my-0 my-2 md:flex block">
           <p className="text-[#787C82]">Дата:&nbsp;</p> 
-          <DateFormatter dateString={data.date} />
+          <DateFormatter dateString={data?.date} />
         </div>
         <div className="my-2">
           <p className="text-[#787C82]">Сумма:&nbsp;</p> 

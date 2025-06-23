@@ -11,7 +11,7 @@ import { PDFDocument } from 'pdf-lib';
 
 const NewRequestPage = () => {
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
-  const types = ['Авария', 'Проблема', 'Запрос'];
+  const types = ['Взаиморасчеты', 'Технические и ремонтные работы', 'Отдел аренды'];
   const sprite_path = './src/assets/images/i.svg';
   const showNavbar = useSelector((state) => state.navbar.showNavbar);
   const allObjects = useSelector((state) => state.agreements_slice.allObjects);
@@ -73,10 +73,11 @@ const NewRequestPage = () => {
       object: selectedObject,
       type: selectedType,
       descr: requestDescr,
-      status: isEditRequest ? getCurrentStatus() : 'В работе',
+      status: 'В работе',
       token: localStorage.getItem('token') ?? sessionStorage.getItem('token'),
       file: uploadedFiles,
     }    
+    console.log(selectedObject, 'selectedObject');
     
      if (selectedObject == '') {
       showToast('Выберите помещение!', 'error', {
@@ -124,7 +125,8 @@ const NewRequestPage = () => {
     setRejectedRequest(true); // Запускает useEffect
   };
 
-  const handleRequestDescrChange = (e) => {    
+  const handleRequestDescrChange = (e) => {   
+    
     if (e.target.value.length < 1000) {
       const input = e.target;
       if (input.value.includes('/') || input.value.includes('\\')) {
@@ -302,7 +304,7 @@ const NewRequestPage = () => {
   }, [selectedFiles]);
 
   useEffect(() => {
-    if (editData) {
+    if (isEditRequest) {
       setRequestDescr(editData.descr);
       setSelectedObject(editData.object_id);
       setSelectedType(editData.type);
@@ -315,6 +317,12 @@ const NewRequestPage = () => {
       handleSubmit(); 
     }
   }, [isRejectedRequest]);
+
+  // useEffect(() => {
+  //   if(!editData) {
+  //     setRequestDescr('')
+  //   }
+  // }, [requestDescr])
 
 
 
@@ -364,7 +372,7 @@ const NewRequestPage = () => {
             {
               !sm_breakpoint ? <span className="text-[#787C82]">Название помещения</span> : ''
             }
-            <CustomSelect onDataSend={setSelectedObject} options={cleanedObjects} defaultValue={isEditRequest ? editData.object : sm_breakpoint ? 'Название помещения' : 'Выбрать'} />
+            <CustomSelect onDataSend={setSelectedObject} options={isEditRequest ? [editData.object] : cleanedObjects} defaultValue={isEditRequest ? editData.object : sm_breakpoint ? 'Название помещения' : 'Выбрать'} />
           </div>
           <div className="lg:mt-0 mt-4 w-full lg:w-1/2">
             {
