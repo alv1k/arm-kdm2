@@ -176,7 +176,8 @@ const ContactsPage = () => {
             ))
           }
           <div className="rounded-xl col-span-2 flex flex-col gap-3 bg-item-default p-8 md:mb-0 mb-4">
-            <p className="text-xl font-semibold">{contactData?.requisits?.name.shortname}</p>
+            <p className="text-xl font-semibold">Реквизиты {contactData?.requisits?.name.shortname}</p>
+
             <p className="">
               <span className="text-[#787C82]">Полное  название:</span>
               &nbsp;{contactData?.requisits?.name.fullname}
@@ -185,14 +186,10 @@ const ContactsPage = () => {
               <span className="text-[#787C82]">Юридический адрес:</span>
               &nbsp;{contactData?.requisits?.urAddress}
             </p>
-            <p className="">
+            {/* <p className="">
               <span className="text-[#787C82]">Почтовый адрес:</span>
               &nbsp;{contactData?.requisits?.postAddress}
-            </p>
-          </div>
-          <div className="rounded-xl col-span-2 flex flex-col gap-3 bg-item-default p-8 md:mb-0 mb-4">
-            <p className="text-xl font-semibold">Реквизиты {contactData?.requisits?.name.shortname}</p>
-
+            </p> */}
             <p className="">
               <span className="text-[#787C82]">Название:</span>
               &nbsp;{contactData?.requisits?.bank.name}
@@ -217,7 +214,7 @@ const ContactsPage = () => {
               <span className="text-[#787C82]">КПП:</span>
               &nbsp;{contactData?.requisits?.kpp}
             </p>
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-3 hidden">
               <p className="">
                 <span className="text-[#787C82]">ОГРН:</span>
                 &nbsp;{contactData?.requisits?.ogrn}
