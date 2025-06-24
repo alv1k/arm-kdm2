@@ -11,6 +11,7 @@ import Header from '@/components/TheHeader/TheHeader';
 import Navbar from '@/components/TheNavbar/TheNavbar';
 import LoadingPage from '@/pages/LoadingPage/LoadingPage';
 import PaymentStatusPage from '@/pages/PaymentStatusPage/PaymentStatusPage';
+import RequisitsPage from '@/pages/RequisitsPage/RequisitsPage'
 import TheModal from '@/components/TheModal/TheModal';
 import useMediaQueries from '@/hooks/useMediaQueries';
 import { showModal } from '@/store/slices/modalSlice';
@@ -72,6 +73,11 @@ const App = () => {
         </Routes>
       </div>      
       <ToastContainer />
+      
+      <div>
+        {location.pathname === '/requisits' && <RequisitsPage />}
+        {location.pathname }
+      </div>
     </div>
   )
 };

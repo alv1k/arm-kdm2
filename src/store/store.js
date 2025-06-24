@@ -75,7 +75,7 @@ listenerMiddleware.startListening({
     fetchAgreementsList.rejected,
     fetchAgreementsAccruals.rejected,
     fetchRequestsList.rejected,
-    fetchAuth.rejected,
+    // fetchAuth.rejected,
     fetchSendCountersIndice.rejected
   ].some(creator => creator.match(action)),
   
