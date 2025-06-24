@@ -174,13 +174,14 @@ const ContactsPage = () => {
           </div>
           {/* Динамические контакты из JSON */}
           {
-            contactData && 
             <ul>
-              {Object.entries(contactData?.requisits).map(([key, value]) => (
+              {contactData?.requisits ? (
+              Object.entries(contactData?.requisits).map(([key, value]) => (
                 <li key={key}>
                   <strong>{key}:</strong> {String(value)}
                 </li>
-              ))}
+              )) ) : <li>Реквизиты отсутствуют</li>
+              }
             </ul>
           }
 
