@@ -64,8 +64,8 @@ const NewRequestPage = () => {
       object: selectedObject,
       type: selectedType,
       descr: requestDescr,
-      // status: isEditRequest ? editData.status : 'В работе',
-      status: isEditRequest ? getCurrentStatus() : 'В работе',
+      // status: isEditRequest ? editData.status : 'На рассмотрении',
+      status: isEditRequest ? getCurrentStatus() : 'На рассмотрении',
       token: localStorage.getItem('token') ?? sessionStorage.getItem('token'),
       file: uploadedFiles,
     } : 
@@ -73,7 +73,7 @@ const NewRequestPage = () => {
       object: selectedObject,
       type: selectedType,
       descr: requestDescr,
-      status: 'В работе',
+      status: 'На рассмотрении',
       token: localStorage.getItem('token') ?? sessionStorage.getItem('token'),
       file: uploadedFiles,
     }    
