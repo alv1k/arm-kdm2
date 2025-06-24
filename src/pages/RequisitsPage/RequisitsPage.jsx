@@ -1,11 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { fetchContactsList } from '@/store/slices/contactsSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setShowRequisits } from '@/store/slices/requisitsSlice';
 
 const RequisitsPage = () => {
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  // const contactData = useSelector((state) => state.contacts_slice.contacts);  
+
+
+  const handleShowRequisitsBtn = () => {
+    dispatch(setShowRequisits(false))
+    navigate('/login', { replace: true });
+  }
+
   const contactData = {
       "name": {
           "shortname": "АО «Комдрагметалл РС(Я)»",
@@ -37,30 +45,51 @@ const RequisitsPage = () => {
   }
 
   return (
-
-    <ul className="bg-red-900">
-  {contactData ? (
-    Object.entries(contactData).map(([key, value]) => (
-      <li key={key}>
-        <strong>{key}:</strong> 
-        {typeof value === 'object' && value !== null ? (
-          <ul>
-            {Object.entries(value).map(([subKey, subValue]) => (
-              <li key={subKey}>
-                <strong>{subKey}:</strong> {String(subValue)}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          String(value)
-        )}
-      </li>
-    ))
-  ) : (
-    <li>Реквизиты отсутствуют</li>
-  )}
-</ul>
+    <main className="min-h-fit h-screen w-full">
+      <div className="lg:flex min-h-fit h-screen relative">
+        <div className="lg:w-1/2 w-full h-screen bg-[#F6F8FF] flex flex-col justify-end">
+          <img className="align-bottom justify-baseline justify-self-end lg:blur-none lg:mt-0 blur-xs h-fit mx-auto" src="/src/assets/images/bg-login.png" alt="" />
+        </div>
+        <div className="lg:w-1/2 lg:static w-full absolute md:top-16 top-10 left-0 right-0 bottom-0 flex align-middle items-center justify-center">
+          <div className={`xl:w-3/5 lg:w-3/4 md:w-2/3 md:my-44 w-[90vw] bg-white md:p-10 px-5 py-10 lg:my-auto mx-auto  lg:rounded-none rounded-2xl text-center`}>
+            <div className="flex flex-col justify-center">
+              <img className="mx-auto" src="/src/assets/images/logo.png" alt="logo" />
+              <img className="mx-auto mt-4 lg:text-2xl my-0 w-3/5" src="/src/assets/images/logo-text.png" alt="" />
+            </div>
+            <section>
+                <div className="text-start text-xs mt-4 p-0">
+                  {contactData ? (
+                    Object.entries(contactData).map(([key, value]) => (
+                      <li className="!m-0 !p-2" key={key}>
+                        <strong>{key}:</strong> 
+                        {typeof value === 'object' && value !== null ? (
+                          <ul>
+                            {Object.entries(value).map(([subKey, subValue]) => (
+                              <li className="!m-0 !p-1" key={subKey}>
+                                <strong>{subKey}:</strong> {String(subValue)}
+                              </li>
+                            ))}
+                          </ul>
+                        ) : (
+                          String(value)
+                        )}
+                      </li>
+                    ))
+                  ) : (
+                    <li>Реквизиты отсутствуют</li>
+                  )}
+                </div>
+            </section>
+            
+            <div className="pt-16">
+              <a className="cursor-pointer" onClick={() => handleShowRequisitsBtn()}>
+                Назад
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
   )
 }
-
 export default RequisitsPage;

@@ -473,7 +473,7 @@ const LoginPage = () => {
               </section>
             }
             <div className="pt-16">
-              <a className="cursor-pointer" onClick={() => handleShowRequisitsBtn()}>
+              <a href='/requisits' className="cursor-pointer" onClick={() => handleShowRequisitsBtn()}>
                 {showRequisits ? 'Назад' : 'Показать реквизиты'} 
               </a>
             </div>
