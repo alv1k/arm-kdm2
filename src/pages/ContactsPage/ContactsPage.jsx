@@ -11,7 +11,7 @@ import useMediaQueries from '@/hooks/useMediaQueries';
 const ContactsPage = () => {
   const sprite_path = './src/assets/images/i.svg';
   const showNavbar = useSelector((state) => state.navbar.showNavbar);
-  const contactData = useSelector((state) => state.contacts_slice.contacts);
+  const contactData = useSelector((state) => state.contacts_slice.contacts);  
   
   // const tabs = useSelector((state) => state.tabs_slice.tabs);
   // useEffect(() => {
@@ -70,7 +70,7 @@ const ContactsPage = () => {
             </p>
 
             {/* Динамические контакты из JSON */}
-            {contactData.Curators.map((contact, i) => (
+            {contactData?.Curators?.map((contact, i) => (
               <div key={i} className="mt-6 pt-6 border-t border-gray-200">
                 <p className="my-4">
                   <span className="text-[#787C82]">Ответственный:</span> &nbsp;
@@ -95,6 +95,8 @@ const ContactsPage = () => {
       </div>
     );
   };
+
+
 
   return (
     <section 
@@ -147,7 +149,7 @@ const ContactsPage = () => {
                 </p>
 
                 {/* Динамические контакты из JSON */}
-                {contactData.Curators.map((contact, i) => (
+                {contactData?.Curators?.map((contact, i) => (
                   <div key={i} className="mt-6 pt-6 border-t border-gray-200">
                     <p className="my-4">
                       <span className="text-[#787C82]">Ответственный:</span> &nbsp;
@@ -171,20 +173,17 @@ const ContactsPage = () => {
             ))}
           </div>
           {/* Динамические контакты из JSON */}
-          {/* {
-            
+          {
+            contactData && 
             <ul>
-              {Object.entries(contactData.requisits).map(([key, value]) => (
+              {Object.entries(contactData?.requisits).map(([key, value]) => (
                 <li key={key}>
                   <strong>{key}:</strong> {String(value)}
                 </li>
               ))}
             </ul>
-          } */}
+          }
 
-          <div>
-
-          </div>
       </div>
     </section>
   )
