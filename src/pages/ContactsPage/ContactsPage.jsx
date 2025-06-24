@@ -32,7 +32,7 @@ const ContactsPage = () => {
   }, [dispatch]);
 
   
-  const locations = [
+  const location = 
     {
       city: "Якутск",
       phone: "+7 (4112) 482-504",
@@ -40,13 +40,12 @@ const ContactsPage = () => {
       address: "г. Якутск, ул. Кирова, 12",
       mapLink: "https://yandex.ru/maps/-/CHvP6GYP"
     }
-  ];  
+  ;  
 
   const ContactCards = () => {
     return (
       <div className="grid md:grid-cols-2 gap-4">
-        {locations.map((location, index) => (
-          <div key={index} className={`rounded-xl bg-item-active p-8 md:mb-0 mb-4`}>
+          <div className={`rounded-xl bg-item-active p-8 md:mb-0 mb-4`}>
             <p className="text-2xl font-bold mb-8">{location.city}</p>
             
             {/* Статические контакты локации */}
@@ -91,7 +90,7 @@ const ContactsPage = () => {
               </div>
             ))}
           </div>
-        ))}
+        
       </div>
     );
   };
@@ -123,68 +122,137 @@ const ContactsPage = () => {
             </p>
           }
         </div>
-        <div className="p-4 mt-6 text-base md:grid md:grid-cols-2 gap-8">
-            {locations.map((location, index) => (
-              <div key={index} className={`rounded-xl bg-item-active p-8 md:mb-0 mb-4`}>
-                <p className="text-2xl font-bold mb-8">{location.city}</p>
-                
-                {/* Статические контакты локации */}
-                <p className="my-4">
-                  <span className="text-[#787C82]">Телефон:</span> &nbsp;          
-                  <a href={`tel:${location.phone.replace(/\D/g, '')}`}>
-                    {location.phone}
-                  </a>
-                </p>
-                <p className="my-4">
-                  <span className="text-[#787C82]">Эл. почта:</span> &nbsp;
-                  <a href={`mailto:${location.email}`}>
-                    {location.email}
-                  </a>
-                </p>
-                <p className="my-4">
-                  <span className="text-[#787C82]">Адрес:</span> &nbsp;          
-                  <a href={location.mapLink} target="_blank" rel="noopener noreferrer">
-                    {location.address}
-                  </a>
-                </p>
+        <div className="p-4 mt-6 text-base md:grid md:grid-cols-2 gap-5">
+          <div className={`rounded-xl bg-item-active p-8 md:mb-0 mb-4`}>
+            <p className="text-2xl font-bold mb-8">{location.city}</p>
+            
+            {/* Статические контакты локации */}
+            <p className="my-4">
+              <span className="text-[#787C82]">Телефон:</span> &nbsp;          
+              <a href={`tel:${location.phone.replace(/\D/g, '')}`}>
+                {location.phone}
+              </a>
+            </p>
+            <p className="my-4">
+              <span className="text-[#787C82]">Эл. почта:</span> &nbsp;
+              <a href={`mailto:${location.email}`}>
+                {location.email}
+              </a>
+            </p>
+            <p className="my-4">
+              <span className="text-[#787C82]">Адрес:</span> &nbsp;          
+              <a href={location.mapLink} target="_blank" rel="noopener noreferrer">
+                {location.address}
+              </a>
+            </p>
 
-                {/* Динамические контакты из JSON */}
-                {contactData?.Curators?.map((contact, i) => (
-                  <div key={i} className="mt-6 pt-6 border-t border-gray-200">
-                    <p className="my-4">
-                      <span className="text-[#787C82]">Ответственный:</span> &nbsp;
-                      {contact.responsible}
-                    </p>
-                    <p className="my-4">
-                      <span className="text-[#787C82]">Контактный телефон:</span> &nbsp;
-                      <a href={`tel:${contact.phone.replace(/\D/g, '')}`}>
-                        {contact.phone}
-                      </a>
-                    </p>
-                    <p className="my-4">
-                      <span className="text-[#787C82]">Контактный email:</span> &nbsp;
-                      <a href={`mailto:${contact.email}`}>
-                        {contact.email}
-                      </a>
-                    </p>
-                  </div>
-                ))}
+            {/* Динамические контакты из JSON */}
+            {contactData?.Curators?.map((contact, i) => (
+              <div key={i} className="mt-6 pt-6 border-t border-gray-200">
+                <p className="my-4">
+                  <span className="text-[#787C82]">Ответственный:</span> &nbsp;
+                  {contact.responsible}
+                </p>
+                <p className="my-4">
+                  <span className="text-[#787C82]">Контактный телефон:</span> &nbsp;
+                  <a href={`tel:${contact.phone.replace(/\D/g, '')}`}>
+                    {contact.phone}
+                  </a>
+                </p>
+                <p className="my-4">
+                  <span className="text-[#787C82]">Контактный email:</span> &nbsp;
+                  <a href={`mailto:${contact.email}`}>
+                    {contact.email}
+                  </a>
+                </p>
               </div>
             ))}
           </div>
-          {/* Динамические контакты из JSON */}
           {
-            <ul>
-              {contactData?.requisits ? (
-              Object.entries(contactData?.requisits).map(([key, value]) => (
-                <li key={key}>
-                  <strong>{key}:</strong> {String(value)}
-                </li>
-              )) ) : <li>Реквизиты отсутствуют</li>
-              }
-            </ul>
+            contactData?.Curators?.map((curator) => (
+              <div>
+                {curator}
+              </div>
+            ))
           }
+          <div className="rounded-xl col-span-2 flex flex-col gap-3 bg-item-default p-8 md:mb-0 mb-4">
+            <p className="text-xl font-semibold">{contactData?.requisits?.name.shortname}</p>
+            <p className="">
+              <span className="text-[#787C82]">Полное  название:</span>
+              &nbsp;{contactData?.requisits?.name.fullname}
+            </p>
+            <p className="">
+              <span className="text-[#787C82]">Юридический адрес:</span>
+              &nbsp;{contactData?.requisits?.urAddress}
+            </p>
+            <p className="">
+              <span className="text-[#787C82]">Почтовый адрес:</span>
+              &nbsp;{contactData?.requisits?.postAddress}
+            </p>
+          </div>
+          <div className="rounded-xl col-span-2 flex flex-col gap-3 bg-item-default p-8 md:mb-0 mb-4">
+            <p className="text-xl font-semibold">Реквизиты {contactData?.requisits?.name.shortname}</p>
 
+            <p className="">
+              <span className="text-[#787C82]">Название:</span>
+              &nbsp;{contactData?.requisits?.bank.name}
+            </p>
+            <p className="">
+              <span className="text-[#787C82]">Р/с:</span>
+              &nbsp;{contactData?.requisits?.bank.Account}
+            </p>
+            <p className="">
+              <span className="text-[#787C82]">К/с:</span>
+              &nbsp;{contactData?.requisits?.bank.KorrAccount}
+            </p>
+            <p className="">
+              <span className="text-[#787C82]">БИК:</span>
+              &nbsp;{contactData?.requisits?.bank.BIK}
+            </p>
+            <p className="">
+              <span className="text-[#787C82]">ИНН::</span>
+              &nbsp;{contactData?.requisits?.inn}
+            </p>
+            <p className="">
+              <span className="text-[#787C82]">КПП:</span>
+              &nbsp;{contactData?.requisits?.kpp}
+            </p>
+            <div className="flex flex-col gap-3">
+              <p className="">
+                <span className="text-[#787C82]">ОГРН:</span>
+                &nbsp;{contactData?.requisits?.ogrn}
+              </p>
+              <p className="">
+                <span className="text-[#787C82]">ОКАТО:</span>
+                &nbsp;{contactData?.requisits?.okato}
+              </p>
+              <p className="">
+                <span className="text-[#787C82]">ОКФС:</span>
+                &nbsp;{contactData?.requisits?.okfs}
+              </p>
+              <p className="">
+                <span className="text-[#787C82]">ОКОГУ:</span>
+                &nbsp;{contactData?.requisits?.okogu}
+              </p>
+              <p className="">
+                <span className="text-[#787C82]">ОКОПФ:</span>
+                &nbsp;{contactData?.requisits?.okopf}
+              </p>
+              <p className="">
+                <span className="text-[#787C82]">ОКПО:</span>
+                &nbsp;{contactData?.requisits?.okpo}
+              </p>
+              <p className="">
+                <span className="text-[#787C82]">ОКТМО:</span>
+                &nbsp;{contactData?.requisits?.oktmo}
+              </p>
+              <p className="">
+                <span className="text-[#787C82]">ОКВЭД:</span>
+                &nbsp;{contactData?.requisits?.okved}
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   )
