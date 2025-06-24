@@ -70,7 +70,7 @@ const ContactsPage = () => {
             </p>
 
             {/* Динамические контакты из JSON */}
-            {contactData.map((contact, i) => (
+            {contactData.Curators.map((contact, i) => (
               <div key={i} className="mt-6 pt-6 border-t border-gray-200">
                 <p className="my-4">
                   <span className="text-[#787C82]">Ответственный:</span> &nbsp;
@@ -147,7 +147,7 @@ const ContactsPage = () => {
                 </p>
 
                 {/* Динамические контакты из JSON */}
-                {contactData.map((contact, i) => (
+                {contactData.Curators.map((contact, i) => (
                   <div key={i} className="mt-6 pt-6 border-t border-gray-200">
                     <p className="my-4">
                       <span className="text-[#787C82]">Ответственный:</span> &nbsp;
@@ -169,6 +169,21 @@ const ContactsPage = () => {
                 ))}
               </div>
             ))}
+          </div>
+          {/* Динамические контакты из JSON */}
+          {/* {
+            
+            <ul>
+              {Object.entries(contactData.requisits).map(([key, value]) => (
+                <li key={key}>
+                  <strong>{key}:</strong> {String(value)}
+                </li>
+              ))}
+            </ul>
+          } */}
+
+          <div>
+
           </div>
       </div>
     </section>
