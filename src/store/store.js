@@ -9,6 +9,7 @@ import modalReducer from './slices/modalSlice';
 import authReducer, { fetchAuth } from './slices/authSlice';
 import agreementsReducer, { fetchAgreementsList, fetchAgreementsAccruals, fetchSendCountersIndice } from './slices/agreementsSlice';
 import loadingSlice, { setLoadingStart, setLoadingEnd } from './slices/loadingSlice';
+import requisitsSlice from './slices/requisitsSlice';
 import countersSlice from './slices/countersSlice';
 import paymentSlice from './slices/paymentSlice';
 import contactsSlice from './slices/contactsSlice';
@@ -75,7 +76,7 @@ listenerMiddleware.startListening({
     fetchAgreementsList.rejected,
     fetchAgreementsAccruals.rejected,
     fetchRequestsList.rejected,
-    // fetchAuth.rejected,
+    fetchAuth.rejected,
     fetchSendCountersIndice.rejected
   ].some(creator => creator.match(action)),
   
@@ -105,7 +106,8 @@ const store = configureStore({
     loading_slice: loadingSlice,
     counters_slice: countersSlice,
     payment_slice: paymentSlice,
-    contacts_slice: contactsSlice
+    contacts_slice: contactsSlice,
+    requisits_slice: requisitsSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()

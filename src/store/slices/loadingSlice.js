@@ -4,7 +4,6 @@ const loadingSlice = createSlice({
   name: 'loading',
   initialState: {
     isLoading: false,
-    showRequisits: false,
   },
   reducers: {
     setLoadingStart(state) {
@@ -13,11 +12,8 @@ const loadingSlice = createSlice({
     setLoadingEnd(state) {
       state.isLoading = false      
     },
-    setShowRequisits(state) {
-      state.showRequisits = true      
-    },
   }
 })
 
-export const { setLoadingStart, setLoadingEnd, setShowRequisits } = loadingSlice.actions
+export const { setLoadingStart, setLoadingEnd } = loadingSlice.actions
 export default loadingSlice.reducer;

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleTabs, selectedTab, setLoginSelectedTab } from '@/store/slices/tabsSlice';
 import { togglePasswordChange, setToken, setUserData } from '@/store/slices/userSlice';
+import { setShowRequisits } from '@/store/slices/requisitsSlice';
 import { isRestorePass, toggleRestorePassword, rememberMe, setRememberMe, fetchRestorePassword } from '@/store/slices/authSlice';
 import axios from 'axios';
 import api from '@/api/api';
@@ -18,7 +19,9 @@ const LoginPage = () => {
   const { xl_breakpoint, lg_breakpoint, md_breakpoint, sm_breakpoint } = useMediaQueries();
   const currentTab = useSelector(selectedTab);
   const isRestorePassword = useSelector(isRestorePass);
-  const pressedRememberMe = useSelector(rememberMe);
+  const pressedRememberMe = useSelector(rememberMe);  
+  const showRequisits = useSelector((state) => state.requisits_slice.showRequisits);
+  
   
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -237,6 +240,40 @@ const LoginPage = () => {
     }
   }, [isRestorePassword])
 
+  const handleShowRequisitsBtn = () => {
+    showRequisits ? dispatch(setShowRequisits(false)) : dispatch(setShowRequisits(true))
+  }
+
+  const contactData = {
+      "name": {
+          "shortname": "АО «Комдрагметалл РС(Я)»",
+          "fullname": "Акционерное общество «Комдрагметалл Республики Саха (Якутия)»",
+          "eng": "'Komdragmetall of the Republic Sakha (Yakutia)' Joint-Stock Company",
+          "director": "Кычкин Александр Егорович",
+          "founding": "На основании Устава"
+      },
+      "inn": "1435343333",
+      "kpp": "143501001",
+      "ogrn": "1191447008719",
+      "okpo": "40242888",
+      "okato": "98401000000",
+      "oktmo": "98701000001",
+      "okogu": "4210001",
+      "okfs": "13",
+      "okopf": "12267",
+      "iko": "51435343333143501001",
+      "ikul": "2143534333314350100108",
+      "okved": "47.77.2",
+      "urAddress": "677018, Республика Саха (Якутия), г. Якутск, ул. Кирова 12",
+      "postAddress": "677018, Республика Саха (Якутия), г. Якутск, ул. Кирова 12",
+      "bank": {
+          "name": "ПАО Сбербанк Якутское отделение 8603 в г. Якутске",
+          "BIK": "049805609",
+          "KorrAccount": "30101810400000000609",
+          "Account": "40602810776000170062"
+      }
+  }
+
   const RestorePassword = () => {
     return (
       <section>
@@ -311,102 +348,135 @@ const LoginPage = () => {
             {
               !isRestorePassword && 
               <section>
-                <p className="font-bold xl:mt-12 md:text-2xl md:mt-10 text-base mt-4">Вход в личный кабинет</p>
-                <form method="GET" onSubmit={handleSubmit}>
-                  <div className="text-left  transition-all duration-2000 ease-in-out overflow-hidden max-h-[1000px]">
-                    <p className="mb-2 mt-4 md:text-base text-sm">Логин</p>
-                    <input 
-                      key="login-input"
-                      name="login" 
-                      value={data.login} 
-                      onChange={handleInputChange} 
-                      className="p-4 bg-item-active w-full rounded-xl" 
-                      type="text" 
-                      placeholder="Введите логин" 
-                      required 
-                      autoFocus
-                    />
-                    <div className="relative">
-                      <p className="mb-2 mt-4 md:text-base text-sm">Пароль</p>
-                      <input 
-                        key="password-input"
-                        ref={inputPasswordRef}
-                        name="password" id="password" 
-                        className={`${!isCorrectLoginData ? 'danger_animation' : ''} p-4 bg-item-active w-full rounded-xl`} 
-                        placeholder="Введите пароль" 
-                        type={showPassword ? 'text' : 'password'} 
-                        required minLength={6} 
-                        value={data.password}
-                        onChange={handleInputChange}
-                        onDoubleClick={(e) => e.target.select()}
-                        onSelect={(e) => {
-                          caretPosRef.current = {
-                            start: e.target.selectionStart,
-                            end: e.target.selectionEnd
-                          };
-                        }}
-                      />
-                      <button
-                        type="button"
-                        className="absolute right-4 top-15 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-transform active:scale-95 focus:text-blue-900 outline-0"
-                        aria-label={showPassword ? "Скрыть пароль" : "Показать пароль"}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setShowPassword(!showPassword);
-                        }}                          
-                      >
-                        {
-                          showPassword ? 
-                            <svg
-                              className="icon me-2"
-                            >
-                              <use href={`${sprite_path}#eye-icon`} />
-                            </svg> : 
-                            <svg
-                              className="icon me-2"
-                            >
-                              <use href={`${sprite_path}#eyeoff-icon`} />
-                            </svg>
-                        }
-                      </button>
-                    </div>
-                    <div className={`
-                      text-left text-red-600 mt-4
-                    `}>
-                      {
-                        isCorrectLoginData ? '' :
-                          <p className="animate-fadeIn">Введен неверный логин или пароль</p>       
-                      }
-                    </div>
+                {
+                  showRequisits ? 
+                  <div className="text-start text-xs mt-4 p-0">
+                    {contactData ? (
+                      Object.entries(contactData).map(([key, value]) => (
+                        <li className="!m-0 !p-2" key={key}>
+                          <strong>{key}:</strong> 
+                          {typeof value === 'object' && value !== null ? (
+                            <ul>
+                              {Object.entries(value).map(([subKey, subValue]) => (
+                                <li className="!m-0 !p-1" key={subKey}>
+                                  <strong>{subKey}:</strong> {String(subValue)}
+                                </li>
+                              ))}
+                            </ul>
+                          ) : (
+                            String(value)
+                          )}
+                        </li>
+                      ))
+                    ) : (
+                      <li>Реквизиты отсутствуют</li>
+                    )}
                   </div>
-                  <div className="flex justify-between py-5 mt-4">
-                    <div onClick={(e) => handleRememberMeChange(e)}>
-                      <CustomCheckbox label="Запомнить меня" id="remember_me"  />
-                    </div>
-                    <div>
-                      <p 
-                        id="forgotPassword"
-                        tabIndex={0} 
-                        className="text-[#203887] cursor-pointer focus:bg-[#F6F8FF] outline-0" 
-                        onClick={() => handleRestoreButton()}
-                        onKeyDown={(e) => {
-                          // Добавляем обработку нажатия пробела/Enter
-                          if (e.key === ' ' || e.key === 'Enter') {
-                            e.preventDefault();
-                            document.getElementById('forgotPassword')?.click();
+                  :
+                  <div>
+                    <p className="font-bold xl:mt-12 md:text-2xl md:mt-10 text-base mt-4">Вход в личный кабинет</p>
+                    <form method="GET" onSubmit={handleSubmit}>
+                      <div className="text-left  transition-all duration-2000 ease-in-out overflow-hidden max-h-[1000px]">
+                        <p className="mb-2 mt-4 md:text-base text-sm">Логин</p>
+                        <input 
+                          key="login-input"
+                          name="login" 
+                          value={data.login} 
+                          onChange={handleInputChange} 
+                          className="p-4 bg-item-active w-full rounded-xl" 
+                          type="text" 
+                          placeholder="Введите логин" 
+                          required 
+                          autoFocus
+                        />
+                        <div className="relative">
+                          <p className="mb-2 mt-4 md:text-base text-sm">Пароль</p>
+                          <input 
+                            key="password-input"
+                            ref={inputPasswordRef}
+                            name="password" id="password" 
+                            className={`${!isCorrectLoginData ? 'danger_animation' : ''} p-4 bg-item-active w-full rounded-xl`} 
+                            placeholder="Введите пароль" 
+                            type={showPassword ? 'text' : 'password'} 
+                            required minLength={6} 
+                            value={data.password}
+                            onChange={handleInputChange}
+                            onDoubleClick={(e) => e.target.select()}
+                            onSelect={(e) => {
+                              caretPosRef.current = {
+                                start: e.target.selectionStart,
+                                end: e.target.selectionEnd
+                              };
+                            }}
+                          />
+                          <button
+                            type="button"
+                            className="absolute right-4 top-15 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-transform active:scale-95 focus:text-blue-900 outline-0"
+                            aria-label={showPassword ? "Скрыть пароль" : "Показать пароль"}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setShowPassword(!showPassword);
+                            }}                          
+                          >
+                            {
+                              showPassword ? 
+                                <svg
+                                  className="icon me-2"
+                                >
+                                  <use href={`${sprite_path}#eye-icon`} />
+                                </svg> : 
+                                <svg
+                                  className="icon me-2"
+                                >
+                                  <use href={`${sprite_path}#eyeoff-icon`} />
+                                </svg>
+                            }
+                          </button>
+                        </div>
+                        <div className={`
+                          text-left text-red-600 mt-4
+                        `}>
+                          {
+                            isCorrectLoginData ? '' :
+                              <p className="animate-fadeIn">Введен неверный логин или пароль</p>       
                           }
-                        }}
-                      >
-                        Забыли пароль?
-                      </p>
-                    </div>
+                        </div>
+                      </div>
+                      <div className="flex justify-between py-5 mt-4">
+                        <div onClick={(e) => handleRememberMeChange(e)}>
+                          <CustomCheckbox label="Запомнить меня" id="remember_me"  />
+                        </div>
+                        <div>
+                          <p 
+                            id="forgotPassword"
+                            tabIndex={0} 
+                            className="text-[#203887] cursor-pointer focus:bg-[#F6F8FF] outline-0" 
+                            onClick={() => handleRestoreButton()}
+                            onKeyDown={(e) => {
+                              // Добавляем обработку нажатия пробела/Enter
+                              if (e.key === ' ' || e.key === 'Enter') {
+                                e.preventDefault();
+                                document.getElementById('forgotPassword')?.click();
+                              }
+                            }}
+                          >
+                            Забыли пароль?
+                          </p>
+                        </div>
+                      </div>
+                      <button type="submit" className="mt-5 btn-primary w-full py-2" disabled={isLoading}>
+                        {isLoading ? 'Вход...' : 'Войти'}
+                      </button>
+                    </form>
                   </div>
-                  <button type="submit" className="mt-5 btn-primary w-full py-2" disabled={isLoading}>
-                    {isLoading ? 'Вход...' : 'Войти'}
-                  </button>
-                </form>
+                }
               </section>
             }
+            <div className="pt-16">
+              <a className="cursor-pointer" onClick={() => handleShowRequisitsBtn()}>
+                {showRequisits ? 'Назад' : 'Показать реквизиты'} 
+              </a>
+            </div>
           </div>
         </div>
       </div>

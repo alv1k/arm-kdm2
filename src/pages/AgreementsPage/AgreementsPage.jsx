@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { hideNavbar } from '@/store/slices/navbarSlice';
@@ -6,10 +6,7 @@ import { toggleTabs  } from '@/store/slices/tabsSlice';
 import { isShowDetails, selectedAgreement, agreementsStoreList, showDetails, hideDetails, setAgreementsList, fetchAgreementsList, fetchAgreementsAccruals, isShowCountersModal, isShowPaymentModal } from '@/store/slices/agreementsSlice';
 import useMediaQueries from '@/hooks/useMediaQueries'; 
 import TheSkeleton from '@/components/TheSkeleton/TheSkeleton';
-import styles from './AgreementsPage.module.css';
-import LoadingPage from '@/pages/LoadingPage/LoadingPage';
 import Page404 from '@/pages/Page404/Page404';
-import { showToast } from '@/utils/notify';
 
 import AgreementItem from '@/components/TheAgreementItem/TheAgreementItem';
 import TheTabsComponent from '@/components/TheTabsComponent/TheTabsComponent';

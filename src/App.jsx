@@ -50,16 +50,16 @@ const App = () => {
         <TheModal /> : ''
       }
       {
-        location.pathname != '/login' ?
+        location.pathname != '/login' && location.pathname != '/requisits' ?
         <Header /> : ''
       }
       <LoadingPage />
       <div className={`
         w-full md:py-5 flex h-fit min-h-[90vh]
-        ${location.pathname == '/login' ? 'xl:p-0 lg:p-0' : 'xl:p-10 lg:p-5'}        
+        ${location.pathname == '/login' && location.pathname != '/requisits' ? 'xl:p-0 lg:p-0' : 'xl:p-10 lg:p-5'}        
       `}>
         {
-          location.pathname != '/login' ?
+          location.pathname != '/login' && location.pathname != '/requisits' ?
           <Navbar /> : ''
         }
         <Routes>
@@ -69,15 +69,12 @@ const App = () => {
           <Route path='/contacts' element={<ContactsPage/>} />
           <Route path='/user' element={<UserPage/>} />
           <Route path='/login' element={<LoginPage/>} />
+          <Route path='/requisits' element={<RequisitsPage/>} />
           <Route path='/payment-success' element={<PaymentStatusPage/>} />
         </Routes>
       </div>      
       <ToastContainer />
       
-      <div>
-        {location.pathname === '/requisits' && <RequisitsPage />}
-        {location.pathname }
-      </div>
     </div>
   )
 };

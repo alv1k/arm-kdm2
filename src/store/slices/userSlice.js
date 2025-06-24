@@ -10,7 +10,7 @@ export const fetchProfileData = createAsyncThunk(
     try {
       const token = localStorage.getItem('token') ?? sessionStorage.getItem('token');
       if (!token) {
-        // window.location.href = '/login';
+        window.location.href = '/login';
         throw new Error('Token not found');
       }
       let params = {
@@ -27,7 +27,7 @@ export const fetchProfileData = createAsyncThunk(
         localStorage.removeItem('token')
         sessionStorage.removeItem('token');
         document.cookie = 'token=; Max-Age=0; path=/;';
-        // window.location.href = '/login';
+        window.location.href = '/login';
         throw new Error(`HTTP error! status: ${response.data.status}`);
       } 
       if (payload && response.data.message == 'Пароль изменен') {         
