@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { hideNavbar } from '@/store/slices/navbarSlice';
 import { toggleTabs  } from '@/store/slices/tabsSlice';
 import { isNew } from '@/store/slices/requestsSlice';
+import { showToast } from '@/utils/notify';
 import { fetchAuth } from '@/store/slices/authSlice';
 import { fetchContactsList } from '@/store/slices/contactsSlice';
 import useMediaQueries from '@/hooks/useMediaQueries';
@@ -11,7 +12,7 @@ import useMediaQueries from '@/hooks/useMediaQueries';
 const ContactsPage = () => {
   const sprite_path = './src/assets/images/i.svg';
   const showNavbar = useSelector((state) => state.navbar.showNavbar);
-  const contactData = useSelector((state) => state.contacts_slice.contacts);  
+  const contactData = useSelector((state) => state.contacts_slice.contacts); 
   
   // const tabs = useSelector((state) => state.tabs_slice.tabs);
   // useEffect(() => {
@@ -95,7 +96,38 @@ const ContactsPage = () => {
     );
   };
 
+  const CopyIcon = () => {
+    return (
+      <svg
+        className="icon absolute -right-10 top-1/2 -translate-y-1/2
+          w-5 h-5 opacity-0 group-hover:opacity-100
+          max-md:hover:opacity-0
+          transition delay-150 duration-300 ease-in-out
+          hidden md:block"
+      >
+        <use href={`${sprite_path}#copy-icon`} />
+      </svg>
+    )
+  }
 
+  const handleCopyValue = (text) => {
+    navigator.clipboard.writeText(text)
+      .then(() => {
+          console.log('Text copied successfully!');      
+          showToast( <div>
+                      Скопировано!<br />
+                      <span className="text-xs">{text}</span>
+                    </div>, 'success', {
+            autoClose: 1000,
+          });
+      })
+      .catch(err => {    
+        console.error('Failed to copy text: ', err);
+          showToast( 'Не удалось скопировать', 'error', {
+            autoClose: 1000,
+          });
+      });
+  }
 
   return (
     <section 
@@ -123,23 +155,23 @@ const ContactsPage = () => {
           }
         </div>
         <div className="p-4 mt-6 text-base md:grid md:grid-cols-2 gap-5">
-          <div className={`rounded-xl bg-item-active p-8 md:mb-0 mb-4`}>
-            <p className="text-2xl font-bold mb-8">{location.city}</p>
+          <div className={`rounded-xl bg-item-active lg:p-10 md:p-6 p-5 md:mb-0 mb-4`}>
+            <p className="md:text-xl text-base font-bold mb-8">{location.city}</p>
             
             {/* Статические контакты локации */}
-            <p className="my-4">
+            <p className="my-4 md:text-base text-sm">
               <span className="text-[#787C82]">Телефон:</span> &nbsp;          
               <a href={`tel:${location.phone.replace(/\D/g, '')}`}>
                 {location.phone}
               </a>
             </p>
-            <p className="my-4">
+            <p className="my-4 md:text-base text-sm">
               <span className="text-[#787C82]">Эл. почта:</span> &nbsp;
               <a href={`mailto:${location.email}`}>
                 {location.email}
               </a>
             </p>
-            <p className="my-4">
+            <p className="my-4 md:text-base text-sm">
               <span className="text-[#787C82]">Адрес:</span> &nbsp;          
               <a href={location.mapLink} target="_blank" rel="noopener noreferrer">
                 {location.address}
@@ -175,46 +207,65 @@ const ContactsPage = () => {
               </div>
             ))
           }
-          <div className="rounded-xl col-span-2 flex flex-col gap-3 bg-item-default p-8 md:mb-0 mb-4">
-            <p className="text-xl font-semibold">Реквизиты {contactData?.requisits?.name.shortname}</p>
+          <div className="rounded-xl col-span-2 flex flex-col gap-3 bg-item-default lg:p-10 md:p-6 p-5 md:mb-0 mb-4">
+            <p className="md:text-xl text-base font-semibold">Реквизиты {contactData?.requisits?.name.shortname}</p>
+            <div className="flex">
+              <div className="flex flex-col gap-3 md:text-base text-sm">
+                <p className="w-fit relative group max-md:hover:after:hidden cursor-pointer" onClick={() => handleCopyValue(contactData?.requisits?.name.fullname)}>
+                  <span className="text-[#787C82]">Полное  название:</span>
+                  &nbsp;{contactData?.requisits?.name.fullname}
+                  {CopyIcon()}
+                </p>
+                <p className="w-fit relative group max-md:hover:after:hidden cursor-pointer" onClick={() => handleCopyValue(contactData?.requisits?.urAddress)}>
+                  <span className="text-[#787C82]">Юридический адрес:</span>
+                  &nbsp;{contactData?.requisits?.urAddress}
+                  {CopyIcon()}
+                </p>
 
-            <p className="">
-              <span className="text-[#787C82]">Полное  название:</span>
-              &nbsp;{contactData?.requisits?.name.fullname}
-            </p>
-            <p className="">
-              <span className="text-[#787C82]">Юридический адрес:</span>
-              &nbsp;{contactData?.requisits?.urAddress}
-            </p>
-            {/* <p className="">
-              <span className="text-[#787C82]">Почтовый адрес:</span>
-              &nbsp;{contactData?.requisits?.postAddress}
-            </p> */}
-            <p className="">
-              <span className="text-[#787C82]">Название:</span>
-              &nbsp;{contactData?.requisits?.bank.name}
-            </p>
-            <p className="">
-              <span className="text-[#787C82]">Р/с:</span>
-              &nbsp;{contactData?.requisits?.bank.Account}
-            </p>
-            <p className="">
-              <span className="text-[#787C82]">К/с:</span>
-              &nbsp;{contactData?.requisits?.bank.KorrAccount}
-            </p>
-            <p className="">
-              <span className="text-[#787C82]">БИК:</span>
-              &nbsp;{contactData?.requisits?.bank.BIK}
-            </p>
-            <p className="">
-              <span className="text-[#787C82]">ИНН::</span>
-              &nbsp;{contactData?.requisits?.inn}
-            </p>
-            <p className="">
-              <span className="text-[#787C82]">КПП:</span>
-              &nbsp;{contactData?.requisits?.kpp}
-            </p>
-            <div className="flex flex-col gap-3 hidden">
+                <p className="w-fit relative group max-md:hover:after:hidden cursor-pointer" onClick={() => handleCopyValue(contactData?.requisits?.inn)}>
+                  <span className="text-[#787C82]">ИНН::</span>
+                  &nbsp;{contactData?.requisits?.inn}
+                  {CopyIcon()}
+                </p>
+                <p className="w-fit relative group max-md:hover:after:hidden cursor-pointer" onClick={() => handleCopyValue(contactData?.requisits?.kpp)}>
+                  <span className="text-[#787C82]">КПП:</span>
+                  &nbsp;{contactData?.requisits?.kpp}
+                  {CopyIcon()}
+                </p>
+
+
+
+                {/* <p className=" ">
+                  <span className="text-[#787C82]">Почтовый адрес:</span>
+                  &nbsp;{contactData?.requisits?.postAddress}
+                </p> */}
+                <p className="w-fit relative group max-md:hover:after:hidden cursor-pointer" onClick={() => handleCopyValue(contactData?.requisits?.bank.name)}>
+                  <span className="text-[#787C82]">Наименование банка:</span>
+                  &nbsp;{contactData?.requisits?.bank.name}
+                  {CopyIcon()}
+                </p>
+                <p className="w-fit relative group max-md:hover:after:hidden cursor-pointer" onClick={() => handleCopyValue(contactData?.requisits?.bank.Account)}>
+                  <span className="text-[#787C82]">Р/с:</span>
+                  &nbsp;{contactData?.requisits?.bank.Account}
+                  {CopyIcon()}
+                </p>
+                <p className="w-fit relative group max-md:hover:after:hidden cursor-pointer" onClick={() => handleCopyValue(contactData?.requisits?.bank.KorrAccount)}>
+                  <span className="text-[#787C82]">К/с:</span>
+                  &nbsp;{contactData?.requisits?.bank.KorrAccount}
+                  {CopyIcon()}
+                </p>
+                <p className="w-fit relative group max-md:hover:after:hidden cursor-pointer" onClick={() => handleCopyValue(contactData?.requisits?.bank.BIK)}>
+                  <span className="text-[#787C82]">БИК:</span>
+                  &nbsp;{contactData?.requisits?.bank.BIK}
+                  {CopyIcon()}
+                </p>
+              </div>
+              {
+                (sm_breakpoint || md_breakpoint) &&
+                <div className={md_breakpoint ? 'w-1/5' : 'w-2/5'}> </div>
+              }
+            </div>
+            <div className="flex flex-col gap-3 hidden md:text-base text-sm">
               <p className="">
                 <span className="text-[#787C82]">ОГРН:</span>
                 &nbsp;{contactData?.requisits?.ogrn}

@@ -81,4 +81,15 @@
     <symbol fill="none" viewBox="0 0 24 24" id="trash-icon" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
         <path d="m20 9-1.995 11.346A2 2 0 0 1 16.035 22h-8.07a2 2 0 0 1-1.97-1.654L4 9m17-3h-5.625m0 0V4a2 2 0 0 0-2-2h-2.75a2 2 0 0 0-2 2v2m6.75 0h-6.75M3 6h5.625M10 17.5V11m4 6.5V11" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
     </symbol>
+    <symbol fill="none" viewBox="0 0 19 19" id="copy-icon" xmlns="http://www.w3.org/2000/svg">
+        <g clip-path="url(#aa)" stroke="#6374AD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15.833 6.333H7.917c-.875 0-1.584.71-1.584 1.584v7.917c0 .874.71 1.583 1.584 1.583h7.916c.875 0 1.584-.71 1.584-1.584V7.918c0-.875-.71-1.583-1.584-1.583Z"/>
+            <path d="M3.167 12.667c-.871 0-1.584-.713-1.584-1.583V3.167c0-.871.713-1.583 1.584-1.583h7.916c.871 0 1.584.712 1.584 1.583"/>
+        </g>
+        <defs>
+            <clipPath id="aa">
+                <path fill="#fff" d="M0 0h19v19H0z"/>
+            </clipPath>
+        </defs>
+    </symbol>
 </svg>
