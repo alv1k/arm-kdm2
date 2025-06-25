@@ -89,7 +89,7 @@ const UserPage = () => {
       {/* <img className="mt-4 w-25 h-25 md:mx-0 mx-auto" src="/src/assets/images/user.png" alt="profile" /> */}
       
       <div className="lg:mt-3 md:mt-4 mt-5">
-        <p className="text-[#203887] font-extrabold md:text-xl text-base md:text-left text-center">
+        <p className="text-[#203887] font-semibold md:text-xl text-base md:text-left text-center">
           {profileFetchedData && profileFetchedData?.kontragent?.name}
         </p>
         <p className={`

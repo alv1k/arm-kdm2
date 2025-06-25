@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { requestStatusFalse, fetchNewRequest, fetchRequestsList, requestEditFalse } from '@/store/slices/requestsSlice';
+import { requestStatusFalse, fetchNewRequest, fetchRequestsList, requestEditFalse, clearEditData } from '@/store/slices/requestsSlice';
 import { downloadBase64PDF } from '@/utils/fileDownload';
 import { getBase64 } from '@/utils/getBase64';
 import useMediaQueries from '@/hooks/useMediaQueries';
@@ -303,12 +303,14 @@ const NewRequestPage = () => {
     
   }, [selectedFiles]);
 
-  useEffect(() => {
+  useEffect(() => {    
     if (isEditRequest) {
       setRequestDescr(editData.descr);
       setSelectedObject(editData.object_id);
       setSelectedType(editData.type);
       setRequestId(editData.id);
+    } else {
+      dispatch(clearEditData());
     }
   }, [editData]);
 
