@@ -5,6 +5,7 @@ import AgreementsPage from './pages/AgreementsPage/AgreementsPage'
 import RequestsPage from './pages/RequestsPage/RequestsPage'
 import ContactsPage from './pages/ContactsPage/ContactsPage'
 import UserPage from './pages/UserPage/UserPage';
+import UserAgreementPage from './pages/UserAgreementPage/UserAgreementPage';
 import LoginPage from './pages/LoginPage/LoginPage';
 import Page404 from './pages/Page404/Page404';
 import Header from '@/components/TheHeader/TheHeader';
@@ -68,6 +69,7 @@ const App = () => {
           <Route path='/requests' element={<RequestsPage/>} />
           <Route path='/contacts' element={<ContactsPage/>} />
           <Route path='/user' element={<UserPage/>} />
+          <Route path='/user-agreement' element={<UserAgreementPage/>} />
           <Route path='/login' element={<LoginPage/>} />
           <Route path='/requisits' element={<RequisitsPage/>} />
           <Route path='/payment-success' element={<PaymentStatusPage/>} />

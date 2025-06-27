@@ -1,0 +1,38 @@
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.subtitle {
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+.signature {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+}
+.section {
+    margin-bottom: 20px;
+}
+.section_title {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.clause {
+    margin-bottom: 15px;
+}
+.clause_title {
+    font-weight: bold;
+}
+ul {
+    padding-left: 20px;
+}
+li {
+    margin-bottom: 5px;
+}
