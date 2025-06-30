@@ -45,6 +45,7 @@ const TheNavbar = () => {
           <TheMenuItem icon="docs-icon" text="Мои договоры" to="/agreements" />
           <TheMenuItem icon="requests-icon" text="Заявки" to="/requests" />
           <TheMenuItem icon="contacts-icon" text="Контакты" to="/contacts" />
+          <TheMenuItem icon="contacts-icon" text="Пользовательское соглашение" to="/user-agreement" />
         </div>
         
         <div className={`
