@@ -265,7 +265,7 @@ const ContactsPage = () => {
                 <div className={md_breakpoint ? 'w-1/5' : 'w-2/5'}> </div>
               }
             </div>
-            <div className="flex flex-col gap-3 hidden md:text-base text-sm">
+            <div className="flex-col gap-3 hidden md:text-base text-sm">
               <p className="">
                 <span className="text-[#787C82]">ОГРН:</span>
                 &nbsp;{contactData?.requisits?.ogrn}
